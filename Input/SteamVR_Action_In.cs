@@ -84,7 +84,7 @@ namespace Valve.VR
         }
 
         /// <summary>
-        /// Indicates whether or not the data for this action and specified input source has changed since the last update. Determined by SteamVR_Standalone or 'changeTolerance'.
+        /// Indicates whether or not the data for this action and specified input source has changed since the last update. Determined by SteamVR or 'changeTolerance'.
         /// </summary>
         /// <param name="inputSource">The device you would like to get data from. Any if the action is not device specific.</param>
         public virtual bool GetChanged(SteamVR_Input_Sources inputSource)
@@ -100,7 +100,6 @@ namespace Valve.VR
         {
             return sourceMap[inputSource].changedTime;
         }
-
 
         /// <summary>
 
@@ -265,7 +264,6 @@ namespace Valve.VR
         /// </summary>
         public string localizedOriginName { get { UpdateOriginTrackedDeviceInfo(); return GetLocalizedOrigin(); } }
 
-
         /// <summary>The Time.realtimeSinceStartup that this action was last changed.</summary>
         public float changedTime { get; protected set; }
 
@@ -278,7 +276,7 @@ namespace Valve.VR
         public abstract void UpdateValue();
 
         /// <summary>
-        /// <strong>[Should not be called by user code]</strong> Initializes the handle for the action, the size of the InputOriginInfo struct, and any other related SteamVR_Standalone data.
+        /// <strong>[Should not be called by user code]</strong> Initializes the handle for the action, the size of the InputOriginInfo struct, and any other related SteamVR data.
         /// </summary>
         public override void Initialize()
         {
@@ -295,7 +293,7 @@ namespace Valve.VR
                 EVRInputError err = OpenVR.Input.GetOriginTrackedDeviceInfo(activeOrigin, ref inputOriginInfo, inputOriginInfo_size);
 
                 if (err != EVRInputError.None)
-                    Debug.LogError("<b>[SteamVR_Standalone]</b> GetOriginTrackedDeviceInfo error (" + fullPath + "): " + err.ToString() + " handle: " + handle.ToString() + " activeOrigin: " + activeOrigin.ToString() + " active: " + active);
+                    MelonLoader.MelonLogger.Error("[HPVR] GetOriginTrackedDeviceInfo error (" + fullPath + "): " + err.ToString() + " handle: " + handle.ToString() + " activeOrigin: " + activeOrigin.ToString() + " active: " + active);
 
                 lastInputOriginInfo = inputOriginInfo;
                 lastOriginGetFrame = Time.frameCount;
@@ -369,11 +367,10 @@ namespace Valve.VR
         uint GetDeviceIndex(SteamVR_Input_Sources inputSource);
 
         /// <summary>
-        /// Indicates whether or not the data for this action and specified input source has changed since the last update. Determined by SteamVR_Standalone or 'changeTolerance'.
+        /// Indicates whether or not the data for this action and specified input source has changed since the last update. Determined by SteamVR or 'changeTolerance'.
         /// </summary>
         /// <param name="inputSource">The device you would like to get data from. Any if the action is not device specific.</param>
         bool GetChanged(SteamVR_Input_Sources inputSource);
-
 
         /// <summary>
 

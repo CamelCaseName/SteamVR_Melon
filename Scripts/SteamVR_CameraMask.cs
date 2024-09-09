@@ -1,4 +1,4 @@
-﻿using Assets.SteamVR_Standalone.Standalone;
+﻿using Assets.SteamVR_Melon.Standalone;
 using System;
 using System.Runtime.InteropServices;
 using UnityEngine;
@@ -16,30 +16,27 @@ namespace Valve.VR
 
         public static Material occlusionMaterial;
 
-
         private static Mesh[] hiddenAreaMeshes = new Mesh[2];
-
 
         public MeshFilter meshFilter;
 
-
         private void Awake()
         {
-            this.meshFilter = GetComponent<MeshFilter>();
-            if (this.meshFilter == null)
+            meshFilter = GetComponent<MeshFilter>();
+            if (meshFilter == null)
             {
-                this.meshFilter = base.gameObject.AddComponent<MeshFilter>();
+                meshFilter = gameObject.AddComponent<MeshFilter>();
             }
-            if (SteamVR_CameraMask.occlusionMaterial == null)
+            if (occlusionMaterial == null)
             {
-                SteamVR_CameraMask.occlusionMaterial = new Material(VRShaders.GetShader(VRShaders.VRShader.occlusion));
+                occlusionMaterial = new Material(VRShaders.GetShader(VRShaders.VRShader.occlusion));
             }
-            meshRenderer = base.GetComponent<MeshRenderer>();
+            meshRenderer = GetComponent<MeshRenderer>();
             if (meshRenderer == null)
             {
-                meshRenderer = base.gameObject.AddComponent<MeshRenderer>();
+                meshRenderer = gameObject.AddComponent<MeshRenderer>();
             }
-            meshRenderer.material = SteamVR_CameraMask.occlusionMaterial;
+            meshRenderer.material = occlusionMaterial;
             meshRenderer.shadowCastingMode = ShadowCastingMode.Off;
             meshRenderer.receiveShadows = false;
             meshRenderer.lightProbeUsage = LightProbeUsage.Off;
@@ -47,22 +44,19 @@ namespace Valve.VR
             meshRenderer.reflectionProbeUsage = ReflectionProbeUsage.Off;
         }
 
-
         public void Set(SteamVR vr, EVREye eye)
         {
-            if (SteamVR_CameraMask.hiddenAreaMeshes[(int)eye] == null)
+            if (hiddenAreaMeshes[(int)eye] == null)
             {
-                SteamVR_CameraMask.hiddenAreaMeshes[(int)eye] = SteamVR_CameraMask.CreateHiddenAreaMesh(vr.hmd.GetHiddenAreaMesh(eye, EHiddenAreaMeshType.k_eHiddenAreaMesh_Standard), vr.textureBounds[(int)eye]);
+                hiddenAreaMeshes[(int)eye] = CreateHiddenAreaMesh(vr.hmd.GetHiddenAreaMesh(eye, EHiddenAreaMeshType.k_eHiddenAreaMesh_Standard), vr.textureBounds[(int)eye]);
             }
-            this.meshFilter.mesh = SteamVR_CameraMask.hiddenAreaMeshes[(int)eye];
+            meshFilter.mesh = hiddenAreaMeshes[(int)eye];
         }
-
 
         public void Clear()
         {
-            this.meshFilter.mesh = null;
+            meshFilter.mesh = null;
         }
-
 
         public static Mesh CreateHiddenAreaMesh(HiddenAreaMesh_t src, VRTextureBounds_t bounds)
         {
@@ -80,7 +74,7 @@ namespace Valve.VR
             float num4 = 2f * bounds.vMax - 1f;
             int num5 = 0;
             int num6 = 0;
-            while ((long)num5 < (long)((ulong)(src.unTriangleCount * 3u)))
+            while ((long)num5 < (long)(ulong)(src.unTriangleCount * 3u))
             {
                 float x = SteamVR_Utils.Lerp(num, num2, array[num6++]);
                 float y = SteamVR_Utils.Lerp(num3, num4, array[num6++]);
@@ -133,8 +127,6 @@ namespace Valve.VR
             m.bounds = new Bounds(Vector3.zero, new Vector3(float.MaxValue, float.MaxValue, float.MaxValue));
             return m;
         }
-
-
 
     }
 }

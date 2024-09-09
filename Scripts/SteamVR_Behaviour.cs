@@ -4,12 +4,10 @@
 // MVID: DF474E11-42EA-4738-BF41-6A2D38F0B79C
 // Assembly location: S:\SteamLibrary\steamapps\common\GTFO\GTFO_Data\BrokenAssembly20012020\Managed\SteamVR.dll
 
-using SteamVR_Standalone_IL2CPP.Standalone;
-using SteamVR_Standalone_IL2CPP.Util;
+using MelonLoader;
+using HPVR.Util;
 using System;
-using System.Collections;
 using UnityEngine;
-using UnityEngine.Events;
 using UnityEngine.XR;
 
 namespace Valve.VR
@@ -35,61 +33,74 @@ namespace Valve.VR
         {
             get
             {
-                if ((UnityEngine.Object)SteamVR_Behaviour._instance == (UnityEngine.Object)null)
-                    SteamVR_Behaviour.Initialize(false);
-                return SteamVR_Behaviour._instance;
+                if (_instance == null)
+                    Initialize(true);
+                return _instance;
             }
         }
 
         public static void Initialize(bool forceUnityVRToOpenVR = false)
         {
-            if (!((UnityEngine.Object)SteamVR_Behaviour._instance == (UnityEngine.Object)null) || SteamVR_Behaviour.initializing)
+            if (!(_instance == null) || initializing)
                 return;
-            SteamVR_Behaviour.initializing = true;
-            GameObject gameObject1 = (GameObject)null;
+            initializing = true;
+            GameObject gameObject1 = null;
             if (forceUnityVRToOpenVR)
-                SteamVR_Behaviour.forcingInitialization = true;
-            SteamVR_Render objectOfType1 = UnityEngine.Object.FindObjectOfType<SteamVR_Render>();
-            if ((UnityEngine.Object)objectOfType1 != (UnityEngine.Object)null)
-                gameObject1 = objectOfType1.gameObject;
-            SteamVR_Behaviour objectOfType2 = UnityEngine.Object.FindObjectOfType<SteamVR_Behaviour>();
-            if ((UnityEngine.Object)objectOfType2 != (UnityEngine.Object)null)
-                gameObject1 = objectOfType2.gameObject;
-            if ((UnityEngine.Object)gameObject1 == (UnityEngine.Object)null)
+                forcingInitialization = true;
+
+            SteamVR_Render objectOfType1 = FindObjectOfType<SteamVR_Render>();
+            if (objectOfType1 != null)
             {
+                gameObject1 = objectOfType1.gameObject;
+                MelonLogger.Msg("[HPVR] found the render");
+            }
+
+            SteamVR_Behaviour objectOfType2 = FindObjectOfType<SteamVR_Behaviour>();
+            if (objectOfType2 != null)
+            {
+                gameObject1 = objectOfType2.gameObject;
+                MelonLogger.Msg("[HPVR] found the behaviour");
+            }
+
+            if (gameObject1 == null)
+            {
+                MelonLogger.Msg("[HPVR] creating new behaviour and renderer");
                 GameObject gameObject2 = new GameObject("[SteamVR]");
-                SteamVR_Behaviour._instance = gameObject2.AddComponent<SteamVR_Behaviour>();
-                SteamVR_Behaviour._instance.steamvr_render = gameObject2.AddComponent<SteamVR_Render>();
-                gameObject2.AddComponent<MelonCoroutineCallbacks>();
+                _instance = gameObject2.AddComponent<SteamVR_Behaviour>();
+                _instance.steamvr_render = gameObject2.AddComponent<SteamVR_Render>();
             }
             else
             {
                 SteamVR_Behaviour steamVrBehaviour = gameObject1.GetComponent<SteamVR_Behaviour>();
-                if ((UnityEngine.Object)steamVrBehaviour == (UnityEngine.Object)null)
+                if (steamVrBehaviour == null)
                     steamVrBehaviour = gameObject1.AddComponent<SteamVR_Behaviour>();
-                if ((UnityEngine.Object)objectOfType1 != (UnityEngine.Object)null)
+                if (objectOfType1 != null)
                 {
                     steamVrBehaviour.steamvr_render = objectOfType1;
                 }
                 else
                 {
                     steamVrBehaviour.steamvr_render = gameObject1.GetComponent<SteamVR_Render>();
-                    if ((UnityEngine.Object)steamVrBehaviour.steamvr_render == (UnityEngine.Object)null)
+                    if (steamVrBehaviour.steamvr_render == null)
                         steamVrBehaviour.steamvr_render = gameObject1.AddComponent<SteamVR_Render>();
                 }
-                SteamVR_Behaviour._instance = steamVrBehaviour;
+                _instance = steamVrBehaviour;
             }
-            if ((UnityEngine.Object)SteamVR_Behaviour._instance != (UnityEngine.Object)null && SteamVR_Behaviour._instance.doNotDestroy)
-                UnityEngine.Object.DontDestroyOnLoad((UnityEngine.Object)SteamVR_Behaviour._instance.transform.root.gameObject);
-            SteamVR_Behaviour.initializing = false;
+
+            MelonLogger.Msg("[HPVR] behaviour: " + _instance?.name);
+            MelonLogger.Msg("[HPVR] renderer: " + _instance?.steamvr_render?.name);
+
+            if (_instance != null && _instance.doNotDestroy)
+                DontDestroyOnLoad(_instance.transform.root.gameObject);
+            initializing = false;
         }
 
         protected void Awake()
         {
-            SteamVR_Behaviour.isPlaying = true;
-            if (!this.initializeSteamVROnAwake || SteamVR_Behaviour.forcingInitialization)
+            isPlaying = true;
+            if (!initializeSteamVROnAwake || forcingInitialization)
                 return;
-            this.InitializeSteamVR(false);
+            InitializeSteamVR(false);
         }
 
         public void InitializeSteamVR(bool forceUnityVRToOpenVR = false)
@@ -106,12 +117,12 @@ namespace Valve.VR
         {
             if (deviceName == "OpenVR")
             {
-                this.loadedOpenVRDeviceSuccess = true;
+                loadedOpenVRDeviceSuccess = true;
             }
             else
             {
-                Debug.LogError(("<b>[SteamVR]</b> Tried to async load: OpenVR. Loaded: " + deviceName), (UnityEngine.Object)this);
-                this.loadedOpenVRDeviceSuccess = true;
+                MelonLogger.Error("[HPVR] Tried to async load: OpenVR. Loaded: " + deviceName, this);
+                loadedOpenVRDeviceSuccess = true;
             }
         }
 
@@ -119,31 +130,29 @@ namespace Valve.VR
         {
             XRSettings.enabled = true;
             SteamVR.Initialize(false);
-            SteamVR_Behaviour.forcingInitialization = false;
+            forcingInitialization = false;
         }
 
         protected void OnEnable()
         {
-            UnityHooks.OnBeforeRender += this.OnBeforeRender;
-            SteamVR_Events.System(EVREventType.VREvent_Quit).Listen((this.OnQuit));
+            SteamVR_Events.System(EVREventType.VREvent_Quit).Listen(OnQuit);
         }
 
         protected void OnDisable()
         {
-            UnityHooks.OnBeforeRender -= this.OnBeforeRender;
-            SteamVR_Events.System(EVREventType.VREvent_Quit).Remove((this.OnQuit));
+            SteamVR_Events.System(EVREventType.VREvent_Quit).Remove(OnQuit);
         }
 
         protected void OnBeforeRender()
         {
-            this.PreCull();
+            PreCull();
         }
 
         protected void PreCull()
         {
-            if (Time.frameCount == SteamVR_Behaviour.lastFrameCount)
+            if (Time.frameCount == lastFrameCount)
                 return;
-            SteamVR_Behaviour.lastFrameCount = Time.frameCount;
+            lastFrameCount = Time.frameCount;
             SteamVR_Input.OnPreCull();
         }
 

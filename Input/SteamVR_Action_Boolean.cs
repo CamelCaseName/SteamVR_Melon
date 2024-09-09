@@ -50,7 +50,6 @@ namespace Valve.VR
         public event ActiveChangeHandler onActiveBindingChange
         { add { sourceMap[SteamVR_Input_Sources.Any].onActiveBindingChange += value; } remove { sourceMap[SteamVR_Input_Sources.Any].onActiveBindingChange -= value; } }
 
-
         /// <summary><strong>[Shortcut to: SteamVR_Input_Sources.Any]</strong> True when the boolean action is true</summary>
         public bool state { get { return sourceMap[SteamVR_Input_Sources.Any].state; } }
 
@@ -60,7 +59,6 @@ namespace Valve.VR
         /// <summary><strong>[Shortcut to: SteamVR_Input_Sources.Any]</strong> True when the boolean action is false and the last state was true</summary>
         public bool stateUp { get { return sourceMap[SteamVR_Input_Sources.Any].stateUp; } }
 
-
         /// <summary><strong>[Shortcut to: SteamVR_Input_Sources.Any]</strong> (previous update) True when the boolean action is true</summary>
         public bool lastState { get { return sourceMap[SteamVR_Input_Sources.Any].lastState; } }
 
@@ -69,7 +67,6 @@ namespace Valve.VR
 
         /// <summary><strong>[Shortcut to: SteamVR_Input_Sources.Any]</strong> (previous update) True when the boolean action is false and the last state was true</summary>
         public bool lastStateUp { get { return sourceMap[SteamVR_Input_Sources.Any].lastStateUp; } }
-
 
         public SteamVR_Action_Boolean() { }
 
@@ -259,7 +256,6 @@ namespace Valve.VR
         /// <remarks>ActionSet is ignored since get is coming from the native struct.</remarks>
         public override bool changed { get { return active && actionData.bChanged; } protected set { } }
 
-
         /// <summary>The value of the action's 'state' during the previous update</summary>
         /// <remarks>Always returns the previous update state</remarks>
         public bool lastState { get { return lastActionData.bState; } }
@@ -297,13 +293,11 @@ namespace Valve.VR
         /// <summary>Returns true if the action is bound</summary>
         public override bool activeBinding { get { return actionData.bActive; } }
 
-
         /// <summary>Returns true if the action was bound and the ActionSet was active during the previous update</summary>
         public override bool lastActive { get; protected set; }
 
         /// <summary>Returns true if the action was bound during the previous update</summary>
         public override bool lastActiveBinding { get { return lastActionData.bActive; } }
-
 
         protected InputDigitalActionData_t actionData = new InputDigitalActionData_t();
         protected InputDigitalActionData_t lastActionData = new InputDigitalActionData_t();
@@ -311,7 +305,7 @@ namespace Valve.VR
         protected SteamVR_Action_Boolean booleanAction;
 
         /// <summary>
-        /// <strong>[Should not be called by user code]</strong> Sets up the internals of the action source before SteamVR_Standalone has been initialized.
+        /// <strong>[Should not be called by user code]</strong> Sets up the internals of the action source before SteamVR has been initialized.
         /// </summary>
         public override void Preinitialize(SteamVR_Action wrappingAction, SteamVR_Input_Sources forInputSource)
         {
@@ -321,7 +315,7 @@ namespace Valve.VR
 
         /// <summary>
         /// <strong>[Should not be called by user code]</strong>
-        /// Initializes the handle for the inputSource, the action data size, and any other related SteamVR_Standalone data.
+        /// Initializes the handle for the inputSource, the action data size, and any other related SteamVR data.
         /// </summary>
         public override void Initialize()
         {
@@ -342,11 +336,11 @@ namespace Valve.VR
 
             EVRInputError err = OpenVR.Input.GetDigitalActionData(action.handle, ref actionData, actionData_size, inputSourceHandle);
             if (err != EVRInputError.None)
-                Debug.LogWarning("<b>[SteamVR_Standalone]</b> GetDigitalActionData error (" + action.fullPath + "): " + err.ToString() + " handle: " + action.handle.ToString());
+                MelonLoader.MelonLogger.Warning("[HPVR] GetDigitalActionData error (" + action.fullPath + "): " + err.ToString() + " handle: " + action.handle.ToString());
 
             if(action.handle == 0)
             {
-                Debug.LogError($"Action {action.GetShortName()} seems to have an incorrect handle!");
+                MelonLoader.MelonLogger.Error($"Action {action.GetShortName()} seems to have an incorrect handle!");
             }
 
             if (changed)

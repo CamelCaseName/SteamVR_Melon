@@ -17,7 +17,6 @@ namespace Valve.VR
         public string[] poseNames;
         #endregion
 
-
         public SteamVR_Skeleton_Poser(IntPtr value)
         : base(value) { }
 
@@ -52,7 +51,6 @@ namespace Valve.VR
 
         public float scale;
 
-
         protected void Awake()
         {
             if (previewLeftInstance != null)
@@ -73,8 +71,6 @@ namespace Valve.VR
             blendedSnapshotR = new SteamVR_Skeleton_PoseSnapshot(boneCount, SteamVR_Input_Sources.RightHand);
         }
 
-
-
         /// <summary>
 
         /// </summary>
@@ -87,7 +83,7 @@ namespace Valve.VR
 
                 if (behaviour.type != PoseBlendingBehaviour.BlenderTypes.Manual)
                 {
-                    Debug.LogWarning("[SteamVR_Standalone] Blending Behaviour: " + behaviourName + " is not a manual behaviour. Its value will likely be overriden.", this);
+                    MelonLoader.MelonLogger.Warning("[SteamVR] Blending Behaviour: " + behaviourName + " is not a manual behaviour. Its value will likely be overriden.", this);
                 }
             }
         }
@@ -145,14 +141,13 @@ namespace Valve.VR
             if (behaviour == null)
             {
                 if (throwErrors)
-                    Debug.LogError("[SteamVR_Standalone] Blending Behaviour: " + behaviourName + " not found on Skeleton Poser: " + gameObject.name, this);
+                    MelonLoader.MelonLogger.Error("[SteamVR] Blending Behaviour: " + behaviourName + " not found on Skeleton Poser: " + gameObject.name, this);
 
                 return null;
             }
 
             return behaviour;
         }
-
 
         public SteamVR_Skeleton_Pose GetPoseByIndex(int index)
         {
@@ -188,7 +183,6 @@ namespace Valve.VR
             return GetBlendedPose(skeletonBehaviour.skeletonAction, skeletonBehaviour.inputSource);
         }
 
-
         /// <summary>
         /// Updates all pose animation and blending. Can be called from different places without performance concerns, as it will only let itself run once per frame.
         /// </summary>
@@ -210,7 +204,6 @@ namespace Valve.VR
             snap.CopyFrom(blendPoses[0].GetHandSnapshot(inputSource));
 
             ApplyBlenderBehaviours(skeletonAction, inputSource, snap);
-
 
             if (inputSource == SteamVR_Input_Sources.RightHand)
                 blendedSnapshotR = snap;
@@ -437,7 +430,6 @@ namespace Valve.VR
             }
         }
 
-
         //this is broken
         public Vector3 GetTargetHandPosition(SteamVR_Behaviour_Skeleton hand, Transform origin)
         {
@@ -499,9 +491,7 @@ namespace Valve.VR
             }
         }
 
-
     }
-
 
     /// <summary>
     /// Simple mask for fingers

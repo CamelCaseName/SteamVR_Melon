@@ -16,7 +16,6 @@ namespace Valve.VR
         public SteamVR_Skybox(IntPtr value)
 : base(value) { }
 
-
         // Note: Unity's Left and Right Skybox shader variables are switched.
         public Texture front, back, left, right, top, bottom;
 
@@ -88,18 +87,18 @@ namespace Valve.VR
                 var textures = new Texture_t[6];
                 for (int i = 0; i < 6; i++)
                 {
-                    textures[i].handle = (handles[i] != null) ? handles[i].GetNativeTexturePtr() : System.IntPtr.Zero;
+                    textures[i].handle = (handles[i] != null) ? handles[i].GetNativeTexturePtr() : IntPtr.Zero;
                     textures[i].eType = SteamVR.instance.textureType;
                     textures[i].eColorSpace = EColorSpace.Auto;
                 }
                 var error = compositor.SetSkyboxOverride(textures);
                 if (error != EVRCompositorError.None)
                 {
-                    Debug.LogError("<b>[SteamVR_Standalone]</b> Failed to set skybox override with error: " + error);
+                    MelonLoader.MelonLogger.Error("[HPVR] Failed to set skybox override with error: " + error);
                     if (error == EVRCompositorError.TextureIsOnWrongDevice)
-                        Debug.Log("<b>[SteamVR_Standalone]</b> Set your graphics driver to use the same video card as the headset is plugged into for Unity.");
+                        MelonLoader.MelonLogger.Msg("[HPVR] Set your graphics driver to use the same video card as the headset is plugged into for Unity.");
                     else if (error == EVRCompositorError.TextureUsesUnsupportedFormat)
-                        Debug.Log("<b>[SteamVR_Standalone]</b> Ensure skybox textures are not compressed and have no mipmaps.");
+                        MelonLoader.MelonLogger.Msg("[HPVR] Ensure skybox textures are not compressed and have no mipmaps.");
                 }
             }
         }

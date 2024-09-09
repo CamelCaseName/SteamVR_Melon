@@ -18,12 +18,9 @@ namespace Valve.VR
         public SteamVR_Behaviour_Pose(IntPtr value)
 : base(value) { }
 
-
         public SteamVR_Action_Pose poseAction = SteamVR_Input.GetAction<SteamVR_Action_Pose>("Pose");
 
-
         public SteamVR_Input_Sources inputSource;
-
 
         public Transform origin;
 
@@ -32,7 +29,6 @@ namespace Valve.VR
 
         /// <summary>Returns whether or not the pose action is bound and able to be updated</summary>
         public bool isActive { get { return poseAction[inputSource].active; } }
-
 
         /// <summary>This Unity event will fire whenever the position or rotation of this transform is updated.</summary>
         public SteamVR_Behaviour_PoseEvent onTransformUpdated;
@@ -49,7 +45,6 @@ namespace Valve.VR
         /// <summary>This Unity event will fire whenever the device's deviceIndex changes</summary>
         public SteamVR_Behaviour_Pose_DeviceIndexChangedEvent onDeviceIndexChanged;
 
-
         /// <summary>This C# event will fire whenever the position or rotation of this transform is updated.</summary>
         public UpdateHandler onTransformUpdatedEvent;
 
@@ -65,14 +60,11 @@ namespace Valve.VR
         /// <summary>This C# event will fire whenever the device's deviceIndex changes</summary>
         public DeviceIndexChangedHandler onDeviceIndexChangedEvent;
 
-
-
         public bool broadcastDeviceChanges = true;
 
         protected int deviceIndex = -1;
 
         protected SteamVR_HistoryBuffer historyBuffer = new SteamVR_HistoryBuffer(30);
-
 
         public Quaternion rotationOffset = Quaternion.identity;
 
@@ -80,14 +72,14 @@ namespace Valve.VR
         {
             if (poseAction == null)
             {
-                Debug.LogError("<b>[SteamVR_Standalone]</b> No pose action set for this component", this);
+                MelonLoader.MelonLogger.Error("[HPVR] No pose action set for this component", this);
                 return;
             }
 
             CheckDeviceIndex();
 
             if (origin == null)
-                origin = this.transform.parent;
+                origin = transform.parent;
         }
 
         protected virtual void OnEnable()

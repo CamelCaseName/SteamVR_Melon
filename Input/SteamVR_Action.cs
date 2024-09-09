@@ -2,11 +2,11 @@
 // Action implementation overview:
 // Actions are split into three parts:
 //     * Action: The user-accessible class that is the interface for accessing action data.
-//          There may be many Action instances per Actual SteamVR_Standalone Action, but these instances are just interfaces to the data and should have virtually no overhead.
+//          There may be many Action instances per Actual SteamVR Action, but these instances are just interfaces to the data and should have virtually no overhead.
 //     * Action Map: This is basically a wrapper for a list of Action_Source instances.
-//          The idea being there is one Map per Actual SteamVR_Standalone Action.
+//          The idea being there is one Map per Actual SteamVR Action.
 //          These maps can be retrieved from a static store in SteamVR_Input so we're not duplicating data.
-//     * Action Source: This is a collection of cached data retrieved by calls to the underlying SteamVR_Standalone Input system.
+//     * Action Source: This is a collection of cached data retrieved by calls to the underlying SteamVR Input system.
 //          Each Action Source has an inputSource that it is associated with.
 
 using UnityEngine;
@@ -20,7 +20,7 @@ namespace Valve.VR
 {
     [Serializable]
     /// <summary>
-    /// This is the base level action for SteamVR_Standalone Input Actions. All SteamVR_Action_In and SteamVR_Action_Out inherit from this.
+    /// This is the base level action for SteamVR Input Actions. All SteamVR_Action_In and SteamVR_Action_Out inherit from this.
     /// Initializes the ulong handle for the action, has some helper references that all actions will have.
     /// </summary>
     public abstract class SteamVR_Action<SourceMap, SourceElement> : SteamVR_Action, ISteamVR_Action where SourceMap : SteamVR_Action_Source_Map<SourceElement>, new() where SourceElement : SteamVR_Action_Source, new()
@@ -52,7 +52,7 @@ namespace Valve.VR
             }
         }
 
-        /// <summary>The underlying handle for this action used for native SteamVR_Standalone Input calls</summary>
+        /// <summary>The underlying handle for this action used for native SteamVR Input calls</summary>
         public override ulong handle { get { return sourceMap.handle; } }
 
         /// <summary>The actionset this action is contained within</summary>
@@ -84,7 +84,6 @@ namespace Valve.VR
 
         /// <summary><strong>[Shortcut to: SteamVR_Input_Sources.Any]</strong> Returns true if the action was bound at the previous update</summary>
         public override bool lastActiveBinding { get { return sourceMap[SteamVR_Input_Sources.Any].lastActiveBinding; } }
-
 
         [NonSerialized]
         protected bool initialized = false;
@@ -135,12 +134,12 @@ namespace Valve.VR
 
                 if (existingAction == null)
                 {
-                    this.sourceMap = null;
+                    sourceMap = null;
                 }
                 else
                 {
-                    this.actionPath = existingAction.fullPath;
-                    this.sourceMap = (SourceMap)existingAction.GetSourceMap();
+                    actionPath = existingAction.fullPath;
+                    sourceMap = (SourceMap)existingAction.GetSourceMap();
 
                     initialized = true;
                     needsReinit = false;
@@ -150,7 +149,6 @@ namespace Valve.VR
 
             return null;
         }
-
 
         /// <summary>
         /// <strong>[Should not be called by user code]</strong> Initializes the individual sources as well as the base map itself.
@@ -187,8 +185,8 @@ namespace Valve.VR
 
         protected override void InitializeCopy(string newActionPath, SteamVR_Action_Source_Map newData)
         {
-            this.actionPath = newActionPath;
-            this.sourceMap = (SourceMap)newData;
+            actionPath = newActionPath;
+            sourceMap = (SourceMap)newData;
 
             initialized = true;
         }
@@ -213,7 +211,6 @@ namespace Valve.VR
             }
         }
 
-
         /// <summary>
 
         /// </summary>
@@ -231,7 +228,6 @@ namespace Valve.VR
         {
             return sourceMap[inputSource].activeBinding;
         }
-
 
         /// <summary>
 
@@ -251,7 +247,6 @@ namespace Valve.VR
             return sourceMap[inputSource].lastActiveBinding;
         }
     }
-
 
     [Serializable]
     public abstract class SteamVR_Action : IEquatable<SteamVR_Action>, ISteamVR_Action
@@ -305,7 +300,7 @@ namespace Valve.VR
             if (SteamVR_Input.ShouldMakeCopy()) //no need to make copies at runtime
             {
                 CreateType action = new CreateType();
-                action.InitializeCopy(this.actionPath, this.GetSourceMap());
+                action.InitializeCopy(actionPath, GetSourceMap());
                 return action;
             }
             else
@@ -321,7 +316,7 @@ namespace Valve.VR
         /// <summary>The full string path for this action</summary>
         public abstract string fullPath { get; }
 
-        /// <summary>The underlying handle for this action used for native SteamVR_Standalone Input calls</summary>
+        /// <summary>The underlying handle for this action used for native SteamVR Input calls</summary>
         public abstract ulong handle { get; }
 
         /// <summary>The actionset this action is contained within</summary>
@@ -357,7 +352,7 @@ namespace Valve.VR
         protected abstract void CreateUninitialized(string newActionSet, SteamVR_ActionDirections direction, string newAction, bool caseSensitive);
 
         /// <summary>
-        /// Initializes the individual sources as well as the base map itself. Gets the handle for the action from SteamVR_Standalone and does any other SteamVR_Standalone related setup that needs to be done
+        /// Initializes the individual sources as well as the base map itself. Gets the handle for the action from SteamVR and does any other SteamVR related setup that needs to be done
         /// </summary>
         public abstract void Initialize(bool createNew = false, bool throwNotSetError = true);
 
@@ -367,13 +362,11 @@ namespace Valve.VR
 
         public abstract SteamVR_Action_Source_Map GetSourceMap();
 
-
         /// <summary>
 
         /// </summary>
         /// <param name="inputSource">The device you would like to get data from. Any if the action is not device specific.</param>
         public abstract bool GetActive(SteamVR_Input_Sources inputSource);
-
 
         /// <summary>
 
@@ -389,7 +382,6 @@ namespace Valve.VR
         /// </summary>
         /// <param name="inputSource">The device you would like to get data from. Any if the action is not device specific.</param>
         public abstract bool GetActiveBinding(SteamVR_Input_Sources inputSource);
-
 
         /// <summary>
 
@@ -414,7 +406,6 @@ namespace Valve.VR
         /// </summary>
         public abstract bool IsUpdating(SteamVR_Input_Sources inputSource);
 
-
         /// <summary>
         /// Creates a hashcode from the full action path of this action
         /// </summary>
@@ -438,7 +429,7 @@ namespace Valve.VR
             //SteamVR_Action_Source_Map otherMap = other.GetSourceMap();
 
             //return this.actionPath == other.actionPath && thisMap.fullPath == otherMap.fullPath;
-            return this.actionPath == other.actionPath;
+            return actionPath == other.actionPath;
         }
 
         /// <summary>
@@ -448,9 +439,9 @@ namespace Valve.VR
         {
             if (ReferenceEquals(null, other))
             {
-                if (string.IsNullOrEmpty(this.actionPath)) //if we haven't set a path, say this action is equal to null
+                if (string.IsNullOrEmpty(actionPath)) //if we haven't set a path, say this action is equal to null
                     return true;
-                if (this.GetSourceMap() == null)
+                if (GetSourceMap() == null)
                     return true;
 
                 return false;
@@ -460,7 +451,7 @@ namespace Valve.VR
                 return true;
 
             if (other is SteamVR_Action)
-                return this.Equals((SteamVR_Action)other);
+                return Equals((SteamVR_Action)other);
 
             return false;
         }
@@ -478,8 +469,8 @@ namespace Valve.VR
         /// </summary>
         public static bool operator ==(SteamVR_Action action1, SteamVR_Action action2)
         {
-            bool action1null = (ReferenceEquals(null, action1) || string.IsNullOrEmpty(action1.actionPath) || action1.GetSourceMap() == null);
-            bool action2null = (ReferenceEquals(null, action2) || string.IsNullOrEmpty(action2.actionPath) || action2.GetSourceMap() == null);
+            bool action1null = ReferenceEquals(null, action1) || string.IsNullOrEmpty(action1.actionPath) || action1.GetSourceMap() == null;
+            bool action2null = ReferenceEquals(null, action2) || string.IsNullOrEmpty(action2.actionPath) || action2.GetSourceMap() == null;
 
             if (action1null && action2null)
                 return true;
@@ -515,7 +506,6 @@ namespace Valve.VR
 
             return existingAction;
         }
-
 
         [NonSerialized]
         private string cachedShortName;
@@ -561,7 +551,7 @@ namespace Valve.VR
         protected SourceElement[] sources = new SourceElement[SteamVR_Input_Source.numSources];
 
         /// <summary>
-        /// <strong>[Should not be called by user code]</strong> Initializes the individual sources as well as the base map itself. Gets the handle for the action from SteamVR_Standalone and does any other SteamVR_Standalone related setup that needs to be done
+        /// <strong>[Should not be called by user code]</strong> Initializes the individual sources as well as the base map itself. Gets the handle for the action from SteamVR and does any other SteamVR related setup that needs to be done
         /// </summary>
         public override void Initialize()
         {
@@ -596,7 +586,7 @@ namespace Valve.VR
         /// <summary>The full string path for this action (from the action manifest)</summary>
         public string fullPath { get; protected set; }
 
-        /// <summary>The underlying handle for this action used for native SteamVR_Standalone Input calls. Retrieved on Initialization from SteamVR_Standalone.</summary>
+        /// <summary>The underlying handle for this action used for native SteamVR Input calls. Retrieved on Initialization from SteamVR.</summary>
         public ulong handle { get; protected set; }
 
         /// <summary>The ActionSet this action is contained within</summary>
@@ -625,12 +615,12 @@ namespace Valve.VR
         }
 
         /// <summary>
-        /// <strong>[Should not be called by user code]</strong> Sets up the internals of the action source before SteamVR_Standalone has been initialized.
+        /// <strong>[Should not be called by user code]</strong> Sets up the internals of the action source before SteamVR has been initialized.
         /// </summary>
         protected abstract void PreinitializeMap(SteamVR_Input_Sources inputSource, SteamVR_Action wrappingAction);
 
         /// <summary>
-        /// <strong>[Should not be called by user code]</strong> Initializes the handle for the action and any other related SteamVR_Standalone data.
+        /// <strong>[Should not be called by user code]</strong> Initializes the handle for the action and any other related SteamVR data.
         /// </summary>
         public virtual void Initialize()
         {
@@ -639,7 +629,7 @@ namespace Valve.VR
             handle = newHandle;
 
             if (err != EVRInputError.None)
-                Debug.LogError("<b>[SteamVR_Standalone]</b> GetActionHandle (" + fullPath.ToLowerInvariant() + ") error: " + err.ToString());
+                MelonLoader.MelonLogger.Error("[HPVR] GetActionHandle (" + fullPath.ToLowerInvariant() + ") error: " + err.ToString());
         }
 
         private string GetActionSetPath()
@@ -669,7 +659,7 @@ namespace Valve.VR
             else if (direction == outLowered)
                 return SteamVR_ActionDirections.Out;
             else
-                Debug.LogError("Could not find match for direction: " + direction);
+                MelonLoader.MelonLogger.Error("Could not find match for direction: " + direction);
             return SteamVR_ActionDirections.In;
         }
     }
@@ -679,7 +669,7 @@ namespace Valve.VR
         /// <summary>The full string path for this action (from the action manifest)</summary>
         public string fullPath { get { return action.fullPath; } }
 
-        /// <summary>The underlying handle for this action used for native SteamVR_Standalone Input calls. Retrieved on Initialization from SteamVR_Standalone.</summary>
+        /// <summary>The underlying handle for this action used for native SteamVR Input calls. Retrieved on Initialization from SteamVR.</summary>
         public ulong handle { get { return action.handle; } }
 
         /// <summary>The ActionSet this action is contained within</summary>
@@ -694,7 +684,6 @@ namespace Valve.VR
         /// <summary>Returns true if the action set this is contained in is active for this input source (or Any)</summary>
         public bool setActive { get { return actionSet.IsActive(inputSource); } }
 
-
         /// <summary>Returns true if this action is bound and the ActionSet is active</summary>
         public abstract bool active { get; }
 
@@ -707,13 +696,12 @@ namespace Valve.VR
         /// <summary>Returns true if the action was bound during the previous update</summary>
         public abstract bool lastActiveBinding { get; }
 
-
         protected ulong inputSourceHandle;
 
         protected SteamVR_Action action;
 
         /// <summary>
-        /// <strong>[Should not be called by user code]</strong> Sets up the internals of the action source before SteamVR_Standalone has been initialized.
+        /// <strong>[Should not be called by user code]</strong> Sets up the internals of the action source before SteamVR has been initialized.
         /// </summary>
         public virtual void Preinitialize(SteamVR_Action wrappingAction, SteamVR_Input_Sources forInputSource)
         {
@@ -725,14 +713,13 @@ namespace Valve.VR
 
         /// <summary>
         /// <strong>[Should not be called by user code]</strong>
-        /// Initializes the handle for the inputSource, and any other related SteamVR_Standalone data.
+        /// Initializes the handle for the inputSource, and any other related SteamVR data.
         /// </summary>
         public virtual void Initialize()
         {
             inputSourceHandle = SteamVR_Input_Source.GetHandle(inputSource);
         }
     }
-
 
     public interface ISteamVR_Action : ISteamVR_Action_Source
     {
@@ -743,7 +730,6 @@ namespace Valve.VR
         /// <summary>Returns the name of the action without the action set or direction</summary>
         string GetShortName();
     }
-
 
     public interface ISteamVR_Action_Source
     {
@@ -762,7 +748,7 @@ namespace Valve.VR
         /// <summary>The full string path for this action (from the action manifest)</summary>
         string fullPath { get; }
 
-        /// <summary>The underlying handle for this action used for native SteamVR_Standalone Input calls. Retrieved on Initialization from SteamVR_Standalone.</summary>
+        /// <summary>The underlying handle for this action used for native SteamVR Input calls. Retrieved on Initialization from SteamVR.</summary>
         ulong handle { get; }
 
         /// <summary>The ActionSet this action is contained within</summary>

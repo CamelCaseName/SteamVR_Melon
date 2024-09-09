@@ -4,23 +4,20 @@
 //
 //=============================================================================
 
+using MelonLoader;
+using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.Rendering;
-using System.Collections;
-using Valve.VR;
-using System;
-using SteamVR_Standalone_IL2CPP.Util;
 
 namespace Valve.VR
 {
-
     public class SteamVR_PlayArea : MonoBehaviour
     {
         public float borderThickness = 0.15f;
         public float wireframeHeight = 2.0f;
         public bool drawWireframeWhenSelectedOnly = false;
         public bool drawInGame = true;
-
 
         public SteamVR_PlayArea(IntPtr value)
 : base(value) { }
@@ -49,7 +46,7 @@ namespace Valve.VR
                 var chaperone = OpenVR.Chaperone;
                 bool success = (chaperone != null) && chaperone.GetPlayAreaRect(ref pRect);
                 if (!success)
-                    Debug.LogWarning("<b>[SteamVR_Standalone]</b> Failed to get Calibrated Play Area bounds!  Make sure you have tracking first, and that your space is calibrated.");
+                    MelonLogger.Warning("[HPVR] Failed to get Calibrated Play Area bounds!  Make sure you have tracking first, and that your space is calibrated.");
 
                 if (temporarySession)
                     SteamVR.ExitTemporarySession();
@@ -172,13 +169,43 @@ namespace Valve.VR
 
             var renderer = GetComponent<MeshRenderer>();
             renderer.material = new Material(Shader.Find("Sprites/Default"));
-            renderer.reflectionProbeUsage = UnityEngine.Rendering.ReflectionProbeUsage.Off;
-            renderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
+            renderer.reflectionProbeUsage = ReflectionProbeUsage.Off;
+            renderer.shadowCastingMode = ShadowCastingMode.Off;
             renderer.receiveShadows = false;
             renderer.lightProbeUsage = LightProbeUsage.Off;
         }
 
-        
+        void OnDrawGizmos()
+        {
+            if (!drawWireframeWhenSelectedOnly)
+                DrawWireframe();
+        }
+
+        void OnDrawGizmosSelected()
+        {
+            if (drawWireframeWhenSelectedOnly)
+                DrawWireframe();
+        }
+
+        public void DrawWireframe()
+        {
+            if (vertices == null || vertices.Length == 0)
+                return;
+
+            var offset = transform.TransformVector(Vector3.up * wireframeHeight);
+            for (int i = 0; i < 4; i++)
+            {
+                int next = (i + 1) % 4;
+
+                var a = transform.TransformPoint(vertices[i]);
+                var b = a + offset;
+                var c = transform.TransformPoint(vertices[next]);
+                var d = c + offset;
+                Gizmos.DrawLine(a, b);
+                Gizmos.DrawLine(a, c);
+                Gizmos.DrawLine(b, d);
+            }
+        }
 
         public void OnEnable()
         {

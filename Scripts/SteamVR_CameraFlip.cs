@@ -1,4 +1,4 @@
-﻿using Assets.SteamVR_Standalone.Standalone;
+﻿using Assets.SteamVR_Melon.Standalone;
 using System;
 using UnityEngine;
 
@@ -17,7 +17,6 @@ namespace Valve.VR
             }
         }
 
-
         private void OnRenderImage(RenderTexture src, RenderTexture dest)
         {
             Graphics.Blit(src, dest, blitMaterial);
@@ -28,11 +27,10 @@ namespace Valve.VR
             
             if (SteamVR_Camera.doomp)
             {
-                Debug.Log(Time.frameCount.ToString() + "/CameraFlip_OnRenderImage");
+                MelonLoader.MelonLogger.Msg(Time.frameCount.ToString() + "/CameraFlip_OnRenderImage");
                 SteamVR_Camera.DumpRenderTexture(dest, Application.streamingAssetsPath + "/CameraFlip_OnRenderImage_dst.png");
             }
         }
-
 
         public static Material blitMaterial;
     }

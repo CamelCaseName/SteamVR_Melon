@@ -21,8 +21,8 @@ namespace Valve.VR
             }
         }
 
-        public bool pauseGameWhenDashboardVisible = false;
-        public bool lockPhysicsUpdateRateToRenderFrequency = false;
+        public bool pauseGameWhenDashboardVisible = true;
+        public bool lockPhysicsUpdateRateToRenderFrequency = true;
         public ETrackingUniverseOrigin trackingSpace
         {
             get
@@ -37,12 +37,9 @@ namespace Valve.VR
             }
         }
 
-
         private ETrackingUniverseOrigin trackingSpaceOrigin = ETrackingUniverseOrigin.TrackingUniverseStanding;
 
-
         public string actionsFilePath = "actions.json";
-
 
         public string steamVRInputPath = "SteamVR_Input";
 
@@ -51,11 +48,8 @@ namespace Valve.VR
 
         public bool activateFirstActionSetOnStart = true;
 
-        
-        public string editorAppKey;
-
-        public bool autoEnableVR = true;
-
+         public string editorAppKey;
+public bool autoEnableVR = true;
 
         public bool legacyMixedRealityCamera = true;
 
@@ -96,11 +90,15 @@ namespace Valve.VR
 
                 if (_instance == null)
                 {
-                    _instance = new SteamVR_Settings();
+                    _instance =new SteamVR_Settings();
                 }
 
                 SetDefaultsIfNeeded();
             }
+        }
+
+        public static void Save()
+        {
         }
 
         private const string defaultSettingsAssetName = "SteamVR_Settings";
@@ -110,11 +108,8 @@ namespace Valve.VR
             if (string.IsNullOrEmpty(_instance.editorAppKey))
             {
                 _instance.editorAppKey = SteamVR.GenerateAppKey();
-                Debug.Log("<b>[SteamVR_Standalone Setup]</b> Generated you an editor app key of: " + _instance.editorAppKey + ". This lets the editor tell SteamVR_Standalone what project this is. Has no effect on builds. This can be changed in Assets/SteamVR_Standalone/Resources/SteamVR_Settings");
-
+                MelonLoader.MelonLogger.Msg("[HPVR] Generated you an editor app key of: " + _instance.editorAppKey + ". This lets the editor tell SteamVR what project this is. Has no effect on builds. This can be changed in Assets/SteamVR/Resources/SteamVR_Settings");
             }
-
-
         }
 
         private static GameObject FindDefaultPreviewHand(string assetName)

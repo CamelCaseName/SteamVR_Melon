@@ -54,7 +54,7 @@ namespace Valve.VR
         {
             if (vector2Action == null)
             {
-                Debug.LogError("[SteamVR_Standalone] Vector2 action not set.", this);
+                MelonLoader.MelonLogger.Error("[SteamVR] Vector2 action not set.", this);
                 return;
             }
 

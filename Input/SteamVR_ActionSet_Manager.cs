@@ -24,7 +24,7 @@ namespace Valve.VR
 
         public static void Initialize()
         {
-            activeActionSetSize = (uint)(Marshal.SizeOf(typeof(VRActiveActionSet_t)));
+            activeActionSetSize = (uint)Marshal.SizeOf(typeof(VRActiveActionSet_t));
         }
 
         /// <summary>
@@ -56,12 +56,12 @@ namespace Valve.VR
                 {
                     EVRInputError err = OpenVR.Input.UpdateActionState(rawActiveActionSetArray, activeActionSetSize);
                     if (err != EVRInputError.None)
-                        Debug.LogError("<b>[SteamVR_Standalone]</b> UpdateActionState error: " + err.ToString());
-                    //else Debug.Log("Action sets activated: " + activeActionSets.Length);
+                        MelonLoader.MelonLogger.Error("[HPVR] UpdateActionState error: " + err.ToString());
+                    //else MelonLoader.MelonLogger.Msg("Action sets activated: " + activeActionSets.Length);
                 }
                 else
                 {
-                    //Debug.LogWarning("No sets active");
+                    //MelonLoader.MelonLogger.Warning("No sets active");
                 }
             }
         }

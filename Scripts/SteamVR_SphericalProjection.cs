@@ -4,10 +4,8 @@
 //
 //=============================================================================
 
-using SteamVR_Standalone_IL2CPP.Util;
 using System;
 using UnityEngine;
-using Mathf = SteamVR_Standalone_IL2CPP.Util.Mathf;
 
 namespace Valve.VR
 {

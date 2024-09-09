@@ -37,7 +37,6 @@ namespace Valve.VR
         public event ActiveChangeHandler onActiveBindingChange
         { add { sourceMap[SteamVR_Input_Sources.Any].onActiveBindingChange += value; } remove { sourceMap[SteamVR_Input_Sources.Any].onActiveBindingChange -= value; } }
 
-
         /// <summary><strong>[Shortcut to: SteamVR_Input_Sources.Any]</strong> The current float value of the action.
         /// Note: Will only return non-zero if the action is also active.</summary>
         public float axis { get { return sourceMap[SteamVR_Input_Sources.Any].axis; } }
@@ -53,7 +52,6 @@ namespace Valve.VR
         /// <summary><strong>[Shortcut to: SteamVR_Input_Sources.Any]</strong> The float value difference between the previous update and update before that.
         /// Note: Will only return non-zero if the action is also active.</summary>
         public float lastDelta { get { return sourceMap[SteamVR_Input_Sources.Any].lastDelta; } }
-
 
         public SteamVR_Action_Single() { }
 
@@ -211,10 +209,8 @@ namespace Valve.VR
         /// Note: Will only return non-zero if the action is also active.</summary>
         public float lastDelta { get { if (active) return lastActionData.deltaX; else return 0; } }
 
-
         /// <summary>If the float value of this action has changed more than the changeTolerance since the last update</summary>
         public override bool changed { get; protected set; }
-
 
         /// <summary>If the float value of this action has changed more than the changeTolerance between the previous update and the update before that</summary>
         public override bool lastChanged { get; protected set; }
@@ -240,22 +236,19 @@ namespace Valve.VR
         /// <summary>Returns true if the action is bound</summary>
         public override bool activeBinding { get { return actionData.bActive; } }
 
-
         /// <summary>Returns true if the action was bound and the ActionSet was active during the previous update</summary>
         public override bool lastActive { get; protected set; }
 
         /// <summary>Returns true if the action was bound during the previous update</summary>
         public override bool lastActiveBinding { get { return lastActionData.bActive; } }
 
-
         protected InputAnalogActionData_t actionData = new InputAnalogActionData_t();
         protected InputAnalogActionData_t lastActionData = new InputAnalogActionData_t();
 
         protected SteamVR_Action_Single singleAction;
 
-
         /// <summary>
-        /// <strong>[Should not be called by user code]</strong> Sets up the internals of the action source before SteamVR_Standalone has been initialized.
+        /// <strong>[Should not be called by user code]</strong> Sets up the internals of the action source before SteamVR has been initialized.
         /// </summary>
         public override void Preinitialize(SteamVR_Action wrappingAction, SteamVR_Input_Sources forInputSource)
         {
@@ -265,7 +258,7 @@ namespace Valve.VR
 
         /// <summary>
         /// <strong>[Should not be called by user code]</strong>
-        /// Initializes the handle for the inputSource, the action data size, and any other related SteamVR_Standalone data.
+        /// Initializes the handle for the inputSource, the action data size, and any other related SteamVR data.
         /// </summary>
         public override void Initialize()
         {
@@ -285,7 +278,7 @@ namespace Valve.VR
 
             EVRInputError err = OpenVR.Input.GetAnalogActionData(handle, ref actionData, actionData_size, SteamVR_Input_Source.GetHandle(inputSource));
             if (err != EVRInputError.None)
-                Debug.LogError("<b>[SteamVR_Standalone]</b> GetAnalogActionData error (" + fullPath + "): " + err.ToString() + " handle: " + handle.ToString());
+                MelonLoader.MelonLogger.Error("[HPVR] GetAnalogActionData error (" + fullPath + "): " + err.ToString() + " handle: " + handle.ToString());
 
             updateTime = Time.realtimeSinceStartup;
 
@@ -314,7 +307,6 @@ namespace Valve.VR
                 }
             }
 
-
             if (onActiveBindingChange != null && lastActiveBinding != activeBinding)
                 onActiveBindingChange.Invoke(singleAction, inputSource, activeBinding);
 
@@ -332,7 +324,6 @@ namespace Valve.VR
         /// <summary>The float value of the action from the previous update.
         /// Note: Will only return non-zero if the action is also active.</summary>
         float lastAxis { get; }
-
 
         /// <summary>The float value difference between this update and the previous update.
         /// Note: Will only return non-zero if the action is also active.</summary>

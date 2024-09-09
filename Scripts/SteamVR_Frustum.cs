@@ -4,15 +4,12 @@
 //
 //=============================================================================
 
-using SteamVR_Standalone_IL2CPP.Util;
 using System;
 using UnityEngine;
-using UnityEngine.Events;
 using Valve.VR;
 
 namespace Valve.VR
 {
-
     public class SteamVR_Frustum : MonoBehaviour
     {
 
@@ -25,48 +22,48 @@ namespace Valve.VR
 
         public void UpdateModel()
         {
-            fovLeft = SteamVR_Standalone_IL2CPP.Util.Mathf.Clamp(fovLeft, 1, 89);
-            fovRight = SteamVR_Standalone_IL2CPP.Util.Mathf.Clamp(fovRight, 1, 89);
-            fovTop = SteamVR_Standalone_IL2CPP.Util.Mathf.Clamp(fovTop, 1, 89);
-            fovBottom = SteamVR_Standalone_IL2CPP.Util.Mathf.Clamp(fovBottom, 1, 89);
-            farZ = SteamVR_Standalone_IL2CPP.Util.Mathf.Max(farZ, nearZ + 0.01f);
-            nearZ = SteamVR_Standalone_IL2CPP.Util.Mathf.Clamp(nearZ, 0.01f, farZ - 0.01f);
+            fovLeft = Mathf.Clamp(fovLeft, 1, 89);
+            fovRight = Mathf.Clamp(fovRight, 1, 89);
+            fovTop = Mathf.Clamp(fovTop, 1, 89);
+            fovBottom = Mathf.Clamp(fovBottom, 1, 89);
+            farZ = Mathf.Max(farZ, nearZ + 0.01f);
+            nearZ = Mathf.Clamp(nearZ, 0.01f, farZ - 0.01f);
 
-            var lsin = SteamVR_Standalone_IL2CPP.Util.Mathf.Sin(-fovLeft * SteamVR_Standalone_IL2CPP.Util.Mathf.Deg2Rad);
-            var rsin = SteamVR_Standalone_IL2CPP.Util.Mathf.Sin(fovRight * SteamVR_Standalone_IL2CPP.Util.Mathf.Deg2Rad);
-            var tsin = SteamVR_Standalone_IL2CPP.Util.Mathf.Sin(fovTop * SteamVR_Standalone_IL2CPP.Util.Mathf.Deg2Rad);
-            var bsin = SteamVR_Standalone_IL2CPP.Util.Mathf.Sin(-fovBottom * SteamVR_Standalone_IL2CPP.Util.Mathf.Deg2Rad);
+            var lsin = Mathf.Sin(-fovLeft * Mathf.Deg2Rad);
+            var rsin = Mathf.Sin(fovRight * Mathf.Deg2Rad);
+            var tsin = Mathf.Sin(fovTop * Mathf.Deg2Rad);
+            var bsin = Mathf.Sin(-fovBottom * Mathf.Deg2Rad);
 
-            var lcos = SteamVR_Standalone_IL2CPP.Util.Mathf.Cos(-fovLeft * SteamVR_Standalone_IL2CPP.Util.Mathf.Deg2Rad);
-            var rcos = SteamVR_Standalone_IL2CPP.Util.Mathf.Cos(fovRight * SteamVR_Standalone_IL2CPP.Util.Mathf.Deg2Rad);
-            var tcos = SteamVR_Standalone_IL2CPP.Util.Mathf.Cos(fovTop * SteamVR_Standalone_IL2CPP.Util.Mathf.Deg2Rad);
-            var bcos = SteamVR_Standalone_IL2CPP.Util.Mathf.Cos(-fovBottom * SteamVR_Standalone_IL2CPP.Util.Mathf.Deg2Rad);
+            var lcos = Mathf.Cos(-fovLeft * Mathf.Deg2Rad);
+            var rcos = Mathf.Cos(fovRight * Mathf.Deg2Rad);
+            var tcos = Mathf.Cos(fovTop * Mathf.Deg2Rad);
+            var bcos = Mathf.Cos(-fovBottom * Mathf.Deg2Rad);
 
             var corners = new Vector3[] {
             new Vector3(lsin * nearZ / lcos, tsin * nearZ / tcos, nearZ), //tln
-			new Vector3(rsin * nearZ / rcos, tsin * nearZ / tcos, nearZ), //trn
-			new Vector3(rsin * nearZ / rcos, bsin * nearZ / bcos, nearZ), //brn
-			new Vector3(lsin * nearZ / lcos, bsin * nearZ / bcos, nearZ), //bln
-			new Vector3(lsin * farZ  / lcos, tsin * farZ  / tcos, farZ ), //tlf
-			new Vector3(rsin * farZ  / rcos, tsin * farZ  / tcos, farZ ), //trf
-			new Vector3(rsin * farZ  / rcos, bsin * farZ  / bcos, farZ ), //brf
-			new Vector3(lsin * farZ  / lcos, bsin * farZ  / bcos, farZ ), //blf
-		};
+            new Vector3(rsin * nearZ / rcos, tsin * nearZ / tcos, nearZ), //trn
+            new Vector3(rsin * nearZ / rcos, bsin * nearZ / bcos, nearZ), //brn
+            new Vector3(lsin * nearZ / lcos, bsin * nearZ / bcos, nearZ), //bln
+            new Vector3(lsin * farZ  / lcos, tsin * farZ  / tcos, farZ ), //tlf
+            new Vector3(rsin * farZ  / rcos, tsin * farZ  / tcos, farZ ), //trf
+            new Vector3(rsin * farZ  / rcos, bsin * farZ  / bcos, farZ ), //brf
+            new Vector3(lsin * farZ  / lcos, bsin * farZ  / bcos, farZ ), //blf
+        };
 
             var triangles = new int[] {
-		//	0, 1, 2, 0, 2, 3, // near
-		//	0, 2, 1, 0, 3, 2, // near
-		//	4, 5, 6, 4, 6, 7, // far
-		//	4, 6, 5, 4, 7, 6, // far
-			0, 4, 7, 0, 7, 3, // left
-			0, 7, 4, 0, 3, 7, // left
-			1, 5, 6, 1, 6, 2, // right
-			1, 6, 5, 1, 2, 6, // right
-			0, 4, 5, 0, 5, 1, // top
-			0, 5, 4, 0, 1, 5, // top
-			2, 3, 7, 2, 7, 6, // bottom
-			2, 7, 3, 2, 6, 7, // bottom
-		};
+        //	0, 1, 2, 0, 2, 3, // near
+        //	0, 2, 1, 0, 3, 2, // near
+        //	4, 5, 6, 4, 6, 7, // far
+        //	4, 6, 5, 4, 7, 6, // far
+            0, 4, 7, 0, 7, 3, // left
+            0, 7, 4, 0, 3, 7, // left
+            1, 5, 6, 1, 6, 2, // right
+            1, 6, 5, 1, 2, 6, // right
+            0, 4, 5, 0, 5, 1, // top
+            0, 5, 4, 0, 1, 5, // top
+            2, 3, 7, 2, 7, 6, // bottom
+            2, 7, 3, 2, 6, 7, // bottom
+        };
 
             int j = 0;
             var vertices = new Vector3[triangles.Length];

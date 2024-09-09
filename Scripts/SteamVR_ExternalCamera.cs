@@ -5,7 +5,6 @@
 //=============================================================================
 
 using System;
-using System.IO;
 using UnityEngine;
 using UnityEngine.Rendering;
 using Valve.VR;
@@ -35,12 +34,10 @@ namespace Valve.VR
             public bool disableStandardAssets;
         }
 
-
         public Config config;
         public string configPath;
 
-
-        public bool autoEnableDisableActionSet = true;
+       public bool autoEnableDisableActionSet = true;
 
         public void ReadConfig()
         {
@@ -124,6 +121,11 @@ namespace Valve.VR
             }
         }
 
+        System.IO.FileSystemWatcher watcher;
+#else
+    }
+#endif
+
         public void SetupPose(SteamVR_Action_Pose newCameraPose, SteamVR_Input_Sources newCameraSource)
         {
             cameraPose = newCameraPose;
@@ -131,26 +133,22 @@ namespace Valve.VR
 
             AutoEnableActionSet();
 
-            SteamVR_Behaviour_Pose poseBehaviour = this.gameObject.AddComponent<SteamVR_Behaviour_Pose>();
+            SteamVR_Behaviour_Pose poseBehaviour = gameObject.AddComponent<SteamVR_Behaviour_Pose>();
             poseBehaviour.poseAction = newCameraPose;
             poseBehaviour.inputSource = newCameraSource;
         }
 
         public void SetupDeviceIndex(int deviceIndex)
         {
-            SteamVR_TrackedObject trackedObject = this.gameObject.AddComponent<SteamVR_TrackedObject>();
+            SteamVR_TrackedObject trackedObject = gameObject.AddComponent<SteamVR_TrackedObject>();
             trackedObject.SetDeviceIndex(deviceIndex);
         }
 
-        void OnChanged(object source, FileSystemEventArgs e)
+        void OnChanged(object source, System.IO.FileSystemEventArgs e)
         {
             ReadConfig();
         }
 
-        FileSystemWatcher watcher;
-#else
-	}
-#endif
         Camera cam;
         Transform target;
         GameObject clipQuad;
@@ -172,6 +170,10 @@ namespace Valve.VR
             else
             {
                 vrcam = steamVR_Camera.camera;
+
+                if (target == steamVR_Camera.head)
+                    return;
+                target = steamVR_Camera.head;
             }
 
 
@@ -213,7 +215,7 @@ namespace Valve.VR
             while (offset.childCount > 0)
                 DestroyImmediate(offset.GetChild(0).gameObject);
 
-
+            // Setup clipping quad (using camera clip causes problems with shadows).
             clipQuad = GameObject.CreatePrimitive(PrimitiveType.Quad);
             clipQuad.name = "ClipQuad";
             DestroyImmediate(clipQuad.GetComponent<MeshCollider>());
@@ -242,7 +244,7 @@ namespace Valve.VR
             var forward = new Vector3(offset.forward.x, 0.0f, offset.forward.z).normalized;
             var targetPos = target.position + new Vector3(target.forward.x, 0.0f, target.forward.z).normalized * config.hmdOffset;
 
-            var distance = -(new Plane(forward, targetPos)).GetDistanceToPoint(offset.position);
+            var distance = -new Plane(forward, targetPos).GetDistanceToPoint(offset.position);
             return Mathf.Clamp(distance, config.near + 0.01f, config.far - 0.01f);
         }
 
@@ -250,8 +252,8 @@ namespace Valve.VR
 
         public void RenderNear()
         {
-            var w = 2560 / 2;
-            var h = 1440 / 2;
+            var w = Screen.width / 2;
+            var h = Screen.height / 2;
 
             if (cam.targetTexture == null || cam.targetTexture.width != w || cam.targetTexture.height != h)
             {
@@ -333,8 +335,8 @@ namespace Valve.VR
             cam.farClipPlane = config.far;
             cam.Render();
 
-            var w = 2560 / 2;
-            var h = 1440 / 2;
+            var w = Screen.width / 2;
+            var h = Screen.height / 2;
             Graphics.DrawTexture(new Rect(0, h, w, h), cam.targetTexture, colorMat);
         }
 

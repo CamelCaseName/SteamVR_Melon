@@ -1,6 +1,6 @@
 //======= Copyright (c) Valve Corporation, All rights reserved. ===============
 //
-// Purpose:	CameraFade script adapted to work with SteamVR_Standalone.
+// Purpose:	CameraFade script adapted to work with SteamVR.
 //
 // Usage:	Add to your top level SteamVR_Camera (the one with ApplyDistoration
 //			checked) and drag a reference to this component into SteamVR_Camera
@@ -19,10 +19,8 @@
 //
 //=============================================================================
 
-using Assets.SteamVR_Standalone.Standalone;
 using System;
 using UnityEngine;
-using UnityEngine.Events;
 using Valve.VR;
 
 namespace Valve.VR
@@ -50,6 +48,17 @@ namespace Valve.VR
                 compositor.FadeToColor(duration, newColor.r, newColor.g, newColor.b, newColor.a, false);
         }
 
+#if TEST_FADE_VIEW
+    void Update()
+    {
+        if (Keyboard.current.spaceKey.wasPressedThisFrame)
+        {
+            SteamVR_Fade.View(Color.black, 0);
+            SteamVR_Fade.View(Color.clear, 1);
+        }
+    }
+#endif
+
         public void OnStartFade(Color newColor, float duration, bool fadeOverlay)
         {
             if (duration > 0.0f)
@@ -70,7 +79,7 @@ namespace Valve.VR
         {
             if (fadeMaterial == null)
             {
-                fadeMaterial = new Material(VRShaders.GetShader(VRShaders.VRShader.fade));
+                fadeMaterial = new Material(Shader.Find("Custom/SteamVR_Fade"));
                 fadeMaterialColorID = Shader.PropertyToID("fadeColor");
             }
 

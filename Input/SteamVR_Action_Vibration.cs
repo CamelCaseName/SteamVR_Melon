@@ -32,9 +32,7 @@ namespace Valve.VR
         public event ExecuteHandler onExecute
         { add { sourceMap[SteamVR_Input_Sources.Any].onExecute += value; } remove { sourceMap[SteamVR_Input_Sources.Any].onExecute -= value; } }
 
-
         public SteamVR_Action_Vibration() { }
-
 
         /// <summary>
         /// Trigger the haptics at a certain time for a certain length
@@ -48,7 +46,6 @@ namespace Valve.VR
         {
             sourceMap[inputSource].Execute(secondsFromNow, durationSeconds, frequency, amplitude);
         }
-
 
         /// <summary>Executes a function when the *functional* active state of this action (with the specified inputSource) changes.
         /// This happens when the action is bound or unbound, or when the ActionSet changes state.</summary>
@@ -143,7 +140,6 @@ namespace Valve.VR
         /// <summary>Returns true if the action is bound</summary>
         public override bool activeBinding { get { return true; } }
 
-
         /// <summary>Returns true if the action was bound and the ActionSet was active during the previous update</summary>
         public override bool lastActive { get; protected set; }
 
@@ -155,10 +151,9 @@ namespace Valve.VR
 
         protected SteamVR_Action_Vibration vibrationAction;
 
-
         /// <summary>
         /// <strong>[Should not be called by user code]</strong>
-        /// Initializes the handle for the inputSource, and any other related SteamVR_Standalone data.
+        /// Initializes the handle for the inputSource, and any other related SteamVR data.
         /// </summary>
         public override void Initialize()
         {
@@ -173,7 +168,6 @@ namespace Valve.VR
 
             vibrationAction = (SteamVR_Action_Vibration)wrappingAction;
         }
-
 
         /// <summary>
         /// Trigger the haptics at a certain time for a certain length
@@ -192,16 +186,15 @@ namespace Valve.VR
 
             EVRInputError err = OpenVR.Input.TriggerHapticVibrationAction(handle, secondsFromNow, durationSeconds, frequency, amplitude, inputSourceHandle);
 
-            //Debug.Log(string.Format("[{5}: haptic] secondsFromNow({0}), durationSeconds({1}), frequency({2}), amplitude({3}), inputSource({4})", secondsFromNow, durationSeconds, frequency, amplitude, inputSource, this.GetShortName()));
+            //MelonLoader.MelonLogger.Msg(string.Format("[{5}: haptic] secondsFromNow({0}), durationSeconds({1}), frequency({2}), amplitude({3}), inputSource({4})", secondsFromNow, durationSeconds, frequency, amplitude, inputSource, this.GetShortName()));
 
             if (err != EVRInputError.None)
-                Debug.LogError("<b>[SteamVR_Standalone]</b> TriggerHapticVibrationAction (" + fullPath + ") error: " + err.ToString() + " handle: " + handle.ToString());
+                MelonLoader.MelonLogger.Error("[HPVR] TriggerHapticVibrationAction (" + fullPath + ") error: " + err.ToString() + " handle: " + handle.ToString());
 
             if (onExecute != null)
                 onExecute.Invoke(vibrationAction, inputSource, secondsFromNow, durationSeconds, frequency, amplitude);
         }
     }
-
 
     /// <summary>
     /// Vibration actions are used to trigger haptic feedback in vr controllers.

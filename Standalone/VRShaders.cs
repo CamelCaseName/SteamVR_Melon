@@ -1,6 +1,7 @@
-﻿using UnityEngine;
+﻿using MelonLoader;
+using UnityEngine;
 
-namespace Assets.SteamVR_Standalone.Standalone
+namespace Assets.SteamVR_Melon.Standalone
 {
     public static class VRShaders
     {
@@ -13,7 +14,6 @@ namespace Assets.SteamVR_Standalone.Standalone
             fade
         }
 
-
         static AssetBundle assetBundle;
 
         static Shader blit;
@@ -24,40 +24,41 @@ namespace Assets.SteamVR_Standalone.Standalone
 
         public static Shader GetShader(VRShader shader)
         {
-            if(blit == null)
+            if (blit == null)
             {
                 TryLoadShaders();
             }
 
-            switch(shader)
+            switch (shader)
             {
-                case (VRShader.blit):
+                case VRShader.blit:
                     return blit;
-                case (VRShader.blitFlip):
+                case VRShader.blitFlip:
                     return blitFlip;
-                case (VRShader.overlay):
+                case VRShader.overlay:
                     return overlay;
-                case (VRShader.occlusion):
+                case VRShader.occlusion:
                     return occlusion;
-                case (VRShader.fade):
+                case VRShader.fade:
                     return fade;
             }
-            Debug.LogWarning("No valid shader found");
+            MelonLogger.Warning("[HPVR] No valid shader found");
             return null;
         }
 
         public static void TryLoadShaders()
         {
-            if(assetBundle == null)
+            if (assetBundle == null)
             {
+                MelonLogger.Msg($"[HPVR] loading assetbundle from {Application.streamingAssetsPath}/vrshaders");
                 assetBundle = AssetBundle.LoadFromFile(Application.streamingAssetsPath + "/vrshaders");
                 if (assetBundle == null)
                 {
-                    Debug.LogError("No assetbundle present!");
+                    MelonLogger.Error("[HPVR] No assetbundle present!");
                     return;
                 }
             }
-            Debug.Log("Loading shaders from asset bundle...");
+            MelonLogger.Msg("[HPVR] Loading shaders from asset bundle...");
 
             occlusion = assetBundle.LoadAsset("assets/steamvr/resources/steamvr_hiddenarea.shader").Cast<Shader>();
             blit = assetBundle.LoadAsset("assets/steamvr/resources/steamvr_blit.shader").Cast<Shader>();
@@ -67,7 +68,7 @@ namespace Assets.SteamVR_Standalone.Standalone
             string[] allAssetNames = assetBundle.GetAllAssetNames();
             for (int i = 0; i < allAssetNames.Length; i++)
             {
-                Debug.Log(allAssetNames[i]);
+                MelonLogger.Msg("[HPVR] " + allAssetNames[i]);
             }
         }
     }

@@ -117,10 +117,10 @@ namespace Valve.VR
         {
             List<string> files = new List<string>();
 
-            FileInfo actionFileInfo = new FileInfo(this.filePath);
+            FileInfo actionFileInfo = new FileInfo(filePath);
             string path = actionFileInfo.Directory.FullName;
 
-            files.Add(this.filePath);
+            files.Add(filePath);
 
             foreach (var binding in default_bindings)
             {
@@ -132,7 +132,7 @@ namespace Valve.VR
                 {
                     if (throwErrors)
                     {
-                        Debug.LogError("<b>[SteamVR_Standalone]</b> Could not bind binding file specified by the actions.json manifest: " + bindingPath);
+                        MelonLoader.MelonLogger.Error("[HPVR] Could not bind binding file specified by the actions.json manifest: " + bindingPath);
                     }
                 }
             }
@@ -165,11 +165,11 @@ namespace Valve.VR
 
                         RemoveAppKey(newFilePath);
 
-                        Debug.Log("<b>[SteamVR_Standalone]</b> Copied (overwrote) SteamVR_Standalone Input file at path: " + newFilePath);
+                        MelonLoader.MelonLogger.Msg("[HPVR] Copied (overwrote) SteamVR Input file at path: " + newFilePath);
                     }
                     else
                     {
-                        Debug.Log("<b>[SteamVR_Standalone]</b> Skipped writing existing file at path: " + newFilePath);
+                        MelonLoader.MelonLogger.Msg("[HPVR] Skipped writing existing file at path: " + newFilePath);
                     }
                 }
                 else
@@ -178,12 +178,11 @@ namespace Valve.VR
 
                     RemoveAppKey(newFilePath);
 
-                    Debug.Log("<b>[SteamVR_Standalone]</b> Copied SteamVR_Standalone Input file to folder: " + newFilePath);
+                    MelonLoader.MelonLogger.Msg("[HPVR] Copied SteamVR Input file to folder: " + newFilePath);
                 }
 
             }
         }
-
 
         private const string findString_appKeyStart = "\"app_key\"";
         private const string findString_appKeyEnd = "\",";
@@ -191,7 +190,7 @@ namespace Valve.VR
         {
             if (File.Exists(newFilePath))
             {
-                string jsonText = System.IO.File.ReadAllText(newFilePath);
+                string jsonText = File.ReadAllText(newFilePath);
 
                 string findString = "\"app_key\"";
                 int stringStart = jsonText.IndexOf(findString);
@@ -231,7 +230,6 @@ namespace Valve.VR
 
             return null;
         }
-
 
         public void Save(string path)
         {
@@ -275,8 +273,8 @@ namespace Valve.VR
         public SteamVR_Input_ActionFile_DefaultBinding GetCopy()
         {
             SteamVR_Input_ActionFile_DefaultBinding newDefaultBinding = new SteamVR_Input_ActionFile_DefaultBinding();
-            newDefaultBinding.controller_type = this.controller_type;
-            newDefaultBinding.binding_url = this.binding_url;
+            newDefaultBinding.controller_type = controller_type;
+            newDefaultBinding.binding_url = binding_url;
             return newDefaultBinding;
         }
     }
@@ -336,8 +334,8 @@ namespace Valve.VR
         public SteamVR_Input_ActionFile_ActionSet GetCopy()
         {
             SteamVR_Input_ActionFile_ActionSet newSet = new SteamVR_Input_ActionFile_ActionSet();
-            newSet.name = this.name;
-            newSet.usage = this.usage;
+            newSet.name = name;
+            newSet.usage = usage;
             return newSet;
         }
 
@@ -349,7 +347,7 @@ namespace Valve.VR
                 if (set == this)
                     return true;
 
-                if (set.name == this.name)
+                if (set.name == name)
                     return true;
 
                 return false;
@@ -406,11 +404,11 @@ namespace Valve.VR
         public SteamVR_Input_ActionFile_Action GetCopy()
         {
             SteamVR_Input_ActionFile_Action newAction = new SteamVR_Input_ActionFile_Action();
-            newAction.name = this.name;
-            newAction.type = this.type;
-            newAction.scope = this.scope;
-            newAction.skeleton = this.skeleton;
-            newAction.requirement = this.requirement;
+            newAction.name = name;
+            newAction.type = type;
+            newAction.scope = scope;
+            newAction.skeleton = skeleton;
+            newAction.requirement = requirement;
             return newAction;
         }
 
@@ -528,7 +526,7 @@ namespace Valve.VR
                 if (this == obj)
                     return true;
 
-                if (this.name == action.name && this.type == action.type && this.skeleton == action.skeleton && this.requirement == action.requirement)
+                if (name == action.name && type == action.type && skeleton == action.skeleton && requirement == action.requirement)
                     return true;
 
                 return false;
@@ -563,7 +561,7 @@ namespace Valve.VR
             if (dictionary.ContainsKey(languageTagKeyName))
                 language = (string)dictionary[languageTagKeyName];
             else
-                Debug.Log("<b>[SteamVR_Standalone]</b> Input: Error in actions file, no language_tag in localization array item.");
+                MelonLoader.MelonLogger.Msg("[HPVR] Input: Error in actions file, no language_tag in localization array item.");
 
             foreach (KeyValuePair<string, string> item in dictionary)
             {
@@ -596,7 +594,7 @@ namespace Valve.VR
     public class SteamVR_Input_Unity_AssemblyFile_Definition
     {
         public string name = "SteamVR_Actions";
-        public string[] references = new string[] { "SteamVR_Standalone" };
+        public string[] references = new string[] { "SteamVR" };
         public string[] optionalUnityReferences = new string[0];
         public string[] includePlatforms = new string[0];
         public string[] excludePlatforms = new string[0];

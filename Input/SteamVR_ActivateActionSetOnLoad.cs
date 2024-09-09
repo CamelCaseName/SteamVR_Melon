@@ -15,7 +15,6 @@ namespace Valve.VR
         public SteamVR_ActivateActionSetOnLoad(IntPtr value)
        : base(value) { }
 
-
         public SteamVR_ActionSet actionSet = SteamVR_Input.GetActionSet("default");
 
         public SteamVR_Input_Sources forSources = SteamVR_Input_Sources.Any;
@@ -25,12 +24,11 @@ namespace Valve.VR
         public bool activateOnStart = true;
         public bool deactivateOnDestroy = true;
 
-
         private void Start()
         {
             if (actionSet != null && activateOnStart)
             {
-                //Debug.Log(string.Format("[SteamVR_Standalone] Activating {0} action set.", actionSet.fullPath));
+                //MelonLoader.MelonLogger.Msg(string.Format("[SteamVR] Activating {0} action set.", actionSet.fullPath));
                 actionSet.Activate(forSources, 0, disableAllOtherActionSets);
             }
         }
@@ -39,7 +37,7 @@ namespace Valve.VR
         {
             if (actionSet != null && deactivateOnDestroy)
             {
-                //Debug.Log(string.Format("[SteamVR_Standalone] Deactivating {0} action set.", actionSet.fullPath));
+                //MelonLoader.MelonLogger.Msg(string.Format("[SteamVR] Deactivating {0} action set.", actionSet.fullPath));
                 actionSet.Deactivate(forSources);
             }
         }

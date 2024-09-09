@@ -8,7 +8,6 @@ using System.Text;
 using UnityEngine;
 using UnityEngine.Events;
 
-
 namespace Valve.VR
 {
     /// <summary>
@@ -55,7 +54,7 @@ namespace Valve.VR
         {
             if (singleAction == null)
             {
-                Debug.LogError("[SteamVR_Standalone] Single action not set.", this);
+                MelonLoader.MelonLogger.Error("[SteamVR] Single action not set.", this);
                 return;
             }
 
@@ -122,7 +121,6 @@ namespace Valve.VR
                 onAxisEvent.Invoke(this, fromSource, newAxis, newDelta);
             }
         }
-
 
         /// <summary>
 

@@ -15,7 +15,7 @@ namespace Valve.VR
 {
     public partial class SteamVR_Input
     {
-        public const string defaultInputGameObjectName = "[SteamVR_Standalone Input]";
+        public const string defaultInputGameObjectName = "[SteamVR Input]";
         private const string localizationKeyName = "localization";
 
         /// <summary>True if the actions file has been initialized</summary>
@@ -54,7 +54,6 @@ namespace Valve.VR
                 return Time.frameCount >= (startupFrame - 1) && Time.frameCount <= (startupFrame + 1);
             }
         }
-
 
         #region array accessors
         /// <summary>An array of all action sets</summary>
@@ -135,8 +134,7 @@ namespace Valve.VR
             if (initialized == true && force == false)
                 return;
 
-
-            Debug.Log("<b>[SteamVR_Standalone]</b> Initializing SteamVR_Standalone input...");
+            MelonLoader.MelonLogger.Msg("Initializing SteamVR input...");
             initializing = true;
 
             startupFrame = Time.frameCount;
@@ -162,7 +160,7 @@ namespace Valve.VR
                     actionSets[0].Activate();
                 else
                 {
-                    Debug.LogError("<b>[SteamVR_Standalone]</b> No action sets to activate.");
+                    MelonLoader.MelonLogger.Error("[HPVR] No action sets to activate.");
                 }
             }
 
@@ -170,7 +168,7 @@ namespace Valve.VR
 
             initialized = true;
             initializing = false;
-            //Debug.Log("<b>[SteamVR_Standalone]</b> Input initialization complete.");
+            //MelonLoader.MelonLogger.Msg("[HPVR] Input initialization complete.");
         }
 
         public static void PreinitializeFinishActionSets()
@@ -320,7 +318,6 @@ namespace Valve.VR
                 onPosesUpdated(false);
         }
 
-
         /// <summary>
         /// Updates the states of all the skeleton actions
         /// </summary>
@@ -340,7 +337,6 @@ namespace Valve.VR
             if (onSkeletonsUpdated != null)
                 onSkeletonsUpdated(skipSendingEvents);
         }
-
 
         /// <summary>
         /// Updates the states of all the non visual actions (boolean, single, vector2, vector3)
@@ -1055,7 +1051,6 @@ namespace Valve.VR
             return false;
         }
 
-
         /// <summary>
 
         /// </summary>
@@ -1247,7 +1242,7 @@ namespace Valve.VR
             }
             else
             {
-                Debug.Log("<b>[SteamVR_Standalone]</b> Wrong type.");
+                MelonLoader.MelonLogger.Msg("[HPVR] Wrong type.");
             }
 
             return null;
@@ -1290,8 +1285,7 @@ namespace Valve.VR
             return false;
         }
 
-
-        /// <summary>Tell SteamVR_Standalone that we're using the actions file at the path defined in SteamVR_Settings.</summary>
+        /// <summary>Tell SteamVR that we're using the actions file at the path defined in SteamVR_Settings.</summary>
         public static void IdentifyActionsFile(bool showLogs = true)
         {
             string fullPath = GetActionsFilePath();
@@ -1299,34 +1293,34 @@ namespace Valve.VR
             {
                 if (OpenVR.Input == null)
                 {
-                    Debug.LogError("<b>[SteamVR_Standalone]</b> Could not instantiate OpenVR Input interface.");
+                    MelonLoader.MelonLogger.Error("Could not instantiate OpenVR Input interface.");
                     return;
                 }
 
                 EVRInputError err = OpenVR.Input.SetActionManifestPath(fullPath);
                 if (err != EVRInputError.None)
-                    Debug.LogError("<b>[SteamVR_Standalone]</b> Error loading action manifest into SteamVR_Standalone: " + err.ToString());
+                    MelonLoader.MelonLogger.Error("Error loading action manifest into SteamVR: " + err.ToString());
                 else
                 {
                     int numActions = 0;
-                    if (SteamVR_Input.actions != null)
+                    if (actions != null)
                     {
-                        numActions = SteamVR_Input.actions.Length;
+                        numActions = actions.Length;
 
                         if (showLogs)
-                            Debug.Log(string.Format("<b>[SteamVR_Standalone]</b> Successfully loaded {0} actions from action manifest into SteamVR_Standalone ({1})", numActions, fullPath));
+                            MelonLoader.MelonLogger.Msg(string.Format("Successfully loaded {0} actions from action manifest into SteamVR ({1})", numActions, fullPath));
                     }
                     else
                     {
                         if (showLogs)
-                            Debug.LogWarning("<b>[SteamVR_Standalone]</b> No actions found, but the action manifest was loaded. This usually means you haven't generated actions. Window -> SteamVR_Standalone Input -> Save and Generate.");
+                            MelonLoader.MelonLogger.Warning("No actions found, but the action manifest was loaded. This usually means you haven't generated actions. Window -> SteamVR Input -> Save and Generate.");
                     }
                 }
             }
             else
             {
                 if (showLogs)
-                    Debug.LogError("<b>[SteamVR_Standalone]</b> Could not find actions file at: " + fullPath);
+                    MelonLoader.MelonLogger.Error("Could not find actions file at: " + fullPath);
             }
         }
 
@@ -1341,7 +1335,7 @@ namespace Valve.VR
 
             if (File.Exists(fullPath))
             {
-                jsonText = System.IO.File.ReadAllText(fullPath);
+                jsonText = File.ReadAllText(fullPath);
             }
             else
             {
@@ -1350,7 +1344,7 @@ namespace Valve.VR
 
             string newHashFromFile = SteamVR_Utils.GetBadMD5Hash(jsonText);
 
-            string newJSON = JsonConvert.SerializeObject(SteamVR_Input.actionFile, Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
+            string newJSON = JsonConvert.SerializeObject(actionFile, Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
 
             string newHashFromMemory = SteamVR_Utils.GetBadMD5Hash(newJSON);
 
@@ -1363,7 +1357,7 @@ namespace Valve.VR
 
             if (File.Exists(actionsFilePath))
             {
-                Debug.LogError($"<b>[SteamVR_Standalone]</b> Actions file already exists in project root: {actionsFilePath}");
+                MelonLoader.MelonLogger.Error($"[HPVR] Actions file already exists in project root: {actionsFilePath}");
                 return false;
             }
 
@@ -1403,12 +1397,12 @@ namespace Valve.VR
 
             if (actionsFileExists)
             {
-                jsonText = System.IO.File.ReadAllText(actionsFilePath);
+                jsonText = File.ReadAllText(actionsFilePath);
             }
             else
             {
                 if (showErrors)
-                    Debug.LogError($"<b>[SteamVR_Standalone]</b> Actions file does not exist in project root: {actionsFilePath}");
+                    MelonLoader.MelonLogger.Error($"[HPVR] Actions file does not exist in project root: {actionsFilePath}");
 
                 return false;
             }
@@ -1436,7 +1430,7 @@ namespace Valve.VR
             if (Directory.Exists(streamingAssets) == false)
                 Directory.CreateDirectory(streamingAssets);
 
-            string streamingAssets_SteamVR = Path.Combine(streamingAssets, "SteamVR_Standalone");
+            string streamingAssets_SteamVR = Path.Combine(streamingAssets, "SteamVR_Melon");
             if (Directory.Exists(streamingAssets_SteamVR) == false)
                 Directory.CreateDirectory(streamingAssets_SteamVR);
 
@@ -1450,7 +1444,6 @@ namespace Valve.VR
 
             return SteamVR_Utils.SanitizePath(path);
         }
-
 
         /// <summary>
         /// Deletes the action manifest file and all the default bindings it had listed in the default bindings section

@@ -66,7 +66,7 @@ namespace Valve.VR
                 return pinkyFingerMovementType;
 
             //default to static
-            Debug.LogWarning("Finger not in range!");
+            MelonLoader.MelonLogger.Warning("Finger not in range!");
             return SteamVR_Skeleton_FingerExtensionTypes.Static;
         }
 
@@ -126,7 +126,7 @@ namespace Valve.VR
             get
             {
                 if (_enumList == null)
-                    _enumList = (SteamVR_Skeleton_FingerExtensionTypes[])System.Enum.GetValues(typeof(SteamVR_Skeleton_FingerExtensionTypes));
+                    _enumList = (SteamVR_Skeleton_FingerExtensionTypes[])Enum.GetValues(typeof(SteamVR_Skeleton_FingerExtensionTypes));
                 return _enumList;
             }
         }

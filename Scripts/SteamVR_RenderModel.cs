@@ -4,9 +4,7 @@
 //
 //=============================================================================
 
-
-using SteamVR_Standalone_IL2CPP.Util;
-using System;
+using MelonLoader;
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
@@ -14,14 +12,8 @@ using UnityEngine;
 
 namespace Valve.VR
 {
-
     public class SteamVR_RenderModel : MonoBehaviour
     {
-
-        public SteamVR_RenderModel(IntPtr value)
-: base(value) { }
-
-
         public SteamVR_TrackedObject.EIndex index = SteamVR_TrackedObject.EIndex.None;
         protected SteamVR_Input_Sources inputSource;
 
@@ -29,18 +21,13 @@ namespace Valve.VR
             "the scene view for lining things up; using it at runtime is discouraged.  Use tracked device " +
             "index instead to ensure the correct model is displayed for all users.";
 
-
         public string modelOverride;
-
 
         public Shader shader;
 
-
         public bool verbose = false;
 
-
         public bool createComponents = true;
-
 
         public bool updateDynamically = true;
 
@@ -99,7 +86,7 @@ namespace Valve.VR
                         _instance = OpenVR.RenderModels;
                         if (_instance == null)
                         {
-                            Debug.LogError("<b>[SteamVR_Standalone]</b> Failed to load IVRRenderModels interface version " + OpenVR.IVRRenderModels_Version);
+                            MelonLogger.Error("[HPVR] Failed to load IVRRenderModels interface version " + OpenVR.IVRRenderModels_Version);
                             failedLoadInterface = true;
                         }
                     }
@@ -159,7 +146,7 @@ namespace Valve.VR
             var capacity = system.GetStringTrackedDeviceProperty((uint)index, ETrackedDeviceProperty.Prop_RenderModelName_String, null, 0, ref error);
             if (capacity <= 1)
             {
-                Debug.LogError("<b>[SteamVR_Standalone]</b> Failed to get render model name for tracked object " + index);
+                MelonLogger.Error("[HPVR] Failed to get render model name for tracked object " + index);
                 return;
             }
 
@@ -251,7 +238,7 @@ namespace Valve.VR
                         var pRenderModel = System.IntPtr.Zero;
 
                         var error = renderModels.LoadRenderModel_Async(renderModelNames[renderModelNameIndex], ref pRenderModel);
-                        //Debug.Log("<b>[SteamVR_Standalone]</b> renderModels.LoadRenderModel_Async(" + renderModelNames[renderModelNameIndex] + ": " + error.ToString());
+                        //MelonLoader.MelonLogger.Msg("[HPVR] renderModels.LoadRenderModel_Async(" + renderModelNames[renderModelNameIndex] + ": " + error.ToString());
 
                         if (error == EVRRenderModelError.Loading)
                         {
@@ -269,7 +256,7 @@ namespace Valve.VR
                                 var pDiffuseTexture = System.IntPtr.Zero;
 
                                 error = renderModels.LoadTexture_Async(renderModel.diffuseTextureId, ref pDiffuseTexture);
-                                //Debug.Log("<b>[SteamVR_Standalone]</b> renderModels.LoadRenderModel_Async(" + renderModelNames[renderModelNameIndex] + ": " + error.ToString());
+                                //MelonLoader.MelonLogger.Msg("[HPVR] renderModels.LoadRenderModel_Async(" + renderModelNames[renderModelNameIndex] + ": " + error.ToString());
 
                                 if (error == EVRRenderModelError.Loading)
                                 {
@@ -291,7 +278,7 @@ namespace Valve.VR
             }
 
             bool success = SetModel(newRenderModelName);
-            this.renderModelName = newRenderModelName;
+            renderModelName = newRenderModelName;
             SteamVR_Events.RenderModelLoaded.Send(this, success);
         }
 
@@ -311,7 +298,7 @@ namespace Valve.VR
                         return true;
                     }
 
-                    Debug.Log("<b>[SteamVR_Standalone]</b> [" + gameObject.name + "] Render model does not support components, falling back to single mesh.");
+                    MelonLogger.Msg("[HPVR] [" + gameObject.name + "] Render model does not support components, falling back to single mesh.");
                 }
 
                 if (!string.IsNullOrEmpty(renderModelName))
@@ -324,7 +311,7 @@ namespace Valve.VR
                             return false;
 
                         if (verbose)
-                            Debug.Log("<b>[SteamVR_Standalone]</b> Loading render model " + renderModelName);
+                            MelonLogger.Msg("[HPVR] Loading render model " + renderModelName);
 
                         model = LoadRenderModel(renderModels, renderModelName, renderModelName);
                         if (model == null)
@@ -360,7 +347,7 @@ namespace Valve.VR
 
             if (error != EVRRenderModelError.None)
             {
-                Debug.LogError(string.Format("<b>[SteamVR_Standalone]</b> Failed to load render model {0} - {1}", renderModelName, error.ToString()));
+                MelonLogger.Error(string.Format("[HPVR] Failed to load render model {0} - {1}", renderModelName, error.ToString()));
                 return null;
             }
 
@@ -399,6 +386,9 @@ namespace Valve.VR
             mesh.uv = uv;
             mesh.triangles = triangles;
 
+#if UNITY_5_4 || UNITY_5_3 || UNITY_5_2 || UNITY_5_1 || UNITY_5_0
+            mesh.Optimize();
+#endif
             //mesh.hideFlags = HideFlags.DontUnloadUnusedAsset;
 
             // Check cache before loading texture.
@@ -456,7 +446,12 @@ namespace Valve.VR
                         texture.Apply();
                     }
 
+#if UNITY_URP
+                    material = new Material(shader != null ? shader : Shader.Find("Universal Render Pipeline/Lit"));
+#else
                     material = new Material(shader != null ? shader : Shader.Find("Standard"));
+#endif
+
                     material.mainTexture = texture;
                     //material.hideFlags = HideFlags.DontUnloadUnusedAsset;
 
@@ -466,13 +461,17 @@ namespace Valve.VR
                 }
                 else
                 {
-                    Debug.Log("<b>[SteamVR_Standalone]</b> Failed to load render model texture for render model " + renderModelName + ". Error: " + error.ToString());
+                    MelonLogger.Msg("[HPVR] Failed to load render model texture for render model " + renderModelName + ". Error: " + error.ToString());
                 }
             }
 
             // Delay freeing when we can since we'll often get multiple requests for the same model right
             // after another (e.g. two controllers or two basestations).
-
+#if UNITY_EDITOR
+            if (!Application.isPlaying)
+                renderModels.FreeRenderModel(pRenderModel);
+            else
+#endif
             MelonCoroutines.Start(FreeRenderModel(pRenderModel));
 
             return new RenderModel(mesh, material);
@@ -492,7 +491,7 @@ namespace Valve.VR
         public Transform FindTransformByName(string componentName, Transform inTransform = null)
         {
             if (inTransform == null)
-                inTransform = this.transform;
+                inTransform = transform;
 
             for (int childIndex = 0; childIndex < inTransform.childCount; childIndex++)
             {
@@ -507,10 +506,11 @@ namespace Valve.VR
         public Transform GetComponentTransform(string componentName)
         {
             if (componentName == null)
-                return this.transform;
+                return transform;
 
             if (componentAttachPoints.ContainsKey(componentName))
                 return componentAttachPoints[componentName];
+
             return null;
         }
 
@@ -605,7 +605,7 @@ namespace Valve.VR
                 if (model == null || model.mesh == null)
                 {
                     if (verbose)
-                        Debug.Log("<b>[SteamVR_Standalone]</b> Loading render model " + componentRenderModelName);
+                        MelonLogger.Msg("[HPVR] Loading render model " + componentRenderModelName);
 
                     model = LoadRenderModel(renderModels, componentRenderModelName, renderModelName);
                     if (model == null)
@@ -623,20 +623,24 @@ namespace Valve.VR
             return true;
         }
 
-
         SteamVR_Events.Action deviceConnectedAction, hideRenderModelsAction, modelSkinSettingsHaveChangedAction;
+
+        SteamVR_RenderModel()
+        {
+            deviceConnectedAction = SteamVR_Events.DeviceConnectedAction(new System.Action<int, bool>(OnDeviceConnected));
+            hideRenderModelsAction = SteamVR_Events.HideRenderModelsAction(new System.Action<bool>(OnHideRenderModels));
+            modelSkinSettingsHaveChangedAction = SteamVR_Events.SystemAction(EVREventType.VREvent_ModelSkinSettingsHaveChanged, new System.Action<VREvent_t>(OnModelSkinSettingsHaveChanged));
+        }
+
         void OnEnable()
         {
-            deviceConnectedAction = SteamVR_Events.DeviceConnectedAction(OnDeviceConnected);
-            hideRenderModelsAction = SteamVR_Events.HideRenderModelsAction(OnHideRenderModels);
-            modelSkinSettingsHaveChangedAction = SteamVR_Events.SystemAction(EVREventType.VREvent_ModelSkinSettingsHaveChanged, OnModelSkinSettingsHaveChanged);
 #if UNITY_EDITOR
             if (!Application.isPlaying)
                 return;
 #endif
             if (!string.IsNullOrEmpty(modelOverride))
             {
-                Debug.Log("<b>[SteamVR_Standalone]</b> " + modelOverrideWarning);
+                MelonLogger.Msg("[HPVR] " + modelOverrideWarning);
                 enabled = false;
                 return;
             }
@@ -654,14 +658,13 @@ namespace Valve.VR
 
         void OnDisable()
         {
-            deviceConnectedAction.enabled = false;
-            hideRenderModelsAction.enabled = false;
-            modelSkinSettingsHaveChangedAction.enabled = false;
 #if UNITY_EDITOR
             if (!Application.isPlaying)
                 return;
 #endif
-
+            deviceConnectedAction.enabled = false;
+            hideRenderModelsAction.enabled = false;
+            modelSkinSettingsHaveChangedAction.enabled = false;
         }
 
 #if UNITY_EDITOR
@@ -774,7 +777,7 @@ namespace Valve.VR
                         nameCache.Add(childInstanceID, componentName);
                     }
 
-                    if (childName == SteamVR_RenderModel.k_localTransformName)
+                    if (childName == k_localTransformName)
                         attach = childChild;
                 }
 
@@ -796,7 +799,7 @@ namespace Valve.VR
 
         public void SetDeviceIndex(int newIndex)
         {
-            this.index = (SteamVR_TrackedObject.EIndex)newIndex;
+            index = (SteamVR_TrackedObject.EIndex)newIndex;
 
             modelOverride = "";
 

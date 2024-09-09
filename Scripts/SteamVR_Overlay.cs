@@ -4,28 +4,20 @@
 //
 //=============================================================================
 
-using UnityEngine;
-using System.Collections;
-using Valve.VR;
 using System;
+using UnityEngine;
 
 namespace Valve.VR
 {
     public class SteamVR_Overlay : MonoBehaviour
     {
-
-        public SteamVR_Overlay(IntPtr value)
-       : base(value) { }
-
+        public SteamVR_Overlay(IntPtr value): base(value) { }
 
         public Texture texture;
 
-
         public float scale = 3.0f;
 
-
         public float distance = 1.25f;
-
 
         public float alpha = 1.0f;
 
@@ -48,13 +40,13 @@ namespace Valve.VR
                 var error = overlay.CreateOverlay(key, gameObject.name, ref handle);
                 if (error != EVROverlayError.None)
                 {
-                    Debug.Log("<b>[SteamVR_Standalone]</b> " + overlay.GetOverlayErrorNameFromEnum(error));
+                    MelonLoader.MelonLogger.Msg("[HPVR] " + overlay.GetOverlayErrorNameFromEnum(error));
                     enabled = false;
                     return;
                 }
             }
 
-            SteamVR_Overlay.instance = this;
+            instance = this;
         }
 
         void OnDisable()
@@ -70,7 +62,7 @@ namespace Valve.VR
                 handle = OpenVR.k_ulOverlayHandleInvalid;
             }
 
-            SteamVR_Overlay.instance = null;
+            instance = null;
         }
 
         public void UpdateOverlay()

@@ -15,7 +15,6 @@ namespace Valve.VR
         public SteamVR_Behaviour_Vector3(IntPtr value)
 : base(value) { }
 
-
         /// <summary>The vector3 action to get data from</summary>
         public SteamVR_Action_Vector3 vector3Action;
 
@@ -40,7 +39,6 @@ namespace Valve.VR
         /// <summary>C# event that fires whenever the action's value has been updated and is non-zero</summary>
         public AxisHandler onAxisEvent;
 
-
         /// <summary>Returns whether this action is bound and the action set is active</summary>
         public bool isActive { get { return vector3Action.GetActive(inputSource); } }
 
@@ -48,7 +46,7 @@ namespace Valve.VR
         {
             if (vector3Action == null)
             {
-                Debug.LogError("[SteamVR_Standalone] Vector3 action not set.", this);
+                MelonLoader.MelonLogger.Error("[SteamVR] Vector3 action not set.", this);
                 return;
             }
 

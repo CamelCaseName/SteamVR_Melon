@@ -1,4 +1,4 @@
-# SteamVR_Standalone_IL2CPP
+# _IL2CPP
 A modified SteamVR plugin that can be injected into Non-VR enabled Unity projects for VR rendering and VR input/interaction. Modified for IL2CPP. Specifically tailored for GTFO. Some adjustments required! 
 
 ## How to use:

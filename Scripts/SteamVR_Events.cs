@@ -1,6 +1,6 @@
 ﻿//======= Copyright (c) Valve Corporation, All rights reserved. ===============
 //
-// Purpose: Simple event system for SteamVR_Standalone.
+// Purpose: Simple event system for SteamVR.
 //
 // Example usage:
 //
@@ -116,12 +116,9 @@ namespace Valve.VR
             System.Action<T0, T1, T2> action;
         }
 
-
-
         public class Event
         {
             public event System.Action OnEvent;
-
 
             public void Listen(System.Action action) { OnEvent += action; }
             public void Remove(System.Action action) { OnEvent -= action; }
@@ -135,7 +132,6 @@ namespace Valve.VR
         public class Event<T>
         {
             public event System.Action<T> OnEvent;
-
 
             public void Listen(System.Action<T> action) { OnEvent += action; }
             public void Remove(System.Action<T> action) { OnEvent -= action; }
@@ -182,7 +178,6 @@ namespace Valve.VR
                 }
             }
         }
-
 
         public static Event<bool> Calibrating = new Event<bool>();
         public static Action CalibratingAction(System.Action<bool> action) { return new Action<bool>(Calibrating, action); }

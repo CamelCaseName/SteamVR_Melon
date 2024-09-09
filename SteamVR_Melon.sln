@@ -1,0 +1,24 @@
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.10.35013.160
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SteamVR_Melon", "SteamVR_Melon.csproj", "{CD430B64-0EA8-4084-912C-379979B05B7C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Release|x64 = Release|x64
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{CD430B64-0EA8-4084-912C-379979B05B7C}.Debug|x64.ActiveCfg = Debug|x64
+		{CD430B64-0EA8-4084-912C-379979B05B7C}.Debug|x64.Build.0 = Debug|x64
+		{CD430B64-0EA8-4084-912C-379979B05B7C}.Release|x64.ActiveCfg = Release|x64
+		{CD430B64-0EA8-4084-912C-379979B05B7C}.Release|x64.Build.0 = Release|x64
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {BF5B1414-24FA-4837-8C2A-63DB2BD0A2B6}
+	EndGlobalSection
+EndGlobal

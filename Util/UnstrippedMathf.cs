@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SteamVR_Standalone_IL2CPP.Util
+namespace HPVR.Util
 {
     public  static partial class Mathf
     {
@@ -211,7 +211,7 @@ namespace SteamVR_Standalone_IL2CPP.Util
         // Same as ::ref::Lerp but makes sure the values interpolate correctly when they wrap around 360 degrees.
         public static float LerpAngle(float a, float b, float t)
         {
-            float delta = Repeat((b - a), 360);
+            float delta = Repeat(b - a, 360);
             if (delta > 180)
                 delta -= 360;
             return a + delta * Clamp01(t);
@@ -220,9 +220,9 @@ namespace SteamVR_Standalone_IL2CPP.Util
         // Moves a value /current/ towards /target/.
         static public float MoveTowards(float current, float target, float maxDelta)
         {
-            if (Mathf.Abs(target - current) <= maxDelta)
+            if (Abs(target - current) <= maxDelta)
                 return target;
-            return current + Mathf.Sign(target - current) * maxDelta;
+            return current + Sign(target - current) * maxDelta;
         }
 
         // Same as ::ref::MoveTowards but makes sure the values interpolate correctly when they wrap around 360 degrees.
@@ -238,7 +238,7 @@ namespace SteamVR_Standalone_IL2CPP.Util
         // Interpolates between /min/ and /max/ with smoothing at the limits.
         public static float SmoothStep(float from, float to, float t)
         {
-            t = Mathf.Clamp01(t);
+            t = Clamp01(t);
             t = -2.0F * t * t * t + 3.0F * t * t;
             return to * t + from * (1F - t);
         }
@@ -275,14 +275,14 @@ namespace SteamVR_Standalone_IL2CPP.Util
         // Loops the value t, so that it is never larger than length and never smaller than 0.
         public static float Repeat(float t, float length)
         {
-            return Clamp(t - Mathf.Floor(t / length) * length, 0.0f, length);
+            return Clamp(t - Floor(t / length) * length, 0.0f, length);
         }
 
         // PingPongs the value t, so that it is never larger than length and never smaller than 0.
         public static float PingPong(float t, float length)
         {
             t = Repeat(t, length * 2F);
-            return length - Mathf.Abs(t - length);
+            return length - Abs(t - length);
         }
 
         // Calculates the ::ref::Lerp parameter between of two values.
@@ -297,7 +297,7 @@ namespace SteamVR_Standalone_IL2CPP.Util
         // Calculates the shortest difference between two given angles.
         public static float DeltaAngle(float current, float target)
         {
-            float delta = Mathf.Repeat((target - current), 360.0F);
+            float delta = Repeat(target - current, 360.0F);
             if (delta > 180.0F)
                 delta -= 360.0F;
             return delta;
@@ -307,7 +307,7 @@ namespace SteamVR_Standalone_IL2CPP.Util
         {
             var buffer = new byte[8];
             r.NextBytes(buffer);
-            return (long)(System.BitConverter.ToUInt64(buffer, 0) & System.Int64.MaxValue);
+            return (long)(BitConverter.ToUInt64(buffer, 0) & System.Int64.MaxValue);
         }
     }
 }

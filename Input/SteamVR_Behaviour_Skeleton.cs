@@ -1,6 +1,7 @@
 ﻿//======= Copyright (c) Valve Corporation, All rights reserved. ===============
 
-using SteamVR_Standalone_IL2CPP.Util;
+using MelonLoader;
+using HPVR.Util;
 using System;
 using System.Collections;
 using UnityEngine;
@@ -13,7 +14,6 @@ namespace Valve.VR
     {
         public SteamVR_Behaviour_Skeleton(IntPtr value)
 : base(value) { }
-
 
         /// <summary>The action this component will use to update the model. Must be a Skeleton type action.</summary>
         public SteamVR_Action_Skeleton skeletonAction;
@@ -45,7 +45,6 @@ namespace Valve.VR
         /// <summary>
         /// How much of a blend to apply to the transform positions and rotations.
 
-
         /// </summary>
 
         public float skeletonBlend = 1f;
@@ -64,7 +63,6 @@ namespace Valve.VR
 
         /// <summary>This Unity event will fire whenever the device's tracking state changes</summary>
         public SteamVR_Behaviour_Skeleton_TrackingChangedEvent onTrackingChanged;
-
 
         /// <summary>This C# event will fire whenever the position or rotation of this transform is updated.</summary>
         public UpdateHandler onBoneTransformsUpdatedEvent;
@@ -85,11 +83,8 @@ namespace Valve.VR
 
         public MirrorType mirroring;
 
-
-
         /// <summary>The fallback SkeletonPoser to drive hand animation when no skeleton data is available</summary>
         public SteamVR_Skeleton_Poser fallbackPoser;
-
 
         /// <summary>The fallback SkeletonPoser to drive hand animation when no skeleton data is available</summary>
         public SteamVR_Action_Single fallbackCurlAction;
@@ -99,21 +94,13 @@ namespace Valve.VR
         /// </summary>
         public bool skeletonAvailable { get { return skeletonAction.activeBinding; } }
 
-
-
-
-
-
-
         /// <summary>The current skeletonPoser we're getting pose data from</summary>
         protected SteamVR_Skeleton_Poser blendPoser;
         /// <summary>The current pose snapshot</summary>
         protected SteamVR_Skeleton_PoseSnapshot blendSnapshot = null;
 
-
         /// <summary>Returns whether this action is bound and the action set is active</summary>
         public bool isActive { get { return skeletonAction.GetActive(); } }
-
 
         /// <summary>An array of five 0-1 values representing how curled a finger is. 0 being straight, 1 being fully curled. 0 being thumb, 4 being pinky</summary>
         public float[] fingerCurls
@@ -196,8 +183,6 @@ namespace Valve.VR
                     return fallbackCurlAction.GetAxis(inputSource);
             }
         }
-
-
 
         public Transform root { get { return bones[SteamVR_Skeleton_JointIndexes.root]; } }
         public Transform wrist { get { return bones[SteamVR_Skeleton_JointIndexes.wrist]; } }
@@ -497,14 +482,13 @@ namespace Valve.VR
             if (blendRoutine != null)
                 MelonCoroutines.Stop(blendRoutine);
 
-            if (this.gameObject.activeInHierarchy)
+            if (gameObject.activeInHierarchy)
             {
                 blendRoutine = DoBlendRoutine(blendToAmount, overTime);
                 MelonCoroutines.Start(blendRoutine);
             }
                 
         }
-
 
         protected IEnumerator DoBlendRoutine(float blendToAmount, float overTime)
         {
@@ -516,7 +500,7 @@ namespace Valve.VR
             while (Time.time < endTime)
             {
                 yield return null;
-                skeletonBlend = SteamVR_Standalone_IL2CPP.Util.Mathf.Lerp(startAmount, blendToAmount, (Time.time - startTime) / overTime);
+                skeletonBlend = HPVR.Util.Mathf.Lerp(startAmount, blendToAmount, (Time.time - startTime) / overTime);
             }
 
             skeletonBlend = blendToAmount;
@@ -531,7 +515,7 @@ namespace Valve.VR
             EVRSkeletalMotionRange oldRangeOfMotion = rangeOfMotion;
             rangeOfMotion = newRangeOfMotion;
 
-            if (this.gameObject.activeInHierarchy)
+            if (gameObject.activeInHierarchy)
             {
                 rangeOfMotionBlendRoutine = DoRangeOfMotionBlend(oldRangeOfMotion, newRangeOfMotion, blendOverSeconds);
                 MelonCoroutines.Start(rangeOfMotionBlendRoutine);
@@ -549,7 +533,7 @@ namespace Valve.VR
 
             temporaryRangeOfMotion = newRangeOfMotion;
 
-            if (this.gameObject.activeInHierarchy)
+            if (gameObject.activeInHierarchy)
             {
                 rangeOfMotionBlendRoutine = DoRangeOfMotionBlend(oldRangeOfMotion, newRangeOfMotion, blendOverSeconds);
                 MelonCoroutines.Start(rangeOfMotionBlendRoutine);
@@ -569,7 +553,7 @@ namespace Valve.VR
 
                 temporaryRangeOfMotion = null;
 
-                if (this.gameObject.activeInHierarchy)
+                if (gameObject.activeInHierarchy)
                 {
                     rangeOfMotionBlendRoutine = DoRangeOfMotionBlend(oldRangeOfMotion, newRangeOfMotion, blendOverSeconds);
                     MelonCoroutines.Start(rangeOfMotionBlendRoutine);
@@ -753,7 +737,6 @@ namespace Valve.VR
                 }
             }
 
-
             if (onBoneTransformsUpdated != null)
                 onBoneTransformsUpdated.Invoke(this, inputSource);
             if (onBoneTransformsUpdatedEvent != null)
@@ -782,7 +765,6 @@ namespace Valve.VR
 
             return bones[joint];
         }
-
 
         /// <summary>
 
@@ -834,7 +816,7 @@ namespace Valve.VR
                 }
                 else
                 {
-                    Debug.LogError("Skeleton Action is not bound, and you have not provided a fallback SkeletonPoser. Please create one to drive hand animation when no skeleton data is available.", this);
+                    MelonLogger.Error("Skeleton Action is not bound, and you have not provided a fallback SkeletonPoser. Please create one to drive hand animation when no skeleton data is available.", this);
                     return null;
                 }
             }
@@ -866,7 +848,7 @@ namespace Valve.VR
                 }
                 else
                 {
-                    Debug.LogError("Skeleton Action is not bound, and you have not provided a fallback SkeletonPoser. Please create one to drive hand animation when no skeleton data is available.", this);
+                    MelonLogger.Error("Skeleton Action is not bound, and you have not provided a fallback SkeletonPoser. Please create one to drive hand animation when no skeleton data is available.", this);
                     return null;
                 }
             }
@@ -911,10 +893,10 @@ namespace Valve.VR
             Quaternion skeletonRotation = skeletonAction.GetLocalRotation();
             if (origin == null)
             {
-                if (this.transform.parent != null)
+                if (transform.parent != null)
                 {
-                    skeletonPosition = this.transform.parent.TransformPoint(skeletonPosition);
-                    skeletonRotation = this.transform.parent.rotation * skeletonRotation;
+                    skeletonPosition = transform.parent.TransformPoint(skeletonPosition);
+                    skeletonRotation = transform.parent.rotation * skeletonRotation;
                 }
             }
             else
@@ -931,8 +913,8 @@ namespace Valve.VR
                     onTransformChangedEvent.Invoke(this, inputSource);
             }
 
-            this.transform.position = skeletonPosition;
-            this.transform.rotation = skeletonRotation;
+            transform.position = skeletonPosition;
+            transform.rotation = skeletonRotation;
 
             if (onTransformUpdated != null)
                 onTransformUpdated.Invoke(this, inputSource);
@@ -959,7 +941,7 @@ namespace Valve.VR
 
             if (skeletonAction.active == false)
             {
-                Debug.LogError("<b>[SteamVR_Standalone Input]</b> Please turn on your " + inputSource.ToString() + " controller and ensure SteamVR_Standalone is open.", this);
+                MelonLogger.Error("[HPVR Input] Please turn on your " + inputSource.ToString() + " controller and ensure SteamVR is open.", this);
                 return;
             }
 
@@ -967,7 +949,7 @@ namespace Valve.VR
 
             if (transforms == null || transforms.Length == 0)
             {
-                Debug.LogError("<b>[SteamVR_Standalone Input]</b> Unable to get the reference transform for " + inputSource.ToString() + ". Please make sure SteamVR_Standalone is open and both controllers are connected.", this);
+                MelonLogger.Error("[HPVR Input] Unable to get the reference transform for " + inputSource.ToString() + ". Please make sure SteamVR is open and both controllers are connected.", this);
             }
 
             if (mirroring == MirrorType.LeftToRight || mirroring == MirrorType.RightToLeft)
@@ -993,11 +975,11 @@ namespace Valve.VR
 
         protected static bool IsMetacarpal(int boneIndex)
         {
-            return (boneIndex == SteamVR_Skeleton_JointIndexes.indexMetacarpal ||
+            return boneIndex == SteamVR_Skeleton_JointIndexes.indexMetacarpal ||
                 boneIndex == SteamVR_Skeleton_JointIndexes.middleMetacarpal ||
                 boneIndex == SteamVR_Skeleton_JointIndexes.ringMetacarpal ||
                 boneIndex == SteamVR_Skeleton_JointIndexes.pinkyMetacarpal ||
-                boneIndex == SteamVR_Skeleton_JointIndexes.thumbMetacarpal);
+                boneIndex == SteamVR_Skeleton_JointIndexes.thumbMetacarpal;
         }
 
         public enum MirrorType

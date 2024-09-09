@@ -2,7 +2,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Events;
 
 namespace Valve.VR
 {
@@ -40,7 +39,7 @@ namespace Valve.VR
                         TrackingReferenceObject trackingReference = new TrackingReferenceObject();
                         trackingReference.trackedDeviceClass = deviceClass;
                         trackingReference.gameObject = new GameObject("Tracking Reference " + deviceIndex.ToString());
-                        trackingReference.gameObject.transform.parent = this.transform;
+                        trackingReference.gameObject.transform.parent = transform;
                         trackingReference.trackedObject = trackingReference.gameObject.AddComponent<SteamVR_TrackedObject>();
                         trackingReference.renderModel = trackingReference.gameObject.AddComponent<SteamVR_RenderModel>();
                         trackingReference.renderModel.createComponents = false;
@@ -48,11 +47,7 @@ namespace Valve.VR
 
                         trackingReferences.Add(deviceIndex, trackingReference);
 
-                        foreach(SteamVR_RenderModel model in GetComponentsInChildren<SteamVR_RenderModel>())
-                        {
-                            model.SetDeviceIndex((int)deviceIndex);
-                        }
-                        //trackingReference.gameObject.SendMessage("SetDeviceIndex", (int)deviceIndex, SendMessageOptions.DontRequireReceiver);
+                        trackingReference.gameObject.SendMessage("SetDeviceIndex", (int)deviceIndex, SendMessageOptions.DontRequireReceiver);
                     }
                     else
                     {

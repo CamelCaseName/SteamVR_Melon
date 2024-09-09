@@ -14,7 +14,6 @@ namespace Valve.VR
         public SteamVR_IK(IntPtr value)
 : base(value) { }
 
-
         public Transform target;
         public Transform start, joint, end;
         public Transform poleVector, upVector;

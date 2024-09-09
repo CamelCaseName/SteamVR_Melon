@@ -40,7 +40,6 @@ namespace Valve.VR
         public event ActiveChangeHandler onActiveBindingChange
         { add { sourceMap[SteamVR_Input_Sources.Any].onActiveBindingChange += value; } remove { sourceMap[SteamVR_Input_Sources.Any].onActiveBindingChange -= value; } }
 
-
         /// <summary><strong>[Shortcut to: SteamVR_Input_Sources.Any]</strong> The current Vector2 value of the action.
         /// Note: Will only return non-zero if the action is also active.</summary>
         public Vector2 axis { get { return sourceMap[SteamVR_Input_Sources.Any].axis; } }
@@ -56,7 +55,6 @@ namespace Valve.VR
         /// <summary><strong>[Shortcut to: SteamVR_Input_Sources.Any]</strong> The Vector2 value difference between the previous update and update before that.
         /// Note: Will only return non-zero if the action is also active.</summary>
         public Vector2 lastDelta { get { return sourceMap[SteamVR_Input_Sources.Any].lastDelta; } }
-
 
         public SteamVR_Action_Vector2() { }
 
@@ -170,7 +168,6 @@ namespace Valve.VR
             sourceMap[inputSource].onAxis -= functionToStopCalling;
         }
 
-
     }
 
     /// <summary>
@@ -202,7 +199,6 @@ namespace Valve.VR
         /// <summary>Event fires when the action is updated</summary>
         public event SteamVR_Action_Vector2.UpdateHandler onUpdate;
 
-
         /// <summary>The current Vector2 value of the action.
         /// Note: Will only return non-zero if the action is also active.</summary>
         public Vector2 axis { get; protected set; }
@@ -219,10 +215,8 @@ namespace Valve.VR
         /// Note: Will only return non-zero if the action is also active.</summary>
         public Vector2 lastDelta { get; protected set; }
 
-
         /// <summary>If the Vector2 value of this action has changed more than the changeTolerance since the last update</summary>
         public override bool changed { get; protected set; }
-
 
         /// <summary>If the Vector2 value of this action has changed more than the changeTolerance between the previous update and the update before that</summary>
         public override bool lastChanged { get; protected set; }
@@ -248,13 +242,11 @@ namespace Valve.VR
         /// <summary>Returns true if the action is bound</summary>
         public override bool activeBinding { get { return actionData.bActive; } }
 
-
         /// <summary>Returns true if the action was bound and the ActionSet was active during the previous update</summary>
         public override bool lastActive { get; protected set; }
 
         /// <summary>Returns true if the action was bound during the previous update</summary>
         public override bool lastActiveBinding { get { return lastActionData.bActive; } }
-
 
         protected InputAnalogActionData_t actionData = new InputAnalogActionData_t();
         protected InputAnalogActionData_t lastActionData = new InputAnalogActionData_t();
@@ -262,7 +254,7 @@ namespace Valve.VR
         protected SteamVR_Action_Vector2 vector2Action;
 
         /// <summary>
-        /// <strong>[Should not be called by user code]</strong> Sets up the internals of the action source before SteamVR_Standalone has been initialized.
+        /// <strong>[Should not be called by user code]</strong> Sets up the internals of the action source before SteamVR has been initialized.
         /// </summary>
         public override void Preinitialize(SteamVR_Action wrappingAction, SteamVR_Input_Sources forInputSource)
         {
@@ -272,7 +264,7 @@ namespace Valve.VR
 
         /// <summary>
         /// <strong>[Should not be called by user code]</strong>
-        /// Initializes the handle for the inputSource, the action data size, and any other related SteamVR_Standalone data.
+        /// Initializes the handle for the inputSource, the action data size, and any other related SteamVR data.
         /// </summary>
         public override void Initialize()
         {
@@ -294,7 +286,7 @@ namespace Valve.VR
 
             EVRInputError err = OpenVR.Input.GetAnalogActionData(handle, ref actionData, actionData_size, SteamVR_Input_Source.GetHandle(inputSource));
             if (err != EVRInputError.None)
-                Debug.LogError("<b>[SteamVR_Standalone]</b> GetAnalogActionData error (" + fullPath + "): " + err.ToString() + " handle: " + handle.ToString());
+                MelonLoader.MelonLogger.Error("[HPVR] GetAnalogActionData error (" + fullPath + "): " + err.ToString() + " handle: " + handle.ToString());
 
             updateTime = Time.realtimeSinceStartup;
             axis = new Vector2(actionData.x, actionData.y);
@@ -324,7 +316,6 @@ namespace Valve.VR
                     onUpdate.Invoke(vector2Action, inputSource, axis, delta);
                 }
             }
-
 
             if (onActiveBindingChange != null && lastActiveBinding != activeBinding)
                 onActiveBindingChange.Invoke(vector2Action, inputSource, activeBinding);

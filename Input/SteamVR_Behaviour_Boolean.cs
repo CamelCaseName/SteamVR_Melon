@@ -23,7 +23,6 @@ namespace Valve.VR
 
         public SteamVR_Action_Boolean booleanAction;
 
-
         public SteamVR_Input_Sources inputSource;
 
         /// <summary>This UnityEvent fires whenever a change happens in the action</summary>
@@ -62,13 +61,11 @@ namespace Valve.VR
         /// <summary>Returns the action set that this action is in.</summary>
         public SteamVR_ActionSet actionSet { get { if (booleanAction != null) return booleanAction.actionSet; else return null; } }
 
-
-
         protected virtual void OnEnable()
         {
             if (booleanAction == null)
             {
-                Debug.LogError("[SteamVR_Standalone] Boolean action not set.", this);
+                MelonLoader.MelonLogger.Error("[SteamVR] Boolean action not set.", this);
                 return;
             }
 

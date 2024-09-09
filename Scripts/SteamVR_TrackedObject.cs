@@ -4,16 +4,15 @@
 //
 //=============================================================================
 
+using MelonLoader;
 using System;
 using UnityEngine;
-using Valve.VR;
 
 namespace Valve.VR
 {
     public class SteamVR_TrackedObject : MonoBehaviour
     {
-        public SteamVR_TrackedObject(IntPtr value)
-: base(value) { }
+        public SteamVR_TrackedObject(IntPtr value) : base(value) { }
 
         public enum EIndex
         {
@@ -76,24 +75,44 @@ namespace Valve.VR
             }
         }
 
+        SteamVR_Events.Action newPosesAction;
+
+        SteamVR_TrackedObject()
+        {
+            newPosesAction = SteamVR_Events.NewPosesAction(OnNewPoses);
+            MelonLogger.Msg("[HPVR] newposes action is null: " + (newPosesAction == null));
+        }
+
         private void Awake()
         {
-            SteamVR_Events.NewPoses.Listen(OnNewPoses);
+            OnEnable();
+        }
+
+        void OnEnable()
+        {
+            var render = SteamVR_Render.instance;
+            if (render == null)
+            {
+                enabled = false;
+                return;
+            }
+
+            MelonLogger.Msg("[HPVR] newposes action is null: " + (newPosesAction == null));
+            if (newPosesAction is not null)
+                newPosesAction.enabled = true;
         }
 
         void OnDisable()
         {
+            MelonLogger.Msg("[HPVR] newposes action is null: " + (newPosesAction == null));
+            if (newPosesAction is not null)
+                newPosesAction.enabled = false;
             isValid = false;
-        }
-
-        void OnDestroy()
-        {
-            SteamVR_Events.NewPoses.Remove(OnNewPoses);
         }
 
         public void SetDeviceIndex(int index)
         {
-            if (System.Enum.IsDefined(typeof(EIndex), index))
+            if (Enum.IsDefined(typeof(EIndex), index))
                 this.index = (EIndex)index;
         }
     }
