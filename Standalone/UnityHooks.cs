@@ -10,24 +10,12 @@ namespace SteamVR_Melon.Util
     {
         public static event Action OnBeforeRender;
 
-        public static event Action<Camera> OnBeforeCull;
-
         public static void InvokeOnBeforeRender()
         {
-            if (OnBeforeRender != null)
-            {
-                OnBeforeRender.Invoke();
-            }
+            OnBeforeRender?.Invoke();
         }
 
-        public static void InvokeOnBeforeCull(Camera cam)
-        {
-            if (OnBeforeCull != null)
-            {
-                OnBeforeCull.Invoke(cam);
-            }
-        }
-
+        //todo change hook to application.onprerender
         public static void Init()
         {
             Camera.onPreRender = (
@@ -35,12 +23,6 @@ namespace SteamVR_Melon.Util
                 ? new Action<Camera>(OnPreRender)
                 : Il2CppSystem.Delegate.Combine(Camera.onPreRender, (Camera.CameraCallback)new Action<Camera>(OnPreRender)).Cast<Camera.CameraCallback>()
                 );
-
-            Camera.onPreCull = (
-   (Camera.onPreCull == null)
-   ? new Action<Camera>(OnPreCull)
-   : Il2CppSystem.Delegate.Combine(Camera.onPreCull, (Camera.CameraCallback)new Action<Camera>(OnPreCull)).Cast<Camera.CameraCallback>()
-   );
         }
 
         private static void OnPreRender(Camera cam)
@@ -51,15 +33,6 @@ namespace SteamVR_Melon.Util
                 InvokeOnBeforeRender();
         }
 
-        private static void OnPreCull(Camera cam)
-        {
-            if (OnPreCullCam == null || !OnPreCullCam.enabled)
-                OnPreCullCam = cam;
-            if (OnPreCullCam == cam)
-                InvokeOnBeforeCull(cam);
-        }
-
         private static Camera OnPreRenderCam = null;
-        private static Camera OnPreCullCam = null;
     }
 }

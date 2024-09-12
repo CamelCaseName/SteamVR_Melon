@@ -12,8 +12,10 @@ using UnityEngine;
 
 namespace Valve.VR
 {
+    [MelonLoader.RegisterTypeInIl2Cpp(true)]
     public class SteamVR_RenderModel : MonoBehaviour
     {
+        public SteamVR_RenderModel(System.IntPtr value) : base(value) { }
         public SteamVR_TrackedObject.EIndex index = SteamVR_TrackedObject.EIndex.None;
         protected SteamVR_Input_Sources inputSource;
 

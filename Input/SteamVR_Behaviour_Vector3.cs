@@ -10,24 +10,27 @@ using UnityEngine.Events;
 
 namespace Valve.VR
 {
+    [MelonLoader.RegisterTypeInIl2Cpp(true)]
     public class SteamVR_Behaviour_Vector3 : MonoBehaviour
     {
-        public SteamVR_Behaviour_Vector3(IntPtr value)
-: base(value) { }
-
+        public SteamVR_Behaviour_Vector3(IntPtr value) : base(value) { }
         /// <summary>The vector3 action to get data from</summary>
         public SteamVR_Action_Vector3 vector3Action;
 
         /// <summary>The device this action applies to. Any if the action is not device specific.</summary>
+        /// <summary>The device this action should apply to. Any if the action is not device specific.</summary>
         public SteamVR_Input_Sources inputSource;
 
         /// <summary>Unity event that fires whenever the action's value has changed since the last update.</summary>
+        /// <summary>Fires whenever the action's value has changed since the last update.</summary>
         public SteamVR_Behaviour_Vector3Event onChange;
 
         /// <summary>Unity event that fires whenever the action's value has been updated</summary>
+        /// <summary>Fires whenever the action's value has been updated.</summary>
         public SteamVR_Behaviour_Vector3Event onUpdate;
 
         /// <summary>Unity event that fires whenever the action's value has been updated and is non-zero</summary>
+        /// <summary>Fires whenever the action's value has been updated and is non-zero.</summary>
         public SteamVR_Behaviour_Vector3Event onAxis;
 
         /// <summary>C# event that fires whenever the action's value has changed since the last update.</summary>
@@ -39,6 +42,7 @@ namespace Valve.VR
         /// <summary>C# event that fires whenever the action's value has been updated and is non-zero</summary>
         public AxisHandler onAxisEvent;
 
+
         /// <summary>Returns whether this action is bound and the action set is active</summary>
         public bool isActive { get { return vector3Action.GetActive(inputSource); } }
 
@@ -46,7 +50,7 @@ namespace Valve.VR
         {
             if (vector3Action == null)
             {
-                MelonLoader.MelonLogger.Error("[SteamVR] Vector3 action not set.", this);
+                MelonLoader.MelonLogger.Error("[HPVR] Vector3 action not set.", this);
                 return;
             }
 
@@ -79,7 +83,7 @@ namespace Valve.VR
         {
             if (onUpdate != null)
             {
-                onUpdate.Invoke(this, fromSource, newAxis, newDelta);
+                onUpdate.Send(this, fromSource, newAxis, newDelta);
             }
             if (onUpdateEvent != null)
             {
@@ -91,7 +95,7 @@ namespace Valve.VR
         {
             if (onChange != null)
             {
-                onChange.Invoke(this, fromSource, newAxis, newDelta);
+                onChange.Send(this, fromSource, newAxis, newDelta);
             }
             if (onChangeEvent != null)
             {
@@ -103,7 +107,7 @@ namespace Valve.VR
         {
             if (onAxis != null)
             {
-                onAxis.Invoke(this, fromSource, newAxis, newDelta);
+                onAxis.Send(this, fromSource, newAxis, newDelta);
             }
             if (onAxisEvent != null)
             {
@@ -112,7 +116,7 @@ namespace Valve.VR
         }
 
         /// <summary>
-
+        /// Gets the localized name of the device that the action corresponds to.
         /// </summary>
         /// <param name="localizedParts">
         /// <list type="bullet">

@@ -4,27 +4,28 @@
 //
 //=============================================================================
 
-using Assets.SteamVR_Melon.Standalone;
 using Il2CppInterop.Runtime;
 using MelonLoader;
-using Standalone;
 using System;
 using System.Collections;
 using System.IO;
+using System.Reflection;
 using UnityEngine;
-using UnityEngine.InputSystem;
 using UnityEngine.XR;
 
 namespace Valve.VR
 {
+    [MelonLoader.RegisterTypeInIl2Cpp(true)]
     public class SteamVR_Camera : MonoBehaviour
     {
         public SteamVR_Camera(IntPtr value) : base(value) { }
         private Transform _head;
         public Transform head { get { return _head; } }
+        public Transform offset { get { return _head; } } // legacy
         public Transform origin { get { return _head.parent; } }
 
         public Camera camera { get; private set; }
+
 
         private Transform _ears;
         public Transform ears { get { return _ears; } }
@@ -36,13 +37,7 @@ namespace Valve.VR
 
         public bool wireframe = false;
 
-        static public float sceneResolutionScale
-        {
-            get { return XRSettings.eyeTextureResolutionScale; }
-            set { XRSettings.eyeTextureResolutionScale = value; }
-        }
-
-        private SteamVR_CameraFlip flip;
+        static public float sceneResolutionScale = 1.0f;
 
         #region Materials
 
@@ -60,12 +55,20 @@ namespace Valve.VR
 
         public static Resolution GetSceneResolution()
         {
-            var vr = SteamVR.instance;
             Resolution r = new Resolution();
-            int w = (int)(vr.sceneWidth * sceneResolutionScale * sceneResolutionScaleMultiplier);
-            int h = (int)(vr.sceneHeight * sceneResolutionScale * sceneResolutionScaleMultiplier);
-            r.width = w;
-            r.height = h;
+            if (SteamVR.instance is not null)
+            {
+                int w = (int)(SteamVR.instance.sceneWidth * sceneResolutionScale * sceneResolutionScaleMultiplier);
+                int h = (int)(SteamVR.instance.sceneHeight * sceneResolutionScale * sceneResolutionScaleMultiplier);
+                r.width = w;
+                r.height = h;
+                //MelonLogger.Msg($"[HPVR] {sceneResolutionScale}|{sceneResolutionScaleMultiplier}");
+            }
+            else
+            {
+                MelonLogger.Msg(SteamVR.enabled);
+                MelonLogger.Warning("[HPVR] steamvr instance was null when getting scene resolution!");
+            }
             return r;
         }
 
@@ -134,35 +137,11 @@ namespace Valve.VR
         }
 
         #endregion
-
-
         #region Enable / Disable
 
         void OnDisable()
         {
             SteamVR_Render.Remove(this);
-        }
-
-        public static bool doomp = false;
-
-        void Update()
-        {
-            doomp = false;
-            if (Keyboard.current.f4Key.wasPressedThisFrame)
-            {
-                MelonLogger.Msg("[HPVR] Doomping rendertextures...");
-                doomp = true;
-            }
-        }
-
-        void LateUpdate()
-        {
-            doomp = false;
-            if (Keyboard.current.f4Key.wasPressedThisFrame)
-            {
-                MelonLogger.Msg("[HPVR] Doomping rendertextures...");
-                doomp = true;
-            }
         }
 
         void OnEnable()
@@ -171,49 +150,35 @@ namespace Valve.VR
             var vr = SteamVR.instance;
             if (vr == null)
             {
-                MelonLogger.Warning("[HPVR] No hmd detected, aborting!");
                 if (head != null)
                 {
-                    head.GetComponent<SteamVR_GameView>().enabled = false;
                     head.GetComponent<SteamVR_TrackedObject>().enabled = false;
                 }
-
-                if (flip != null)
-                    flip.enabled = false;
 
                 enabled = false;
                 return;
             }
-            MelonLogger.Msg("[HPVR] building camera rig");
-            // Ensure rig is properly set up
-            Expand();
 
-            if (blitMaterial == null)
+            // Convert camera rig for native OpenVR integration.
+            var t = transform;
+            if (head != t)
             {
-                blitMaterial = new Material(VRShaders.GetShader(VRShaders.VRShader.blit));
-            }
+                Expand();
 
-            MelonLogger.Msg("[HPVR] setting camera settings");
-            // Set remaining hmd specific settings
-            var camera = Camera.main;
-            MelonLogger.Msg("[HPVR] steamvr camera camera is null: " + (camera is null));
-            camera.fieldOfView = vr.fieldOfView;
-            camera.aspect = vr.aspect;
-            camera.eventMask = 0;           // disable mouse events
-            camera.orthographic = false;    // force perspective
-            camera.enabled = false;         // manually rendered by SteamVR_Render
+                t.parent = origin;
 
-            if (camera.actualRenderingPath != RenderingPath.Forward && QualitySettings.antiAliasing > 1)
-            {
-                MelonLogger.Warning("[HPVR] MSAA only supported in Forward rendering path. (disabling MSAA)");
-                QualitySettings.antiAliasing = 0;
-            }
+                while (head.childCount > 0)
+                    head.GetChild(0).parent = t;
 
-            // Ensure game view camera hdr setting matches
-            var headCam = head.GetComponent<Camera>();
-            if (headCam != null)
-            {
-                headCam.renderingPath = camera.renderingPath;
+                // Keep the head around, but parent to the camera now since it moves with the hmd
+                // but existing content may still have references to this object.
+                head.parent = t;
+                head.localPosition = Vector3.zero;
+                head.localRotation = Quaternion.identity;
+                head.localScale = Vector3.one;
+                head.gameObject.SetActive(false);
+
+                _head = t;
             }
 
             if (ears == null)
@@ -227,7 +192,6 @@ namespace Valve.VR
                 ears.GetComponent<SteamVR_Ears>().vrcam = this;
 
             SteamVR_Render.Add(this);
-            MelonLogger.Msg("[HPVR] Done creating the cameras");
         }
 
         #endregion
@@ -236,7 +200,7 @@ namespace Valve.VR
 
         void Awake()
         {
-            camera = Camera.main; // cached to avoid runtime lookup
+            camera = GetComponent<Camera>(); // cached to avoid runtime lookup
             ForceLast();
         }
 
@@ -244,28 +208,48 @@ namespace Valve.VR
 
         public void ForceLast()
         {
-            if (isLast)
+            if (values != null)
             {
-                if (flip == null)
+                // Restore values on new instance
+                foreach (DictionaryEntry entry in values)
                 {
-                    flip = gameObject.GetComponent<SteamVR_CameraFlip>();
+                    var f = entry.Key as FieldInfo;
+                    f.SetValue(this, entry.Value);
                 }
-                return;
+                values = null;
             }
-            Component[] components = GetComponents<Component>();
-            if (this != components[components.Length - 1] || flip == null)
+            else
             {
-                if (flip == null)
+                // Make sure it's the last component
+                var components = GetComponents<Component>();
+
+                // But first make sure there aren't any other SteamVR_Cameras on this object.
+                for (int i = 0; i < components.Length; i++)
                 {
-                    flip = gameObject.AddComponent<SteamVR_CameraFlip>();
+                    var c = components[i] as SteamVR_Camera;
+                    if (c != null && c != this)
+                    {
+                        DestroyImmediate(c);
+                    }
                 }
-                GameObject g = gameObject;
-                DestroyImmediate(this);
-                isLast = true;
-                g.AddComponent<SteamVR_Camera>().ForceLast();
+
+                components = GetComponents<Component>();
+
+                if (this != components[components.Length - 1])
+                {
+                    // Store off values to be restored on new instance
+                    values = new Hashtable();
+                    var fields = GetType().GetFields(BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public);
+                    foreach (var f in fields)
+                        if (f.IsPublic || f.IsDefined(typeof(SerializeField), true))
+                            values[f] = f.GetValue(this);
+
+                    var go = gameObject;
+                    DestroyImmediate(this);
+                    go.AddComponent<SteamVR_Camera>().ForceLast();
+                }
             }
         }
-        static bool isLast;
 
         #endregion
 
@@ -336,6 +320,7 @@ namespace Valve.VR
             // Move children and components from head back to camera.
             while (head.childCount > 0)
                 head.GetChild(0).parent = transform;
+
             if (ears != null)
             {
                 while (ears.childCount > 0)
@@ -385,7 +370,5 @@ namespace Valve.VR
             MelonLogger.Msg($"Writing texture to {pngOutPath}");
             File.WriteAllBytes(pngOutPath, textureBytes);
         }
-
-        public static bool useHeadTracking = true;
     }
 }

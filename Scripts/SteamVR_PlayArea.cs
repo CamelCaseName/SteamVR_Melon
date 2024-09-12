@@ -12,15 +12,15 @@ using UnityEngine.Rendering;
 
 namespace Valve.VR
 {
+    [MelonLoader.RegisterTypeInIl2Cpp(true)]
     public class SteamVR_PlayArea : MonoBehaviour
     {
+        public SteamVR_PlayArea(IntPtr value) : base(value) { }
         public float borderThickness = 0.15f;
         public float wireframeHeight = 2.0f;
         public bool drawWireframeWhenSelectedOnly = false;
         public bool drawInGame = true;
 
-        public SteamVR_PlayArea(IntPtr value)
-: base(value) { }
 
         public enum Size
         {

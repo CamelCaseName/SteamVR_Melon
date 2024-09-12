@@ -8,34 +8,33 @@ using System.Text;
 using UnityEngine;
 using UnityEngine.Events;
 
+
 namespace Valve.VR
 {
     /// <summary>
     /// SteamVR_Behaviour_Single simplifies the use of single actions. It gives an event to subscribe to for when the action has changed.
     /// </summary>
+    [MelonLoader.RegisterTypeInIl2Cpp(true)]
     public class SteamVR_Behaviour_Single : MonoBehaviour
     {
-
-        public SteamVR_Behaviour_Single(IntPtr value)
-: base(value) { }
-
+        public SteamVR_Behaviour_Single(IntPtr value) : base(value) { }
         /// <summary>The single action to get data from.</summary>
         public SteamVR_Action_Single singleAction;
 
         /// <summary>The device this action applies to. Any if the action is not device specific.</summary>
-
+        /// <summary>The device this action should apply to. Any if the action is not device specific.</summary>
         public SteamVR_Input_Sources inputSource;
 
         /// <summary>Unity event that Fires whenever the action's value has changed since the last update.</summary>
-
+        /// <summary>Fires whenever the action's value has changed since the last update.</summary>
         public SteamVR_Behaviour_SingleEvent onChange;
 
         /// <summary>Unity event that Fires whenever the action's value has been updated</summary>
-
+        /// <summary>Fires whenever the action's value has been updated.</summary>
         public SteamVR_Behaviour_SingleEvent onUpdate;
 
         /// <summary>Unity event that Fires whenever the action's value has been updated and is non-zero</summary>
-
+        /// <summary>Fires whenever the action's value has been updated and is non-zero.</summary>
         public SteamVR_Behaviour_SingleEvent onAxis;
 
         /// <summary>C# event that fires whenever the action's value has changed since the last update.</summary>
@@ -54,7 +53,7 @@ namespace Valve.VR
         {
             if (singleAction == null)
             {
-                MelonLoader.MelonLogger.Error("[SteamVR] Single action not set.", this);
+                MelonLoader.MelonLogger.Error("[HPVR] Single action not set.", this);
                 return;
             }
 
@@ -87,7 +86,7 @@ namespace Valve.VR
         {
             if (onUpdate != null)
             {
-                onUpdate.Invoke(this, fromSource, newAxis, newDelta);
+                onUpdate.Send(this, fromSource, newAxis, newDelta);
             }
 
             if (onUpdateEvent != null)
@@ -100,7 +99,7 @@ namespace Valve.VR
         {
             if (onChange != null)
             {
-                onChange.Invoke(this, fromSource, newAxis, newDelta);
+                onChange.Send(this, fromSource, newAxis, newDelta);
             }
 
             if (onChangeEvent != null)
@@ -113,7 +112,7 @@ namespace Valve.VR
         {
             if (onAxis != null)
             {
-                onAxis.Invoke(this, fromSource, newAxis, newDelta);
+                onAxis.Send(this, fromSource, newAxis, newDelta);
             }
 
             if (onAxisEvent != null)
@@ -122,8 +121,9 @@ namespace Valve.VR
             }
         }
 
-        /// <summary>
 
+        /// <summary>
+        /// Gets the localized name of the device that the action corresponds to.
         /// </summary>
         /// <param name="localizedParts">
         /// <list type="bullet">

@@ -11,10 +11,10 @@ using Valve.VR;
 
 namespace Valve.VR
 {
+    [MelonLoader.RegisterTypeInIl2Cpp(true)]
     public class SteamVR_ExternalCamera : MonoBehaviour
     {
-        public SteamVR_ExternalCamera(IntPtr value)
-       : base(value) { }
+        public SteamVR_ExternalCamera(IntPtr value) : base(value) { }
 
         private SteamVR_Action_Pose cameraPose = null;
         private SteamVR_Input_Sources cameraInputSource = SteamVR_Input_Sources.Camera;

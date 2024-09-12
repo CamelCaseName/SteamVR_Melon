@@ -48,8 +48,8 @@ namespace Valve.VR
 
         public bool activateFirstActionSetOnStart = true;
 
-         public string editorAppKey;
-public bool autoEnableVR = true;
+        public string editorAppKey;
+        public bool autoEnableVR = true;
 
         public bool legacyMixedRealityCamera = true;
 
@@ -90,7 +90,7 @@ public bool autoEnableVR = true;
 
                 if (_instance == null)
                 {
-                    _instance =new SteamVR_Settings();
+                    _instance = new SteamVR_Settings();
                 }
 
                 SetDefaultsIfNeeded();

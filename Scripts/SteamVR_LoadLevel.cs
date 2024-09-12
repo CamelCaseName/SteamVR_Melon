@@ -13,6 +13,7 @@ using System;
 
 namespace Valve.VR
 {
+    [MelonLoader.RegisterTypeInIl2Cpp(true)]
     public class SteamVR_LoadLevel : MonoBehaviour
     {
         public SteamVR_LoadLevel(IntPtr value) : base(value) { }

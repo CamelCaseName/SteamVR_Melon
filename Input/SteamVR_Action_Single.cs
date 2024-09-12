@@ -37,6 +37,7 @@ namespace Valve.VR
         public event ActiveChangeHandler onActiveBindingChange
         { add { sourceMap[SteamVR_Input_Sources.Any].onActiveBindingChange += value; } remove { sourceMap[SteamVR_Input_Sources.Any].onActiveBindingChange -= value; } }
 
+
         /// <summary><strong>[Shortcut to: SteamVR_Input_Sources.Any]</strong> The current float value of the action.
         /// Note: Will only return non-zero if the action is also active.</summary>
         public float axis { get { return sourceMap[SteamVR_Input_Sources.Any].axis; } }
@@ -52,6 +53,7 @@ namespace Valve.VR
         /// <summary><strong>[Shortcut to: SteamVR_Input_Sources.Any]</strong> The float value difference between the previous update and update before that.
         /// Note: Will only return non-zero if the action is also active.</summary>
         public float lastDelta { get { return sourceMap[SteamVR_Input_Sources.Any].lastDelta; } }
+
 
         public SteamVR_Action_Single() { }
 
@@ -165,6 +167,10 @@ namespace Valve.VR
             sourceMap[inputSource].onAxis -= functionToStopCalling;
         }
 
+        public void RemoveAllListeners(SteamVR_Input_Sources inputSource)
+        {
+            sourceMap[inputSource].RemoveAllListeners();
+        }
     }
 
     public class SteamVR_Action_Single_Source_Map : SteamVR_Action_In_Source_Map<SteamVR_Action_Single_Source>
@@ -209,8 +215,10 @@ namespace Valve.VR
         /// Note: Will only return non-zero if the action is also active.</summary>
         public float lastDelta { get { if (active) return lastActionData.deltaX; else return 0; } }
 
+
         /// <summary>If the float value of this action has changed more than the changeTolerance since the last update</summary>
         public override bool changed { get; protected set; }
+
 
         /// <summary>If the float value of this action has changed more than the changeTolerance between the previous update and the update before that</summary>
         public override bool lastChanged { get; protected set; }
@@ -236,16 +244,19 @@ namespace Valve.VR
         /// <summary>Returns true if the action is bound</summary>
         public override bool activeBinding { get { return actionData.bActive; } }
 
+
         /// <summary>Returns true if the action was bound and the ActionSet was active during the previous update</summary>
         public override bool lastActive { get; protected set; }
 
         /// <summary>Returns true if the action was bound during the previous update</summary>
         public override bool lastActiveBinding { get { return lastActionData.bActive; } }
 
+
         protected InputAnalogActionData_t actionData = new InputAnalogActionData_t();
         protected InputAnalogActionData_t lastActionData = new InputAnalogActionData_t();
 
         protected SteamVR_Action_Single singleAction;
+
 
         /// <summary>
         /// <strong>[Should not be called by user code]</strong> Sets up the internals of the action source before SteamVR has been initialized.
@@ -266,6 +277,54 @@ namespace Valve.VR
 
             if (actionData_size == 0)
                 actionData_size = (uint)Marshal.SizeOf(typeof(InputAnalogActionData_t));
+        }
+
+        /// <summary>
+        /// Removes all listeners, useful for dispose pattern
+        /// </summary>
+        public void RemoveAllListeners()
+        {
+            Delegate[] delegates;
+
+            if (onAxis != null)
+            {
+                delegates = onAxis.GetInvocationList();
+                if (delegates != null)
+                    foreach (Delegate existingDelegate in delegates)
+                        onAxis -= (SteamVR_Action_Single.AxisHandler)existingDelegate;
+            }
+
+            if (onUpdate != null)
+            {
+                delegates = onUpdate.GetInvocationList();
+                if (delegates != null)
+                    foreach (Delegate existingDelegate in delegates)
+                        onUpdate -= (SteamVR_Action_Single.UpdateHandler)existingDelegate;
+            }
+
+            if (onChange != null)
+            {
+                delegates = onChange.GetInvocationList();
+                if (delegates != null)
+                    foreach (Delegate existingDelegate in delegates)
+                        onChange -= (SteamVR_Action_Single.ChangeHandler)existingDelegate;
+            }
+
+            if (onActiveChange != null)
+            {
+                delegates = onActiveChange.GetInvocationList();
+                if (delegates != null)
+                    foreach (Delegate existingDelegate in delegates)
+                        onActiveChange -= (SteamVR_Action_Single.ActiveChangeHandler)existingDelegate;
+            }
+
+            if (onActiveBindingChange != null)
+            {
+                delegates = onActiveBindingChange.GetInvocationList();
+                if (delegates != null)
+                    foreach (Delegate existingDelegate in delegates)
+                        onActiveBindingChange -= (SteamVR_Action_Single.ActiveChangeHandler)existingDelegate;
+            }
         }
 
         /// <summary><strong>[Should not be called by user code]</strong>
@@ -307,6 +366,7 @@ namespace Valve.VR
                 }
             }
 
+
             if (onActiveBindingChange != null && lastActiveBinding != activeBinding)
                 onActiveBindingChange.Invoke(singleAction, inputSource, activeBinding);
 
@@ -324,6 +384,7 @@ namespace Valve.VR
         /// <summary>The float value of the action from the previous update.
         /// Note: Will only return non-zero if the action is also active.</summary>
         float lastAxis { get; }
+
 
         /// <summary>The float value difference between this update and the previous update.
         /// Note: Will only return non-zero if the action is also active.</summary>

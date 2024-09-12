@@ -178,6 +178,22 @@ namespace Valve.VR
                 }
             }
         }
+        public class Event<T0, T1, T2, T3>
+        {
+            public event System.Action<T0, T1, T2, T3> OnEvent;
+
+            public void Listen(System.Action<T0, T1, T2, T3> action) { OnEvent += action; }
+            public void Remove(System.Action<T0, T1, T2, T3> action) { OnEvent -= action; }
+            public void Send(T0 arg0, T1 arg1, T2 arg2, T3 arg3)
+            {
+                if (OnEvent != null)
+                {
+                    {
+                        OnEvent.Invoke(arg0, arg1, arg2, arg3);
+                    }
+                }
+            }
+        }
 
         public static Event<bool> Calibrating = new Event<bool>();
         public static Action CalibratingAction(System.Action<bool> action) { return new Action<bool>(Calibrating, action); }

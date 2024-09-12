@@ -1,12 +1,8 @@
 ﻿//======= Copyright (c) Valve Corporation, All rights reserved. ===============
 
-using UnityEngine;
-using System.Collections;
 using System.Collections.Generic;
 
 using System.Linq;
-
-using System.IO;
 
 namespace Valve.VR
 {
@@ -42,17 +38,17 @@ namespace Valve.VR
             {
                 SteamVR_Input_BindingFile_Chord chord = (SteamVR_Input_BindingFile_Chord)obj;
 
-                if (output == chord.output && inputs != null && chord.inputs != null)
+                if (this.output == chord.output && this.inputs != null && chord.inputs != null)
                 {
-                    if (inputs.Count == chord.inputs.Count)
+                    if (this.inputs.Count == chord.inputs.Count)
                     {
-                        for (int thisIndex = 0; thisIndex < inputs.Count; thisIndex++)
+                        for (int thisIndex = 0; thisIndex < this.inputs.Count; thisIndex++)
                         {
-                            if (inputs[thisIndex] != null && chord.inputs[thisIndex] != null && inputs[thisIndex].Count == chord.inputs[thisIndex].Count)
+                            if (this.inputs[thisIndex] != null && chord.inputs[thisIndex] != null && this.inputs[thisIndex].Count == chord.inputs[thisIndex].Count)
                             {
-                                for (int thisSubIndex = 0; thisSubIndex < inputs[thisIndex].Count; thisSubIndex++)
+                                for (int thisSubIndex = 0; thisSubIndex < this.inputs[thisIndex].Count; thisSubIndex++)
                                 {
-                                    if (inputs[thisIndex][thisSubIndex] != chord.inputs[thisIndex][thisSubIndex])
+                                    if (this.inputs[thisIndex][thisSubIndex] != chord.inputs[thisIndex][thisSubIndex])
                                     {
                                         return false;
                                     }
@@ -86,7 +82,7 @@ namespace Valve.VR
             if (obj is SteamVR_Input_BindingFile_Pose)
             {
                 SteamVR_Input_BindingFile_Pose pose = (SteamVR_Input_BindingFile_Pose)obj;
-                if (pose.output == output && pose.path == path)
+                if (pose.output == this.output && pose.path == this.path)
                     return true;
                 return false;
             }
@@ -111,7 +107,7 @@ namespace Valve.VR
             if (obj is SteamVR_Input_BindingFile_Haptic)
             {
                 SteamVR_Input_BindingFile_Haptic pose = (SteamVR_Input_BindingFile_Haptic)obj;
-                if (pose.output == output && pose.path == path)
+                if (pose.output == this.output && pose.path == this.path)
                     return true;
                 return false;
             }
@@ -136,7 +132,7 @@ namespace Valve.VR
             if (obj is SteamVR_Input_BindingFile_Skeleton)
             {
                 SteamVR_Input_BindingFile_Skeleton pose = (SteamVR_Input_BindingFile_Skeleton)obj;
-                if (pose.output == output && pose.path == path)
+                if (pose.output == this.output && pose.path == this.path)
                     return true;
                 return false;
             }
@@ -181,12 +177,12 @@ namespace Valve.VR
             if (obj is SteamVR_Input_BindingFile_Source)
             {
                 SteamVR_Input_BindingFile_Source pose = (SteamVR_Input_BindingFile_Source)obj;
-                if (pose.mode == mode && pose.path == path)
+                if (pose.mode == this.mode && pose.path == this.path)
                 {
                     bool parametersEqual = false;
                     if (parameters != null && pose.parameters != null)
                     {
-                        if (parameters.Equals(pose.parameters))
+                        if (this.parameters.Equals(pose.parameters))
                             parametersEqual = true;
                     }
                     else if (parameters == null && pose.parameters == null)
@@ -197,7 +193,7 @@ namespace Valve.VR
                         bool inputsEqual = false;
                         if (inputs != null && pose.inputs != null)
                         {
-                            if (inputs.Equals(pose.inputs))
+                            if (this.inputs.Equals(pose.inputs))
                                 inputsEqual = true;
                         }
                         else if (inputs == null && pose.inputs == null)
@@ -232,7 +228,7 @@ namespace Valve.VR
                     return true;
                 else
                 {
-                    if (Count == sourceInput.Count)
+                    if (this.Count == sourceInput.Count)
                     {
                         foreach (var element in this)
                         {
@@ -267,7 +263,7 @@ namespace Valve.VR
                 if (this == stringDictionary)
                     return true;
 
-                return Count == stringDictionary.Count && !this.Except(stringDictionary).Any();
+                return (this.Count == stringDictionary.Count && !this.Except(stringDictionary).Any());
             }
 
             return base.Equals(obj);

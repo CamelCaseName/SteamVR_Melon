@@ -9,6 +9,7 @@ using Mathf = HPVR.Util.Mathf;
 namespace Valve.VR
 {
 
+    [MelonLoader.RegisterTypeInIl2Cpp(true)]
     public class SteamVR_Render : MonoBehaviour
     {
         public SteamVR_Render(IntPtr value) : base(value) { }
@@ -362,10 +363,15 @@ namespace Valve.VR
         {
             if (SteamVR.active == false)
                 return;
-
             if (SteamVR.settings.IsPoseUpdateMode(SteamVR_UpdateModes.OnPreCull))
             {
                 UpdatePoses();
+                MelonLogger.Msg("updated Poses");
+            }
+            else
+            {
+
+                MelonLogger.Msg("Poses were not updated");
             }
         }
 

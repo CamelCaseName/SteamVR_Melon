@@ -5,10 +5,10 @@ using Valve.VR;
 
 namespace Standalone
 {
+    [MelonLoader.RegisterTypeInIl2Cpp(true)]
     public class SteamVR_GameView : MonoBehaviour
     {
-        public SteamVR_GameView(IntPtr value)
-: base(value) { }
+        public SteamVR_GameView(IntPtr value) : base(value) { }
         static Camera cam;
 
         private void OnEnable()

@@ -12,16 +12,16 @@ namespace Valve.VR
     /// This component simplifies the use of Pose actions. Adding it to a gameobject will auto set that transform's position and rotation every update to match the pose.
     /// Advanced velocity estimation is handled through a buffer of the last 30 updates.
     /// </summary>
+    [MelonLoader.RegisterTypeInIl2Cpp(true)]
     public class SteamVR_Behaviour_Pose : MonoBehaviour
     {
-
-        public SteamVR_Behaviour_Pose(IntPtr value)
-: base(value) { }
-
+        public SteamVR_Behaviour_Pose(IntPtr value) : base(value) { }
         public SteamVR_Action_Pose poseAction = SteamVR_Input.GetAction<SteamVR_Action_Pose>("Pose");
 
+        /// <summary>The device this action should apply to. Any if the action is not device specific.</summary>
         public SteamVR_Input_Sources inputSource;
 
+        /// <summary>If not set, relative to parent</summary>
         public Transform origin;
 
         /// <summary>Returns whether or not the current pose is in a valid state</summary>
@@ -29,6 +29,7 @@ namespace Valve.VR
 
         /// <summary>Returns whether or not the pose action is bound and able to be updated</summary>
         public bool isActive { get { return poseAction[inputSource].active; } }
+
 
         /// <summary>This Unity event will fire whenever the position or rotation of this transform is updated.</summary>
         public SteamVR_Behaviour_PoseEvent onTransformUpdated;
@@ -45,6 +46,7 @@ namespace Valve.VR
         /// <summary>This Unity event will fire whenever the device's deviceIndex changes</summary>
         public SteamVR_Behaviour_Pose_DeviceIndexChangedEvent onDeviceIndexChanged;
 
+
         /// <summary>This C# event will fire whenever the position or rotation of this transform is updated.</summary>
         public UpdateHandler onTransformUpdatedEvent;
 
@@ -60,13 +62,14 @@ namespace Valve.VR
         /// <summary>This C# event will fire whenever the device's deviceIndex changes</summary>
         public DeviceIndexChangedHandler onDeviceIndexChangedEvent;
 
+
+        /// <summary>Can be disabled to stop broadcasting bound device status changes</summary>
         public bool broadcastDeviceChanges = true;
 
         protected int deviceIndex = -1;
 
         protected SteamVR_HistoryBuffer historyBuffer = new SteamVR_HistoryBuffer(30);
 
-        public Quaternion rotationOffset = Quaternion.identity;
 
         protected virtual void Start()
         {
@@ -79,7 +82,7 @@ namespace Valve.VR
             CheckDeviceIndex();
 
             if (origin == null)
-                origin = transform.parent;
+                origin = this.transform.parent;
         }
 
         protected virtual void OnEnable()
@@ -115,7 +118,7 @@ namespace Valve.VR
             UpdateTransform();
 
             if (onTransformUpdated != null)
-                onTransformUpdated.Invoke(this, inputSource);
+                onTransformUpdated.Send(this, inputSource);
             if (onTransformUpdatedEvent != null)
                 onTransformUpdatedEvent.Invoke(this, inputSource);
         }
@@ -126,19 +129,19 @@ namespace Valve.VR
             if (origin != null)
             {
                 transform.position = origin.transform.TransformPoint(poseAction[inputSource].localPosition);
-                transform.rotation = origin.rotation * rotationOffset * poseAction[inputSource].localRotation;
+                transform.rotation = origin.rotation * poseAction[inputSource].localRotation;
             }
             else
             {
                 transform.localPosition = poseAction[inputSource].localPosition;
-                transform.localRotation = poseAction[inputSource].localRotation * rotationOffset;
+                transform.localRotation = poseAction[inputSource].localRotation;
             }
         }
 
         private void SteamVR_Behaviour_Pose_OnChange(SteamVR_Action_Pose fromAction, SteamVR_Input_Sources fromSource)
         {
             if (onTransformChanged != null)
-                onTransformChanged.Invoke(this, fromSource);
+                onTransformChanged.Send(this, fromSource);
             if (onTransformChangedEvent != null)
                 onTransformChangedEvent.Invoke(this, fromSource);
         }
@@ -148,7 +151,7 @@ namespace Valve.VR
             CheckDeviceIndex();
 
             if (onConnectedChanged != null)
-                onConnectedChanged.Invoke(this, inputSource, connected);
+                onConnectedChanged.Send(this, inputSource, connected);
             if (onConnectedChangedEvent != null)
                 onConnectedChangedEvent.Invoke(this, inputSource, connected);
         }
@@ -156,7 +159,7 @@ namespace Valve.VR
         protected virtual void OnTrackingChanged(SteamVR_Action_Pose changedAction, SteamVR_Input_Sources changedSource, ETrackingResult trackingChanged)
         {
             if (onTrackingChanged != null)
-                onTrackingChanged.Invoke(this, inputSource, trackingChanged);
+                onTrackingChanged.Send(this, inputSource, trackingChanged);
             if (onTrackingChangedEvent != null)
                 onTrackingChangedEvent.Invoke(this, inputSource, trackingChanged);
         }
@@ -173,17 +176,12 @@ namespace Valve.VR
 
                     if (broadcastDeviceChanges)
                     {
-                        foreach(SteamVR_RenderModel r in GetComponentsInChildren<SteamVR_RenderModel>())
-                        {
-                            r.SetInputSource(inputSource);
-                            r.SetDeviceIndex(deviceIndex);
-                        }
-                        //this.gameObject.BroadcastMessage("SetInputSource", inputSource, SendMessageOptions.DontRequireReceiver);
-                        //this.gameObject.BroadcastMessage("SetDeviceIndex", deviceIndex, SendMessageOptions.DontRequireReceiver);
+                        this.gameObject.BroadcastMessage("SetInputSource", (int)inputSource, SendMessageOptions.DontRequireReceiver);
+                        this.gameObject.BroadcastMessage("SetDeviceIndex", deviceIndex, SendMessageOptions.DontRequireReceiver);
                     }
 
                     if (onDeviceIndexChanged != null)
-                        onDeviceIndexChanged.Invoke(this, inputSource, deviceIndex);
+                        onDeviceIndexChanged.Send(this, inputSource, deviceIndex);
                     if (onDeviceIndexChangedEvent != null)
                         onDeviceIndexChangedEvent.Invoke(this, inputSource, deviceIndex);
                 }
@@ -239,7 +237,7 @@ namespace Valve.VR
         }
 
         /// <summary>
-
+        /// Gets the localized name of the device that the action corresponds to.
         /// </summary>
         /// <param name="localizedParts">
         /// <list type="bullet">

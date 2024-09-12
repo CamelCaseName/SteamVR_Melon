@@ -5,9 +5,8 @@ using System.Collections;
 using System.Collections.Generic;
 
 using System.Linq;
-
-using System.IO;
 using Newtonsoft.Json;
+using System.IO;
 
 namespace Valve.VR
 {
@@ -19,10 +18,8 @@ namespace Valve.VR
         public List<SteamVR_Input_ActionFile_DefaultBinding> default_bindings = new List<SteamVR_Input_ActionFile_DefaultBinding>();
         public List<Dictionary<string, string>> localization = new List<Dictionary<string, string>>();
 
-        [JsonIgnore]
         public string filePath;
 
-        [JsonIgnore]
         public List<SteamVR_Input_ActionFile_LocalizationItem> localizationHelperList = new List<SteamVR_Input_ActionFile_LocalizationItem>();
 
         public void InitializeHelperLists()
@@ -117,10 +114,10 @@ namespace Valve.VR
         {
             List<string> files = new List<string>();
 
-            FileInfo actionFileInfo = new FileInfo(filePath);
+            FileInfo actionFileInfo = new FileInfo(this.filePath);
             string path = actionFileInfo.Directory.FullName;
 
-            files.Add(filePath);
+            files.Add(this.filePath);
 
             foreach (var binding in default_bindings)
             {
@@ -184,13 +181,14 @@ namespace Valve.VR
             }
         }
 
+
         private const string findString_appKeyStart = "\"app_key\"";
         private const string findString_appKeyEnd = "\",";
         private static void RemoveAppKey(string newFilePath)
         {
             if (File.Exists(newFilePath))
             {
-                string jsonText = File.ReadAllText(newFilePath);
+                string jsonText = System.IO.File.ReadAllText(newFilePath);
 
                 string findString = "\"app_key\"";
                 int stringStart = jsonText.IndexOf(findString);
@@ -230,6 +228,7 @@ namespace Valve.VR
 
             return null;
         }
+
 
         public void Save(string path)
         {
@@ -273,8 +272,8 @@ namespace Valve.VR
         public SteamVR_Input_ActionFile_DefaultBinding GetCopy()
         {
             SteamVR_Input_ActionFile_DefaultBinding newDefaultBinding = new SteamVR_Input_ActionFile_DefaultBinding();
-            newDefaultBinding.controller_type = controller_type;
-            newDefaultBinding.binding_url = binding_url;
+            newDefaultBinding.controller_type = this.controller_type;
+            newDefaultBinding.binding_url = this.binding_url;
             return newDefaultBinding;
         }
     }
@@ -334,8 +333,8 @@ namespace Valve.VR
         public SteamVR_Input_ActionFile_ActionSet GetCopy()
         {
             SteamVR_Input_ActionFile_ActionSet newSet = new SteamVR_Input_ActionFile_ActionSet();
-            newSet.name = name;
-            newSet.usage = usage;
+            newSet.name = this.name;
+            newSet.usage = this.usage;
             return newSet;
         }
 
@@ -347,7 +346,7 @@ namespace Valve.VR
                 if (set == this)
                     return true;
 
-                if (set.name == name)
+                if (set.name == this.name)
                     return true;
 
                 return false;
@@ -404,11 +403,11 @@ namespace Valve.VR
         public SteamVR_Input_ActionFile_Action GetCopy()
         {
             SteamVR_Input_ActionFile_Action newAction = new SteamVR_Input_ActionFile_Action();
-            newAction.name = name;
-            newAction.type = type;
-            newAction.scope = scope;
-            newAction.skeleton = skeleton;
-            newAction.requirement = requirement;
+            newAction.name = this.name;
+            newAction.type = this.type;
+            newAction.scope = this.scope;
+            newAction.skeleton = this.skeleton;
+            newAction.requirement = this.requirement;
             return newAction;
         }
 
@@ -526,7 +525,7 @@ namespace Valve.VR
                 if (this == obj)
                     return true;
 
-                if (name == action.name && type == action.type && skeleton == action.skeleton && requirement == action.requirement)
+                if (this.name == action.name && this.type == action.type && this.skeleton == action.skeleton && this.requirement == action.requirement)
                     return true;
 
                 return false;
@@ -597,7 +596,7 @@ namespace Valve.VR
         public string[] references = new string[] { "SteamVR" };
         public string[] optionalUnityReferences = new string[0];
         public string[] includePlatforms = new string[0];
-        public string[] excludePlatforms = new string[0];
+        public string[] excludePlatforms = new string[] { "Android" };
         public bool allowUnsafeCode = false;
         public bool overrideReferences = false;
         public string[] precompiledReferences = new string[0];

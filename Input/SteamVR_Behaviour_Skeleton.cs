@@ -1,52 +1,49 @@
 ﻿//======= Copyright (c) Valve Corporation, All rights reserved. ===============
 
-using MelonLoader;
-using HPVR.Util;
 using System;
 using System.Collections;
 using UnityEngine;
-using UnityEngine.Events;
-using Valve.VR;
 
 namespace Valve.VR
 {
+    [MelonLoader.RegisterTypeInIl2Cpp(true)]
     public class SteamVR_Behaviour_Skeleton : MonoBehaviour
     {
-        public SteamVR_Behaviour_Skeleton(IntPtr value)
-: base(value) { }
-
+        public SteamVR_Behaviour_Skeleton(IntPtr value) : base(value) { }
+        /// <summary>If not set, will try to auto assign this based on 'Skeleton' + inputSource</summary>
         /// <summary>The action this component will use to update the model. Must be a Skeleton type action.</summary>
         public SteamVR_Action_Skeleton skeletonAction;
 
         /// <summary>The device this action should apply to. Any if the action is not device specific.</summary>
-
+        /// <summary>The device this action should apply to. Any if the action is not device specific.</summary>
         public SteamVR_Input_Sources inputSource;
 
         /// <summary>The range of motion you'd like the hand to move in. With controller is the best estimate of the fingers wrapped around a controller. Without is from a flat hand to a fist.</summary>
-        
+        /// <summary>The range of motion you'd like the hand to move in. With controller is the best estimate of the fingers wrapped around a controller. Without is from a flat hand to a fist.</summary>
         public EVRSkeletalMotionRange rangeOfMotion = EVRSkeletalMotionRange.WithoutController;
 
         /// <summary>The root Transform of the skeleton. Needs to have a child (wrist) then wrist should have children in the order thumb, index, middle, ring, pinky</summary>
-        
+        /// <summary>This needs to be in the order of: root -> wrist -> thumb, index, middle, ring, pinky</summary>
         public Transform skeletonRoot;
 
         /// <summary>The transform this transform should be relative to</summary>
-        
+        /// <summary>If not set, relative to parent</summary>
         public Transform origin;
 
         /// <summary>Whether or not to update this transform's position and rotation inline with the skeleton transforms or if this is handled in another script</summary>
-        
+        /// <summary>Set to true if you want this script to update its position and rotation. False if this will be handled elsewhere</summary>
         public bool updatePose = true;
 
         /// <summary>Check this to not set the positions of the bones. This is helpful for differently scaled skeletons.</summary>
-        
+        /// <summary>Check this to not set the positions of the bones. This is helpful for differently scaled skeletons.</summary>
         public bool onlySetRotations = false;
 
         /// <summary>
         /// How much of a blend to apply to the transform positions and rotations.
-
+        /// Set to 0 for the transform orientation to be set by an animation.
+        /// Set to 1 for the transform orientation to be set by the skeleton action.
         /// </summary>
-
+        /// <summary>Modify this to blend between animations setup on the hand</summary>
         public float skeletonBlend = 1f;
 
         /// <summary>This Unity event will fire whenever the position or rotation of the bones are updated.</summary>
@@ -64,6 +61,7 @@ namespace Valve.VR
         /// <summary>This Unity event will fire whenever the device's tracking state changes</summary>
         public SteamVR_Behaviour_Skeleton_TrackingChangedEvent onTrackingChanged;
 
+
         /// <summary>This C# event will fire whenever the position or rotation of this transform is updated.</summary>
         public UpdateHandler onBoneTransformsUpdatedEvent;
 
@@ -80,12 +78,14 @@ namespace Valve.VR
         public TrackingChangeHandler onTrackingChangedEvent;
 
         /// <summary>Can be set to mirror the bone data across the x axis</summary>
-
+        /// <summary>Is this rendermodel a mirror of another one?</summary>
         public MirrorType mirroring;
 
         /// <summary>The fallback SkeletonPoser to drive hand animation when no skeleton data is available</summary>
+        /// <summary>The fallback SkeletonPoser to drive hand animation when no skeleton data is available</summary>
         public SteamVR_Skeleton_Poser fallbackPoser;
 
+        /// <summary>The fallback action to drive finger curl values when no skeleton data is available</summary>
         /// <summary>The fallback SkeletonPoser to drive hand animation when no skeleton data is available</summary>
         public SteamVR_Action_Single fallbackCurlAction;
 
@@ -94,13 +94,16 @@ namespace Valve.VR
         /// </summary>
         public bool skeletonAvailable { get { return skeletonAction.activeBinding; } }
 
+
         /// <summary>The current skeletonPoser we're getting pose data from</summary>
         protected SteamVR_Skeleton_Poser blendPoser;
         /// <summary>The current pose snapshot</summary>
         protected SteamVR_Skeleton_PoseSnapshot blendSnapshot = null;
 
+
         /// <summary>Returns whether this action is bound and the action set is active</summary>
         public bool isActive { get { return skeletonAction.GetActive(); } }
+
 
         /// <summary>An array of five 0-1 values representing how curled a finger is. 0 being straight, 1 being fully curled. 0 being thumb, 4 being pinky</summary>
         public float[] fingerCurls
@@ -184,6 +187,8 @@ namespace Valve.VR
             }
         }
 
+
+
         public Transform root { get { return bones[SteamVR_Skeleton_JointIndexes.root]; } }
         public Transform wrist { get { return bones[SteamVR_Skeleton_JointIndexes.wrist]; } }
         public Transform indexMetacarpal { get { return bones[SteamVR_Skeleton_JointIndexes.indexMetacarpal]; } }
@@ -242,7 +247,7 @@ namespace Valve.VR
         protected EVRSkeletalMotionRange? temporaryRangeOfMotion = null;
 
         /// <summary>
-
+        /// Get the accuracy level of the skeletal tracking data.
         /// <para/>* Estimated: Body part location can’t be directly determined by the device. Any skeletal pose provided by the device is estimated based on the active buttons, triggers, joysticks, or other input sensors. Examples include the Vive Controller and gamepads.
         /// <para/>* Partial: Body part location can be measured directly but with fewer degrees of freedom than the actual body part.Certain body part positions may be unmeasured by the device and estimated from other input data.Examples include Knuckles or gloves that only measure finger curl
         /// <para/>* Full: Body part location can be measured directly throughout the entire range of motion of the body part.Examples include hi-end mocap systems, or gloves that measure the rotation of each finger segment.
@@ -353,7 +358,7 @@ namespace Valve.VR
         private void OnDeviceConnectedChanged(SteamVR_Action_Skeleton fromAction, bool deviceConnected)
         {
             if (onConnectedChanged != null)
-                onConnectedChanged.Invoke(this, inputSource, deviceConnected);
+                onConnectedChanged.Send(this, inputSource, deviceConnected);
             if (onConnectedChangedEvent != null)
                 onConnectedChangedEvent.Invoke(this, inputSource, deviceConnected);
         }
@@ -361,7 +366,7 @@ namespace Valve.VR
         private void OnTrackingChanged(SteamVR_Action_Skeleton fromAction, ETrackingResult trackingState)
         {
             if (onTrackingChanged != null)
-                onTrackingChanged.Invoke(this, inputSource, trackingState);
+                onTrackingChanged.Send(this, inputSource, trackingState);
             if (onTrackingChangedEvent != null)
                 onTrackingChangedEvent.Invoke(this, inputSource, trackingState);
         }
@@ -397,7 +402,7 @@ namespace Valve.VR
         }
 
         /// <summary>
-
+        /// Sets a temporary range of motion for this action that can easily be reset (using ResetTemporaryRangeOfMotion).
         /// This is useful for short range of motion changes, for example picking up a controller shaped object
         /// </summary>
         /// <param name="newRangeOfMotion">The new range of motion you want to apply (temporarily)</param>
@@ -480,15 +485,13 @@ namespace Valve.VR
         public void BlendTo(float blendToAmount, float overTime)
         {
             if (blendRoutine != null)
-                MelonCoroutines.Stop(blendRoutine);
+                MelonLoader.MelonCoroutines.Stop(blendRoutine);
 
-            if (gameObject.activeInHierarchy)
-            {
+            if (this.gameObject.activeInHierarchy)
                 blendRoutine = DoBlendRoutine(blendToAmount, overTime);
-                MelonCoroutines.Start(blendRoutine);
-            }
-                
+                MelonLoader.MelonCoroutines.Start(blendRoutine);
         }
+
 
         protected IEnumerator DoBlendRoutine(float blendToAmount, float overTime)
         {
@@ -500,7 +503,7 @@ namespace Valve.VR
             while (Time.time < endTime)
             {
                 yield return null;
-                skeletonBlend = HPVR.Util.Mathf.Lerp(startAmount, blendToAmount, (Time.time - startTime) / overTime);
+                skeletonBlend = Mathf.Lerp(startAmount, blendToAmount, (Time.time - startTime) / overTime);
             }
 
             skeletonBlend = blendToAmount;
@@ -510,22 +513,22 @@ namespace Valve.VR
         protected void RangeOfMotionBlend(EVRSkeletalMotionRange newRangeOfMotion, float blendOverSeconds)
         {
             if (rangeOfMotionBlendRoutine != null)
-                MelonCoroutines.Stop(rangeOfMotionBlendRoutine);
+                MelonLoader.MelonCoroutines.Stop(rangeOfMotionBlendRoutine);
 
             EVRSkeletalMotionRange oldRangeOfMotion = rangeOfMotion;
             rangeOfMotion = newRangeOfMotion;
 
-            if (gameObject.activeInHierarchy)
+            if (this.gameObject.activeInHierarchy)
             {
                 rangeOfMotionBlendRoutine = DoRangeOfMotionBlend(oldRangeOfMotion, newRangeOfMotion, blendOverSeconds);
-                MelonCoroutines.Start(rangeOfMotionBlendRoutine);
+                MelonLoader.MelonCoroutines.Start(rangeOfMotionBlendRoutine);
             }
         }
 
         protected void TemporaryRangeOfMotionBlend(EVRSkeletalMotionRange newRangeOfMotion, float blendOverSeconds)
         {
             if (rangeOfMotionBlendRoutine != null)
-                MelonCoroutines.Stop(rangeOfMotionBlendRoutine);
+                MelonLoader.MelonCoroutines.Stop(rangeOfMotionBlendRoutine);
 
             EVRSkeletalMotionRange oldRangeOfMotion = rangeOfMotion;
             if (temporaryRangeOfMotion != null)
@@ -533,10 +536,10 @@ namespace Valve.VR
 
             temporaryRangeOfMotion = newRangeOfMotion;
 
-            if (gameObject.activeInHierarchy)
+            if (this.gameObject.activeInHierarchy)
             {
                 rangeOfMotionBlendRoutine = DoRangeOfMotionBlend(oldRangeOfMotion, newRangeOfMotion, blendOverSeconds);
-                MelonCoroutines.Start(rangeOfMotionBlendRoutine);
+                MelonLoader.MelonCoroutines.Start(rangeOfMotionBlendRoutine);
             }
         }
 
@@ -545,7 +548,7 @@ namespace Valve.VR
             if (temporaryRangeOfMotion != null)
             {
                 if (rangeOfMotionBlendRoutine != null)
-                    MelonCoroutines.Stop(rangeOfMotionBlendRoutine);
+                    MelonLoader.MelonCoroutines.Stop(rangeOfMotionBlendRoutine);
 
                 EVRSkeletalMotionRange oldRangeOfMotion = temporaryRangeOfMotion.Value;
 
@@ -553,10 +556,10 @@ namespace Valve.VR
 
                 temporaryRangeOfMotion = null;
 
-                if (gameObject.activeInHierarchy)
+                if (this.gameObject.activeInHierarchy)
                 {
                     rangeOfMotionBlendRoutine = DoRangeOfMotionBlend(oldRangeOfMotion, newRangeOfMotion, blendOverSeconds);
-                    MelonCoroutines.Start(rangeOfMotionBlendRoutine);
+                    MelonLoader.MelonCoroutines.Start(rangeOfMotionBlendRoutine);
                 }
             }
         }
@@ -625,7 +628,7 @@ namespace Valve.VR
                 }
 
                 if (onBoneTransformsUpdated != null)
-                    onBoneTransformsUpdated.Invoke(this, inputSource);
+                    onBoneTransformsUpdated.Send(this, inputSource);
                 if (onBoneTransformsUpdatedEvent != null)
                     onBoneTransformsUpdatedEvent.Invoke(this, inputSource);
 
@@ -737,8 +740,9 @@ namespace Valve.VR
                 }
             }
 
+
             if (onBoneTransformsUpdated != null)
-                onBoneTransformsUpdated.Invoke(this, inputSource);
+                onBoneTransformsUpdated.Send(this, inputSource);
             if (onBoneTransformsUpdatedEvent != null)
                 onBoneTransformsUpdatedEvent.Invoke(this, inputSource);
         }
@@ -755,7 +759,7 @@ namespace Valve.VR
         }
 
         /// <summary>
-
+        /// Gets the transform for a bone by the joint index. Joint indexes specified in: SteamVR_Skeleton_JointIndexes
         /// </summary>
         /// <param name="joint">The joint index of the bone. Specified in SteamVR_Skeleton_JointIndexes</param>
         public virtual Transform GetBone(int joint)
@@ -766,8 +770,9 @@ namespace Valve.VR
             return bones[joint];
         }
 
-        /// <summary>
 
+        /// <summary>
+        /// Gets the position of the transform for a bone by the joint index. Joint indexes specified in: SteamVR_Skeleton_JointIndexes
         /// </summary>
         /// <param name="joint">The joint index of the bone. Specified in SteamVR_Skeleton_JointIndexes</param>
         /// <param name="local">true to get the localspace position for the joint (position relative to this joint's parent)</param>
@@ -780,7 +785,7 @@ namespace Valve.VR
         }
 
         /// <summary>
-
+        /// Gets the rotation of the transform for a bone by the joint index. Joint indexes specified in: SteamVR_Skeleton_JointIndexes
         /// </summary>
         /// <param name="joint">The joint index of the bone. Specified in SteamVR_Skeleton_JointIndexes</param>
         /// <param name="local">true to get the localspace rotation for the joint (rotation relative to this joint's parent)</param>
@@ -816,7 +821,7 @@ namespace Valve.VR
                 }
                 else
                 {
-                    MelonLogger.Error("Skeleton Action is not bound, and you have not provided a fallback SkeletonPoser. Please create one to drive hand animation when no skeleton data is available.", this);
+                    MelonLoader.MelonLogger.Error("Skeleton Action is not bound, and you have not provided a fallback SkeletonPoser. Please create one to drive hand animation when no skeleton data is available.", this);
                     return null;
                 }
             }
@@ -848,7 +853,7 @@ namespace Valve.VR
                 }
                 else
                 {
-                    MelonLogger.Error("Skeleton Action is not bound, and you have not provided a fallback SkeletonPoser. Please create one to drive hand animation when no skeleton data is available.", this);
+                    MelonLoader.MelonLogger.Error("Skeleton Action is not bound, and you have not provided a fallback SkeletonPoser. Please create one to drive hand animation when no skeleton data is available.", this);
                     return null;
                 }
             }
@@ -893,10 +898,10 @@ namespace Valve.VR
             Quaternion skeletonRotation = skeletonAction.GetLocalRotation();
             if (origin == null)
             {
-                if (transform.parent != null)
+                if (this.transform.parent != null)
                 {
-                    skeletonPosition = transform.parent.TransformPoint(skeletonPosition);
-                    skeletonRotation = transform.parent.rotation * skeletonRotation;
+                    skeletonPosition = this.transform.parent.TransformPoint(skeletonPosition);
+                    skeletonRotation = this.transform.parent.rotation * skeletonRotation;
                 }
             }
             else
@@ -908,16 +913,16 @@ namespace Valve.VR
             if (skeletonAction.poseChanged)
             {
                 if (onTransformChanged != null)
-                    onTransformChanged.Invoke(this, inputSource);
+                    onTransformChanged.Send(this, inputSource);
                 if (onTransformChangedEvent != null)
                     onTransformChangedEvent.Invoke(this, inputSource);
             }
 
-            transform.position = skeletonPosition;
-            transform.rotation = skeletonRotation;
+            this.transform.position = skeletonPosition;
+            this.transform.rotation = skeletonRotation;
 
             if (onTransformUpdated != null)
-                onTransformUpdated.Invoke(this, inputSource);
+                onTransformUpdated.Send(this, inputSource);
         }
 
         /// <summary>
@@ -932,6 +937,28 @@ namespace Valve.VR
                 temporarySession = SteamVR.InitializeTemporarySession(true);
                 Awake();
 
+#if UNITY_EDITOR
+                //gotta wait a bit for steamvr input to startup //todo: implement steamvr_input.isready
+                string title = "SteamVR";
+                string text = "Getting reference pose...";
+                float msToWait = 3000;
+                float increment = 100;
+                for (float timer = 0; timer < msToWait; timer += increment)
+                {
+                    bool cancel = UnityEditor.EditorUtility.DisplayCancelableProgressBar(title, text, timer / msToWait);
+                    if (cancel)
+                    {
+                        UnityEditor.EditorUtility.ClearProgressBar();
+
+                        if (temporarySession)
+                            SteamVR.ExitTemporarySession();
+                        return;
+                    }
+                    System.Threading.Thread.Sleep((int)increment);
+                }
+                UnityEditor.EditorUtility.ClearProgressBar();
+#endif
+
                 skeletonAction.actionSet.Activate();
 
                 SteamVR_ActionSet_Manager.UpdateActionStates(true);
@@ -941,7 +968,7 @@ namespace Valve.VR
 
             if (skeletonAction.active == false)
             {
-                MelonLogger.Error("[HPVR Input] Please turn on your " + inputSource.ToString() + " controller and ensure SteamVR is open.", this);
+                MelonLoader.MelonLogger.Error("[SteamVR Input] Please turn on your " + inputSource.ToString() + " controller and ensure SteamVR is open.", this);
                 return;
             }
 
@@ -949,7 +976,7 @@ namespace Valve.VR
 
             if (transforms == null || transforms.Length == 0)
             {
-                MelonLogger.Error("[HPVR Input] Unable to get the reference transform for " + inputSource.ToString() + ". Please make sure SteamVR is open and both controllers are connected.", this);
+                MelonLoader.MelonLogger.Error("[SteamVR Input] Unable to get the reference transform for " + inputSource.ToString() + ". Please make sure SteamVR is open and both controllers are connected.", this);
             }
 
             if (mirroring == MirrorType.LeftToRight || mirroring == MirrorType.RightToLeft)
@@ -975,11 +1002,11 @@ namespace Valve.VR
 
         protected static bool IsMetacarpal(int boneIndex)
         {
-            return boneIndex == SteamVR_Skeleton_JointIndexes.indexMetacarpal ||
+            return (boneIndex == SteamVR_Skeleton_JointIndexes.indexMetacarpal ||
                 boneIndex == SteamVR_Skeleton_JointIndexes.middleMetacarpal ||
                 boneIndex == SteamVR_Skeleton_JointIndexes.ringMetacarpal ||
                 boneIndex == SteamVR_Skeleton_JointIndexes.pinkyMetacarpal ||
-                boneIndex == SteamVR_Skeleton_JointIndexes.thumbMetacarpal;
+                boneIndex == SteamVR_Skeleton_JointIndexes.thumbMetacarpal);
         }
 
         public enum MirrorType

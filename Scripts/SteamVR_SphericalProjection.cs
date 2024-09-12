@@ -9,11 +9,10 @@ using UnityEngine;
 
 namespace Valve.VR
 {
+    [MelonLoader.RegisterTypeInIl2Cpp(true)]
     public class SteamVR_SphericalProjection : MonoBehaviour
     {
-
-        public SteamVR_SphericalProjection(IntPtr value)
-: base(value) { }
+        public SteamVR_SphericalProjection(IntPtr value) : base(value) { }
 
         static Material material;
 

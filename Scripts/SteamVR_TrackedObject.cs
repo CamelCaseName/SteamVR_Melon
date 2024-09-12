@@ -10,6 +10,7 @@ using UnityEngine;
 
 namespace Valve.VR
 {
+    [MelonLoader.RegisterTypeInIl2Cpp(true)]
     public class SteamVR_TrackedObject : MonoBehaviour
     {
         public SteamVR_TrackedObject(IntPtr value) : base(value) { }
@@ -97,14 +98,12 @@ namespace Valve.VR
                 return;
             }
 
-            MelonLogger.Msg("[HPVR] newposes action is null: " + (newPosesAction == null));
             if (newPosesAction is not null)
                 newPosesAction.enabled = true;
         }
 
         void OnDisable()
         {
-            MelonLogger.Msg("[HPVR] newposes action is null: " + (newPosesAction == null));
             if (newPosesAction is not null)
                 newPosesAction.enabled = false;
             isValid = false;

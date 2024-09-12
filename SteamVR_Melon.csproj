@@ -8,6 +8,7 @@
     <AssemblyVersion>1.0.0.0</AssemblyVersion>
     <FileVersion>1.0.0.0</FileVersion>
     <Platforms>x64</Platforms>
+      <DefineConstants>TRACE;DEBUG;UNITY_2017_1_OR_NEWER;UNITY_2017_2_OR_NEWER;UNITY_2018_3_OR_NEWER;UNITY_5_3_OR_NEWER;UNITY_URP</DefineConstants>
       <PlatformTarget>x64</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">

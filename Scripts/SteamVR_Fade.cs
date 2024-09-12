@@ -19,17 +19,17 @@
 //
 //=============================================================================
 
+using Assets.SteamVR_Melon.Standalone;
 using System;
 using UnityEngine;
 using Valve.VR;
 
 namespace Valve.VR
 {
+    [MelonLoader.RegisterTypeInIl2Cpp(true)]
     public class SteamVR_Fade : MonoBehaviour
     {
-
-        public SteamVR_Fade(IntPtr value)
-: base(value) { }
+        public SteamVR_Fade(IntPtr value) : base(value) { }
 
         private Color currentColor = new Color(0, 0, 0, 0); // default starting color: black and fully transparent
         private Color targetColor = new Color(0, 0, 0, 0);  // default target color: black and fully transparent
@@ -79,7 +79,7 @@ namespace Valve.VR
         {
             if (fadeMaterial == null)
             {
-                fadeMaterial = new Material(Shader.Find("Custom/SteamVR_Fade"));
+                fadeMaterial = new Material(VRShaders.GetShader(VRShaders.VRShader.fade));
                 fadeMaterialColorID = Shader.PropertyToID("fadeColor");
             }
 

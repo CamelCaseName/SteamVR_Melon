@@ -10,10 +10,10 @@ using Valve.VR;
 
 namespace Valve.VR
 {
+    [MelonLoader.RegisterTypeInIl2Cpp(true)]
     public class SteamVR_Ears : MonoBehaviour
     {
-        public SteamVR_Ears(IntPtr value)
-        : base(value) { }
+        public SteamVR_Ears(IntPtr value) : base(value) { }
 
         public SteamVR_Camera vrcam;
 

@@ -5,11 +5,10 @@ using UnityEngine;
 
 namespace Valve.VR
 {
+    [MelonLoader.RegisterTypeInIl2Cpp(true)]
     public class SteamVR_TrackingReferenceManager : MonoBehaviour
     {
-
-        public SteamVR_TrackingReferenceManager(IntPtr value)
-: base(value) { }
+        public SteamVR_TrackingReferenceManager(IntPtr value) : base(value) { }
 
         private Dictionary<uint, TrackingReferenceObject> trackingReferences = new Dictionary<uint, TrackingReferenceObject>();
 

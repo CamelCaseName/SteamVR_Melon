@@ -85,6 +85,7 @@ namespace Valve.VR
         /// <summary><strong>[Shortcut to: SteamVR_Input_Sources.Any]</strong> Returns true if the action was bound at the previous update</summary>
         public override bool lastActiveBinding { get { return sourceMap[SteamVR_Input_Sources.Any].lastActiveBinding; } }
 
+
         [NonSerialized]
         protected bool initialized = false;
 
@@ -134,12 +135,12 @@ namespace Valve.VR
 
                 if (existingAction == null)
                 {
-                    sourceMap = null;
+                    this.sourceMap = null;
                 }
                 else
                 {
-                    actionPath = existingAction.fullPath;
-                    sourceMap = (SourceMap)existingAction.GetSourceMap();
+                    this.actionPath = existingAction.fullPath;
+                    this.sourceMap = (SourceMap)existingAction.GetSourceMap();
 
                     initialized = true;
                     needsReinit = false;
@@ -150,9 +151,10 @@ namespace Valve.VR
             return null;
         }
 
+
         /// <summary>
         /// <strong>[Should not be called by user code]</strong> Initializes the individual sources as well as the base map itself.
-
+        /// Gets the handle for the action from SteamVR and does any other SteamVR related setup that needs to be done
         /// </summary>
         public override void Initialize(bool createNew = false, bool throwErrors = true)
         {
@@ -169,6 +171,22 @@ namespace Valve.VR
             {
                 sourceMap = SteamVR_Input.GetActionDataFromPath<SourceMap>(actionPath);
 
+                if (sourceMap == null)
+                {
+#if UNITY_EDITOR
+                    if (throwErrors)
+                    {
+                        if (string.IsNullOrEmpty(actionPath))
+                        {
+                            MelonLoader.MelonLogger.Error("[HPVR] Action has not been assigned.");
+                        }
+                        else
+                        {
+                            MelonLoader.MelonLogger.Error("[HPVR] Could not find action with path: " + actionPath);
+                        }
+                    }
+#endif
+                }
             }
 
             initialized = true;
@@ -185,8 +203,8 @@ namespace Valve.VR
 
         protected override void InitializeCopy(string newActionPath, SteamVR_Action_Source_Map newData)
         {
-            actionPath = newActionPath;
-            sourceMap = (SourceMap)newData;
+            this.actionPath = newActionPath;
+            this.sourceMap = (SourceMap)newData;
 
             initialized = true;
         }
@@ -211,8 +229,9 @@ namespace Valve.VR
             }
         }
 
-        /// <summary>
 
+        /// <summary>
+        /// Gets a value indicating whether or not the action is currently bound and if the containing action set is active
         /// </summary>
         /// <param name="inputSource">The device you would like to get data from. Any if the action is not device specific.</param>
         public override bool GetActive(SteamVR_Input_Sources inputSource)
@@ -221,7 +240,7 @@ namespace Valve.VR
         }
 
         /// <summary>
-
+        /// Gets a value indicating whether or not the action is currently bound
         /// </summary>
         /// <param name="inputSource">The device you would like to get data from. Any if the action is not device specific.</param>
         public override bool GetActiveBinding(SteamVR_Input_Sources inputSource)
@@ -229,8 +248,9 @@ namespace Valve.VR
             return sourceMap[inputSource].activeBinding;
         }
 
-        /// <summary>
 
+        /// <summary>
+        /// Gets the value from the previous update indicating whether or not the action was currently bound and if the containing action set was active
         /// </summary>
         /// <param name="inputSource">The device you would like to get data from. Any if the action is not device specific.</param>
         public override bool GetLastActive(SteamVR_Input_Sources inputSource)
@@ -239,22 +259,52 @@ namespace Valve.VR
         }
 
         /// <summary>
-
+        /// Gets the value from the previous update indicating whether or not the action is currently bound
         /// </summary>
         /// <param name="inputSource">The device you would like to get data from. Any if the action is not device specific.</param>
         public override bool GetLastActiveBinding(SteamVR_Input_Sources inputSource)
         {
             return sourceMap[inputSource].lastActiveBinding;
         }
+
+        private static uint inputBindingInfo_size = 0;
+        /// <summary>
+        /// Gets all current active bindings for this action.
+        /// Returns array of InputBindingInfo_t with strings: rchDevicePathName, rchInputPathName, rchInputSourceType, rchModeName, rchSlotName;
+        /// </summary>
+        /// <notes>This is not restricted by input source.</notes>
+        public InputBindingInfo_t[] GetActionBindingInfo()
+        {
+            if (inputBindingInfo_size == 0)
+                inputBindingInfo_size = (uint)Marshal.SizeOf(typeof(InputBindingInfo_t));
+
+            uint size = 0;
+            EVRInputError err = OpenVR.Input.GetActionBindingInfo(this.handle, zeroLengthBindingInfos, inputBindingInfo_size, ref size);
+
+            if (err != EVRInputError.BufferTooSmall && err != EVRInputError.None)
+                MelonLoader.MelonLogger.Error("[HPVR] GetActionBindingInfo error (" + fullPath + "): " + err.ToString() + " handle: " + handle.ToString());
+
+            InputBindingInfo_t[] bindingInfos = new InputBindingInfo_t[size];
+            err = OpenVR.Input.GetActionBindingInfo(this.handle, bindingInfos, inputBindingInfo_size, ref size);
+
+            if (err != EVRInputError.BufferTooSmall && err != EVRInputError.None)
+                MelonLoader.MelonLogger.Error("[HPVR] GetActionBindingInfo error (" + fullPath + "): " + err.ToString() + " handle: " + handle.ToString());
+
+            return bindingInfos;
+        }
+        private static InputBindingInfo_t[] zeroLengthBindingInfos = new InputBindingInfo_t[0];
     }
+
 
     [Serializable]
     public abstract class SteamVR_Action : IEquatable<SteamVR_Action>, ISteamVR_Action
     {
         public SteamVR_Action() { }
 
+        
         protected string actionPath;
 
+        
         protected bool needsReinit;
 
         /// <summary>
@@ -300,7 +350,7 @@ namespace Valve.VR
             if (SteamVR_Input.ShouldMakeCopy()) //no need to make copies at runtime
             {
                 CreateType action = new CreateType();
-                action.InitializeCopy(actionPath, GetSourceMap());
+                action.InitializeCopy(this.actionPath, this.GetSourceMap());
                 return action;
             }
             else
@@ -362,14 +412,16 @@ namespace Valve.VR
 
         public abstract SteamVR_Action_Source_Map GetSourceMap();
 
-        /// <summary>
 
+        /// <summary>
+        /// Gets a value indicating whether or not the action is currently bound and if the containing action set is active
         /// </summary>
         /// <param name="inputSource">The device you would like to get data from. Any if the action is not device specific.</param>
         public abstract bool GetActive(SteamVR_Input_Sources inputSource);
 
-        /// <summary>
 
+        /// <summary>
+        /// Gets a value indicating whether or not the containing action set is active
         /// </summary>
         /// <param name="inputSource">The device you would like to get data from. Any if the action is not device specific.</param>
         public bool GetSetActive(SteamVR_Input_Sources inputSource)
@@ -378,19 +430,20 @@ namespace Valve.VR
         }
 
         /// <summary>
-
+        /// Gets a value indicating whether or not the action is currently bound
         /// </summary>
         /// <param name="inputSource">The device you would like to get data from. Any if the action is not device specific.</param>
         public abstract bool GetActiveBinding(SteamVR_Input_Sources inputSource);
 
-        /// <summary>
 
+        /// <summary>
+        /// Gets the value from the previous update indicating whether or not the action is currently bound and if the containing action set is active
         /// </summary>
         /// <param name="inputSource">The device you would like to get data from. Any if the action is not device specific.</param>
         public abstract bool GetLastActive(SteamVR_Input_Sources inputSource);
 
         /// <summary>
-
+        /// Gets the value from the previous update indicating whether or not the action is currently bound
         /// </summary>
         /// <param name="inputSource">The device you would like to get data from. Any if the action is not device specific.</param>
         public abstract bool GetLastActiveBinding(SteamVR_Input_Sources inputSource);
@@ -405,6 +458,7 @@ namespace Valve.VR
         /// Returns true if the data for this action is being updated for the specified input source. This can be triggered by querying the data
         /// </summary>
         public abstract bool IsUpdating(SteamVR_Input_Sources inputSource);
+
 
         /// <summary>
         /// Creates a hashcode from the full action path of this action
@@ -429,7 +483,7 @@ namespace Valve.VR
             //SteamVR_Action_Source_Map otherMap = other.GetSourceMap();
 
             //return this.actionPath == other.actionPath && thisMap.fullPath == otherMap.fullPath;
-            return actionPath == other.actionPath;
+            return this.actionPath == other.actionPath;
         }
 
         /// <summary>
@@ -439,9 +493,9 @@ namespace Valve.VR
         {
             if (ReferenceEquals(null, other))
             {
-                if (string.IsNullOrEmpty(actionPath)) //if we haven't set a path, say this action is equal to null
+                if (string.IsNullOrEmpty(this.actionPath)) //if we haven't set a path, say this action is equal to null
                     return true;
-                if (GetSourceMap() == null)
+                if (this.GetSourceMap() == null)
                     return true;
 
                 return false;
@@ -451,7 +505,7 @@ namespace Valve.VR
                 return true;
 
             if (other is SteamVR_Action)
-                return Equals((SteamVR_Action)other);
+                return this.Equals((SteamVR_Action)other);
 
             return false;
         }
@@ -469,8 +523,8 @@ namespace Valve.VR
         /// </summary>
         public static bool operator ==(SteamVR_Action action1, SteamVR_Action action2)
         {
-            bool action1null = ReferenceEquals(null, action1) || string.IsNullOrEmpty(action1.actionPath) || action1.GetSourceMap() == null;
-            bool action2null = ReferenceEquals(null, action2) || string.IsNullOrEmpty(action2.actionPath) || action2.GetSourceMap() == null;
+            bool action1null = (ReferenceEquals(null, action1) || string.IsNullOrEmpty(action1.actionPath) || action1.GetSourceMap() == null);
+            bool action2null = (ReferenceEquals(null, action2) || string.IsNullOrEmpty(action2.actionPath) || action2.GetSourceMap() == null);
 
             if (action1null && action2null)
                 return true;
@@ -507,6 +561,7 @@ namespace Valve.VR
             return existingAction;
         }
 
+
         [NonSerialized]
         private string cachedShortName;
 
@@ -528,14 +583,14 @@ namespace Valve.VR
 
         public void HideOrigins()
         {
-            OpenVR.Input.ShowActionOrigins(0, 0);
+            OpenVR.Input.ShowActionOrigins(0,0);
         }
     }
 
     public abstract class SteamVR_Action_Source_Map<SourceElement> : SteamVR_Action_Source_Map where SourceElement : SteamVR_Action_Source, new()
     {
         /// <summary>
-
+        /// Gets a reference to the action restricted to a certain input source. LeftHand or RightHand for example.
         /// </summary>
         /// <param name="inputSource">The device you would like data from</param>
         public SourceElement this[SteamVR_Input_Sources inputSource]
@@ -684,6 +739,7 @@ namespace Valve.VR
         /// <summary>Returns true if the action set this is contained in is active for this input source (or Any)</summary>
         public bool setActive { get { return actionSet.IsActive(inputSource); } }
 
+
         /// <summary>Returns true if this action is bound and the ActionSet is active</summary>
         public abstract bool active { get; }
 
@@ -695,6 +751,7 @@ namespace Valve.VR
 
         /// <summary>Returns true if the action was bound during the previous update</summary>
         public abstract bool lastActiveBinding { get; }
+
 
         protected ulong inputSourceHandle;
 
@@ -721,6 +778,7 @@ namespace Valve.VR
         }
     }
 
+
     public interface ISteamVR_Action : ISteamVR_Action_Source
     {
         /// <summary>Returns the active state of the action for the specified Input Source</summary>
@@ -730,6 +788,7 @@ namespace Valve.VR
         /// <summary>Returns the name of the action without the action set or direction</summary>
         string GetShortName();
     }
+
 
     public interface ISteamVR_Action_Source
     {

@@ -18,10 +18,12 @@ namespace Valve.VR
     {
         public SteamVR_ActionSet() { }
 
+        
         private string actionSetPath;
 
         [NonSerialized]
         protected SteamVR_ActionSet_Data setData;
+
 
         /// <summary>All actions within this set (including out actions)</summary>
         public SteamVR_Action[] allActions
@@ -95,6 +97,7 @@ namespace Valve.VR
             }
         }
 
+
         /// <summary>The full path to this action set (ex: /actions/in/default)</summary>
         public string fullPath
         {
@@ -130,6 +133,7 @@ namespace Valve.VR
 
         [NonSerialized]
         protected bool initialized = false;
+
 
         public static CreateType Create<CreateType>(string newSetPath) where CreateType : SteamVR_ActionSet, new()
         {
@@ -173,6 +177,22 @@ namespace Valve.VR
             {
                 setData = SteamVR_Input.GetActionSetDataFromPath(actionSetPath);
 
+                if (setData == null)
+                {
+#if UNITY_EDITOR
+                    if (throwErrors)
+                    {
+                        if (string.IsNullOrEmpty(actionSetPath))
+                        {
+                            MelonLoader.MelonLogger.Error("[HPVR] Action has not been assigned.");
+                        }
+                        else
+                        {
+                            MelonLoader.MelonLogger.Error("[HPVR] Could not find action with path: " + actionSetPath);
+                        }
+                    }
+#endif
+                }
             }
 
             initialized = true;
@@ -239,6 +259,7 @@ namespace Valve.VR
                 return SteamVR_Input.ShowBindingHints(originToHighlight);
         }
 
+
         public bool ReadRawSetActive(SteamVR_Input_Sources inputSource)
         {
             return setData.ReadRawSetActive(inputSource);
@@ -264,8 +285,8 @@ namespace Valve.VR
             if (SteamVR_Input.ShouldMakeCopy()) //no need to make copies at runtime
             {
                 CreateType actionSet = new CreateType();
-                actionSet.actionSetPath = actionSetPath;
-                actionSet.setData = setData;
+                actionSet.actionSetPath = this.actionSetPath;
+                actionSet.setData = this.setData;
                 actionSet.initialized = true;
                 return actionSet;
             }
@@ -280,14 +301,14 @@ namespace Valve.VR
             if (ReferenceEquals(null, other))
                 return false;
 
-            return actionSetPath == other.actionSetPath;
+            return this.actionSetPath == other.actionSetPath;
         }
 
         public override bool Equals(object other)
         {
             if (ReferenceEquals(null, other))
             {
-                if (string.IsNullOrEmpty(actionSetPath)) //if we haven't set a path, say this action set is equal to null
+                if (string.IsNullOrEmpty(this.actionSetPath)) //if we haven't set a path, say this action set is equal to null
                     return true;
                 return false;
             }
@@ -296,7 +317,7 @@ namespace Valve.VR
                 return true;
 
             if (other is SteamVR_ActionSet)
-                return Equals((SteamVR_ActionSet)other);
+                return this.Equals((SteamVR_ActionSet)other);
 
             return false;
         }
@@ -316,8 +337,8 @@ namespace Valve.VR
 
         public static bool operator ==(SteamVR_ActionSet set1, SteamVR_ActionSet set2)
         {
-            bool set1null = ReferenceEquals(null, set1) || string.IsNullOrEmpty(set1.actionSetPath) || set1.GetActionSetData() == null;
-            bool set2null = ReferenceEquals(null, set2) || string.IsNullOrEmpty(set2.actionSetPath) || set2.GetActionSetData() == null;
+            bool set1null = (ReferenceEquals(null, set1) || string.IsNullOrEmpty(set1.actionSetPath) || set1.GetActionSetData() == null);
+            bool set2null = (ReferenceEquals(null, set2) || string.IsNullOrEmpty(set2.actionSetPath) || set2.GetActionSetData() == null);
 
             if (set1null && set2null)
                 return true;
@@ -326,7 +347,6 @@ namespace Valve.VR
 
             return set1.Equals(set2);
         }
-
     }
     /// <summary>
     /// Action sets are logical groupings of actions. Multiple sets can be active at one time.
@@ -353,9 +373,11 @@ namespace Valve.VR
         /// <summary>All out actions within this set</summary>
         public ISteamVR_Action_Out[] outActionArray { get; set; }
 
+
         /// <summary>The full path to this action set (ex: /actions/in/default)</summary>
         public string fullPath { get; set; }
         public string usage { get; set; }
+
 
         public ulong handle { get; set; }
 
@@ -382,7 +404,7 @@ namespace Valve.VR
 
             if (SteamVR_Input.actions == null)
             {
-                MelonLoader.MelonLogger.Error("[HPVR Input] Actions not initialized!");
+                MelonLoader.MelonLogger.Error("[SteamVR Input] Actions not initialized!");
                 return;
             }
 
@@ -414,7 +436,7 @@ namespace Valve.VR
                     }
                     else
                     {
-                        MelonLoader.MelonLogger.Error("[HPVR Input] Action doesn't implement known interface: " + action.fullPath);
+                        MelonLoader.MelonLogger.Error("[SteamVR Input] Action doesn't implement known interface: " + action.fullPath);
                     }
                 }
             }
@@ -567,6 +589,7 @@ namespace Valve.VR
         /// <summary>All out actions within this set</summary>
         ISteamVR_Action_Out[] outActionArray { get; }
 
+
         /// <summary>The full path to this action set (ex: /actions/in/default)</summary>
         string fullPath { get; }
 
@@ -578,6 +601,7 @@ namespace Valve.VR
         bool ReadRawSetActive(SteamVR_Input_Sources inputSource);
         float ReadRawSetLastChanged(SteamVR_Input_Sources inputSource);
         int ReadRawSetPriority(SteamVR_Input_Sources inputSource);
+
 
         /// <summary>
         /// Returns whether the set is currently active or not.

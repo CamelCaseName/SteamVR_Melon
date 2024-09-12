@@ -15,14 +15,14 @@ namespace Valve.VR
     /// <para>Provides editor accessible events: OnPress, OnPressDown, OnPressUp, OnChange, and OnUpdate.</para>
     /// <para>Provides script accessible events: OnPressEvent, OnPressDownEvent, OnPressUpEvent, OnChangeEvent, and OnUpdateEvent.</para>
     /// </summary>
+    [MelonLoader.RegisterTypeInIl2Cpp(true)]
     public class SteamVR_Behaviour_Boolean : MonoBehaviour
     {
-
-        public SteamVR_Behaviour_Boolean(IntPtr value)
-: base(value) { }
-
+        public SteamVR_Behaviour_Boolean(IntPtr value) : base(value) { }
+        /// <summary>The SteamVR boolean action that this component should use</summary>
         public SteamVR_Action_Boolean booleanAction;
 
+        /// <summary>The device this action should apply to. Any if the action is not device specific.</summary>
         public SteamVR_Input_Sources inputSource;
 
         /// <summary>This UnityEvent fires whenever a change happens in the action</summary>
@@ -61,11 +61,13 @@ namespace Valve.VR
         /// <summary>Returns the action set that this action is in.</summary>
         public SteamVR_ActionSet actionSet { get { if (booleanAction != null) return booleanAction.actionSet; else return null; } }
 
+
+
         protected virtual void OnEnable()
         {
             if (booleanAction == null)
             {
-                MelonLoader.MelonLogger.Error("[SteamVR] Boolean action not set.", this);
+                MelonLoader.MelonLogger.Error("[HPVR] Boolean action not set.", this);
                 return;
             }
 
@@ -103,7 +105,7 @@ namespace Valve.VR
         {
             if (onPressUp != null)
             {
-                onPressUp.Invoke(this, fromSource, false);
+                onPressUp.Send(this, fromSource, false);
             }
 
             if (onPressUpEvent != null)
@@ -116,7 +118,7 @@ namespace Valve.VR
         {
             if (onPressDown != null)
             {
-                onPressDown.Invoke(this, fromSource, true);
+                onPressDown.Send(this, fromSource, true);
             }
 
             if (onPressDownEvent != null)
@@ -129,7 +131,7 @@ namespace Valve.VR
         {
             if (onPress != null)
             {
-                onPress.Invoke(this, fromSource, true);
+                onPress.Send(this, fromSource, true);
             }
 
             if (onPressEvent != null)
@@ -142,7 +144,7 @@ namespace Valve.VR
         {
             if (onUpdate != null)
             {
-                onUpdate.Invoke(this, fromSource, newState);
+                onUpdate.Send(this, fromSource, newState);
             }
 
             if (onUpdateEvent != null)
@@ -155,7 +157,7 @@ namespace Valve.VR
         {
             if (onChange != null)
             {
-                onChange.Invoke(this, fromSource, newState);
+                onChange.Send(this, fromSource, newState);
             }
 
             if (onChangeEvent != null)
@@ -165,7 +167,7 @@ namespace Valve.VR
         }
 
         /// <summary>
-
+        /// Gets the localized name of the device that the action corresponds to.
         /// </summary>
         /// <param name="localizedParts">
         /// <list type="bullet">

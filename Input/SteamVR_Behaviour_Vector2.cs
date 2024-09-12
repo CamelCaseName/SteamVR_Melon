@@ -13,29 +13,27 @@ namespace Valve.VR
     /// <summary>
     /// Simplifies the use of the Vector2 action. Provides an onChange event that fires whenever the vector2 changes.
     /// </summary>
+    [MelonLoader.RegisterTypeInIl2Cpp(true)]
     public class SteamVR_Behaviour_Vector2 : MonoBehaviour
     {
-
-        public SteamVR_Behaviour_Vector2(IntPtr value)
-: base(value) { }
-
+        public SteamVR_Behaviour_Vector2(IntPtr value) : base(value) { }
         /// <summary>The vector2 action to get data from</summary>
         public SteamVR_Action_Vector2 vector2Action;
 
         /// <summary>The device this action applies to. Any if the action is not device specific.</summary>
-
+        /// <summary>The device this action should apply to. Any if the action is not device specific.</summary>
         public SteamVR_Input_Sources inputSource;
 
         /// <summary>Unity event that fires whenever the action's value has changed since the last update.</summary>
-
+        /// <summary>Fires whenever the action's value has changed since the last update.</summary>
         public SteamVR_Behaviour_Vector2Event onChange;
 
         /// <summary>Unity event that fires whenever the action's value has been updated</summary>
-
+        /// <summary>Fires whenever the action's value has been updated.</summary>
         public SteamVR_Behaviour_Vector2Event onUpdate;
 
         /// <summary>Unity event that fires whenever the action's value has been updated and is non-zero</summary>
-
+        /// <summary>Fires whenever the action's value has been updated and is non-zero.</summary>
         public SteamVR_Behaviour_Vector2Event onAxis;
 
         /// <summary>C# event that fires whenever the action's value has changed since the last update.</summary>
@@ -54,7 +52,7 @@ namespace Valve.VR
         {
             if (vector2Action == null)
             {
-                MelonLoader.MelonLogger.Error("[SteamVR] Vector2 action not set.", this);
+                MelonLoader.MelonLogger.Error("[HPVR] Vector2 action not set.", this);
                 return;
             }
 
@@ -87,7 +85,7 @@ namespace Valve.VR
         {
             if (onUpdate != null)
             {
-                onUpdate.Invoke(this, fromSource, newAxis, newDelta);
+                onUpdate.Send(this, fromSource, newAxis, newDelta);
             }
             if (onUpdateEvent != null)
             {
@@ -99,7 +97,7 @@ namespace Valve.VR
         {
             if (onChange != null)
             {
-                onChange.Invoke(this, fromSource, newAxis, newDelta);
+                onChange.Send(this, fromSource, newAxis, newDelta);
             }
             if (onChangeEvent != null)
             {
@@ -111,7 +109,7 @@ namespace Valve.VR
         {
             if (onAxis != null)
             {
-                onAxis.Invoke(this, fromSource, newAxis, newDelta);
+                onAxis.Send(this, fromSource, newAxis, newDelta);
             }
             if (onAxisEvent != null)
             {
@@ -120,7 +118,7 @@ namespace Valve.VR
         }
 
         /// <summary>
-
+        /// Gets the localized name of the device that the action corresponds to.
         /// </summary>
         /// <param name="localizedParts">
         /// <list type="bullet">

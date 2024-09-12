@@ -10,6 +10,7 @@ using UnityEngine.InputSystem;
 
 namespace Valve.VR
 {
+    [MelonLoader.RegisterTypeInIl2Cpp(true)]
     public class SteamVR_Menu : MonoBehaviour
     {
         public SteamVR_Menu(System.IntPtr value) : base(value) { }

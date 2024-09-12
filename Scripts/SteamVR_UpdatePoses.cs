@@ -10,6 +10,7 @@ using UnityEngine;
 
 namespace Valve.VR
 {
+    [MelonLoader.RegisterTypeInIl2Cpp(true)]
     public class SteamVR_UpdatePoses : MonoBehaviour
     {
         public SteamVR_UpdatePoses(IntPtr value) : base(value) { }

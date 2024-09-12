@@ -32,7 +32,9 @@ namespace Valve.VR
         public event ExecuteHandler onExecute
         { add { sourceMap[SteamVR_Input_Sources.Any].onExecute += value; } remove { sourceMap[SteamVR_Input_Sources.Any].onExecute -= value; } }
 
+
         public SteamVR_Action_Vibration() { }
+
 
         /// <summary>
         /// Trigger the haptics at a certain time for a certain length
@@ -46,6 +48,7 @@ namespace Valve.VR
         {
             sourceMap[inputSource].Execute(secondsFromNow, durationSeconds, frequency, amplitude);
         }
+
 
         /// <summary>Executes a function when the *functional* active state of this action (with the specified inputSource) changes.
         /// This happens when the action is bound or unbound, or when the ActionSet changes state.</summary>
@@ -98,6 +101,14 @@ namespace Valve.VR
         }
 
         /// <summary>
+        /// Removes all listeners, useful for dispose pattern
+        /// </summary>
+        public void RemoveAllListeners(SteamVR_Input_Sources input_Sources)
+        {
+            sourceMap[input_Sources].RemoveAllListeners();
+        }
+
+        /// <summary>
         /// Returns the last time this action was executed
         /// </summary>
         /// <param name="inputSource">The device you would like to get data from. Any if the action is not device specific.</param>
@@ -140,6 +151,7 @@ namespace Valve.VR
         /// <summary>Returns true if the action is bound</summary>
         public override bool activeBinding { get { return true; } }
 
+
         /// <summary>Returns true if the action was bound and the ActionSet was active during the previous update</summary>
         public override bool lastActive { get; protected set; }
 
@@ -150,6 +162,7 @@ namespace Valve.VR
         public float timeLastExecuted { get; protected set; }
 
         protected SteamVR_Action_Vibration vibrationAction;
+
 
         /// <summary>
         /// <strong>[Should not be called by user code]</strong>
@@ -168,6 +181,39 @@ namespace Valve.VR
 
             vibrationAction = (SteamVR_Action_Vibration)wrappingAction;
         }
+
+        /// <summary>
+        /// Removes all listeners, useful for dispose pattern
+        /// </summary>
+        public void RemoveAllListeners()
+        {
+            Delegate[] delegates;
+
+            if (onActiveBindingChange != null)
+            {
+                delegates = onActiveBindingChange.GetInvocationList();
+                if (delegates != null)
+                    foreach (Delegate existingDelegate in delegates)
+                        onActiveBindingChange -= (SteamVR_Action_Vibration.ActiveChangeHandler)existingDelegate;
+            }
+
+            if (onActiveChange != null)
+            {
+                delegates = onActiveChange.GetInvocationList();
+                if (delegates != null)
+                    foreach (Delegate existingDelegate in delegates)
+                        onActiveChange -= (SteamVR_Action_Vibration.ActiveChangeHandler)existingDelegate;
+            }
+
+            if (onExecute != null)
+            {
+                delegates = onExecute.GetInvocationList();
+                if (delegates != null)
+                    foreach (Delegate existingDelegate in delegates)
+                        onExecute -= (SteamVR_Action_Vibration.ExecuteHandler)existingDelegate;
+            }
+        }
+
 
         /// <summary>
         /// Trigger the haptics at a certain time for a certain length
@@ -195,6 +241,7 @@ namespace Valve.VR
                 onExecute.Invoke(vibrationAction, inputSource, secondsFromNow, durationSeconds, frequency, amplitude);
         }
     }
+
 
     /// <summary>
     /// Vibration actions are used to trigger haptic feedback in vr controllers.
