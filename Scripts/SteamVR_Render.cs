@@ -52,6 +52,7 @@ namespace Valve.VR
 
         void AddInternal(SteamVR_Camera vrcam)
         {
+            MelonLogger.Msg("[hpvr] adding " + vrcam);
             var camera = vrcam.GetComponent<Camera>();
             var length = cameras.Length;
             var sorted = new SteamVR_Camera[length + 1];
@@ -114,6 +115,15 @@ namespace Valve.VR
             {
                 _pauseRendering = value;
 
+                if (!value)
+                {
+                    MelonLogger.Msg("Pausing rendering");
+                }
+                else
+                {
+                    MelonLogger.Msg("Unpausing rendering");
+                }
+
                 var compositor = OpenVR.Compositor;
                 if (compositor != null)
                     compositor.SuspendRendering(value);
@@ -134,10 +144,16 @@ namespace Valve.VR
                 var compositor = OpenVR.Compositor;
                 if (compositor != null)
                 {
-                    if (!compositor.CanRenderScene())
+                    if (compositor.CanRenderScene())
+                    {
+                        //MelonLogger.Msg("can render scene");
+                        compositor.SetTrackingSpace(SteamVR.settings.trackingSpace);
+                    }
+                    else
+                    {
+                        //MelonLogger.Msg("cannot render scene");
                         continue;
-
-                    compositor.SetTrackingSpace(SteamVR.settings.trackingSpace);
+                    }
                 }
 
                 var overlay = SteamVR_Overlay.instance;
@@ -362,11 +378,15 @@ namespace Valve.VR
         void OnBeforeRender()
         {
             if (SteamVR.active == false)
+            {
+                MelonLogger.Msg("steamvr not active");
                 return;
+            }
+
             if (SteamVR.settings.IsPoseUpdateMode(SteamVR_UpdateModes.OnPreCull))
             {
                 UpdatePoses();
-                MelonLogger.Msg("updated Poses");
+                //MelonLogger.Msg("updated Poses");
             }
             else
             {

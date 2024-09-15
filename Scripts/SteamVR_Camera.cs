@@ -11,7 +11,6 @@ using System.Collections;
 using System.IO;
 using System.Reflection;
 using UnityEngine;
-using UnityEngine.XR;
 
 namespace Valve.VR
 {
@@ -26,6 +25,7 @@ namespace Valve.VR
 
         public Camera camera { get; private set; }
 
+        public new Transform transform { get { MelonLogger.Msg(base.transform.parent?.name ?? "none"); return base.transform; } }
 
         private Transform _ears;
         public Transform ears { get { return _ears; } }
@@ -274,9 +274,10 @@ namespace Valve.VR
                 _origin.localPosition = transform.localPosition;
                 _origin.localRotation = transform.localRotation;
                 _origin.localScale = transform.localScale;
+                MelonLogger.Msg("origin: " + _origin.name + " parent: " + _origin.parent?.name);
             }
 
-            if (head == null)
+            if (_head == null)
             {
                 _head = new GameObject(name + headSuffix, Il2CppType.Of<SteamVR_TrackedObject>()).transform;
                 head.parent = _origin;
@@ -284,6 +285,7 @@ namespace Valve.VR
                 head.rotation = transform.rotation;
                 head.localScale = Vector3.one;
                 head.tag = tag;
+                MelonLogger.Msg("head: " + head.name + " parent: " + head.parent?.name);
             }
 
             if (transform.parent != head)
@@ -300,17 +302,19 @@ namespace Valve.VR
                 if (audioListener != null)
                 {
                     DestroyImmediate(audioListener);
-                    _ears = new GameObject(name + earsSuffix, Il2CppType.Of<SteamVR_Ears>()).transform;
+                    _ears = new GameObject(name + earsSuffix, Il2CppType.Of<SteamVR_Ears>(), Il2CppType.Of<AudioListener>()).transform;
                     ears.parent = _head;
                     ears.localPosition = Vector3.zero;
                     ears.localRotation = Quaternion.identity;
                     ears.localScale = Vector3.one;
+                    MelonLogger.Msg("ears: " + ears.name + " parent: " + ears.parent?.name);
                 }
             }
 
             if (!name.EndsWith(eyeSuffix))
                 name += eyeSuffix;
             MelonLogger.Msg("[HPVR] ...done");
+            //MelonLogger.Msg("origin: " + head.parent.name +"/" + origin.name + " - head: " + transform.parent.name + "/" + (origin.GetChild(0)?.name ?? "none") + "/" + head.name + " - eye: " + (origin.GetChild(0)?.GetChild(0)?.name ?? "none") + "/" + this.name);
         }
 
         public void Collapse()
@@ -362,6 +366,7 @@ namespace Valve.VR
 
         public static void DumpRenderTexture(RenderTexture rt, string pngOutPath)
         {
+            var oldRT = RenderTexture.active;
             Texture2D tex = new Texture2D(1920, 1080, TextureFormat.RGB24, false);
             RenderTexture.active = rt;
             tex.ReadPixels(new Rect(0, 0, rt.width, rt.height), 0, 0);
@@ -369,6 +374,8 @@ namespace Valve.VR
             byte[] textureBytes = ImageConversion.EncodeToPNG(tex);
             MelonLogger.Msg($"Writing texture to {pngOutPath}");
             File.WriteAllBytes(pngOutPath, textureBytes);
+
+            RenderTexture.active = oldRT;
         }
     }
 }

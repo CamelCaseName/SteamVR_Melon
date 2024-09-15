@@ -701,6 +701,7 @@ namespace Valve.VR
 
             float r_left = 0.0f, r_right = 0.0f, r_top = 0.0f, r_bottom = 0.0f;
             hmd.GetProjectionRaw(EVREye.Eye_Right, ref r_left, ref r_right, ref r_top, ref r_bottom);
+            MelonLogger.Msg($"[HPVR] hmd projection: {r_left}{r_right}{r_top}{r_bottom}");
 
             tanHalfFov = new Vector2(
                 Mathf.Max(-l_left, l_right, -r_left, r_right),

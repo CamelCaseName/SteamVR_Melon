@@ -106,7 +106,7 @@ namespace Valve.VR
 
 
         /// <summary>An array of five 0-1 values representing how curled a finger is. 0 being straight, 1 being fully curled. 0 being thumb, 4 being pinky</summary>
-        public float[] fingerCurls
+        public Il2CppInterop.Runtime.InteropTypes.Arrays.Il2CppStructArray<float> fingerCurls
         {
             get
             {
@@ -223,19 +223,19 @@ namespace Valve.VR
         public Transform pinkyAux { get { return bones[SteamVR_Skeleton_JointIndexes.pinkyAux]; } }
 
         /// <summary>An array of all the finger proximal joint transforms</summary>
-        public Transform[] proximals { get; protected set; }
+        public Il2CppInterop.Runtime.InteropTypes.Arrays.Il2CppReferenceArray<Transform> proximals { get; protected set; }
 
         /// <summary>An array of all the finger middle joint transforms</summary>
-        public Transform[] middles { get; protected set; }
+        public Il2CppInterop.Runtime.InteropTypes.Arrays.Il2CppReferenceArray<Transform> middles { get; protected set; }
 
         /// <summary>An array of all the finger distal joint transforms</summary>
-        public Transform[] distals { get; protected set; }
+        public Il2CppInterop.Runtime.InteropTypes.Arrays.Il2CppReferenceArray<Transform> distals { get; protected set; }
 
         /// <summary>An array of all the finger tip transforms</summary>
-        public Transform[] tips { get; protected set; }
+        public Il2CppInterop.Runtime.InteropTypes.Arrays.Il2CppReferenceArray<Transform> tips { get; protected set; }
 
         /// <summary>An array of all the finger aux transforms</summary>
-        public Transform[] auxs { get; protected set; }
+        public Il2CppInterop.Runtime.InteropTypes.Arrays.Il2CppReferenceArray<Transform> auxs { get; protected set; }
 
         protected IEnumerator blendRoutine;
         protected IEnumerator rangeOfMotionBlendRoutine;
@@ -386,7 +386,8 @@ namespace Valve.VR
 
             if (blendPoser != null && skeletonBlend < 1)
             {
-                if (blendSnapshot == null) blendSnapshot = blendPoser.GetBlendedPose(this);
+                if (blendSnapshot == null)
+                    blendSnapshot = blendPoser.GetBlendedPose(this);
                 blendSnapshot = blendPoser.GetBlendedPose(this);
             }
 
@@ -489,7 +490,7 @@ namespace Valve.VR
 
             if (this.gameObject.activeInHierarchy)
                 blendRoutine = DoBlendRoutine(blendToAmount, overTime);
-                MelonLoader.MelonCoroutines.Start(blendRoutine);
+            MelonLoader.MelonCoroutines.Start(blendRoutine);
         }
 
 
@@ -584,8 +585,8 @@ namespace Valve.VR
                 {
                     skeletonAction.SetRangeOfMotion(oldRangeOfMotion);
                     skeletonAction.UpdateValueWithoutEvents();
-                    oldBonePositions = (Vector3[])GetBonePositions().Clone();
-                    oldBoneRotations = (Quaternion[])GetBoneRotations().Clone();
+                    oldBonePositions = (Vector3[])((Vector3[])GetBonePositions()).Clone();
+                    oldBoneRotations = (Quaternion[])((Quaternion[])GetBoneRotations()).Clone();
 
                     skeletonAction.SetRangeOfMotion(newRangeOfMotion);
                     skeletonAction.UpdateValueWithoutEvents();
@@ -797,7 +798,7 @@ namespace Valve.VR
                 return bones[joint].rotation;
         }
 
-        protected Vector3[] GetBonePositions()
+        protected Il2CppInterop.Runtime.InteropTypes.Arrays.Il2CppStructArray<Vector3> GetBonePositions()
         {
             if (skeletonAvailable)
             {
@@ -828,7 +829,7 @@ namespace Valve.VR
         }
 
         protected static readonly Quaternion rightFlipAngle = Quaternion.AngleAxis(180, Vector3.right);
-        protected Quaternion[] GetBoneRotations()
+        protected Il2CppInterop.Runtime.InteropTypes.Arrays.Il2CppStructArray<Quaternion> GetBoneRotations()
         {
             if (skeletonAvailable)
             {
