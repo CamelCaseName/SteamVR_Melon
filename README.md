@@ -1,11 +1,11 @@
 # SteamVR_Melon
-A modified SteamVR plugin that can be injected into Non-VR enabled Unity projects for VR rendering and VR input/interaction. Modified for IL2CPP with Melonloader. 
+A modified SteamVR plugin that can be injected into Non-VR enabled Unity projects for VR rendering and VR input/interaction. Modified for IL2CPP with Melonloader. Needs SteamXR_Melon. This thing was made for Unity 2022.3.16f1
 
 ## How to use:
 
 #### CONFIGURATION 
 
-You need to replace the memory offset in the SteamVR/ExternalPluginFunctionExtractor class with the memory offset of FindAndLoadUnityPlugin 
+You need to replace the memory offset in the PluginImporter/GetLoadPluginFunction() with the memory offset of FindAndLoadUnityPlugin 
 from UnityPlayer.DLL (in your game install folder) for the exact Unity version your game is using.
 
 var loadLibraryAddress = module.BaseAddress + >>> 0x786D00 <<<
@@ -19,6 +19,7 @@ You need to have Il2CPP support enabled in the given Unity install for them to a
 #### INITIALIZATION
 
 Call SteamVR.Initialize(false) before the game loads. 
+Call MelonXR.Initialize() after that
 Add SteamVR_Camera on the main player character. 
 You may need to tweak the Expand() function in SteamVR_Camera depending on the needs of your game.
 For rendering UI look at Eusth's VRGIN approach or at GTFO VR if you're ok with just using SteamVR_Overlay for it.
