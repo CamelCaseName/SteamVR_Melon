@@ -25,7 +25,7 @@ namespace Valve.VR
 
         public Camera camera { get; private set; }
 
-        public new Transform transform { get { MelonLogger.Msg(base.transform.parent?.name ?? "none"); return base.transform; } }
+        public new Transform transform { get { return base.transform; } }
 
         private Transform _ears;
         public Transform ears { get { return _ears; } }
@@ -286,7 +286,7 @@ namespace Valve.VR
                 _origin.localPosition = transform.localPosition;
                 _origin.localRotation = transform.localRotation;
                 _origin.localScale = transform.localScale;
-                MelonLogger.Msg("origin: " + _origin.name + " parent: " + _origin.parent?.name);
+                //.Msg("origin: " + _origin.name + " parent: " + _origin.parent?.name);
             }
 
             if (_head == null)
@@ -297,7 +297,7 @@ namespace Valve.VR
                 head.rotation = transform.rotation;
                 head.localScale = Vector3.one;
                 head.tag = tag;
-                MelonLogger.Msg("head: " + head.name + " parent: " + head.parent?.name);
+                //MelonLogger.Msg("head: " + head.name + " parent: " + head.parent?.name);
             }
 
             if (transform.parent != head)
@@ -321,7 +321,7 @@ namespace Valve.VR
                     ears.localPosition = Vector3.zero;
                     ears.localRotation = Quaternion.identity;
                     ears.localScale = Vector3.one;
-                    MelonLogger.Msg("ears: " + ears.name + " parent: " + ears.parent?.name);
+                    //MelonLogger.Msg("ears: " + ears.name + " parent: " + ears.parent?.name);
                 }
             }
 

@@ -17,6 +17,7 @@
 //
 //=============================================================================
 
+using System;
 using UnityEngine;
 using UnityEngine.Events;
 using Valve.VR;
@@ -138,7 +139,16 @@ namespace Valve.VR
 
             public void Listen(System.Action action) { OnEvent += action; }
             public void Remove(System.Action action) { OnEvent -= action; }
-            public void Send() { OnEvent?.Invoke();
+            public void Send() { OnEvent?.Invoke(); }
+            public void RemoveAllListeners()
+            {
+                Delegate[] subscribers = OnEvent.GetInvocationList();
+
+                Delegate currentDelegate = OnEvent;
+                for (int i = 0; i < subscribers.Length; i++)
+                {
+                    currentDelegate = Delegate.RemoveAll(currentDelegate, subscribers[i])!;
+                }
             }
         }
 
@@ -157,8 +167,18 @@ namespace Valve.VR
                     }
                 }
             }
+            public void RemoveAllListeners()
+            {
+                Delegate[] subscribers = OnEvent.GetInvocationList();
+
+                Delegate currentDelegate = OnEvent;
+                for (int i = 0; i < subscribers.Length; i++)
+                {
+                    currentDelegate = Delegate.RemoveAll(currentDelegate, subscribers[i])!;
+                }
+            }
         }
-             
+
 
         public class Event<T0, T1>
         {
@@ -166,12 +186,23 @@ namespace Valve.VR
 
             public void Listen(System.Action<T0, T1> action) { OnEvent += action; }
             public void Remove(System.Action<T0, T1> action) { OnEvent -= action; }
-            public void Send(T0 arg0, T1 arg1) {
+            public void Send(T0 arg0, T1 arg1)
+            {
                 if (OnEvent != null)
                 {
                     {
                         OnEvent.Invoke(arg0, arg1);
                     }
+                }
+            }
+            public void RemoveAllListeners()
+            {
+                Delegate[] subscribers = OnEvent.GetInvocationList();
+
+                Delegate currentDelegate = OnEvent;
+                for (int i = 0; i < subscribers.Length; i++)
+                {
+                    currentDelegate = Delegate.RemoveAll(currentDelegate, subscribers[i])!;
                 }
             }
         }
@@ -182,12 +213,23 @@ namespace Valve.VR
 
             public void Listen(System.Action<T0, T1, T2> action) { OnEvent += action; }
             public void Remove(System.Action<T0, T1, T2> action) { OnEvent -= action; }
-            public void Send(T0 arg0, T1 arg1, T2 arg2) {
+            public void Send(T0 arg0, T1 arg1, T2 arg2)
+            {
                 if (OnEvent != null)
                 {
                     {
                         OnEvent.Invoke(arg0, arg1, arg2);
                     }
+                }
+            }
+            public void RemoveAllListeners()
+            {
+                Delegate[] subscribers = OnEvent.GetInvocationList();
+
+                Delegate currentDelegate = OnEvent;
+                for (int i = 0; i < subscribers.Length; i++)
+                {
+                    currentDelegate = Delegate.RemoveAll(currentDelegate, subscribers[i])!;
                 }
             }
         }
@@ -204,6 +246,16 @@ namespace Valve.VR
                     {
                         OnEvent.Invoke(arg0, arg1, arg2, arg3);
                     }
+                }
+            }
+            public void RemoveAllListeners()
+            {
+                Delegate[] subscribers = OnEvent.GetInvocationList();
+
+                Delegate currentDelegate = OnEvent;
+                for (int i = 0; i < subscribers.Length; i++)
+                {
+                    currentDelegate = Delegate.RemoveAll(currentDelegate, subscribers[i])!;
                 }
             }
         }
@@ -239,8 +291,9 @@ namespace Valve.VR
         public static Action LoadingFadeOutAction(System.Action<float> action) { return new Action<float>(LoadingFadeOut, action); }
 
         public static Event<TrackedDevicePose_t[]> NewPoses = new Event<TrackedDevicePose_t[]>();
-        public static Action NewPosesAction(System.Action<TrackedDevicePose_t[]> action) { 
-            return new Action<TrackedDevicePose_t[]>(NewPoses, action); 
+        public static Action NewPosesAction(System.Action<TrackedDevicePose_t[]> action)
+        {
+            return new Action<TrackedDevicePose_t[]>(NewPoses, action);
         }
 
         public static Event NewPosesApplied = new Event();

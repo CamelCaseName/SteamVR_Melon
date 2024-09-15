@@ -8,7 +8,8 @@ namespace SteamVR_Melon.Standalone
     public class OpenVRMagic
     {
 
-        public static string DLLName = "openvr_api";
+        public static string openvr_api = "openvr_api";
+        public static string XRSDKOpenVR = "XRSDKOpenVR";
 
         public const int k_nRenderEventID_WaitGetPoses = 201510020;
 
@@ -26,7 +27,7 @@ namespace SteamVR_Melon.Standalone
     /// Thank him for supporting il2cpp modding ^^
     /// </summary>
 
-    public static class ExternalPluginFunctionExtractor
+    public static class PluginImporter
     {
         // 2019.4.1f1  : 0x786D00
         // 2019.4.21f1 : 0x792350
@@ -43,7 +44,7 @@ namespace SteamVR_Melon.Standalone
 
         public static int FindAndLoadUnityPluginOffset = 0x5b71b0;
 
-        public static void GetLoadPluginFunction()
+        public static void GetPluginLoadFunction()
         {
             MelonLogger.Msg("[HPVR] Loading external plugin load function");
             var process = Process.GetCurrentProcess();
@@ -60,32 +61,42 @@ namespace SteamVR_Melon.Standalone
                 var loadLibraryAddress = module.BaseAddress + FindAndLoadUnityPluginOffset;
                 MelonLogger.Msg($"[HPVR] loadLibrary Address: {loadLibraryAddress:x} (offset {FindAndLoadUnityPluginOffset:x})");
 
-                var findAndLoadPlugin = Marshal.GetDelegateForFunctionPointer<FindAndLoadUnityPlugin>(loadLibraryAddress);
+                method = Marshal.GetDelegateForFunctionPointer<FindAndLoadUnityPlugin>(loadLibraryAddress);
                 MelonLogger.Msg("[HPVR] got the delegate");
-
-                var strPtr = Marshal.StringToHGlobalAnsi(OpenVRMagic.DLLName);
-                MelonLogger.Msg($"[HPVR] callind the delegate with {strPtr:x} ({OpenVRMagic.DLLName})");
-
-                var retName = findAndLoadPlugin(strPtr, out var loaded, 1);
-
-                MelonLogger.Msg("[HPVR] unity loaded the plugin from: " + Marshal.PtrToStringAnsi(retName));
-
-                if (loaded == IntPtr.Zero)
-                {
-                    MelonLogger.Error("[HPVR] Module load failed");
-                    return;
-                }
-                MelonLogger.Msg("[HPVR] module loaded");
-
-                Marshal.FreeHGlobal(strPtr);
 
                 break;
             }
         }
 
+        public static void LoadPlugin(string name)
+        {
+            if (method is null)
+            {
+                GetPluginLoadFunction();
+            }
+
+            var name_ = name;
+            var strPtr = Marshal.StringToHGlobalAnsi(name);
+            MelonLogger.Msg($"[HPVR] loading plugin {strPtr:x} ({name})");
+
+            var retName = method(strPtr, out var loaded, 1);
+
+            MelonLogger.Msg("[HPVR] unity loaded the plugin from: " + Marshal.PtrToStringAnsi(retName));
+
+            if (loaded == IntPtr.Zero)
+            {
+                MelonLogger.Error("[HPVR] Module load failed");
+                return;
+            }
+            MelonLogger.Msg("[HPVR] plugin loaded");
+
+            Marshal.FreeHGlobal(strPtr);
+        }
+
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-        private delegate IntPtr FindAndLoadUnityPlugin(IntPtr name, out IntPtr loadedModule, byte param3);
+        public delegate IntPtr FindAndLoadUnityPlugin(IntPtr name, out IntPtr loadedModule, byte param3);
+        public static FindAndLoadUnityPlugin method;
 
         //[UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         //private delegate IntPtr CallbackPointer();

@@ -173,8 +173,7 @@ namespace Valve.VR
             {
                 var error = EVRInitError.None;
 
-
-                ExternalPluginFunctionExtractor.GetLoadPluginFunction();
+                PluginImporter.LoadPlugin(OpenVRMagic.openvr_api);
                 UnityHooks.Init();
                 //VRShaders.TryLoadShaders();
 
