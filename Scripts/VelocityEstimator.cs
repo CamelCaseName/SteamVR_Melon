@@ -95,7 +95,9 @@ namespace Valve.VR.InteractionSystem
             for (int i = 2 + sampleCount - velocitySamples.Length; i < sampleCount; i++)
             {
                 if (i < 2)
+                {
                     continue;
+                }
 
                 int first = i - 2;
                 int second = i - 1;

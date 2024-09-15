@@ -47,9 +47,9 @@ namespace Valve.VR.InteractionSystem.Sample
             planting.GetComponentInChildren<MeshRenderer>().material.SetColor("_BaseColor", newColor);
             Rigidbody rigidbody = planting.GetComponent<Rigidbody>();
             if (rigidbody != null)
+            {
                 rigidbody.isKinematic = true;
-
-
+            }
 
             Vector3 initialScale = Vector3.one * 0.01f;
             Vector3 targetScale = Vector3.one * (1 + (UnityEngine.Random.value * 0.25f));
@@ -66,7 +66,9 @@ namespace Valve.VR.InteractionSystem.Sample
 
 
             if (rigidbody != null)
+            {
                 rigidbody.isKinematic = false;
+            }
         }
     }
 }

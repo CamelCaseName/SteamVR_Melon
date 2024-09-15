@@ -2072,7 +2072,10 @@ namespace Valve.VR
 
             int size = System.Text.Encoding.UTF8.GetByteCount(managedString) + 1;
             if (buffer.Length < size)
+            {
                 buffer = new byte[size];
+            }
+
             int written = System.Text.Encoding.UTF8.GetBytes(managedString, 0, managedString.Length, buffer, 0);
             buffer[written] = 0x00; // null terminate
             IntPtr nativeUtf8 = Marshal.AllocHGlobal(written + 1);
@@ -6061,7 +6064,9 @@ namespace Valve.VR
         private static void _copysign(ref float sizeval, float signval)
         {
             if (signval > 0 != sizeval > 0)
+            {
                 sizeval = -sizeval;
+            }
         }
 
     }
@@ -8218,7 +8223,9 @@ namespace Valve.VR
                     var eError = EVRInitError.None;
                     var pInterface = OpenVRInterop.GetGenericInterface(FnTable_Prefix + IVRSystem_Version, ref eError);
                     if (pInterface != IntPtr.Zero && eError == EVRInitError.None)
+                    {
                         m_pVRSystem = new CVRSystem(pInterface);
+                    }
                 }
                 return m_pVRSystem;
             }
@@ -8231,7 +8238,9 @@ namespace Valve.VR
                     var eError = EVRInitError.None;
                     var pInterface = OpenVRInterop.GetGenericInterface(FnTable_Prefix + IVRChaperone_Version, ref eError);
                     if (pInterface != IntPtr.Zero && eError == EVRInitError.None)
+                    {
                         m_pVRChaperone = new CVRChaperone(pInterface);
+                    }
                 }
                 return m_pVRChaperone;
             }
@@ -8244,7 +8253,9 @@ namespace Valve.VR
                     var eError = EVRInitError.None;
                     var pInterface = OpenVRInterop.GetGenericInterface(FnTable_Prefix + IVRChaperoneSetup_Version, ref eError);
                     if (pInterface != IntPtr.Zero && eError == EVRInitError.None)
+                    {
                         m_pVRChaperoneSetup = new CVRChaperoneSetup(pInterface);
+                    }
                 }
                 return m_pVRChaperoneSetup;
             }
@@ -8257,7 +8268,9 @@ namespace Valve.VR
                     var eError = EVRInitError.None;
                     var pInterface = OpenVRInterop.GetGenericInterface(FnTable_Prefix + IVRCompositor_Version, ref eError);
                     if (pInterface != IntPtr.Zero && eError == EVRInitError.None)
+                    {
                         m_pVRCompositor = new CVRCompositor(pInterface);
+                    }
                 }
                 return m_pVRCompositor;
             }
@@ -8270,7 +8283,9 @@ namespace Valve.VR
                     var eError = EVRInitError.None;
                     var pInterface = OpenVRInterop.GetGenericInterface(FnTable_Prefix + IVRHeadsetView_Version, ref eError);
                     if (pInterface != IntPtr.Zero && eError == EVRInitError.None)
+                    {
                         m_pVRHeadsetView = new CVRHeadsetView(pInterface);
+                    }
                 }
                 return m_pVRHeadsetView;
             }
@@ -8283,7 +8298,9 @@ namespace Valve.VR
                     var eError = EVRInitError.None;
                     var pInterface = OpenVRInterop.GetGenericInterface(FnTable_Prefix + IVROverlay_Version, ref eError);
                     if (pInterface != IntPtr.Zero && eError == EVRInitError.None)
+                    {
                         m_pVROverlay = new CVROverlay(pInterface);
+                    }
                 }
                 return m_pVROverlay;
             }
@@ -8296,7 +8313,9 @@ namespace Valve.VR
                     var eError = EVRInitError.None;
                     var pInterface = OpenVRInterop.GetGenericInterface(FnTable_Prefix + IVROverlayView_Version, ref eError);
                     if (pInterface != IntPtr.Zero && eError == EVRInitError.None)
+                    {
                         m_pVROverlayView = new CVROverlayView(pInterface);
+                    }
                 }
                 return m_pVROverlayView;
             }
@@ -8309,7 +8328,9 @@ namespace Valve.VR
                     var eError = EVRInitError.None;
                     var pInterface = OpenVRInterop.GetGenericInterface(FnTable_Prefix + IVRRenderModels_Version, ref eError);
                     if (pInterface != IntPtr.Zero && eError == EVRInitError.None)
+                    {
                         m_pVRRenderModels = new CVRRenderModels(pInterface);
+                    }
                 }
                 return m_pVRRenderModels;
             }
@@ -8322,7 +8343,9 @@ namespace Valve.VR
                     var eError = EVRInitError.None;
                     var pInterface = OpenVRInterop.GetGenericInterface(FnTable_Prefix + IVRExtendedDisplay_Version, ref eError);
                     if (pInterface != IntPtr.Zero && eError == EVRInitError.None)
+                    {
                         m_pVRExtendedDisplay = new CVRExtendedDisplay(pInterface);
+                    }
                 }
                 return m_pVRExtendedDisplay;
             }
@@ -8335,7 +8358,9 @@ namespace Valve.VR
                     var eError = EVRInitError.None;
                     var pInterface = OpenVRInterop.GetGenericInterface(FnTable_Prefix + IVRSettings_Version, ref eError);
                     if (pInterface != IntPtr.Zero && eError == EVRInitError.None)
+                    {
                         m_pVRSettings = new CVRSettings(pInterface);
+                    }
                 }
                 return m_pVRSettings;
             }
@@ -8348,7 +8373,9 @@ namespace Valve.VR
                     var eError = EVRInitError.None;
                     var pInterface = OpenVRInterop.GetGenericInterface(FnTable_Prefix + IVRApplications_Version, ref eError);
                     if (pInterface != IntPtr.Zero && eError == EVRInitError.None)
+                    {
                         m_pVRApplications = new CVRApplications(pInterface);
+                    }
                 }
                 return m_pVRApplications;
             }
@@ -8361,7 +8388,9 @@ namespace Valve.VR
                     var eError = EVRInitError.None;
                     var pInterface = OpenVRInterop.GetGenericInterface(FnTable_Prefix + IVRScreenshots_Version, ref eError);
                     if (pInterface != IntPtr.Zero && eError == EVRInitError.None)
+                    {
                         m_pVRScreenshots = new CVRScreenshots(pInterface);
+                    }
                 }
                 return m_pVRScreenshots;
             }
@@ -8374,7 +8403,9 @@ namespace Valve.VR
                     var eError = EVRInitError.None;
                     var pInterface = OpenVRInterop.GetGenericInterface(FnTable_Prefix + IVRTrackedCamera_Version, ref eError);
                     if (pInterface != IntPtr.Zero && eError == EVRInitError.None)
+                    {
                         m_pVRTrackedCamera = new CVRTrackedCamera(pInterface);
+                    }
                 }
                 return m_pVRTrackedCamera;
             }
@@ -8387,7 +8418,9 @@ namespace Valve.VR
                     var eError = EVRInitError.None;
                     var pInterface = OpenVRInterop.GetGenericInterface(FnTable_Prefix + IVRInput_Version, ref eError);
                     if (pInterface != IntPtr.Zero && eError == EVRInitError.None)
+                    {
                         m_pVRInput = new CVRInput(pInterface);
+                    }
                 }
                 return m_pVRInput;
             }
@@ -8400,7 +8433,9 @@ namespace Valve.VR
                     var eError = EVRInitError.None;
                     var pInterface = OpenVRInterop.GetGenericInterface(FnTable_Prefix + IVRIOBuffer_Version, ref eError);
                     if (pInterface != IntPtr.Zero && eError == EVRInitError.None)
+                    {
                         m_pVRIOBuffer = new CVRIOBuffer(pInterface);
+                    }
                 }
                 return m_pVRIOBuffer;
             }
@@ -8413,7 +8448,9 @@ namespace Valve.VR
                     var eError = EVRInitError.None;
                     var pInterface = OpenVRInterop.GetGenericInterface(FnTable_Prefix + IVRSpatialAnchors_Version, ref eError);
                     if (pInterface != IntPtr.Zero && eError == EVRInitError.None)
+                    {
                         m_pVRSpatialAnchors = new CVRSpatialAnchors(pInterface);
+                    }
                 }
                 return m_pVRSpatialAnchors;
             }
@@ -8426,7 +8463,9 @@ namespace Valve.VR
                     var eError = EVRInitError.None;
                     var pInterface = OpenVRInterop.GetGenericInterface(FnTable_Prefix + IVRDebug_Version, ref eError);
                     if (pInterface != IntPtr.Zero && eError == EVRInitError.None)
+                    {
                         m_pVRDebug = new CVRDebug(pInterface);
+                    }
                 }
                 return m_pVRDebug;
             }
@@ -8439,7 +8478,9 @@ namespace Valve.VR
                     var eError = EVRInitError.None;
                     var pInterface = OpenVRInterop.GetGenericInterface(FnTable_Prefix + IVRNotifications_Version, ref eError);
                     if (pInterface != IntPtr.Zero && eError == EVRInitError.None)
+                    {
                         m_pVRNotifications = new CVRNotifications(pInterface);
+                    }
                 }
                 return m_pVRNotifications;
             }
@@ -8470,7 +8511,10 @@ namespace Valve.VR
             get
             {
                 if (_OpenVRInternal_ModuleContext == null)
+                {
                     _OpenVRInternal_ModuleContext = new COpenVRContext();
+                }
+
                 return _OpenVRInternal_ModuleContext;
             }
         }
@@ -8510,7 +8554,9 @@ namespace Valve.VR
             OpenVRInternal_ModuleContext.Clear();
 
             if (peError != EVRInitError.None)
+            {
                 return null;
+            }
 
             bool bInterfaceValid = IsInterfaceVersionValid(IVRSystem_Version);
             if (!bInterfaceValid)

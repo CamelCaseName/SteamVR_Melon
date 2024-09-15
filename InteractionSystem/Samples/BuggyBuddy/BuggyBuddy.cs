@@ -126,7 +126,9 @@ namespace Valve.VR.InteractionSystem.Sample
 
             float forward = maxTorque * throttle;
             if (steer.y < -0.5f)
+            {
                 forward *= -1;
+            }
 
             float angle = maxAngle * steer.x;
 
@@ -226,8 +228,10 @@ namespace Valve.VR.InteractionSystem.Sample
         {
             // If the vector the angle is being calculated to is 0...
             if (toVector == Vector3.zero)
+            {
                 // ... the angle between them is 0.
                 return 0f;
+            }
 
             // Create a float to store the angle between the facing of the enemy and the direction it's travelling.
             float angle = Vector3.Angle(fromVector, toVector);

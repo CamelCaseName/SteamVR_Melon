@@ -24,10 +24,7 @@ namespace Valve.VR.InteractionSystem
             if ( contactBalloon != null )
             {
                 Hand hand = physParent.GetComponentInParent<Hand>();
-                if ( hand != null )
-                {
-                    hand.TriggerHapticPulse( 500 );
-                }
+                hand?.TriggerHapticPulse( 500 );
             }
         }
     }

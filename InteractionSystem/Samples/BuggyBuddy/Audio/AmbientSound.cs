@@ -26,7 +26,9 @@ namespace Valve.VR.InteractionSystem.Sample
             s = GetComponent<AudioSource>();
             s.time =UnityEngine.Random.Range(0, s.clip.length);
             if (fadeintime > 0)
+            {
                 t = 0;
+            }
 
             vol = s.volume;
 

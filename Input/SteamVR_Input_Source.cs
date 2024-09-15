@@ -27,14 +27,18 @@ namespace Valve.VR
         {
             int index = (int)inputSource;
             if (index < inputSourceHandlesBySource.Length)
+            {
                 return inputSourceHandlesBySource[index];
+            }
 
             return 0;
         }
         public static SteamVR_Input_Sources GetSource(ulong handle)
         {
             if (inputSourceSourcesByHandle.ContainsKey(handle))
+            {
                 return inputSourceSourcesByHandle[handle];
+            }
 
             return SteamVR_Input_Sources.Any;
         }
@@ -42,7 +46,9 @@ namespace Valve.VR
         public static SteamVR_Input_Sources[] GetAllSources()
         {
             if (allSources == null)
+            {
                 allSources = (SteamVR_Input_Sources[])System.Enum.GetValues(typeof(SteamVR_Input_Sources));
+            }
 
             return allSources;
         }
@@ -69,7 +75,9 @@ namespace Valve.VR
                 EVRInputError err = OpenVR.Input.GetInputSourceHandle(path, ref handle);
 
                 if (err != EVRInputError.None)
+                {
                     MelonLoader.MelonLogger.Error("[HPVR] GetInputSourceHandle (" + path + ") error: " + err.ToString());
+                }
 
                 if (enumNames[enumIndex] == SteamVR_Input_Sources.Any.ToString()) //todo: temporary hack
                 {

@@ -95,7 +95,9 @@ namespace Valve.VR
         private void OnDeviceConnected(int i, bool connected)
         {
             if (i != (int)index)
+            {
                 return;
+            }
 
             GetComponent<MeshFilter>().mesh = null;
 
@@ -107,27 +109,39 @@ namespace Valve.VR
                     var error = ETrackedPropertyError.TrackedProp_Success;
                     var result = system.GetFloatTrackedDeviceProperty((uint)i, ETrackedDeviceProperty.Prop_FieldOfViewLeftDegrees_Float, ref error);
                     if (error == ETrackedPropertyError.TrackedProp_Success)
+                    {
                         fovLeft = result;
+                    }
 
                     result = system.GetFloatTrackedDeviceProperty((uint)i, ETrackedDeviceProperty.Prop_FieldOfViewRightDegrees_Float, ref error);
                     if (error == ETrackedPropertyError.TrackedProp_Success)
+                    {
                         fovRight = result;
+                    }
 
                     result = system.GetFloatTrackedDeviceProperty((uint)i, ETrackedDeviceProperty.Prop_FieldOfViewTopDegrees_Float, ref error);
                     if (error == ETrackedPropertyError.TrackedProp_Success)
+                    {
                         fovTop = result;
+                    }
 
                     result = system.GetFloatTrackedDeviceProperty((uint)i, ETrackedDeviceProperty.Prop_FieldOfViewBottomDegrees_Float, ref error);
                     if (error == ETrackedPropertyError.TrackedProp_Success)
+                    {
                         fovBottom = result;
+                    }
 
                     result = system.GetFloatTrackedDeviceProperty((uint)i, ETrackedDeviceProperty.Prop_TrackingRangeMinimumMeters_Float, ref error);
                     if (error == ETrackedPropertyError.TrackedProp_Success)
+                    {
                         nearZ = result;
+                    }
 
                     result = system.GetFloatTrackedDeviceProperty((uint)i, ETrackedDeviceProperty.Prop_TrackingRangeMaximumMeters_Float, ref error);
                     if (error == ETrackedPropertyError.TrackedProp_Success)
+                    {
                         farZ = result;
+                    }
 
                     UpdateModel();
                 }

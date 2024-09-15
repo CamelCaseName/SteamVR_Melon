@@ -48,9 +48,13 @@ namespace Valve.VR.InteractionSystem.Sample
                 }
 
                 if (drawTape)
+                {
                     visualWrapper.SetActive(distance < maxDistanceToDraw);
+                }
                 else
+                {
                     visualWrapper.SetActive(false);
+                }
             }
         }
     }

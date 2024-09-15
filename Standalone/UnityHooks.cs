@@ -68,7 +68,10 @@ namespace SteamVR_Melon.Util
             foreach (ProcessModule module in process.Modules)
             {
                 if (!module.FileName.Contains("UnityPlayer"))
+                {
                     continue;
+                }
+
                 adress = module.BaseAddress;
             }
 

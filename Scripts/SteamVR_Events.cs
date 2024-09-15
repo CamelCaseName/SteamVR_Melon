@@ -44,9 +44,13 @@ namespace Valve.VR
             public override void Enable(bool enabled)
             {
                 if (enabled)
+                {
                     _event.Listen(action);
+                }
                 else
+                {
                     _event.Remove(action);
+                }
             }
 
             Event _event;
@@ -65,9 +69,13 @@ namespace Valve.VR
             public override void Enable(bool enabled)
             {
                 if (enabled)
+                {
                     _event.Listen(action);
+                }
                 else
+                {
                     _event.Remove(action);
+                }
             }
 
             Event<T> _event;
@@ -86,9 +94,13 @@ namespace Valve.VR
             public override void Enable(bool enabled)
             {
                 if (enabled)
+                {
                     _event.Listen(action);
+                }
                 else
+                {
                     _event.Remove(action);
+                }
             }
 
             Event<T0, T1> _event;
@@ -107,9 +119,13 @@ namespace Valve.VR
             public override void Enable(bool enabled)
             {
                 if (enabled)
+                {
                     _event.Listen(action);
+                }
                 else
+                {
                     _event.Remove(action);
+                }
             }
 
             Event<T0, T1, T2> _event;
@@ -122,10 +138,7 @@ namespace Valve.VR
 
             public void Listen(System.Action action) { OnEvent += action; }
             public void Remove(System.Action action) { OnEvent -= action; }
-            public void Send() { if (OnEvent != null)
-                {
-                    OnEvent.Invoke();
-                }
+            public void Send() { OnEvent?.Invoke();
             }
         }
 

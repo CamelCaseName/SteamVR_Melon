@@ -78,9 +78,13 @@ namespace Valve.VR.InteractionSystem
             if (audioSource.playOnAwake)
             {
                 if (useRetriggerTime)
+                {
                     InvokeRepeating("Play", timeInitial, UnityEngine.Random.Range(timeMin, timeMax));
+                }
                 else
+                {
                     Play();
+                }
             }
 
             // if playOnAwake is false, but the playOnAwakeWithDelay on the PlaySound is true, play the sound on away but with a delay
@@ -89,7 +93,9 @@ namespace Valve.VR.InteractionSystem
                 PlayWithDelay(delayOffsetTime);
 
                 if (useRetriggerTime)
+                {
                     InvokeRepeating("Play", timeInitial, UnityEngine.Random.Range(timeMin, timeMax));
+                }
             }
 
             // in the case where both playOnAwake and playOnAwakeWithDelay are both set to true, just to the same as above, play the sound but with a delay
@@ -98,7 +104,9 @@ namespace Valve.VR.InteractionSystem
                 PlayWithDelay(delayOffsetTime);
 
                 if (useRetriggerTime)
+                {
                     InvokeRepeating("Play", timeInitial, UnityEngine.Random.Range(timeMin, timeMax));
+                }
             }
         }
 
@@ -115,7 +123,9 @@ namespace Valve.VR.InteractionSystem
             }
 
             else
+            {
                 PlayOneShotSound();
+            }
         }
 
 
@@ -123,9 +133,13 @@ namespace Valve.VR.InteractionSystem
         public void PlayWithDelay(float delayTime)
         {
             if (looping)
+            {
                 Invoke("PlayLooping", delayTime);
+            }
             else
+            {
                 Invoke("PlayOneShotSound", delayTime);
+            }
         }
 
 
@@ -135,13 +149,21 @@ namespace Valve.VR.InteractionSystem
         public AudioClip PlayOneShotSound()
         {
             if (!this.audioSource.isActiveAndEnabled)
+            {
                 return null;
+            }
 
             SetAudioSource();
             if (this.stopOnPlay)
+            {
                 audioSource.Stop();
+            }
+
             if (this.disableOnEnd)
+            {
                 Invoke("Disable", clip.length);
+            }
+
             this.audioSource.PlayOneShot(this.clip);
             return this.clip;
         }
@@ -155,14 +177,19 @@ namespace Valve.VR.InteractionSystem
 
             // if the audio source has forgotten to be set to looping, set it to looping
             if (!audioSource.loop)
+            {
                 audioSource.loop = true;
+            }
 
             // play the clip in the audio source, all the meanwhile updating it's location
             this.audioSource.Play();
 
             // if disable on end is checked, stop playing the wave file after the first loop has finished.
             if (stopOnEnd)
+            {
                 Invoke("Stop", audioSource.clip.length);
+            }
+
             return this.clip;
         }
 

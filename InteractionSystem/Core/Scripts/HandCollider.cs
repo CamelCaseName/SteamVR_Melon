@@ -122,7 +122,10 @@ namespace Valve.VR.InteractionSystem
         void SetPhysicMaterial(PhysicMaterial mat)
         {
             if (colliders == null)
+            {
                 colliders = GetComponentsInChildren<Collider>();
+            }
+
             for (int i = 0; i < colliders.Length; i++)
             {
                 colliders[i].sharedMaterial = mat;
@@ -156,7 +159,9 @@ namespace Valve.VR.InteractionSystem
             rigidbody.position = position;
 
             if (rotation.x != 0 || rotation.y != 0 || rotation.z != 0 || rotation.w != 0)
+            {
                 rigidbody.rotation = rotation;
+            }
 
             //also update transform in case physics is disabled
             transform.position = position;
@@ -234,8 +239,9 @@ namespace Valve.VR.InteractionSystem
                 realNumbers = true;
             }
             else
+            {
                 velocityTarget = Vector3.zero;
-
+            }
 
             Quaternion rotationDelta = targetRotation * Quaternion.Inverse(rigidbody.rotation);
 
@@ -245,7 +251,9 @@ namespace Valve.VR.InteractionSystem
             rotationDelta.ToAngleAxis(out angle, out axis);
 
             if (angle > 180)
+            {
                 angle -= 360;
+            }
 
             if (angle != 0 && float.IsNaN(axis.x) == false && float.IsInfinity(axis.x) == false)
             {
@@ -254,7 +262,9 @@ namespace Valve.VR.InteractionSystem
                 realNumbers &= true;
             }
             else
+            {
                 angularTarget = Vector3.zero;
+            }
 
             return realNumbers;
         }
@@ -271,7 +281,9 @@ namespace Valve.VR.InteractionSystem
             if (collision.rigidbody != null)
             {
                 if (collision.rigidbody.isKinematic == false)
+                {
                     touchingDynamic = true;
+                }
             }
 
             // low friction if touching static object, high friction if touching dynamic

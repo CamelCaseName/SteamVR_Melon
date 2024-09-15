@@ -50,7 +50,9 @@ namespace Valve.VR
         void OnGUI()
         {
             if (overlay == null)
+            {
                 return;
+            }
 
             var texture = overlay.texture as RenderTexture;
 
@@ -58,7 +60,9 @@ namespace Valve.VR
             RenderTexture.active = texture;
 
             if (Event.current.type == EventType.Repaint)
+            {
                 GL.Clear(false, true, Color.clear);
+            }
 
             var area = new Rect(0, 0, texture.width, texture.height);
 
@@ -116,7 +120,9 @@ namespace Valve.VR
                 if (result != scaleLimitX)
                 {
                     if (float.TryParse(result, out scaleLimits.x))
+                    {
                         scaleLimitX = result;
+                    }
                 }
             }
             {
@@ -124,7 +130,9 @@ namespace Valve.VR
                 if (result != scaleLimitY)
                 {
                     if (float.TryParse(result, out scaleLimits.y))
+                    {
                         scaleLimitY = result;
+                    }
                 }
             }
             GUILayout.EndHorizontal();
@@ -136,7 +144,9 @@ namespace Valve.VR
                 if (result != scaleRateText)
                 {
                     if (float.TryParse(result, out scaleRate))
+                    {
                         scaleRateText = result;
+                    }
                 }
             }
             GUILayout.EndHorizontal();
@@ -169,25 +179,30 @@ namespace Valve.VR
                 if (SteamVR.settings.trackingSpace == ETrackingUniverseOrigin.TrackingUniverseSeated)
                 {
                     if (GUILayout.Button("Switch to Standing"))
+                    {
                         SteamVR.settings.trackingSpace = ETrackingUniverseOrigin.TrackingUniverseStanding;
+                    }
 
                     if (GUILayout.Button("Center View"))
                     {
                         var chaperone = OpenVR.Chaperone;
-                        if (chaperone != null)
-                            chaperone.ResetZeroPose(SteamVR.settings.trackingSpace);
+                        chaperone?.ResetZeroPose(SteamVR.settings.trackingSpace);
                     }
                 }
                 else
                 {
                     if (GUILayout.Button("Switch to Seated"))
+                    {
                         SteamVR.settings.trackingSpace = ETrackingUniverseOrigin.TrackingUniverseSeated;
+                    }
                 }
             }
 
 #if !UNITY_EDITOR
         if (GUILayout.Button("Exit"))
-            Application.Quit();
+            {
+                Application.Quit();
+            }
 #endif
             GUILayout.Space(menuOffset);
 
@@ -215,14 +230,18 @@ namespace Valve.VR
             RenderTexture.active = prevActive;
 
             if (bHideMenu)
+            {
                 HideMenu();
+            }
         }
 
         public void ShowMenu()
         {
             var overlay = SteamVR_Overlay.instance;
             if (overlay == null)
+            {
                 return;
+            }
 
             var texture = overlay.texture as RenderTexture;
             if (texture == null)
@@ -255,7 +274,9 @@ namespace Valve.VR
 
             var tracker = SteamVR_Render.Top();
             if (tracker != null)
+            {
                 scale = tracker.origin.localScale.x;
+            }
         }
 
         public void HideMenu()
@@ -263,7 +284,9 @@ namespace Valve.VR
             RestoreCursorState();
 
             if (overlayCam != null)
+            {
                 overlayCam.enabled = true;
+            }
 
             if (overlay != null)
             {
@@ -306,7 +329,9 @@ namespace Valve.VR
 
             var tracker = SteamVR_Render.Top();
             if (tracker != null)
+            {
                 tracker.origin.localScale = new Vector3(scale, scale, scale);
+            }
         }
 
         void SaveCursorState()

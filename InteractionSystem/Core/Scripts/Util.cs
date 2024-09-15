@@ -49,11 +49,17 @@ namespace Valve.VR.InteractionSystem
             float delta = target - value;
 
             if (delta > speed)
+            {
                 value += speed;
+            }
             else if (delta < -speed)
+            {
                 value -= speed;
+            }
             else
+            {
                 value = target;
+            }
 
             return value;
         }
@@ -239,13 +245,17 @@ namespace Valve.VR.InteractionSystem
         public static Transform FindChild(Transform parent, string name)
         {
             if (parent.name == name)
+            {
                 return parent;
+            }
 
             foreach (Transform child in parent)
             {
                 var found = FindChild(child, name);
                 if (found != null)
+                {
                     return found;
+                }
             }
 
             return null;
@@ -256,10 +266,14 @@ namespace Valve.VR.InteractionSystem
         public static bool IsNullOrEmpty<T>(T[] array)
         {
             if (array == null)
+            {
                 return true;
+            }
 
             if (array.Length == 0)
+            {
                 return true;
+            }
 
             return false;
         }
@@ -269,7 +283,9 @@ namespace Valve.VR.InteractionSystem
         public static bool IsValidIndex<T>(T[] array, int i)
         {
             if (array == null)
+            {
                 return false;
+            }
 
             return (i >= 0) && (i < array.Length);
         }
@@ -279,7 +295,9 @@ namespace Valve.VR.InteractionSystem
         public static bool IsValidIndex<T>(List<T> list, int i)
         {
             if (list == null || list.Count == 0)
+            {
                 return false;
+            }
 
             return (i >= 0) && (i < list.Count);
         }
@@ -314,7 +332,9 @@ namespace Valve.VR.InteractionSystem
         {
             T component = gameObject.GetComponent<T>();
             if (component)
+            {
                 return component;
+            }
 
             return gameObject.AddComponent<T>();
         }
@@ -342,7 +362,9 @@ namespace Valve.VR.InteractionSystem
         public static void SwitchLayerRecursively(Transform transform, int fromLayer, int toLayer)
         {
             if (transform.gameObject.layer == fromLayer)
+            {
                 transform.gameObject.layer = toLayer;
+            }
 
             int childCount = transform.childCount;
             for (int i = 0; i < childCount; i++)
@@ -394,10 +416,14 @@ namespace Valve.VR.InteractionSystem
             var t = Vector3.Dot(vVector2, vVector1);
 
             if (t <= 0)
+            {
                 return vA;
+            }
 
             if (t >= d)
+            {
                 return vB;
+            }
 
             var vVector3 = vVector2 * t;
 
@@ -575,7 +601,9 @@ namespace Valve.VR.InteractionSystem
 #endif
         {
             if (path.corners.Length < 2)
+            {
                 return 0;
+            }
 
             Vector3 previousCorner = path.corners[0];
             float lengthSoFar = 0.0f;
@@ -652,10 +680,7 @@ namespace Valve.VR.InteractionSystem
         //-------------------------------------------------
         public static void SetActive(GameObject gameObject, bool active)
         {
-            if (gameObject != null)
-            {
-                gameObject.SetActive(active);
-            }
+            gameObject?.SetActive(active);
         }
 
 

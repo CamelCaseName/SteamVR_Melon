@@ -393,7 +393,9 @@ namespace Valve.VR
             for (int sourceIndex = 0; sourceIndex < sources.Length; sourceIndex++)
             {
                 if (sources[sourceIndex] != null)
+                {
                     sources[sourceIndex].universeOrigin = newOrigin;
+                }
             }
         }
 
@@ -450,7 +452,9 @@ namespace Valve.VR
             get
             {
                 if (active)
+                {
                     return poseActionData.activeOrigin;
+                }
 
                 return 0;
             }
@@ -543,7 +547,9 @@ namespace Valve.VR
             base.Initialize();
 
             if (poseActionData_size == 0)
+            {
                 poseActionData_size = (uint)Marshal.SizeOf(typeof(InputPoseActionData_t));
+            }
         }
 
         /// <summary>
@@ -558,56 +564,84 @@ namespace Valve.VR
             {
                 delegates = onActiveChange.GetInvocationList();
                 if (delegates != null)
+                {
                     foreach (Delegate existingDelegate in delegates)
+                    {
                         onActiveChange -= (SteamVR_Action_Pose.ActiveChangeHandler)existingDelegate;
+                    }
+                }
             }
 
             if (onActiveBindingChange != null)
             {
                 delegates = onActiveBindingChange.GetInvocationList();
                 if (delegates != null)
+                {
                     foreach (Delegate existingDelegate in delegates)
+                    {
                         onActiveBindingChange -= (SteamVR_Action_Pose.ActiveChangeHandler)existingDelegate;
+                    }
+                }
             }
 
             if (onChange != null)
             {
                 delegates = onChange.GetInvocationList();
                 if (delegates != null)
+                {
                     foreach (Delegate existingDelegate in delegates)
+                    {
                         onChange -= (SteamVR_Action_Pose.ChangeHandler)existingDelegate;
+                    }
+                }
             }
 
             if (onUpdate != null)
             {
                 delegates = onUpdate.GetInvocationList();
                 if (delegates != null)
+                {
                     foreach (Delegate existingDelegate in delegates)
+                    {
                         onUpdate -= (SteamVR_Action_Pose.UpdateHandler)existingDelegate;
+                    }
+                }
             }
 
             if (onTrackingChanged != null)
             {
                 delegates = onTrackingChanged.GetInvocationList();
                 if (delegates != null)
+                {
                     foreach (Delegate existingDelegate in delegates)
+                    {
                         onTrackingChanged -= (SteamVR_Action_Pose.TrackingChangeHandler)existingDelegate;
+                    }
+                }
             }
 
             if (onValidPoseChanged != null)
             {
                 delegates = onValidPoseChanged.GetInvocationList();
                 if (delegates != null)
+                {
                     foreach (Delegate existingDelegate in delegates)
+                    {
                         onValidPoseChanged -= (SteamVR_Action_Pose.ValidPoseChangeHandler)existingDelegate;
+                    }
+                }
             }
 
             if (onDeviceConnectedChanged != null)
             {
                 delegates = onDeviceConnectedChanged.GetInvocationList();
                 if (delegates != null)
+                {
                     foreach (Delegate existingDelegate in delegates)
+                    {
                         onDeviceConnectedChanged -= (SteamVR_Action_Pose.DeviceConnectedChangeHandler)existingDelegate;
+                    }
+                }
             }
         }
 
@@ -636,9 +670,13 @@ namespace Valve.VR
             EVRInputError err;
 
             if (framesAhead == -1)
+            {
                 err = OpenVR.Input.GetPoseActionDataForNextFrame(handle, universeOrigin, ref poseActionData, poseActionData_size, inputSourceHandle);
+            }
             else
+            {
                 err = OpenVR.Input.GetPoseActionDataRelativeToNow(handle, universeOrigin, framesAhead * (1 / SteamVR.instance.hmd_DisplayFrequency), ref poseActionData, poseActionData_size, inputSourceHandle);
+            }
 
             if (err != EVRInputError.None)
             {
@@ -652,10 +690,14 @@ namespace Valve.VR
             }
 
             if (changed)
+            {
                 changedTime = updateTime;
+            }
 
             if (skipStateAndEventUpdates == false)
+            {
                 CheckAndSendEvents();
+            }
         }
 
         protected void SetCacheVariables()
@@ -670,13 +712,21 @@ namespace Valve.VR
         protected bool GetChanged()
         {
             if (Vector3.Distance(localPosition, lastLocalPosition) > changeTolerance)
+            {
                 return true;
+            }
             else if (Mathf.Abs(Quaternion.Angle(localRotation, lastLocalRotation)) > changeTolerance)
+            {
                 return true;
+            }
             else if (Vector3.Distance(velocity, lastVelocity) > changeTolerance)
+            {
                 return true;
+            }
             else if (Vector3.Distance(angularVelocity, lastAngularVelocity) > changeTolerance)
+            {
                 return true;
+            }
 
             return false;
         }
@@ -744,25 +794,36 @@ namespace Valve.VR
         protected virtual void CheckAndSendEvents()
         {
             if (trackingState != lastTrackingState && onTrackingChanged != null)
+            {
                 onTrackingChanged.Invoke(poseAction, inputSource, trackingState);
+            }
 
             if (poseIsValid != lastPoseIsValid && onValidPoseChanged != null)
+            {
                 onValidPoseChanged.Invoke(poseAction, inputSource, poseIsValid);
+            }
 
             if (deviceIsConnected != lastDeviceIsConnected && onDeviceConnectedChanged != null)
+            {
                 onDeviceConnectedChanged.Invoke(poseAction, inputSource, deviceIsConnected);
+            }
 
             if (changed && onChange != null)
+            {
                 onChange.Invoke(poseAction, inputSource);
+            }
 
             if (active != lastActive && onActiveChange != null)
+            {
                 onActiveChange.Invoke(poseAction, inputSource, active);
+            }
 
             if (activeBinding != lastActiveBinding && onActiveBindingChange != null)
+            {
                 onActiveBindingChange.Invoke(poseAction, inputSource, activeBinding);
+            }
 
-            if (onUpdate != null)
-                onUpdate.Invoke(poseAction, inputSource);
+            onUpdate?.Invoke(poseAction, inputSource);
         }
 
         protected Vector3 GetUnityCoordinateVelocity(HmdVector3_t vector)

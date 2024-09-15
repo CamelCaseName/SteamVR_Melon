@@ -68,7 +68,9 @@ namespace Valve.VR.InteractionSystem.Sample
             rigidbody.freezeRotation = !held;
 
             if (held == false)
+            {
                 FixRotation();
+            }
         }
 
         private void FixRotation()
@@ -118,7 +120,9 @@ namespace Valve.VR.InteractionSystem.Sample
         {
             input = move;
             if (move.magnitude > 1f)
+            {
                 move.Normalize();
+            }
 
             move = transform.InverseTransformDirection(move);
 
@@ -179,7 +183,10 @@ namespace Valve.VR.InteractionSystem.Sample
         private void FixedUpdate()
         {
             groundedTime += Time.fixedDeltaTime;
-            if (!isGrounded) groundedTime = 0; // reset timer
+            if (!isGrounded)
+            {
+                groundedTime = 0; // reset timer
+            }
 
             if (isGrounded & !held)
             {

@@ -32,7 +32,9 @@ namespace Valve.VR
 
             currentIndex++;
             if (currentIndex >= buffer.Length)
+            {
                 currentIndex = 0;
+            }
 
             cleared = false;
         }
@@ -40,7 +42,9 @@ namespace Valve.VR
         public virtual T GetAtIndex(int atIndex)
         {
             if (atIndex < 0)
+            {
                 atIndex += buffer.Length;
+            }
 
             return buffer[atIndex];
         }
@@ -54,7 +58,9 @@ namespace Valve.VR
         {
             int lastIndex = currentIndex - 1;
             if (lastIndex < 0)
+            {
                 lastIndex += buffer.Length;
+            }
 
             return lastIndex;
         }
@@ -63,10 +69,14 @@ namespace Valve.VR
         public void Clear()
         {
             if (cleared == true)
+            {
                 return;
+            }
 
             if (buffer == null)
+            {
                 return;
+            }
 
             for (int index = 0; index < buffer.Length; index++)
             {
@@ -88,7 +98,9 @@ namespace Valve.VR
         public void Update(Vector3 position, Quaternion rotation, Vector3 velocity, Vector3 angularVelocity)
         {
             if (buffer[currentIndex] == null)
+            {
                 buffer[currentIndex] = new SteamVR_HistoryStep();
+            }
 
             buffer[currentIndex].position = position;
             buffer[currentIndex].rotation = rotation;
@@ -96,7 +108,9 @@ namespace Valve.VR
             buffer[currentIndex].angularVelocity = angularVelocity;
 
             if (UseDateTimeForTicks)
+            {
                 buffer[currentIndex].timeInTicks = System.DateTime.Now.Ticks;
+            }
             else
             {
 #if UNITY_2020_2_OR_NEWER
@@ -112,16 +126,24 @@ namespace Valve.VR
         public float GetVelocityMagnitudeTrend(int toIndex = -1, int fromIndex = -1)
         {
             if (toIndex == -1)
+            {
                 toIndex = currentIndex - 1;
+            }
 
             if (toIndex < 0)
+            {
                 toIndex += buffer.Length;
+            }
 
             if (fromIndex == -1)
+            {
                 fromIndex = toIndex - 1;
+            }
 
             if (fromIndex < 0)
+            {
                 fromIndex += buffer.Length;
+            }
 
             SteamVR_HistoryStep toStep = buffer[toIndex];
             SteamVR_HistoryStep fromStep = buffer[fromIndex];
@@ -152,12 +174,16 @@ namespace Valve.VR
                 currentFrame--;
 
                 if (currentFrame < 0)
+                {
                     currentFrame = buffer.Length - 1;
+                }
 
                 SteamVR_HistoryStep currentStep = buffer[currentFrame];
 
                 if (IsValid(currentStep) == false)
+                {
                     break;
+                }
 
                 float currentSqr = buffer[currentFrame].velocity.sqrMagnitude;
                 if (currentSqr > topVelocitySqr)
@@ -170,7 +196,9 @@ namespace Valve.VR
             topFrame += addFrames;
 
             if (topFrame >= buffer.Length)
+            {
                 topFrame -= buffer.Length;
+            }
 
             return topFrame;
         }
@@ -181,15 +209,21 @@ namespace Valve.VR
             angularVelocity = Vector3.zero;
 
             if (startFrame == -1)
+            {
                 startFrame = currentIndex - 1;
+            }
 
             if (startFrame < 0)
+            {
                 startFrame = buffer.Length - 1;
+            }
 
             int endFrame = startFrame - forFrames;
 
             if (endFrame < 0)
+            {
                 endFrame += buffer.Length;
+            }
 
             Vector3 totalVelocity = Vector3.zero;
             Vector3 totalAngularVelocity = Vector3.zero;
@@ -201,12 +235,16 @@ namespace Valve.VR
                 currentFrame--;
 
                 if (currentFrame < 0)
+                {
                     currentFrame = buffer.Length - 1;
+                }
 
                 SteamVR_HistoryStep currentStep = buffer[currentFrame];
 
                 if (IsValid(currentStep) == false)
+                {
                     break;
+                }
 
                 totalFrames++;
 

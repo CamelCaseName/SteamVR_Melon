@@ -26,7 +26,9 @@ namespace Valve.VR
         {
             const float epsilon = 0.001f;
             if (blendPct < epsilon)
+            {
                 return;
+            }
 
             var preUp = upVector ? upVector.up : Vector3.Cross(end.position - start.position, joint.position - start.position).normalized;
 
@@ -40,7 +42,9 @@ namespace Valve.VR
                 ref result, out forward, out up);
 
             if (up == Vector3.zero)
+            {
                 return;
+            }
 
             var startPosition = start.position;
             var jointPosition = joint.position;

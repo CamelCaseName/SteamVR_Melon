@@ -201,19 +201,19 @@ namespace Valve.VR
 
         /// <summary>The current float value of the action.
         /// Note: Will only return non-zero if the action is also active.</summary>
-        public float axis { get { if (active) return actionData.x; else return 0; } }
+        public float axis { get { if (active) { return actionData.x; } else { return 0; } } }
 
         /// <summary>The float value of the action from the previous update.
         /// Note: Will only return non-zero if the action is also active.</summary>
-        public float lastAxis { get { if (active) return lastActionData.x; else return 0; } }
+        public float lastAxis { get { if (active) { return lastActionData.x; } else { return 0; } } }
 
         /// <summary>The float value difference between this update and the previous update.
         /// Note: Will only return non-zero if the action is also active.</summary>
-        public float delta { get { if (active) return actionData.deltaX; else return 0; } }
+        public float delta { get { if (active) { return actionData.deltaX; } else { return 0; } } }
 
         /// <summary>The float value difference between the previous update and update before that.
         /// Note: Will only return non-zero if the action is also active.</summary>
-        public float lastDelta { get { if (active) return lastActionData.deltaX; else return 0; } }
+        public float lastDelta { get { if (active) { return lastActionData.deltaX; } else { return 0; } } }
 
 
         /// <summary>If the float value of this action has changed more than the changeTolerance since the last update</summary>
@@ -229,7 +229,9 @@ namespace Valve.VR
             get
             {
                 if (active)
+                {
                     return actionData.activeOrigin;
+                }
 
                 return 0;
             }
@@ -276,7 +278,9 @@ namespace Valve.VR
             base.Initialize();
 
             if (actionData_size == 0)
+            {
                 actionData_size = (uint)Marshal.SizeOf(typeof(InputAnalogActionData_t));
+            }
         }
 
         /// <summary>
@@ -290,40 +294,60 @@ namespace Valve.VR
             {
                 delegates = onAxis.GetInvocationList();
                 if (delegates != null)
+                {
                     foreach (Delegate existingDelegate in delegates)
+                    {
                         onAxis -= (SteamVR_Action_Single.AxisHandler)existingDelegate;
+                    }
+                }
             }
 
             if (onUpdate != null)
             {
                 delegates = onUpdate.GetInvocationList();
                 if (delegates != null)
+                {
                     foreach (Delegate existingDelegate in delegates)
+                    {
                         onUpdate -= (SteamVR_Action_Single.UpdateHandler)existingDelegate;
+                    }
+                }
             }
 
             if (onChange != null)
             {
                 delegates = onChange.GetInvocationList();
                 if (delegates != null)
+                {
                     foreach (Delegate existingDelegate in delegates)
+                    {
                         onChange -= (SteamVR_Action_Single.ChangeHandler)existingDelegate;
+                    }
+                }
             }
 
             if (onActiveChange != null)
             {
                 delegates = onActiveChange.GetInvocationList();
                 if (delegates != null)
+                {
                     foreach (Delegate existingDelegate in delegates)
+                    {
                         onActiveChange -= (SteamVR_Action_Single.ActiveChangeHandler)existingDelegate;
+                    }
+                }
             }
 
             if (onActiveBindingChange != null)
             {
                 delegates = onActiveBindingChange.GetInvocationList();
                 if (delegates != null)
+                {
                     foreach (Delegate existingDelegate in delegates)
+                    {
                         onActiveBindingChange -= (SteamVR_Action_Single.ActiveChangeHandler)existingDelegate;
+                    }
+                }
             }
         }
 
@@ -337,7 +361,9 @@ namespace Valve.VR
 
             EVRInputError err = OpenVR.Input.GetAnalogActionData(handle, ref actionData, actionData_size, SteamVR_Input_Source.GetHandle(inputSource));
             if (err != EVRInputError.None)
+            {
                 MelonLoader.MelonLogger.Error("[HPVR] GetAnalogActionData error (" + fullPath + "): " + err.ToString() + " handle: " + handle.ToString());
+            }
 
             updateTime = Time.realtimeSinceStartup;
 
@@ -350,28 +376,27 @@ namespace Valve.VR
                     changed = true;
                     changedTime = Time.realtimeSinceStartup + actionData.fUpdateTime; //fUpdateTime is the time from the time the action was called that the action changed
 
-                    if (onChange != null)
-                        onChange.Invoke(singleAction, inputSource, axis, delta);
+                    onChange?.Invoke(singleAction, inputSource, axis, delta);
                 }
 
                 if (axis != 0)
                 {
-                    if (onAxis != null)
-                        onAxis.Invoke(singleAction, inputSource, axis, delta);
+                    onAxis?.Invoke(singleAction, inputSource, axis, delta);
                 }
 
-                if (onUpdate != null)
-                {
-                    onUpdate.Invoke(singleAction, inputSource, axis, delta);
-                }
+                onUpdate?.Invoke(singleAction, inputSource, axis, delta);
             }
 
 
             if (onActiveBindingChange != null && lastActiveBinding != activeBinding)
+            {
                 onActiveBindingChange.Invoke(singleAction, inputSource, activeBinding);
+            }
 
             if (onActiveChange != null && lastActive != active)
+            {
                 onActiveChange.Invoke(singleAction, inputSource, activeBinding);
+            }
         }
     }
 

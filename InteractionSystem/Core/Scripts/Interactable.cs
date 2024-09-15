@@ -83,7 +83,10 @@ namespace Valve.VR.InteractionSystem
             get
             {
                 if (hoveringHands.Count > 0)
+                {
                     return hoveringHands[0];
+                }
+
                 return null;
             }
         }
@@ -102,10 +105,14 @@ namespace Valve.VR.InteractionSystem
         protected virtual void Start()
         {
             if (highlightMat == null)
+            {
                 highlightMat = Resources.Load<Material>("SteamVR_HoverHighlight_URP");
+            }
 
             if (highlightMat == null)
+            {
                 MelonLoader.MelonLogger.Error("[HPVR Interaction] Hover Highlight Material is missing. Please create a material named 'SteamVR_HoverHighlight' and place it in a Resources folder", this);
+            }
 
             if (skeletonPoser != null)
             {
@@ -127,7 +134,9 @@ namespace Valve.VR.InteractionSystem
             for (int ignoreIndex = 0; ignoreIndex < hideHighlight.Length; ignoreIndex++)
             {
                 if (check == hideHighlight[ignoreIndex])
+                {
                     return true;
+                }
             }
 
             return false;
@@ -144,7 +153,9 @@ namespace Valve.VR.InteractionSystem
                 SkinnedMeshRenderer existingSkinned = existingSkinnedRenderers[skinnedIndex];
 
                 if (ShouldIgnoreHighlight(existingSkinned))
+                {
                     continue;
+                }
 
                 GameObject newSkinnedHolder = new GameObject("SkinnedHolder");
                 newSkinnedHolder.transform.parent = highlightHolder.transform;
@@ -174,7 +185,9 @@ namespace Valve.VR.InteractionSystem
                 MeshRenderer existingRenderer = existingFilter.GetComponent<MeshRenderer>();
 
                 if (existingFilter == null || existingRenderer == null || ShouldIgnoreHighlight(existingFilter))
+                {
                     continue;
+                }
 
                 GameObject newFilterHolder = new GameObject("FilterHolder");
                 newFilterHolder.transform.parent = highlightHolder.transform;
@@ -197,7 +210,9 @@ namespace Valve.VR.InteractionSystem
         protected virtual void UpdateHighlightRenderers()
         {
             if (highlightHolder == null)
+            {
                 return;
+            }
 
             for (int skinnedIndex = 0; skinnedIndex < existingSkinnedRenderers.Length; skinnedIndex++)
             {
@@ -219,8 +234,9 @@ namespace Valve.VR.InteractionSystem
                     }
                 }
                 else if (highlightSkinned != null)
+                {
                     highlightSkinned.enabled = false;
-
+                }
             }
 
             for (int rendererIndex = 0; rendererIndex < highlightRenderers.Length; rendererIndex++)
@@ -236,7 +252,9 @@ namespace Valve.VR.InteractionSystem
                     highlightRenderer.enabled = isHovering && existingRenderer.enabled && existingRenderer.gameObject.activeInHierarchy;
                 }
                 else if (highlightRenderer != null)
+                {
                     highlightRenderer.enabled = false;
+                }
             }
         }
 
@@ -272,7 +290,9 @@ namespace Valve.VR.InteractionSystem
                 isHovering = false;
 
                 if (highlightOnHover && highlightHolder != null)
+                {
                     Destroy(highlightHolder);
+                }
             }
         }
 
@@ -283,7 +303,9 @@ namespace Valve.VR.InteractionSystem
                 UpdateHighlightRenderers();
 
                 if (isHovering == false && highlightHolder != null)
+                {
                     Destroy(highlightHolder);
+                }
             }
         }
 
@@ -293,13 +315,9 @@ namespace Valve.VR.InteractionSystem
 
         protected virtual void OnAttachedToHand(Hand hand)
         {
-            if (activateActionSetOnAttach != null)
-                activateActionSetOnAttach.Activate(hand.handType);
+            activateActionSetOnAttach?.Activate(hand.handType);
 
-            if (onAttachedToHand != null)
-            {
-                onAttachedToHand.Invoke(hand);
-            }
+            onAttachedToHand?.Invoke(hand);
 
             if (skeletonPoser != null && hand.skeleton != null)
             {
@@ -321,16 +339,12 @@ namespace Valve.VR.InteractionSystem
                 }
             }
 
-            if (onDetachedFromHand != null)
-            {
-                onDetachedFromHand.Invoke(hand);
-            }
+            onDetachedFromHand?.Invoke(hand);
 
 
             if (skeletonPoser != null)
             {
-                if (hand.skeleton != null)
-                    hand.skeleton.BlendToSkeleton(releasePoseBlendTime);
+                hand.skeleton?.BlendToSkeleton(releasePoseBlendTime);
             }
 
             attachedToHand = null;
@@ -347,8 +361,9 @@ namespace Valve.VR.InteractionSystem
             }
 
             if (highlightHolder != null)
+            {
                 Destroy(highlightHolder);
-
+            }
         }
 
 
@@ -356,13 +371,12 @@ namespace Valve.VR.InteractionSystem
         {
             isDestroying = true;
 
-            if (attachedToHand != null)
-            {
-                attachedToHand.ForceHoverUnlock();
-            }
+            attachedToHand?.ForceHoverUnlock();
 
             if (highlightHolder != null)
+            {
                 Destroy(highlightHolder);
+            }
         }
     }
 }

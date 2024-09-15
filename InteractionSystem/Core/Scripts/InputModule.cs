@@ -22,9 +22,11 @@ namespace Valve.VR.InteractionSystem
 			get
 			{
 				if ( _instance == null )
-					_instance = GameObject.FindObjectOfType<InputModule>();
+                {
+                    _instance = GameObject.FindObjectOfType<InputModule>();
+                }
 
-				return _instance;
+                return _instance;
 			}
 		}
 
@@ -33,9 +35,11 @@ namespace Valve.VR.InteractionSystem
 		public override bool ShouldActivateModule()
 		{
 			if ( !base.ShouldActivateModule() )
-				return false;
+            {
+                return false;
+            }
 
-			return submitObject != null;
+            return submitObject != null;
 		}
 
 

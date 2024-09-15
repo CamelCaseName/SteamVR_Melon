@@ -22,18 +22,28 @@ namespace Valve.VR
         public SteamVR_Skeleton_Pose_Hand GetHand(int hand)
         {
             if (hand == leftHandInputSource)
+            {
                 return leftHand;
+            }
             else if (hand == rightHandInputSource)
+            {
                 return rightHand;
+            }
+
             return null;
         }
 
         public SteamVR_Skeleton_Pose_Hand GetHand(SteamVR_Input_Sources hand)
         {
             if (hand == SteamVR_Input_Sources.LeftHand)
+            {
                 return leftHand;
+            }
             else if (hand == SteamVR_Input_Sources.RightHand)
+            {
                 return rightHand;
+            }
+
             return null;
         }
     }
@@ -55,15 +65,29 @@ namespace Valve.VR
         public SteamVR_Skeleton_FingerExtensionTypes GetFingerExtensionType(int finger)
         {
             if (finger == 0)
+            {
                 return thumbFingerMovementType;
+            }
+
             if (finger == 1)
+            {
                 return indexFingerMovementType;
+            }
+
             if (finger == 2)
+            {
                 return middleFingerMovementType;
+            }
+
             if (finger == 3)
+            {
                 return ringFingerMovementType;
+            }
+
             if (finger == 4)
+            {
                 return pinkyFingerMovementType;
+            }
 
             //default to static
             MelonLoader.MelonLogger.Warning("Finger not in range!");
@@ -126,7 +150,10 @@ namespace Valve.VR
             get
             {
                 if (_enumList == null)
+                {
                     _enumList = (SteamVR_Skeleton_FingerExtensionTypes[])System.Enum.GetValues(typeof(SteamVR_Skeleton_FingerExtensionTypes));
+                }
+
                 return _enumList;
             }
         }
@@ -137,7 +164,10 @@ namespace Valve.VR
             get
             {
                 if (_stringList == null)
+                {
                     _stringList = enumList.Select(element => element.ToString()).ToArray();
+                }
+
                 return _stringList;
             }
         }

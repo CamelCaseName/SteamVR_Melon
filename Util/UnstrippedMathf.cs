@@ -41,12 +41,17 @@ namespace HPVR.Util
         {
             int len = values.Length;
             if (len == 0)
+            {
                 return 0;
+            }
+
             float m = values[0];
             for (int i = 1; i < len; i++)
             {
                 if (values[i] < m)
+                {
                     m = values[i];
+                }
             }
             return m;
         }
@@ -58,12 +63,17 @@ namespace HPVR.Util
         {
             int len = values.Length;
             if (len == 0)
+            {
                 return 0;
+            }
+
             int m = values[0];
             for (int i = 1; i < len; i++)
             {
                 if (values[i] < m)
+                {
                     m = values[i];
+                }
             }
             return m;
         }
@@ -75,12 +85,17 @@ namespace HPVR.Util
         {
             int len = values.Length;
             if (len == 0)
+            {
                 return 0;
+            }
+
             float m = values[0];
             for (int i = 1; i < len; i++)
             {
                 if (values[i] > m)
+                {
                     m = values[i];
+                }
             }
             return m;
         }
@@ -92,12 +107,17 @@ namespace HPVR.Util
         {
             int len = values.Length;
             if (len == 0)
+            {
                 return 0;
+            }
+
             int m = values[0];
             for (int i = 1; i < len; i++)
             {
                 if (values[i] > m)
+                {
                     m = values[i];
+                }
             }
             return m;
         }
@@ -162,9 +182,14 @@ namespace HPVR.Util
         public static float Clamp(float value, float min, float max)
         {
             if (value < min)
+            {
                 value = min;
+            }
             else if (value > max)
+            {
                 value = max;
+            }
+
             return value;
         }
 
@@ -175,9 +200,14 @@ namespace HPVR.Util
         public static int Clamp(int value, int min, int max)
         {
             if (value < min)
+            {
                 value = min;
+            }
             else if (value > max)
+            {
                 value = max;
+            }
+
             return value;
         }
 
@@ -185,11 +215,17 @@ namespace HPVR.Util
         public static float Clamp01(float value)
         {
             if (value < 0F)
+            {
                 return 0F;
+            }
             else if (value > 1F)
+            {
                 return 1F;
+            }
             else
+            {
                 return value;
+            }
         }
 
         // Interpolates between /a/ and /b/ by /t/. /t/ is clamped between 0 and 1.
@@ -209,7 +245,10 @@ namespace HPVR.Util
         {
             float delta = Repeat(b - a, 360);
             if (delta > 180)
+            {
                 delta -= 360;
+            }
+
             return a + delta * Clamp01(t);
         }
 
@@ -217,7 +256,10 @@ namespace HPVR.Util
         static public float MoveTowards(float current, float target, float maxDelta)
         {
             if (Abs(target - current) <= maxDelta)
+            {
                 return target;
+            }
+
             return current + Sign(target - current) * maxDelta;
         }
 
@@ -226,7 +268,10 @@ namespace HPVR.Util
         {
             float deltaAngle = DeltaAngle(current, target);
             if (-maxDelta < deltaAngle && deltaAngle < maxDelta)
+            {
                 return target;
+            }
+
             target = current + deltaAngle;
             return MoveTowards(current, target, maxDelta);
         }
@@ -245,7 +290,9 @@ namespace HPVR.Util
             bool negative = value < 0F;
             float absval = Abs(value);
             if (absval > absmax)
+            {
                 return negative ? -absval : absval;
+            }
 
             float result = Pow(absval / absmax, gamma) * absmax;
             return negative ? -result : result;
@@ -285,9 +332,13 @@ namespace HPVR.Util
         public static float InverseLerp(float a, float b, float value)
         {
             if (a != b)
+            {
                 return Clamp01((value - a) / (b - a));
+            }
             else
+            {
                 return 0.0f;
+            }
         }
 
         // Calculates the shortest difference between two given angles.
@@ -295,7 +346,10 @@ namespace HPVR.Util
         {
             float delta = Repeat(target - current, 360.0F);
             if (delta > 180.0F)
+            {
                 delta -= 360.0F;
+            }
+
             return delta;
         }
 

@@ -235,7 +235,9 @@ namespace Valve.VR
             get
             {
                 if (active)
+                {
                     return actionData.activeOrigin;
+                }
 
                 return 0;
             }
@@ -281,7 +283,9 @@ namespace Valve.VR
             base.Initialize();
 
             if (actionData_size == 0)
+            {
                 actionData_size = (uint)Marshal.SizeOf(typeof(InputAnalogActionData_t));
+            }
         }
 
         /// <summary>
@@ -295,40 +299,60 @@ namespace Valve.VR
             {
                 delegates = onAxis.GetInvocationList();
                 if (delegates != null)
+                {
                     foreach (Delegate existingDelegate in delegates)
+                    {
                         onAxis -= (SteamVR_Action_Vector3.AxisHandler)existingDelegate;
+                    }
+                }
             }
 
             if (onUpdate != null)
             {
                 delegates = onUpdate.GetInvocationList();
                 if (delegates != null)
+                {
                     foreach (Delegate existingDelegate in delegates)
+                    {
                         onUpdate -= (SteamVR_Action_Vector3.UpdateHandler)existingDelegate;
+                    }
+                }
             }
 
             if (onChange != null)
             {
                 delegates = onChange.GetInvocationList();
                 if (delegates != null)
+                {
                     foreach (Delegate existingDelegate in delegates)
+                    {
                         onChange -= (SteamVR_Action_Vector3.ChangeHandler)existingDelegate;
+                    }
+                }
             }
 
             if (onActiveChange != null)
             {
                 delegates = onActiveChange.GetInvocationList();
                 if (delegates != null)
+                {
                     foreach (Delegate existingDelegate in delegates)
+                    {
                         onActiveChange -= (SteamVR_Action_Vector3.ActiveChangeHandler)existingDelegate;
+                    }
+                }
             }
 
             if (onActiveBindingChange != null)
             {
                 delegates = onActiveBindingChange.GetInvocationList();
                 if (delegates != null)
+                {
                     foreach (Delegate existingDelegate in delegates)
+                    {
                         onActiveBindingChange -= (SteamVR_Action_Vector3.ActiveChangeHandler)existingDelegate;
+                    }
+                }
             }
         }
 
@@ -344,7 +368,9 @@ namespace Valve.VR
 
             EVRInputError err = OpenVR.Input.GetAnalogActionData(handle, ref actionData, actionData_size, SteamVR_Input_Source.GetHandle(inputSource));
             if (err != EVRInputError.None)
+            {
                 MelonLoader.MelonLogger.Error("[HPVR] GetAnalogActionData error (" + fullPath + "): " + err.ToString() + " handle: " + handle.ToString());
+            }
 
             updateTime = Time.realtimeSinceStartup;
             axis = new Vector3(actionData.x, actionData.y, actionData.z);
@@ -359,28 +385,27 @@ namespace Valve.VR
                     changed = true;
                     changedTime = Time.realtimeSinceStartup + actionData.fUpdateTime; //fUpdateTime is the time from the time the action was called that the action changed
 
-                    if (onChange != null)
-                        onChange.Invoke(vector3Action, inputSource, axis, delta);
+                    onChange?.Invoke(vector3Action, inputSource, axis, delta);
                 }
 
                 if (axis != Vector3.zero)
                 {
-                    if (onAxis != null)
-                        onAxis.Invoke(vector3Action, inputSource, axis, delta);
+                    onAxis?.Invoke(vector3Action, inputSource, axis, delta);
                 }
 
-                if (onUpdate != null)
-                {
-                    onUpdate.Invoke(vector3Action, inputSource, axis, delta);
-                }
+                onUpdate?.Invoke(vector3Action, inputSource, axis, delta);
             }
 
 
             if (onActiveBindingChange != null && lastActiveBinding != activeBinding)
+            {
                 onActiveBindingChange.Invoke(vector3Action, inputSource, activeBinding);
+            }
 
             if (onActiveChange != null && lastActive != active)
+            {
                 onActiveChange.Invoke(vector3Action, inputSource, activeBinding);
+            }
         }
     }
 

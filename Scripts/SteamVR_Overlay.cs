@@ -56,10 +56,7 @@ namespace Valve.VR
             if (handle != OpenVR.k_ulOverlayHandleInvalid)
             {
                 var overlay = OpenVR.Overlay;
-                if (overlay != null)
-                {
-                    overlay.DestroyOverlay(handle);
-                }
+                overlay?.DestroyOverlay(handle);
 
                 handle = OpenVR.k_ulOverlayHandleInvalid;
             }
@@ -71,7 +68,9 @@ namespace Valve.VR
         {
             var overlay = OpenVR.Overlay;
             if (overlay == null)
+            {
                 return;
+            }
 
             if (texture != null)
             {
@@ -79,7 +78,9 @@ namespace Valve.VR
                 if (error == EVROverlayError.InvalidHandle || error == EVROverlayError.UnknownOverlay)
                 {
                     if (overlay.FindOverlay(key, ref handle) != EVROverlayError.None)
+                    {
                         return;
+                    }
                 }
 
                 var tex = new Texture_t();
@@ -129,7 +130,9 @@ namespace Valve.VR
         {
             var overlay = OpenVR.Overlay;
             if (overlay == null)
+            {
                 return false;
+            }
 
             var size = (uint)System.Runtime.InteropServices.Marshal.SizeOf(typeof(Valve.VR.VREvent_t));
             return overlay.PollNextOverlayEvent(handle, ref pEvent, size);
@@ -147,7 +150,9 @@ namespace Valve.VR
         {
             var overlay = OpenVR.Overlay;
             if (overlay == null)
+            {
                 return false;
+            }
 
             var input = new VROverlayIntersectionParams_t();
             input.eOrigin = SteamVR.settings.trackingSpace;
@@ -160,7 +165,9 @@ namespace Valve.VR
 
             var output = new VROverlayIntersectionResults_t();
             if (!overlay.ComputeOverlayIntersection(handle, ref input, ref output))
+            {
                 return false;
+            }
 
             results.point = new Vector3(output.vPoint.v0, output.vPoint.v1, -output.vPoint.v2);
             results.normal = new Vector3(output.vNormal.v0, output.vNormal.v1, -output.vNormal.v2);

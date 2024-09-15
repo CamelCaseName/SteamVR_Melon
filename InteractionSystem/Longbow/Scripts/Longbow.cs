@@ -196,10 +196,7 @@ namespace Valve.VR.InteractionSystem
             hand.HoverUnlock( GetComponent<Interactable>() );
             hand.otherHand.HoverUnlock( arrowHand.GetComponent<Interactable>() );
 
-            if ( releaseSound != null )
-            {
-                releaseSound.Play();
-            }
+            releaseSound?.Play();
 
             MelonLoader.MelonCoroutines.Start( this.ResetDrawAnim() );
         }
@@ -331,10 +328,7 @@ namespace Valve.VR.InteractionSystem
         {
             DoHandednessCheck();
 
-            if ( nockSound != null )
-            {
-                nockSound.Play();
-            }
+            nockSound?.Play();
         }
 
 

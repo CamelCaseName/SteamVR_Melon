@@ -81,38 +81,20 @@ namespace Valve.VR
 
         private void SteamVR_Behaviour_Vector3_OnUpdate(SteamVR_Action_Vector3 fromAction, SteamVR_Input_Sources fromSource, Vector3 newAxis, Vector3 newDelta)
         {
-            if (onUpdate != null)
-            {
-                onUpdate.Send(this, fromSource, newAxis, newDelta);
-            }
-            if (onUpdateEvent != null)
-            {
-                onUpdateEvent.Invoke(this, fromSource, newAxis, newDelta);
-            }
+            onUpdate?.Send(this, fromSource, newAxis, newDelta);
+            onUpdateEvent?.Invoke(this, fromSource, newAxis, newDelta);
         }
 
         private void SteamVR_Behaviour_Vector3_OnChange(SteamVR_Action_Vector3 fromAction, SteamVR_Input_Sources fromSource, Vector3 newAxis, Vector3 newDelta)
         {
-            if (onChange != null)
-            {
-                onChange.Send(this, fromSource, newAxis, newDelta);
-            }
-            if (onChangeEvent != null)
-            {
-                onChangeEvent.Invoke(this, fromSource, newAxis, newDelta);
-            }
+            onChange?.Send(this, fromSource, newAxis, newDelta);
+            onChangeEvent?.Invoke(this, fromSource, newAxis, newDelta);
         }
 
         private void SteamVR_Behaviour_Vector3_OnAxis(SteamVR_Action_Vector3 fromAction, SteamVR_Input_Sources fromSource, Vector3 newAxis, Vector3 newDelta)
         {
-            if (onAxis != null)
-            {
-                onAxis.Send(this, fromSource, newAxis, newDelta);
-            }
-            if (onAxisEvent != null)
-            {
-                onAxisEvent.Invoke(this, fromSource, newAxis, newDelta);
-            }
+            onAxis?.Send(this, fromSource, newAxis, newDelta);
+            onAxisEvent?.Invoke(this, fromSource, newAxis, newDelta);
         }
 
         /// <summary>
@@ -129,7 +111,10 @@ namespace Valve.VR
         public string GetLocalizedName(params EVRInputStringBits[] localizedParts)
         {
             if (vector3Action != null)
+            {
                 return vector3Action.GetLocalizedOriginPart(inputSource, localizedParts);
+            }
+
             return null;
         }
 

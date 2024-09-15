@@ -51,7 +51,10 @@ namespace SteamVR_Melon.Standalone
             {
                 MelonLogger.Msg("[HPVR] " + module.FileName);
                 if (!module.FileName.Contains("UnityPlayer"))
+                {
                     continue;
+                }
+
                 MelonLogger.Msg("[HPVR] Found the unityplayer module");
 
                 var loadLibraryAddress = module.BaseAddress + FindAndLoadUnityPluginOffset;

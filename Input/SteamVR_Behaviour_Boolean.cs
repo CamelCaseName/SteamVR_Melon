@@ -59,7 +59,7 @@ namespace Valve.VR
         public bool isActive { get { return booleanAction[inputSource].active; } }
 
         /// <summary>Returns the action set that this action is in.</summary>
-        public SteamVR_ActionSet actionSet { get { if (booleanAction != null) return booleanAction.actionSet; else return null; } }
+        public SteamVR_ActionSet actionSet { get { if (booleanAction != null) { return booleanAction.actionSet; } else { return null; } } }
 
 
 
@@ -103,67 +103,37 @@ namespace Valve.VR
 
         private void SteamVR_Behaviour_Boolean_OnStateUp(SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource)
         {
-            if (onPressUp != null)
-            {
-                onPressUp.Send(this, fromSource, false);
-            }
+            onPressUp?.Send(this, fromSource, false);
 
-            if (onPressUpEvent != null)
-            {
-                onPressUpEvent.Invoke(this, fromSource);
-            }
+            onPressUpEvent?.Invoke(this, fromSource);
         }
 
         private void SteamVR_Behaviour_Boolean_OnStateDown(SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource)
         {
-            if (onPressDown != null)
-            {
-                onPressDown.Send(this, fromSource, true);
-            }
+            onPressDown?.Send(this, fromSource, true);
 
-            if (onPressDownEvent != null)
-            {
-                onPressDownEvent.Invoke(this, fromSource);
-            }
+            onPressDownEvent?.Invoke(this, fromSource);
         }
 
         private void SteamVR_Behaviour_Boolean_OnState(SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource)
         {
-            if (onPress != null)
-            {
-                onPress.Send(this, fromSource, true);
-            }
+            onPress?.Send(this, fromSource, true);
 
-            if (onPressEvent != null)
-            {
-                onPressEvent.Invoke(this, fromSource);
-            }
+            onPressEvent?.Invoke(this, fromSource);
         }
 
         private void SteamVR_Behaviour_Boolean_OnUpdate(SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource, bool newState)
         {
-            if (onUpdate != null)
-            {
-                onUpdate.Send(this, fromSource, newState);
-            }
+            onUpdate?.Send(this, fromSource, newState);
 
-            if (onUpdateEvent != null)
-            {
-                onUpdateEvent.Invoke(this, fromSource, newState);
-            }
+            onUpdateEvent?.Invoke(this, fromSource, newState);
         }
 
         private void SteamVR_Behaviour_Boolean_OnChange(SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource, bool newState)
         {
-            if (onChange != null)
-            {
-                onChange.Send(this, fromSource, newState);
-            }
+            onChange?.Send(this, fromSource, newState);
 
-            if (onChangeEvent != null)
-            {
-                onChangeEvent.Invoke(this, fromSource, newState);
-            }
+            onChangeEvent?.Invoke(this, fromSource, newState);
         }
 
         /// <summary>
@@ -180,7 +150,10 @@ namespace Valve.VR
         public string GetLocalizedName(params EVRInputStringBits[] localizedParts)
         {
             if (booleanAction != null)
+            {
                 return booleanAction.GetLocalizedOriginPart(inputSource, localizedParts);
+            }
+
             return null;
         }
 

@@ -133,9 +133,13 @@ namespace Valve.VR
             get
             {
                 if (skeletonAvailable)
+                {
                     return skeletonAction.GetFingerCurl(SteamVR_Skeleton_FingerIndexEnum.thumb);
+                }
                 else
+                {
                     return fallbackCurlAction.GetAxis(inputSource);
+                }
             }
         }
 
@@ -145,9 +149,13 @@ namespace Valve.VR
             get
             {
                 if (skeletonAvailable)
+                {
                     return skeletonAction.GetFingerCurl(SteamVR_Skeleton_FingerIndexEnum.index);
+                }
                 else
+                {
                     return fallbackCurlAction.GetAxis(inputSource);
+                }
             }
         }
 
@@ -157,9 +165,13 @@ namespace Valve.VR
             get
             {
                 if (skeletonAvailable)
+                {
                     return skeletonAction.GetFingerCurl(SteamVR_Skeleton_FingerIndexEnum.middle);
+                }
                 else
+                {
                     return fallbackCurlAction.GetAxis(inputSource);
+                }
             }
         }
 
@@ -169,9 +181,13 @@ namespace Valve.VR
             get
             {
                 if (skeletonAvailable)
+                {
                     return skeletonAction.GetFingerCurl(SteamVR_Skeleton_FingerIndexEnum.ring);
+                }
                 else
+                {
                     return fallbackCurlAction.GetAxis(inputSource);
+                }
             }
         }
 
@@ -181,9 +197,13 @@ namespace Valve.VR
             get
             {
                 if (skeletonAvailable)
+                {
                     return skeletonAction.GetFingerCurl(SteamVR_Skeleton_FingerIndexEnum.pinky);
+                }
                 else
+                {
                     return fallbackCurlAction.GetAxis(inputSource);
+                }
             }
         }
 
@@ -324,7 +344,9 @@ namespace Valve.VR
         protected virtual void CheckSkeletonAction()
         {
             if (skeletonAction == null)
+            {
                 skeletonAction = SteamVR_Input.GetAction<SteamVR_Action_Skeleton>("Skeleton" + inputSource.ToString());
+            }
         }
 
         protected virtual void AssignBonesArray()
@@ -357,18 +379,14 @@ namespace Valve.VR
 
         private void OnDeviceConnectedChanged(SteamVR_Action_Skeleton fromAction, bool deviceConnected)
         {
-            if (onConnectedChanged != null)
-                onConnectedChanged.Send(this, inputSource, deviceConnected);
-            if (onConnectedChangedEvent != null)
-                onConnectedChangedEvent.Invoke(this, inputSource, deviceConnected);
+            onConnectedChanged?.Send(this, inputSource, deviceConnected);
+            onConnectedChangedEvent?.Invoke(this, inputSource, deviceConnected);
         }
 
         private void OnTrackingChanged(SteamVR_Action_Skeleton fromAction, ETrackingResult trackingState)
         {
-            if (onTrackingChanged != null)
-                onTrackingChanged.Send(this, inputSource, trackingState);
-            if (onTrackingChangedEvent != null)
-                onTrackingChangedEvent.Invoke(this, inputSource, trackingState);
+            onTrackingChanged?.Send(this, inputSource, trackingState);
+            onTrackingChangedEvent?.Invoke(this, inputSource, trackingState);
         }
 
         protected virtual void SteamVR_Input_OnSkeletonsUpdated(bool skipSendingEvents)
@@ -379,24 +397,35 @@ namespace Valve.VR
         protected virtual void UpdateSkeleton()
         {
             if (skeletonAction == null)
+            {
                 return;
+            }
 
             if (updatePose)
+            {
                 UpdatePose();
+            }
 
             if (blendPoser != null && skeletonBlend < 1)
             {
                 if (blendSnapshot == null)
+                {
                     blendSnapshot = blendPoser.GetBlendedPose(this);
+                }
+
                 blendSnapshot = blendPoser.GetBlendedPose(this);
             }
 
             if (rangeOfMotionBlendRoutine == null)
             {
                 if (temporaryRangeOfMotion != null)
+                {
                     skeletonAction.SetRangeOfMotion(temporaryRangeOfMotion.Value);
+                }
                 else
+                {
                     skeletonAction.SetRangeOfMotion(rangeOfMotion); //this may be a frame behind
+                }
 
                 UpdateSkeletonTransforms();
             }
@@ -449,7 +478,10 @@ namespace Valve.VR
         public void BlendToSkeleton(float overTime = 0.1f)
         {
             if (blendPoser != null)
+            {
                 blendSnapshot = blendPoser.GetBlendedPose(this);
+            }
+
             blendPoser = null;
             BlendTo(1, overTime);
         }
@@ -462,7 +494,9 @@ namespace Valve.VR
         public void BlendToPoser(SteamVR_Skeleton_Poser poser, float overTime = 0.1f)
         {
             if (poser == null)
+            {
                 return;
+            }
 
             blendPoser = poser;
             BlendTo(0, overTime);
@@ -486,10 +520,15 @@ namespace Valve.VR
         public void BlendTo(float blendToAmount, float overTime)
         {
             if (blendRoutine != null)
+            {
                 MelonLoader.MelonCoroutines.Stop(blendRoutine);
+            }
 
             if (this.gameObject.activeInHierarchy)
+            {
                 blendRoutine = DoBlendRoutine(blendToAmount, overTime);
+            }
+
             MelonLoader.MelonCoroutines.Start(blendRoutine);
         }
 
@@ -514,7 +553,9 @@ namespace Valve.VR
         protected void RangeOfMotionBlend(EVRSkeletalMotionRange newRangeOfMotion, float blendOverSeconds)
         {
             if (rangeOfMotionBlendRoutine != null)
+            {
                 MelonLoader.MelonCoroutines.Stop(rangeOfMotionBlendRoutine);
+            }
 
             EVRSkeletalMotionRange oldRangeOfMotion = rangeOfMotion;
             rangeOfMotion = newRangeOfMotion;
@@ -529,11 +570,15 @@ namespace Valve.VR
         protected void TemporaryRangeOfMotionBlend(EVRSkeletalMotionRange newRangeOfMotion, float blendOverSeconds)
         {
             if (rangeOfMotionBlendRoutine != null)
+            {
                 MelonLoader.MelonCoroutines.Stop(rangeOfMotionBlendRoutine);
+            }
 
             EVRSkeletalMotionRange oldRangeOfMotion = rangeOfMotion;
             if (temporaryRangeOfMotion != null)
+            {
                 oldRangeOfMotion = temporaryRangeOfMotion.Value;
+            }
 
             temporaryRangeOfMotion = newRangeOfMotion;
 
@@ -549,7 +594,9 @@ namespace Valve.VR
             if (temporaryRangeOfMotion != null)
             {
                 if (rangeOfMotionBlendRoutine != null)
+                {
                     MelonLoader.MelonCoroutines.Stop(rangeOfMotionBlendRoutine);
+                }
 
                 EVRSkeletalMotionRange oldRangeOfMotion = temporaryRangeOfMotion.Value;
 
@@ -596,7 +643,9 @@ namespace Valve.VR
                     for (int boneIndex = 0; boneIndex < bones.Length; boneIndex++)
                     {
                         if (bones[boneIndex] == null)
+                        {
                             continue;
+                        }
 
                         if (SteamVR_Utils.IsValid(newBoneRotations[boneIndex]) == false || SteamVR_Utils.IsValid(oldBoneRotations[boneIndex]) == false)
                         {
@@ -628,10 +677,8 @@ namespace Valve.VR
                     }
                 }
 
-                if (onBoneTransformsUpdated != null)
-                    onBoneTransformsUpdated.Send(this, inputSource);
-                if (onBoneTransformsUpdatedEvent != null)
-                    onBoneTransformsUpdatedEvent.Invoke(this, inputSource);
+                onBoneTransformsUpdated?.Send(this, inputSource);
+                onBoneTransformsUpdatedEvent?.Invoke(this, inputSource);
 
             }
 
@@ -658,7 +705,9 @@ namespace Valve.VR
                     for (int boneIndex = 0; boneIndex < bones.Length; boneIndex++)
                     {
                         if (bones[boneIndex] == null)
+                        {
                             continue;
+                        }
 
                         if ((boneIndex == SteamVR_Skeleton_JointIndexes.wrist && mainPose.ignoreWristPoseData) ||
                             (boneIndex == SteamVR_Skeleton_JointIndexes.root && mainPose.ignoreRootPoseData))
@@ -693,7 +742,9 @@ namespace Valve.VR
                 for (int boneIndex = 0; boneIndex < bones.Length; boneIndex++)
                 {
                     if (bones[boneIndex] == null)
+                    {
                         continue;
+                    }
 
                     SetBonePosition(boneIndex, bonePositions[boneIndex]);
                     SetBoneRotation(boneIndex, boneRotations[boneIndex]);
@@ -704,7 +755,9 @@ namespace Valve.VR
                 for (int boneIndex = 0; boneIndex < bones.Length; boneIndex++)
                 {
                     if (bones[boneIndex] == null)
+                    {
                         continue;
+                    }
 
                     if (blendPoser != null)
                     {
@@ -742,16 +795,16 @@ namespace Valve.VR
             }
 
 
-            if (onBoneTransformsUpdated != null)
-                onBoneTransformsUpdated.Send(this, inputSource);
-            if (onBoneTransformsUpdatedEvent != null)
-                onBoneTransformsUpdatedEvent.Invoke(this, inputSource);
+            onBoneTransformsUpdated?.Send(this, inputSource);
+            onBoneTransformsUpdatedEvent?.Invoke(this, inputSource);
         }
 
         public virtual void SetBonePosition(int boneIndex, Vector3 localPosition)
         {
             if (onlySetRotations == false) //ignore position sets if we're only setting rotations
+            {
                 bones[boneIndex].localPosition = localPosition;
+            }
         }
 
         public virtual void SetBoneRotation(int boneIndex, Quaternion localRotation)
@@ -766,7 +819,9 @@ namespace Valve.VR
         public virtual Transform GetBone(int joint)
         {
             if (bones == null || bones.Length == 0)
+            {
                 Awake();
+            }
 
             return bones[joint];
         }
@@ -780,9 +835,13 @@ namespace Valve.VR
         public Vector3 GetBonePosition(int joint, bool local = false)
         {
             if (local)
+            {
                 return bones[joint].localPosition;
+            }
             else
+            {
                 return bones[joint].position;
+            }
         }
 
         /// <summary>
@@ -793,9 +852,13 @@ namespace Valve.VR
         public Quaternion GetBoneRotation(int joint, bool local = false)
         {
             if (local)
+            {
                 return bones[joint].localRotation;
+            }
             else
+            {
                 return bones[joint].rotation;
+            }
         }
 
         protected Il2CppInterop.Runtime.InteropTypes.Arrays.Il2CppStructArray<Vector3> GetBonePositions()
@@ -893,7 +956,9 @@ namespace Valve.VR
         protected virtual void UpdatePose()
         {
             if (skeletonAction == null)
+            {
                 return;
+            }
 
             Vector3 skeletonPosition = skeletonAction.GetLocalPosition();
             Quaternion skeletonRotation = skeletonAction.GetLocalRotation();
@@ -913,17 +978,14 @@ namespace Valve.VR
 
             if (skeletonAction.poseChanged)
             {
-                if (onTransformChanged != null)
-                    onTransformChanged.Send(this, inputSource);
-                if (onTransformChangedEvent != null)
-                    onTransformChangedEvent.Invoke(this, inputSource);
+                onTransformChanged?.Send(this, inputSource);
+                onTransformChangedEvent?.Invoke(this, inputSource);
             }
 
             this.transform.position = skeletonPosition;
             this.transform.rotation = skeletonRotation;
 
-            if (onTransformUpdated != null)
-                onTransformUpdated.Send(this, inputSource);
+            onTransformUpdated?.Send(this, inputSource);
         }
 
         /// <summary>
@@ -998,7 +1060,9 @@ namespace Valve.VR
             }
 
             if (temporarySession)
+            {
                 SteamVR.ExitTemporarySession();
+            }
         }
 
         protected static bool IsMetacarpal(int boneIndex)

@@ -22,7 +22,9 @@ namespace Valve.VR.InteractionSystem.Sample
         private void OnCollisionEnter(Collision collision)
         {
             if (interactable != null && interactable.attachedToHand != null) //don't explode in hand
+            {
                 return;
+            }
 
             if (collision.impulse.magnitude > minMagnitudeToExplode)
             {

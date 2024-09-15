@@ -42,10 +42,7 @@ namespace Valve.VR.InteractionSystem
         }
         protected override void HandAttachedUpdate(Hand hand)
         {
-            if (interactable.skeletonPoser != null)
-            {
-                interactable.skeletonPoser.SetBlendingBehaviourEnabled("PinchPose", hand.currentAttachedObjectInfo.Value.grabbedWithType == GrabTypes.Pinch);
-            }
+            interactable.skeletonPoser?.SetBlendingBehaviourEnabled("PinchPose", hand.currentAttachedObjectInfo.Value.grabbedWithType == GrabTypes.Pinch);
 
             base.HandAttachedUpdate(hand);
         }

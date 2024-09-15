@@ -83,7 +83,10 @@ namespace Valve.VR
             {
                 SteamVR_Input_BindingFile_Pose pose = (SteamVR_Input_BindingFile_Pose)obj;
                 if (pose.output == this.output && pose.path == this.path)
+                {
                     return true;
+                }
+
                 return false;
             }
 
@@ -108,7 +111,10 @@ namespace Valve.VR
             {
                 SteamVR_Input_BindingFile_Haptic pose = (SteamVR_Input_BindingFile_Haptic)obj;
                 if (pose.output == this.output && pose.path == this.path)
+                {
                     return true;
+                }
+
                 return false;
             }
 
@@ -133,7 +139,10 @@ namespace Valve.VR
             {
                 SteamVR_Input_BindingFile_Skeleton pose = (SteamVR_Input_BindingFile_Skeleton)obj;
                 if (pose.output == this.output && pose.path == this.path)
+                {
                     return true;
+                }
+
                 return false;
             }
 
@@ -183,10 +192,14 @@ namespace Valve.VR
                     if (parameters != null && pose.parameters != null)
                     {
                         if (this.parameters.Equals(pose.parameters))
+                        {
                             parametersEqual = true;
+                        }
                     }
                     else if (parameters == null && pose.parameters == null)
+                    {
                         parametersEqual = true;
+                    }
 
                     if (parametersEqual)
                     {
@@ -194,10 +207,14 @@ namespace Valve.VR
                         if (inputs != null && pose.inputs != null)
                         {
                             if (this.inputs.Equals(pose.inputs))
+                            {
                                 inputsEqual = true;
+                            }
                         }
                         else if (inputs == null && pose.inputs == null)
+                        {
                             inputsEqual = true;
+                        }
 
                         return inputsEqual;
                     }
@@ -225,7 +242,9 @@ namespace Valve.VR
                 SteamVR_Input_BindingFile_Source_Input sourceInput = (SteamVR_Input_BindingFile_Source_Input)obj;
 
                 if (this == sourceInput)
+                {
                     return true;
+                }
                 else
                 {
                     if (this.Count == sourceInput.Count)
@@ -233,9 +252,14 @@ namespace Valve.VR
                         foreach (var element in this)
                         {
                             if (sourceInput.ContainsKey(element.Key) == false)
+                            {
                                 return false;
+                            }
+
                             if (this[element.Key].Equals(sourceInput[element.Key]) == false)
+                            {
                                 return false;
+                            }
                         }
                         return true;
                     }
@@ -261,7 +285,9 @@ namespace Valve.VR
                 SteamVR_Input_BindingFile_Source_Input_StringDictionary stringDictionary = (SteamVR_Input_BindingFile_Source_Input_StringDictionary)obj;
 
                 if (this == stringDictionary)
+                {
                     return true;
+                }
 
                 return (this.Count == stringDictionary.Count && !this.Except(stringDictionary).Any());
             }

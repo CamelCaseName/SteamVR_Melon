@@ -99,7 +99,9 @@ namespace Valve.VR
         {
             var vr = SteamVR.instance;
             if (vr == null)
+            {
                 return null;
+            }
 
             int w = (int)(vr.sceneWidth * sceneResolutionScale * sceneResolutionScaleMultiplier);
             int h = (int)(vr.sceneHeight * sceneResolutionScale * sceneResolutionScaleMultiplier);
@@ -168,7 +170,9 @@ namespace Valve.VR
                 t.parent = origin;
 
                 while (head.childCount > 0)
+                {
                     head.GetChild(0).parent = t;
+                }
 
                 // Keep the head around, but parent to the camera now since it moves with the hmd
                 // but existing content may still have references to this object.
@@ -185,11 +189,15 @@ namespace Valve.VR
             {
                 var e = transform.GetComponentInChildren<SteamVR_Ears>();
                 if (e != null)
+                {
                     _ears = e.transform;
+                }
             }
 
             if (ears != null)
+            {
                 ears.GetComponent<SteamVR_Ears>().vrcam = this;
+            }
 
             SteamVR_Render.Add(this);
         }
@@ -241,8 +249,12 @@ namespace Valve.VR
                     values = new Hashtable();
                     var fields = GetType().GetFields(BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public);
                     foreach (var f in fields)
+                    {
                         if (f.IsPublic || f.IsDefined(typeof(SerializeField), true))
+                        {
                             values[f] = f.GetValue(this);
+                        }
+                    }
 
                     var go = gameObject;
                     DestroyImmediate(this);
@@ -296,7 +308,9 @@ namespace Valve.VR
                 transform.localScale = Vector3.one;
 
                 while (transform.childCount > 0)
+                {
                     transform.GetChild(0).parent = head;
+                }
 
                 var audioListener = GetComponent<AudioListener>();
                 if (audioListener != null)
@@ -312,7 +326,10 @@ namespace Valve.VR
             }
 
             if (!name.EndsWith(eyeSuffix))
+            {
                 name += eyeSuffix;
+            }
+
             MelonLogger.Msg("[HPVR] ...done");
             //MelonLogger.Msg("origin: " + head.parent.name +"/" + origin.name + " - head: " + transform.parent.name + "/" + (origin.GetChild(0)?.name ?? "none") + "/" + head.name + " - eye: " + (origin.GetChild(0)?.GetChild(0)?.name ?? "none") + "/" + this.name);
         }
@@ -323,12 +340,16 @@ namespace Valve.VR
 
             // Move children and components from head back to camera.
             while (head.childCount > 0)
+            {
                 head.GetChild(0).parent = transform;
+            }
 
             if (ears != null)
             {
                 while (ears.childCount > 0)
+                {
                     ears.GetChild(0).parent = transform;
+                }
 
                 DestroyImmediate(ears.gameObject);
                 _ears = null;
@@ -344,7 +365,9 @@ namespace Valve.VR
                     // Reparent any children so we don't accidentally delete them.
                     var _origin = origin;
                     while (_origin.childCount > 0)
+                    {
                         _origin.GetChild(0).parent = _origin.parent;
+                    }
 
                     DestroyImmediate(_origin.gameObject);
                 }
@@ -358,7 +381,9 @@ namespace Valve.VR
             _head = null;
 
             if (name.EndsWith(eyeSuffix))
+            {
                 name = name.Substring(0, name.Length - eyeSuffix.Length);
+            }
         }
 
         #endregion

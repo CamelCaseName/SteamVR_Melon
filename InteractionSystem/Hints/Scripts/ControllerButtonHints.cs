@@ -146,8 +146,7 @@ namespace Valve.VR.InteractionSystem
         public virtual void SetInputSource(SteamVR_Input_Sources newInputSource)
         {
             inputSource = newInputSource;
-            if (renderModel != null)
-                renderModel.SetInputSource(newInputSource);
+            renderModel?.SetInputSource(newInputSource);
         }
 
         //-------------------------------------------------
@@ -197,7 +196,9 @@ namespace Valve.VR.InteractionSystem
         private IEnumerator DoInitialize(SteamVR_RenderModel renderModel)
         {
             while (renderModel.initializedAttachPoints == false)
+            {
                 yield return null;
+            }
 
             textHintParent = new GameObject("Text Hints").transform;
             textHintParent.SetParent(this.transform);
@@ -213,7 +214,9 @@ namespace Valve.VR.InteractionSystem
                 string renderModelDebug = "";
 
                 if (debugHints)
+                {
                     renderModelDebug = "Components for render model " + renderModel.index;
+                }
 
                 for (int childIndex = 0; childIndex < renderModel.transform.childCount; childIndex++)
                 {
@@ -222,13 +225,19 @@ namespace Valve.VR.InteractionSystem
                     if (componentTransformMap.ContainsKey(child.name))
                     {
                         if (debugHints)
+                        {
                             renderModelDebug += "\n\t!    Child component already exists with name: " + child.name;
+                        }
                     }
                     else
+                    {
                         componentTransformMap.Add(child.name, child);
+                    }
 
                     if (debugHints)
+                    {
                         renderModelDebug += "\n\t" + child.name + ".";
+                    }
                 }
 
                 //Uncomment to show the button mask for each component of the render model
@@ -242,7 +251,9 @@ namespace Valve.VR.InteractionSystem
                 ISteamVR_Action_In action = SteamVR_Input.actionsNonPoseNonSkeletonIn[actionIndex];
 
                 if (action.GetActive(inputSource))
+                {
                     CreateAndAddButtonInfo(action, inputSource);
+                }
             }
 
             ComputeTextEndTransforms();
@@ -314,7 +325,9 @@ namespace Valve.VR.InteractionSystem
             {
                 Transform child = buttonTransform.GetChild(childIndex);
                 if (child.name == SteamVR_RenderModel.k_localTransformName)
+                {
                     hintInfo.localTransform = child;
+                }
             }
 
             OffsetType offsetType = OffsetType.Right;
@@ -506,7 +519,9 @@ namespace Valve.VR.InteractionSystem
             Clear();
 
             if (renderModel != null && renderModel.gameObject != null)
+            {
                 renderModel.gameObject.SetActive(false);
+            }
         }
 
 
@@ -772,10 +787,7 @@ namespace Valve.VR.InteractionSystem
         public static void ShowButtonHint(Hand hand, params ISteamVR_Action_In_Source[] actions)
         {
             ControllerButtonHints hints = GetControllerButtonHints(hand);
-            if (hints != null)
-            {
-                hints.ShowButtonHint(actions);
-            }
+            hints?.ShowButtonHint(actions);
         }
 
 
@@ -783,10 +795,7 @@ namespace Valve.VR.InteractionSystem
         public static void HideButtonHint(Hand hand, params ISteamVR_Action_In_Source[] actions)
         {
             ControllerButtonHints hints = GetControllerButtonHints(hand);
-            if (hints != null)
-            {
-                hints.HideButtonHint(actions);
-            }
+            hints?.HideButtonHint(actions);
         }
 
 
@@ -794,10 +803,7 @@ namespace Valve.VR.InteractionSystem
         public static void HideAllButtonHints(Hand hand)
         {
             ControllerButtonHints hints = GetControllerButtonHints(hand);
-            if (hints != null)
-            {
-                hints.HideAllButtonHints();
-            }
+            hints?.HideAllButtonHints();
         }
 
 
@@ -825,7 +831,9 @@ namespace Valve.VR.InteractionSystem
                 if (hand != null)
                 {
                     if (hints.autoSetWithControllerRangeOfMotion)
+                    {
                         hand.SetTemporarySkeletonRangeOfMotion(SkeletalMotionRangeChange.WithController);
+                    }
                 }
             }
         }
@@ -842,7 +850,9 @@ namespace Valve.VR.InteractionSystem
                 if (hand != null)
                 {
                     if (hints.autoSetWithControllerRangeOfMotion)
+                    {
                         hand.ResetTemporarySkeletonRangeOfMotion();
+                    }
                 }
             }
 
@@ -853,10 +863,7 @@ namespace Valve.VR.InteractionSystem
         public static void HideAllTextHints(Hand hand)
         {
             ControllerButtonHints hints = GetControllerButtonHints(hand);
-            if (hints != null)
-            {
-                hints.HideAllText();
-            }
+            hints?.HideAllText();
         }
 
 

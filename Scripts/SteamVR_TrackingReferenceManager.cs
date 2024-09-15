@@ -25,7 +25,9 @@ namespace Valve.VR
         private void OnNewPoses(TrackedDevicePose_t[] poses)
         {
             if (poses == null)
+            {
                 return;
+            }
 
             for (uint deviceIndex = 0; deviceIndex < poses.Length; deviceIndex++)
             {

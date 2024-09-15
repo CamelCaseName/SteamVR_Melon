@@ -46,19 +46,27 @@ namespace Valve.VR
         private void OnNewPoses(TrackedDevicePose_t[] poses)
         {
             if (index == EIndex.None)
+            {
                 return;
+            }
 
             var i = (int)index;
 
             isValid = false;
             if (poses.Length <= i)
+            {
                 return;
+            }
 
             if (!poses[i].bDeviceIsConnected)
+            {
                 return;
+            }
 
             if (!poses[i].bPoseIsValid)
+            {
                 return;
+            }
 
             isValid = true;
 
@@ -99,20 +107,27 @@ namespace Valve.VR
             }
 
             if (newPosesAction is not null)
+            {
                 newPosesAction.enabled = true;
+            }
         }
 
         void OnDisable()
         {
             if (newPosesAction is not null)
+            {
                 newPosesAction.enabled = false;
+            }
+
             isValid = false;
         }
 
         public void SetDeviceIndex(int index)
         {
             if (Enum.IsDefined(typeof(EIndex), index))
+            {
                 this.index = (EIndex)index;
+            }
         }
     }
 }

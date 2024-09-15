@@ -220,7 +220,9 @@ namespace Valve.VR
                 }
 
                 if (string.IsNullOrEmpty(actionPath))
+                {
                     sourceMap = null;
+                }
             }
 
             if (initialized == false)
@@ -276,19 +278,25 @@ namespace Valve.VR
         public InputBindingInfo_t[] GetActionBindingInfo()
         {
             if (inputBindingInfo_size == 0)
+            {
                 inputBindingInfo_size = (uint)Marshal.SizeOf(typeof(InputBindingInfo_t));
+            }
 
             uint size = 0;
             EVRInputError err = OpenVR.Input.GetActionBindingInfo(this.handle, zeroLengthBindingInfos, inputBindingInfo_size, ref size);
 
             if (err != EVRInputError.BufferTooSmall && err != EVRInputError.None)
+            {
                 MelonLoader.MelonLogger.Error("[HPVR] GetActionBindingInfo error (" + fullPath + "): " + err.ToString() + " handle: " + handle.ToString());
+            }
 
             InputBindingInfo_t[] bindingInfos = new InputBindingInfo_t[size];
             err = OpenVR.Input.GetActionBindingInfo(this.handle, bindingInfos, inputBindingInfo_size, ref size);
 
             if (err != EVRInputError.BufferTooSmall && err != EVRInputError.None)
+            {
                 MelonLoader.MelonLogger.Error("[HPVR] GetActionBindingInfo error (" + fullPath + "): " + err.ToString() + " handle: " + handle.ToString());
+            }
 
             return bindingInfos;
         }
@@ -466,9 +474,13 @@ namespace Valve.VR
         public override int GetHashCode()
         {
             if (actionPath == null)
+            {
                 return 0;
+            }
             else
+            {
                 return actionPath.GetHashCode();
+            }
         }
 
         /// <summary>
@@ -477,7 +489,9 @@ namespace Valve.VR
         public bool Equals(SteamVR_Action other)
         {
             if (ReferenceEquals(null, other))
+            {
                 return false;
+            }
 
             //SteamVR_Action_Source_Map thisMap = this.GetSourceMap();
             //SteamVR_Action_Source_Map otherMap = other.GetSourceMap();
@@ -494,18 +508,27 @@ namespace Valve.VR
             if (ReferenceEquals(null, other))
             {
                 if (string.IsNullOrEmpty(this.actionPath)) //if we haven't set a path, say this action is equal to null
+                {
                     return true;
+                }
+
                 if (this.GetSourceMap() == null)
+                {
                     return true;
+                }
 
                 return false;
             }
 
             if (ReferenceEquals(this, other))
+            {
                 return true;
+            }
 
             if (other is SteamVR_Action)
+            {
                 return this.Equals((SteamVR_Action)other);
+            }
 
             return false;
         }
@@ -527,9 +550,13 @@ namespace Valve.VR
             bool action2null = (ReferenceEquals(null, action2) || string.IsNullOrEmpty(action2.actionPath) || action2.GetSourceMap() == null);
 
             if (action1null && action2null)
+            {
                 return true;
+            }
             else if (action1null != action2null)
+            {
                 return false;
+            }
 
             return action1.Equals(action2);
         }
@@ -540,7 +567,9 @@ namespace Valve.VR
         public static SteamVR_Action FindExistingActionForPartialPath(string path)
         {
             if (string.IsNullOrEmpty(path) || path.IndexOf('/') == -1)
+            {
                 return null;
+            }
 
             //   0    1       2     3   4
             //    /actions/default/in/foobar
@@ -614,8 +643,7 @@ namespace Valve.VR
 
             for (int sourceIndex = 0; sourceIndex < sources.Length; sourceIndex++)
             {
-                if (sources[sourceIndex] != null)
-                    sources[sourceIndex].Initialize();
+                sources[sourceIndex]?.Initialize();
             }
         }
 
@@ -684,7 +712,9 @@ namespace Valve.VR
             handle = newHandle;
 
             if (err != EVRInputError.None)
+            {
                 MelonLoader.MelonLogger.Error("[HPVR] GetActionHandle (" + fullPath.ToLowerInvariant() + ") error: " + err.ToString());
+            }
         }
 
         private string GetActionSetPath()
@@ -710,11 +740,18 @@ namespace Valve.VR
             string direction = fullPath.Substring(setEndIndex + 1, count);
 
             if (direction == inLowered)
+            {
                 return SteamVR_ActionDirections.In;
+            }
             else if (direction == outLowered)
+            {
                 return SteamVR_ActionDirections.Out;
+            }
             else
+            {
                 MelonLoader.MelonLogger.Error("Could not find match for direction: " + direction);
+            }
+
             return SteamVR_ActionDirections.In;
         }
     }

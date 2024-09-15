@@ -46,11 +46,9 @@ namespace Valve.VR.InteractionSystem
 
         private void AllOff()
         {
-            if (rotateLeftFX != null)
-                rotateLeftFX.SetActive(false);
+            rotateLeftFX?.SetActive(false);
 
-            if (rotateRightFX != null)
-                rotateRightFX.SetActive(false);
+            rotateRightFX?.SetActive(false);
         }
 
 
@@ -62,7 +60,9 @@ namespace Valve.VR.InteractionSystem
             {
                 //only allow snap turning after a quarter second after the last teleport
                 if (Time.time < (teleportLastActiveTime + canTurnEverySeconds))
+                {
                     return;
+                }
 
                 // only allow snap turning when not holding something
 
@@ -138,7 +138,9 @@ namespace Valve.VR.InteractionSystem
             GameObject fx = angle > 0 ? rotateRightFX : rotateLeftFX;
 
             if (showTurnAnimation)
+            {
                 ShowRotateFX(fx);
+            }
 
             if (fadeScreen)
             {
@@ -161,7 +163,9 @@ namespace Valve.VR.InteractionSystem
         void ShowRotateFX(GameObject fx)
         {
             if (fx == null)
+            {
                 return;
+            }
 
             fx.SetActive(false);
 

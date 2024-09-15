@@ -35,7 +35,9 @@ namespace Valve.VR.InteractionSystem
             gameObject.transform.parent = null;
 
             if ( destroyAfterPlayOnce )
+            {
                 Destroy( gameObject, thisAudioSource.clip.length );
+            }
         }
     }
 }

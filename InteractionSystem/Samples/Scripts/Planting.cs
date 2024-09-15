@@ -22,7 +22,9 @@ namespace Valve.VR.InteractionSystem.Sample
         private void OnEnable()
         {
             if (hand == null)
+            {
                 hand = this.GetComponent<Hand>();
+            }
 
             if (plantAction == null)
             {
@@ -35,8 +37,7 @@ namespace Valve.VR.InteractionSystem.Sample
 
         private void OnDisable()
         {
-            if (plantAction != null)
-                plantAction.RemoveOnChangeListener(OnPlantActionChange, hand.handType);
+            plantAction?.RemoveOnChangeListener(OnPlantActionChange, hand.handType);
         }
 
         private void OnPlantActionChange(SteamVR_Action_Boolean actionIn, SteamVR_Input_Sources inputSource, bool newValue)
@@ -76,9 +77,9 @@ namespace Valve.VR.InteractionSystem.Sample
 
             Rigidbody rigidbody = planting.GetComponent<Rigidbody>();
             if (rigidbody != null)
+            {
                 rigidbody.isKinematic = true;
-
-
+            }
 
             Vector3 initialScale = Vector3.one * 0.01f;
             Vector3 targetScale = Vector3.one * (1 + (UnityEngine.Random.value * 0.25f));
@@ -95,7 +96,9 @@ namespace Valve.VR.InteractionSystem.Sample
 
 
             if (rigidbody != null)
+            {
                 rigidbody.isKinematic = false;
+            }
         }
     }
 }

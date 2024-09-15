@@ -20,7 +20,9 @@ namespace Valve.VR
         public static void SubscribeToNewPoses()
         {
             if (newPosesAction == null)
+            {
                 newPosesAction = SteamVR_Events.NewPosesAction(OnNewPoses);
+            }
 
             newPosesAction.enabled = true;
         }
@@ -28,7 +30,9 @@ namespace Valve.VR
         private static void OnNewPoses(TrackedDevicePose_t[] poses)
         {
             if (cameraIndex != -1)
+            {
                 return;
+            }
 
             int controllercount = 0;
             for (int index = 0; index < poses.Length; index++)

@@ -130,7 +130,9 @@ namespace Valve.VR
         public static void Initialize(bool force = false)
         {
             if (initialized == true && force == false)
+            {
                 return;
+            }
 
 #if UNITY_EDITOR
             CheckSetup();
@@ -161,7 +163,9 @@ namespace Valve.VR
             if (SteamVR_Settings.instance.activateFirstActionSetOnStart)
             {
                 if (actionSets.Length > 0)
+                {
                     actionSets[0].Activate();
+                }
                 else
                 {
                     MelonLoader.MelonLogger.Error("[HPVR] No action sets to activate.");
@@ -216,7 +220,9 @@ namespace Valve.VR
         public static void Update()
         {
             if (initialized == false || isStartupFrame)
+            {
                 return;
+            }
 
             if (SteamVR.settings.IsInputUpdateMode(SteamVR_UpdateModes.OnUpdate))
             {
@@ -235,7 +241,9 @@ namespace Valve.VR
         public static void LateUpdate()
         {
             if (initialized == false || isStartupFrame)
+            {
                 return;
+            }
 
             if (SteamVR.settings.IsInputUpdateMode(SteamVR_UpdateModes.OnLateUpdate))
             {
@@ -258,7 +266,9 @@ namespace Valve.VR
         public static void FixedUpdate()
         {
             if (initialized == false || isStartupFrame)
+            {
                 return;
+            }
 
             if (SteamVR.settings.IsInputUpdateMode(SteamVR_UpdateModes.OnFixedUpdate))
             {
@@ -275,7 +285,9 @@ namespace Valve.VR
         public static void OnPreCull()
         {
             if (initialized == false || isStartupFrame)
+            {
                 return;
+            }
 
             if (SteamVR.settings.IsInputUpdateMode(SteamVR_UpdateModes.OnPreCull))
             {
@@ -294,7 +306,9 @@ namespace Valve.VR
         public static void UpdateVisualActions(bool skipStateAndEventUpdates = false)
         {
             if (initialized == false)
+            {
                 return;
+            }
 
             SteamVR_ActionSet_Manager.UpdateActionStates();
 
@@ -310,7 +324,9 @@ namespace Valve.VR
         public static void UpdatePoseActions(bool skipSendingEvents = false)
         {
             if (initialized == false)
+            {
                 return;
+            }
 
             for (int actionIndex = 0; actionIndex < actionsPose.Length; actionIndex++)
             {
@@ -319,7 +335,9 @@ namespace Valve.VR
             }
 
             if (onPosesUpdated != null)
+            {
                 onPosesUpdated(false);
+            }
         }
 
 
@@ -330,7 +348,9 @@ namespace Valve.VR
         public static void UpdateSkeletonActions(bool skipSendingEvents = false)
         {
             if (initialized == false)
+            {
                 return;
+            }
 
             for (int actionIndex = 0; actionIndex < actionsSkeleton.Length; actionIndex++)
             {
@@ -340,7 +360,9 @@ namespace Valve.VR
             }
 
             if (onSkeletonsUpdated != null)
+            {
                 onSkeletonsUpdated(skipSendingEvents);
+            }
         }
 
 
@@ -350,7 +372,9 @@ namespace Valve.VR
         public static void UpdateNonVisualActions()
         {
             if (initialized == false)
+            {
                 return;
+            }
 
             SteamVR_ActionSet_Manager.UpdateActionStates();
 
@@ -362,14 +386,18 @@ namespace Valve.VR
             }
 
             if (onNonVisualActionsUpdated != null)
+            {
                 onNonVisualActionsUpdated();
+            }
         }
 
         private static uint sizeVRActiveActionSet_t = 0;
         protected static void ShowBindingHintsForSets(VRActiveActionSet_t[] sets, ulong highlightAction = 0)
         {
             if (sizeVRActiveActionSet_t == 0)
+            {
                 sizeVRActiveActionSet_t = (uint)System.Runtime.InteropServices.Marshal.SizeOf(typeof(VRActiveActionSet_t));
+            }
 
             OpenVR.Input.ShowBindingsForActionSet(sets, sizeVRActiveActionSet_t, highlightAction);
         }
@@ -414,7 +442,9 @@ namespace Valve.VR
         public static void ShowBindingHintsForActiveActionSets(ulong highlightAction = 0)
         {
             if (sizeVRActiveActionSet_t == 0)
+            {
                 sizeVRActiveActionSet_t = (uint)System.Runtime.InteropServices.Marshal.SizeOf(typeof(VRActiveActionSet_t));
+            }
 
             OpenVR.Input.ShowBindingsForActionSet(SteamVR_ActionSet_Manager.rawActiveActionSetArray, sizeVRActiveActionSet_t, highlightAction);
         }
@@ -466,10 +496,14 @@ namespace Valve.VR
         {
             SteamVR_Action foundAction = GetBaseActionFromPath(path, caseSensitive);
             if (foundAction != null)
+            {
                 return foundAction.GetCopy<T>();
+            }
 
             if (returnNulls)
+            {
                 return null;
+            }
 
             return CreateFakeAction<T>(path, caseSensitive);
         }
@@ -478,7 +512,9 @@ namespace Valve.VR
         public static SteamVR_Action GetBaseActionFromPath(string path, bool caseSensitive = false)
         {
             if (string.IsNullOrEmpty(path))
+            {
                 return null;
+            }
 
             if (caseSensitive)
             {
@@ -615,10 +651,14 @@ namespace Valve.VR
         {
             SteamVR_Action action = GetBaseAction(actionSetName, actionName, caseSensitive);
             if (action != null)
+            {
                 return (T)action.GetCopy<T>();
+            }
 
             if (returnNulls)
+            {
                 return null;
+            }
 
             return CreateFakeAction<T>(actionSetName, actionName, caseSensitive);
         }
@@ -637,12 +677,16 @@ namespace Valve.VR
                     if (caseSensitive)
                     {
                         if (actions[actionIndex].GetShortName() == actionName)
+                        {
                             return actions[actionIndex];
+                        }
                     }
                     else
                     {
                         if (string.Equals(actions[actionIndex].GetShortName(), actionName, StringComparison.CurrentCultureIgnoreCase))
+                        {
                             return actions[actionIndex];
+                        }
                     }
                 }
             }
@@ -657,12 +701,16 @@ namespace Valve.VR
                         if (caseSensitive)
                         {
                             if (actionSet.allActions[actionIndex].GetShortName() == actionName)
+                            {
                                 return actionSet.allActions[actionIndex];
+                            }
                         }
                         else
                         {
                             if (string.Equals(actionSet.allActions[actionIndex].GetShortName(), actionName, StringComparison.CurrentCultureIgnoreCase))
+                            {
                                 return actionSet.allActions[actionIndex];
+                            }
                         }
                     }
                 }
@@ -865,7 +913,9 @@ namespace Valve.VR
             if (actionSets == null)
             {
                 if (returnNulls)
+                {
                     return null;
+                }
 
                 return SteamVR_ActionSet.CreateFromName<T>(actionSetName);
             }
@@ -875,17 +925,23 @@ namespace Valve.VR
                 if (caseSensitive)
                 {
                     if (actionSets[actionSetIndex].GetShortName() == actionSetName)
+                    {
                         return actionSets[actionSetIndex].GetCopy<T>();
+                    }
                 }
                 else
                 {
                     if (string.Equals(actionSets[actionSetIndex].GetShortName(), actionSetName, StringComparison.CurrentCultureIgnoreCase))
+                    {
                         return actionSets[actionSetIndex].GetCopy<T>();
+                    }
                 }
             }
 
             if (returnNulls)
+            {
                 return null;
+            }
 
             return SteamVR_ActionSet.CreateFromName<T>(actionSetName);
         }
@@ -918,7 +974,9 @@ namespace Valve.VR
             if (actionSets == null || actionSets[0] == null || string.IsNullOrEmpty(path))
             {
                 if (returnsNulls)
+                {
                     return null;
+                }
 
                 return SteamVR_ActionSet.Create<T>(path);
             }
@@ -936,9 +994,13 @@ namespace Valve.VR
                 {
                     SteamVR_ActionSet set = actionSetsByPathCache[path];
                     if (set == null)
+                    {
                         return null;
+                    }
                     else
+                    {
                         return set.GetCopy<T>();
+                    }
                 }
                 else if (actionSetsByPath.ContainsKey(path))
                 {
@@ -961,7 +1023,9 @@ namespace Valve.VR
             }
 
             if (returnsNulls)
+            {
                 return null;
+            }
 
             return SteamVR_ActionSet.Create<T>(path);
         }
@@ -1279,7 +1343,9 @@ namespace Valve.VR
             int localizedPartsMask = 0;
 
             for (int partIndex = 0; partIndex < localizedParts.Length; partIndex++)
+            {
                 localizedPartsMask |= (int)localizedParts[partIndex];
+            }
 
             StringBuilder stringBuilder = new StringBuilder(500);
             OpenVR.Input.GetOriginLocalizedName(originHandle, stringBuilder, 500, localizedPartsMask);
@@ -1361,7 +1427,9 @@ namespace Valve.VR
 
                 EVRInputError err = OpenVR.Input.SetActionManifestPath(fullPath);
                 if (err != EVRInputError.None)
+                {
                     MelonLoader.MelonLogger.Error("[HPVR] Error loading action manifest into SteamVR: " + err.ToString());
+                }
                 else
                 {
                     int numActions = 0;
@@ -1370,19 +1438,25 @@ namespace Valve.VR
                         numActions = SteamVR_Input.actions.Length;
 
                         if (showLogs)
+                        {
                             MelonLoader.MelonLogger.Msg(string.Format("[HPVR] Successfully loaded {0} actions from action manifest into SteamVR ({1})", numActions, fullPath));
+                        }
                     }
                     else
                     {
                         if (showLogs)
+                        {
                             MelonLoader.MelonLogger.Warning("[HPVR] No actions found, but the action manifest was loaded. This usually means you haven't generated actions. Window -> SteamVR Input -> Save and Generate.");
+                        }
                     }
                 }
             }
             else
             {
                 if (showLogs)
+                {
                     MelonLoader.MelonLogger.Error("[HPVR] Could not find actions file at: " + fullPath);
+                }
             }
         }
 
@@ -1464,7 +1538,9 @@ namespace Valve.VR
             else
             {
                 if (showErrors)
+                {
                     MelonLoader.MelonLogger.Warning($"[HPVR] Actions file does not exist in project root: {actionsFilePath}");
+                }
 
                 return false;
             }
@@ -1490,11 +1566,15 @@ namespace Valve.VR
         {
             string streamingAssets = Application.streamingAssetsPath;
             if (Directory.Exists(streamingAssets) == false)
+            {
                 Directory.CreateDirectory(streamingAssets);
+            }
 
             string streamingAssets_SteamVR = Path.Combine(streamingAssets, "SteamVR_Melon");
             if (Directory.Exists(streamingAssets_SteamVR) == false)
+            {
                 Directory.CreateDirectory(streamingAssets_SteamVR);
+            }
 
             return streamingAssets_SteamVR;
         }
@@ -1520,7 +1600,9 @@ namespace Valve.VR
         public static bool DeleteManifestAndBindings()
         {
             if (DoesActionsFileExist() == false)
+            {
                 return false;
+            }
 
             InitializeFile();
 
@@ -1559,7 +1641,9 @@ namespace Valve.VR
             ulong actionSetHandle = 0;
 
             if (actionSetToEdit != null)
+            {
                 actionSetHandle = actionSetToEdit.handle;
+            }
 
             OpenVR.Input.OpenBindingUI(null, actionSetHandle, deviceHandle, false);
         }

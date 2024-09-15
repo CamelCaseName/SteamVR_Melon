@@ -83,7 +83,9 @@ namespace Valve.VR
                     if (_instance == null && !failedLoadInterface)
                     {
                         if (Application.isEditor && Application.isPlaying == false)
+                        {
                             needsShutdown = SteamVR.InitializeTemporarySession();
+                        }
 
                         _instance = OpenVR.RenderModels;
                         if (_instance == null)
@@ -98,7 +100,9 @@ namespace Valve.VR
             public void Dispose()
             {
                 if (needsShutdown)
+                {
                     SteamVR.ExitTemporarySession();
+                }
             }
         }
 
@@ -118,7 +122,9 @@ namespace Valve.VR
                 MeshRenderer renderer = meshRenderers[rendererIndex];
 
                 if (renderer != null)
+                {
                     renderer.enabled = state;
+                }
             }
         }
 
@@ -130,7 +136,9 @@ namespace Valve.VR
         private void OnDeviceConnected(int i, bool connected)
         {
             if (i != (int)index)
+            {
                 return;
+            }
 
             if (connected)
             {
@@ -142,7 +150,9 @@ namespace Valve.VR
         {
             var system = OpenVR.System;
             if (system == null || index == SteamVR_TrackedObject.EIndex.None)
+            {
                 return;
+            }
 
             var error = ETrackedPropertyError.TrackedProp_Success;
             var capacity = system.GetStringTrackedDeviceProperty((uint)index, ETrackedDeviceProperty.Prop_RenderModelName_String, null, 0, ref error);
@@ -167,14 +177,18 @@ namespace Valve.VR
             meshRenderers.Clear();
 
             if (string.IsNullOrEmpty(newRenderModelName))
+            {
                 yield break;
+            }
 
             // Preload all render models before asking for the data to create meshes.
             using (RenderModelInterfaceHolder holder = new RenderModelInterfaceHolder())
             {
                 CVRRenderModels renderModels = holder.instance;
                 if (renderModels == null)
+                {
                     yield break;
+                }
 
                 // Gather names of render models to preload.
                 string[] renderModelNames;
@@ -188,21 +202,29 @@ namespace Valve.VR
                     {
                         uint capacity = renderModels.GetComponentName(newRenderModelName, (uint)componentIndex, null, 0);
                         if (capacity == 0)
+                        {
                             continue;
+                        }
 
                         var componentNameStringBuilder = new System.Text.StringBuilder((int)capacity);
                         if (renderModels.GetComponentName(newRenderModelName, (uint)componentIndex, componentNameStringBuilder, capacity) == 0)
+                        {
                             continue;
+                        }
 
                         string componentName = componentNameStringBuilder.ToString();
 
                         capacity = renderModels.GetComponentRenderModelName(newRenderModelName, componentName, null, 0);
                         if (capacity == 0)
+                        {
                             continue;
+                        }
 
                         var nameStringBuilder = new System.Text.StringBuilder((int)capacity);
                         if (renderModels.GetComponentRenderModelName(newRenderModelName, componentName, nameStringBuilder, capacity) == 0)
+                        {
                             continue;
+                        }
 
                         var s = nameStringBuilder.ToString();
 
@@ -235,7 +257,9 @@ namespace Valve.VR
                     for (int renderModelNameIndex = 0; renderModelNameIndex < renderModelNames.Length; renderModelNameIndex++)
                     {
                         if (string.IsNullOrEmpty(renderModelNames[renderModelNameIndex]))
+                        {
                             continue;
+                        }
 
                         var pRenderModel = System.IntPtr.Zero;
 
@@ -310,14 +334,20 @@ namespace Valve.VR
                     {
                         var renderModels = holder.instance;
                         if (renderModels == null)
+                        {
                             return false;
+                        }
 
                         if (verbose)
+                        {
                             MelonLogger.Msg("[HPVR] Loading render model " + renderModelName);
+                        }
 
                         model = LoadRenderModel(renderModels, renderModelName, renderModelName);
                         if (model == null)
+                        {
                             return false;
+                        }
 
                         models[renderModelName] = model;
                     }
@@ -342,7 +372,9 @@ namespace Valve.VR
             {
                 error = renderModels.LoadRenderModel_Async(renderModelName, ref pRenderModel);
                 if (error != EVRRenderModelError.Loading)
+                {
                     break;
+                }
 
                 Sleep();
             }
@@ -403,7 +435,9 @@ namespace Valve.VR
                 {
                     error = renderModels.LoadTexture_Async(renderModel.diffuseTextureId, ref pDiffuseTexture);
                     if (error != EVRRenderModelError.Loading)
+                    {
                         break;
+                    }
 
                     Sleep();
                 }
@@ -420,7 +454,9 @@ namespace Valve.VR
                         {
                             error = renderModels.LoadIntoTextureD3D11_Async(renderModel.diffuseTextureId, texturePointer);
                             if (error != EVRRenderModelError.Loading)
+                            {
                                 break;
+                            }
 
                             Sleep();
                         }
@@ -493,13 +529,17 @@ namespace Valve.VR
         public Transform FindTransformByName(string componentName, Transform inTransform = null)
         {
             if (inTransform == null)
+            {
                 inTransform = transform;
+            }
 
             for (int childIndex = 0; childIndex < inTransform.childCount; childIndex++)
             {
                 Transform child = inTransform.GetChild(childIndex);
                 if (child.name == componentName)
+                {
                     return child;
+                }
             }
 
             return null;
@@ -508,10 +548,14 @@ namespace Valve.VR
         public Transform GetComponentTransform(string componentName)
         {
             if (componentName == null)
+            {
                 return transform;
+            }
 
             if (componentAttachPoints.ContainsKey(componentName))
+            {
                 return componentAttachPoints[componentName];
+            }
 
             return null;
         }
@@ -520,11 +564,15 @@ namespace Valve.VR
         {
             var meshRenderer = go.GetComponent<MeshRenderer>();
             if (meshRenderer != null)
+            {
                 DestroyImmediate(meshRenderer);
+            }
 
             var meshFilter = go.GetComponent<MeshFilter>();
             if (meshFilter != null)
+            {
                 DestroyImmediate(meshFilter);
+            }
         }
 
         private bool LoadComponents(RenderModelInterfaceHolder holder, string renderModelName)
@@ -541,25 +589,35 @@ namespace Valve.VR
 
             // If no model specified, we're done; return success.
             if (string.IsNullOrEmpty(renderModelName))
+            {
                 return true;
+            }
 
             var renderModels = holder.instance;
             if (renderModels == null)
+            {
                 return false;
+            }
 
             var count = renderModels.GetComponentCount(renderModelName);
             if (count == 0)
+            {
                 return false;
+            }
 
             for (int i = 0; i < count; i++)
             {
                 var capacity = renderModels.GetComponentName(renderModelName, (uint)i, null, 0);
                 if (capacity == 0)
+                {
                     continue;
+                }
 
                 System.Text.StringBuilder componentNameStringBuilder = new System.Text.StringBuilder((int)capacity);
                 if (renderModels.GetComponentName(renderModelName, (uint)i, componentNameStringBuilder, capacity) == 0)
+                {
                     continue;
+                }
 
                 string componentName = componentNameStringBuilder.ToString();
 
@@ -594,11 +652,15 @@ namespace Valve.VR
 
                 capacity = renderModels.GetComponentRenderModelName(renderModelName, componentName, null, 0);
                 if (capacity == 0)
+                {
                     continue;
+                }
 
                 var componentRenderModelNameStringBuilder = new System.Text.StringBuilder((int)capacity);
                 if (renderModels.GetComponentRenderModelName(renderModelName, componentName, componentRenderModelNameStringBuilder, capacity) == 0)
+                {
                     continue;
+                }
 
                 string componentRenderModelName = componentRenderModelNameStringBuilder.ToString();
 
@@ -607,11 +669,15 @@ namespace Valve.VR
                 if (model == null || model.mesh == null)
                 {
                     if (verbose)
+                    {
                         MelonLogger.Msg("[HPVR] Loading render model " + componentRenderModelName);
+                    }
 
                     model = LoadRenderModel(renderModels, componentRenderModelName, renderModelName);
                     if (model == null)
+                    {
                         continue;
+                    }
 
                     models[componentRenderModelName] = model;
                 }
@@ -732,7 +798,9 @@ namespace Valve.VR
 #endif
             // Update component transforms dynamically.
             if (updateDynamically)
+            {
                 UpdateComponents(OpenVR.RenderModels);
+            }
         }
 
         Dictionary<int, string> nameCache;
@@ -740,13 +808,19 @@ namespace Valve.VR
         public void UpdateComponents(CVRRenderModels renderModels)
         {
             if (renderModels == null)
+            {
                 return;
+            }
 
             if (transform.childCount == 0)
+            {
                 return;
+            }
 
             if (nameCache == null)
+            {
                 nameCache = new Dictionary<int, string>();
+            }
 
             for (int childIndex = 0; childIndex < transform.childCount; childIndex++)
             {
@@ -762,7 +836,9 @@ namespace Valve.VR
 
                 var componentState = new RenderModel_ComponentState_t();
                 if (!renderModels.GetComponentStateForDevicePath(renderModelName, componentName, SteamVR_Input_Source.GetHandle(inputSource), ref controllerModeState, ref componentState))
+                {
                     continue;
+                }
 
                 child.localPosition = componentState.mTrackingToComponentRenderModel.GetPosition();
                 child.localRotation = componentState.mTrackingToComponentRenderModel.GetRotation();
@@ -780,7 +856,9 @@ namespace Valve.VR
                     }
 
                     if (childName == k_localTransformName)
+                    {
                         attach = childChild;
+                    }
                 }
 
                 if (attach != null)

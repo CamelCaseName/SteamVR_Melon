@@ -77,7 +77,9 @@ namespace Valve.VR.InteractionSystem
             }
 
             if ((onlyColorOnChange && grabbedColor != lastColor) || onlyColorOnChange == false)
+            {
                 ColorSelf(grabbedColor);
+            }
 
             lastColor = grabbedColor;
         }
@@ -185,7 +187,9 @@ namespace Valve.VR.InteractionSystem
             ColorThing(markerColor, baseMarker.GetComponentsInChildren<Renderer>());
 
             if (destroyAfter > 0)
+            {
                 Destroy(baseMarker, destroyAfter);
+            }
         }
 
         private void ColorSelf(Color newColor)

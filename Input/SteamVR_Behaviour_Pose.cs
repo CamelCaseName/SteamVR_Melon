@@ -82,7 +82,9 @@ namespace Valve.VR
             CheckDeviceIndex();
 
             if (origin == null)
+            {
                 origin = this.transform.parent;
+            }
         }
 
         protected virtual void OnEnable()
@@ -117,10 +119,8 @@ namespace Valve.VR
 
             UpdateTransform();
 
-            if (onTransformUpdated != null)
-                onTransformUpdated.Send(this, inputSource);
-            if (onTransformUpdatedEvent != null)
-                onTransformUpdatedEvent.Invoke(this, inputSource);
+            onTransformUpdated?.Send(this, inputSource);
+            onTransformUpdatedEvent?.Invoke(this, inputSource);
         }
         protected virtual void UpdateTransform()
         {
@@ -140,28 +140,22 @@ namespace Valve.VR
 
         private void SteamVR_Behaviour_Pose_OnChange(SteamVR_Action_Pose fromAction, SteamVR_Input_Sources fromSource)
         {
-            if (onTransformChanged != null)
-                onTransformChanged.Send(this, fromSource);
-            if (onTransformChangedEvent != null)
-                onTransformChangedEvent.Invoke(this, fromSource);
+            onTransformChanged?.Send(this, fromSource);
+            onTransformChangedEvent?.Invoke(this, fromSource);
         }
 
         protected virtual void OnDeviceConnectedChanged(SteamVR_Action_Pose changedAction, SteamVR_Input_Sources changedSource, bool connected)
         {
             CheckDeviceIndex();
 
-            if (onConnectedChanged != null)
-                onConnectedChanged.Send(this, inputSource, connected);
-            if (onConnectedChangedEvent != null)
-                onConnectedChangedEvent.Invoke(this, inputSource, connected);
+            onConnectedChanged?.Send(this, inputSource, connected);
+            onConnectedChangedEvent?.Invoke(this, inputSource, connected);
         }
 
         protected virtual void OnTrackingChanged(SteamVR_Action_Pose changedAction, SteamVR_Input_Sources changedSource, ETrackingResult trackingChanged)
         {
-            if (onTrackingChanged != null)
-                onTrackingChanged.Send(this, inputSource, trackingChanged);
-            if (onTrackingChangedEvent != null)
-                onTrackingChangedEvent.Invoke(this, inputSource, trackingChanged);
+            onTrackingChanged?.Send(this, inputSource, trackingChanged);
+            onTrackingChangedEvent?.Invoke(this, inputSource, trackingChanged);
         }
 
         protected virtual void CheckDeviceIndex()
@@ -180,10 +174,8 @@ namespace Valve.VR
                         this.gameObject.BroadcastMessage("SetDeviceIndex", deviceIndex, SendMessageOptions.DontRequireReceiver);
                     }
 
-                    if (onDeviceIndexChanged != null)
-                        onDeviceIndexChanged.Send(this, inputSource, deviceIndex);
-                    if (onDeviceIndexChangedEvent != null)
-                        onDeviceIndexChangedEvent.Invoke(this, inputSource, deviceIndex);
+                    onDeviceIndexChanged?.Send(this, inputSource, deviceIndex);
+                    onDeviceIndexChangedEvent?.Invoke(this, inputSource, deviceIndex);
                 }
             }
         }
@@ -194,7 +186,9 @@ namespace Valve.VR
         public int GetDeviceIndex()
         {
             if (deviceIndex == -1)
+            {
                 CheckDeviceIndex();
+            }
 
             return deviceIndex;
         }
@@ -250,7 +244,10 @@ namespace Valve.VR
         public string GetLocalizedName(params EVRInputStringBits[] localizedParts)
         {
             if (poseAction != null)
+            {
                 return poseAction.GetLocalizedOriginPart(inputSource, localizedParts);
+            }
+
             return null;
         }
 

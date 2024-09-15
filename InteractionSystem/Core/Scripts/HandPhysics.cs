@@ -67,7 +67,11 @@ namespace Valve.VR.InteractionSystem
 
         private void FixedUpdate()
         {
-            if (hand.skeleton == null) return;
+            if (hand.skeleton == null)
+            {
+                return;
+            }
+
             initialized = true;
 
             UpdateCenterPoint();
@@ -75,7 +79,9 @@ namespace Valve.VR.InteractionSystem
             handCollider.MoveTo(targetPosition, targetRotation);
 
             if ((handCollider.transform.position - targetPosition).sqrMagnitude > handResetDistance * handResetDistance)
+            {
                 handCollider.TeleportTo(targetPosition, targetRotation);
+            }
 
             UpdateFingertips();
         }
@@ -115,7 +121,11 @@ namespace Valve.VR.InteractionSystem
 
             handCollider.SetCollisionDetectionEnabled(collisionsEnabled);
 
-            if (hand.skeleton == null) return;
+            if (hand.skeleton == null)
+            {
+                return;
+            }
+
             initialized = true;
 
             // get the desired pose of the wrist in world space. Can't get the wrist bone transform, as this is affected by the resulting physics.
@@ -165,7 +175,9 @@ namespace Valve.VR.InteractionSystem
                 {
                     bone = tip - 1 - i; // start at distal and go down
                     if (handCollider.fingerColliders[finger][i] != null)
+                    {
                         handCollider.fingerColliders[finger][i].localPosition = wrist.InverseTransformPoint(hand.skeleton.GetBone(bone).position);
+                    }
                 }
             }
             /*
@@ -188,7 +200,10 @@ namespace Valve.VR.InteractionSystem
 
         void UpdateHand(SteamVR_Behaviour_Pose pose, SteamVR_Input_Sources inputSource)
         {
-            if (!initialized) return;
+            if (!initialized)
+            {
+                return;
+            }
 
             UpdateCenterPoint();
 

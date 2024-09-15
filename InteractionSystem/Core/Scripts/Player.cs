@@ -184,7 +184,9 @@ namespace Valve.VR.InteractionSystem
                     for (int i = 0; i < hmdTransforms.Length; i++)
                     {
                         if (hmdTransforms[i].gameObject.activeInHierarchy)
+                        {
                             return hmdTransforms[i];
+                        }
                     }
                 }
                 return null;
@@ -279,7 +281,9 @@ namespace Valve.VR.InteractionSystem
             _instance = this;
 
             while (SteamVR.initializedState == SteamVR.InitializedStates.None || SteamVR.initializedState == SteamVR.InitializedStates.Initializing)
+            {
                 yield return null;
+            }
 
             if ( SteamVR.instance != null )
             {
@@ -296,7 +300,9 @@ namespace Valve.VR.InteractionSystem
         protected virtual void Update()
         {
             if (SteamVR.initializedState != SteamVR.InitializedStates.InitializeSuccess)
+            {
                 return;
+            }
 
             if (headsetOnHead != null)
             {
@@ -380,10 +386,14 @@ namespace Valve.VR.InteractionSystem
         public void Draw2DDebug()
         {
             if ( !allowToggleTo2D )
+            {
                 return;
+            }
 
             if ( !SteamVR.active )
+            {
                 return;
+            }
 
             int width = 100;
             int height = 25;

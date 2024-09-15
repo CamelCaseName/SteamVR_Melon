@@ -36,13 +36,21 @@ namespace Valve.VR.InteractionSystem.Sample
                         Color color = tex.GetPixelBilinear(hit.textureCoord.x, hit.textureCoord.y);
 
                         if (color.r > 0.7f && color.g > 0.7f && color.b < 0.7f)
+                        {
                             color = Color.yellow;
+                        }
                         else if (Mathf.Max(color.r, color.g, color.b) == color.r)
+                        {
                             color = Color.red;
+                        }
                         else if (Mathf.Max(color.r, color.g, color.b) == color.g)
+                        {
                             color = Color.green;
+                        }
                         else
+                        {
                             color = Color.yellow;
+                        }
 
                         color *= 15f;
 
@@ -65,7 +73,9 @@ namespace Valve.VR.InteractionSystem.Sample
                 Debug.DrawRay(ray.origin, ray.direction, Color.cyan, 5, true);
 
                 if (destroyOnTargetCollision)
+                {
                     Destroy(this.gameObject);
+                }
             }
         }
     }

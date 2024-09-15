@@ -70,7 +70,9 @@ namespace Valve.VR
             get
             {
                 if (!enabled)
+                {
                     return null;
+                }
 
                 if (_instance == null)
                 {
@@ -112,12 +114,16 @@ namespace Valve.VR
                 {
                     _instance = CreateInstance();
                     if (_instance == null)
+                    {
                         _enabled = false;
+                    }
                 }
             }
 
             if (_enabled)
+            {
                 SteamVR_Behaviour.Initialize(forceUnityVRMode);
+            }
         }
 
         public static bool usingNativeSupport
@@ -133,13 +139,20 @@ namespace Valve.VR
 
 
             if (XRSettings.enabled == false)
+            {
                 errorLog += "VR may be disabled in player settings. Go to player settings in the editor and check the 'Virtual Reality Supported' checkbox'. ";
+            }
+
             if (XRSettings.supportedDevices != null && XRSettings.supportedDevices.Length > 0)
             {
                 if (XRSettings.supportedDevices.Contains("OpenVR") == false)
+                {
                     errorLog += "OpenVR is not in your list of supported virtual reality SDKs. Add it to the list in player settings. ";
+                }
                 else if (XRSettings.supportedDevices.First().Contains("OpenVR") == false)
+                {
                     errorLog += "OpenVR is not first in your list of supported virtual reality SDKs. This is okay, but if you have an Oculus device plugged in, and Oculus above OpenVR in this list, it will try and use the Oculus SDK instead of OpenVR. ";
+                }
             }
             else
             {
@@ -172,7 +185,7 @@ namespace Valve.VR
                 MelonLogger.Msg("manifest file: " + manifestFile);
                 EVRApplicationError evrapplicationError = OpenVR.Applications.AddApplicationManifest(manifestFile, true);
                 if (evrapplicationError != EVRApplicationError.None)
-
+                {
                     if (!SteamVR.usingNativeSupport)
                     {
                         ReportGeneralErrors();
@@ -180,6 +193,7 @@ namespace Valve.VR
                         SteamVR_Events.Initialized.Send(false);
                         return null;
                     }
+                }
 
                 // Verify common interfaces are valid.
 
@@ -214,7 +228,9 @@ namespace Valve.VR
                 settings = SteamVR_Settings.instance;
 
                 if (Application.isEditor)
+                {
                     IdentifyEditorApplication();
+                }
 
                 SteamVR_Input.IdentifyActionsFile();
 
@@ -477,7 +493,9 @@ namespace Valve.VR
         {
             string productName = Application.productName;
             if (string.IsNullOrEmpty(productName))
+            {
                 productName = "unnamed_product";
+            }
             else
             {
                 productName = System.Text.RegularExpressions.Regex.Replace(Application.productName, "[^\\w\\._]", "");
@@ -508,7 +526,10 @@ namespace Valve.VR
                     MelonLoader.MelonLogger.Msg("[HPVR] Deleting existing VRManifest because it has a different app key.");
                     FileInfo existingInfo = new FileInfo(fullPath);
                     if (existingInfo.IsReadOnly)
+                    {
                         existingInfo.IsReadOnly = false;
+                    }
+
                     existingInfo.Delete();
                 }
 
@@ -520,7 +541,10 @@ namespace Valve.VR
                         "\nNew: " + fullManifestPath.FullName);
                     FileInfo existingInfo = new FileInfo(fullPath);
                     if (existingInfo.IsReadOnly)
+                    {
                         existingInfo.IsReadOnly = false;
+                    }
+
                     existingInfo.Delete();
                 }
             }
@@ -594,22 +618,30 @@ namespace Valve.VR
 
             EVRApplicationError addManifestErr = OpenVR.Applications.AddApplicationManifest(manifestPath, true);
             if (addManifestErr != EVRApplicationError.None)
+            {
                 MelonLoader.MelonLogger.Error("[HPVR] Error adding vr manifest file: " + addManifestErr.ToString());
+            }
             else
             {
                 if (showLogs)
+                {
                     MelonLoader.MelonLogger.Msg("[HPVR] Successfully added VR manifest to SteamVR");
+                }
             }
 
             int processId = System.Diagnostics.Process.GetCurrentProcess().Id;
             EVRApplicationError applicationIdentifyErr = OpenVR.Applications.IdentifyApplication((uint)processId, SteamVR_Settings.instance.editorAppKey);
 
             if (applicationIdentifyErr != EVRApplicationError.None)
+            {
                 MelonLoader.MelonLogger.Error("[HPVR] Error identifying application: " + applicationIdentifyErr.ToString());
+            }
             else
             {
                 if (showLogs)
+                {
                     MelonLoader.MelonLogger.Msg(string.Format("[HPVR] Successfully identified process as editor project to SteamVR ({0})", SteamVR_Settings.instance.editorAppKey));
+                }
             }
         }
 
@@ -782,8 +814,7 @@ namespace Valve.VR
         // Use this interface to avoid accidentally creating the instance in the process of attempting to dispose of it.
         public static void SafeDispose()
         {
-            if (_instance != null)
-                _instance.Dispose();
+            _instance?.Dispose();
         }
     }
 }

@@ -80,41 +80,23 @@ namespace Valve.VR
 
         private void SteamVR_Behaviour_Single_OnUpdate(SteamVR_Action_Single fromAction, SteamVR_Input_Sources fromSource, float newAxis, float newDelta)
         {
-            if (onUpdate != null)
-            {
-                onUpdate.Send(this, fromSource, newAxis, newDelta);
-            }
+            onUpdate?.Send(this, fromSource, newAxis, newDelta);
 
-            if (onUpdateEvent != null)
-            {
-                onUpdateEvent.Invoke(this, fromSource, newAxis, newDelta);
-            }
+            onUpdateEvent?.Invoke(this, fromSource, newAxis, newDelta);
         }
 
         private void SteamVR_Behaviour_Single_OnChange(SteamVR_Action_Single fromAction, SteamVR_Input_Sources fromSource, float newAxis, float newDelta)
         {
-            if (onChange != null)
-            {
-                onChange.Send(this, fromSource, newAxis, newDelta);
-            }
+            onChange?.Send(this, fromSource, newAxis, newDelta);
 
-            if (onChangeEvent != null)
-            {
-                onChangeEvent.Invoke(this, fromSource, newAxis, newDelta);
-            }
+            onChangeEvent?.Invoke(this, fromSource, newAxis, newDelta);
         }
 
         private void SteamVR_Behaviour_Single_OnAxis(SteamVR_Action_Single fromAction, SteamVR_Input_Sources fromSource, float newAxis, float newDelta)
         {
-            if (onAxis != null)
-            {
-                onAxis.Send(this, fromSource, newAxis, newDelta);
-            }
+            onAxis?.Send(this, fromSource, newAxis, newDelta);
 
-            if (onAxisEvent != null)
-            {
-                onAxisEvent.Invoke(this, fromSource, newAxis, newDelta);
-            }
+            onAxisEvent?.Invoke(this, fromSource, newAxis, newDelta);
         }
 
 
@@ -132,7 +114,10 @@ namespace Valve.VR
         public string GetLocalizedName(params EVRInputStringBits[] localizedParts)
         {
             if (singleAction != null)
+            {
                 return singleAction.GetLocalizedOriginPart(inputSource, localizedParts);
+            }
+
             return null;
         }
 

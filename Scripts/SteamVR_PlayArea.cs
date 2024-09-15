@@ -41,15 +41,21 @@ namespace Valve.VR
             {
                 bool temporarySession = false;
                 if (Application.isEditor && Application.isPlaying == false)
+                {
                     temporarySession = SteamVR.InitializeTemporarySession();
+                }
 
                 var chaperone = OpenVR.Chaperone;
                 bool success = (chaperone != null) && chaperone.GetPlayAreaRect(ref pRect);
                 if (!success)
+                {
                     MelonLogger.Warning("[HPVR] Failed to get Calibrated Play Area bounds!  Make sure you have tracking first, and that your space is calibrated.");
+                }
 
                 if (temporarySession)
+                {
                     SteamVR.ExitTemporarySession();
+                }
 
                 return success;
             }
@@ -92,7 +98,9 @@ namespace Valve.VR
         {
             var rect = new HmdQuad_t();
             if (!GetBounds(size, ref rect))
+            {
                 return;
+            }
 
             var corners = new HmdVector3_t[] { rect.vCorners0, rect.vCorners1, rect.vCorners2, rect.vCorners3 };
 
@@ -178,19 +186,25 @@ namespace Valve.VR
         void OnDrawGizmos()
         {
             if (!drawWireframeWhenSelectedOnly)
+            {
                 DrawWireframe();
+            }
         }
 
         void OnDrawGizmosSelected()
         {
             if (drawWireframeWhenSelectedOnly)
+            {
                 DrawWireframe();
+            }
         }
 
         public void DrawWireframe()
         {
             if (vertices == null || vertices.Length == 0)
+            {
                 return;
+            }
 
             var offset = transform.TransformVector(Vector3.up * wireframeHeight);
             for (int i = 0; i < 4; i++)
@@ -221,7 +235,9 @@ namespace Valve.VR
                 // If we want the configured bounds of the user,
                 // we need to wait for tracking.
                 if (drawInGame && size == Size.Calibrated)
+                {
                     MelonCoroutines.Start(UpdateBounds());
+                }
             }
         }
 
@@ -231,10 +247,14 @@ namespace Valve.VR
 
             var chaperone = OpenVR.Chaperone;
             if (chaperone == null)
+            {
                 yield break;
+            }
 
             while (chaperone.GetCalibrationState() != ChaperoneCalibrationState.OK)
+            {
                 yield return null;
+            }
 
             BuildMesh();
         }

@@ -59,9 +59,14 @@ namespace Valve.VR
         protected void Awake()
         {
             if (previewLeftInstance != null)
+            {
                 DestroyImmediate(previewLeftInstance);
+            }
+
             if (previewRightInstance != null)
+            {
                 DestroyImmediate(previewRightInstance);
+            }
 
             blendPoses = new SkeletonBlendablePose[skeletonAdditionalPoses.Count + 1];
             for (int i = 0; i < blendPoseCount; i++)
@@ -148,7 +153,9 @@ namespace Valve.VR
             if (behaviour == null)
             {
                 if (throwErrors)
+                {
                     MelonLoader.MelonLogger.Error("[HPVR] Blending Behaviour: " + behaviourName + " not found on Skeleton Poser: " + gameObject.name, this);
+                }
 
                 return null;
             }
@@ -166,9 +173,13 @@ namespace Valve.VR
         private SteamVR_Skeleton_PoseSnapshot GetHandSnapshot(SteamVR_Input_Sources inputSource)
         {
             if (inputSource == SteamVR_Input_Sources.LeftHand)
+            {
                 return blendedSnapshotL;
+            }
             else
+            {
                 return blendedSnapshotR;
+            }
         }
 
         /// <summary>
@@ -198,7 +209,10 @@ namespace Valve.VR
         public void UpdatePose(SteamVR_Action_Skeleton skeletonAction, SteamVR_Input_Sources inputSource)
         {
             // only allow this function to run once per frame
-            if (poseUpdatedThisFrame) return;
+            if (poseUpdatedThisFrame)
+            {
+                return;
+            }
 
             poseUpdatedThisFrame = true;
 
@@ -216,9 +230,14 @@ namespace Valve.VR
 
 
             if (inputSource == SteamVR_Input_Sources.RightHand)
+            {
                 blendedSnapshotR = snap;
+            }
+
             if (inputSource == SteamVR_Input_Sources.LeftHand)
+            {
                 blendedSnapshotL = snap;
+            }
         }
 
         protected void ApplyBlenderBehaviours(SteamVR_Action_Skeleton skeletonAction, SteamVR_Input_Sources inputSource, SteamVR_Skeleton_PoseSnapshot snapshot)
@@ -389,16 +408,24 @@ namespace Valve.VR
                 if (type == BlenderTypes.AnalogAction)
                 {
                     if (smoothingSpeed == 0)
+                    {
                         value = action_single.GetAxis(inputSource);
+                    }
                     else
+                    {
                         value = Mathf.Lerp(value, action_single.GetAxis(inputSource), deltaTime * smoothingSpeed);
+                    }
                 }
                 if (type == BlenderTypes.BooleanAction)
                 {
                     if (smoothingSpeed == 0)
+                    {
                         value = action_bool.GetState(inputSource) ? 1 : 0;
+                    }
                     else
+                    {
                         value = Mathf.Lerp(value, action_bool.GetState(inputSource) ? 1 : 0, deltaTime * smoothingSpeed);
+                    }
                 }
             }
 

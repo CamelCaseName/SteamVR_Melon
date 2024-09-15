@@ -25,7 +25,7 @@ namespace Valve.VR
         }
         public static Texture progressTexture
         {
-            get { return (_active != null) ? _active.renderTexture : null; }
+            get { return _active?.renderTexture; }
         }
 
         // Name of level to load.
@@ -97,13 +97,17 @@ namespace Valve.VR
         void OnEnable()
         {
             if (autoTriggerOnEnable)
+            {
                 Trigger();
+            }
         }
 
         public void Trigger()
         {
             if (!loading && !string.IsNullOrEmpty(levelName))
+            {
                 MelonCoroutines.Start(LoadLevel());
+            }
         }
 
         // Helper function to quickly and simply load a level from script.
@@ -123,13 +127,17 @@ namespace Valve.VR
         void OnGUI()
         {
             if (_active != this)
+            {
                 return;
+            }
 
             // Optionally create an overlay for our progress bar to use, separate from the loading screen.
             if (progressBarEmpty != null && progressBarFull != null)
             {
                 if (progressBarOverlayHandle == OpenVR.k_ulOverlayHandleInvalid)
+                {
                     progressBarOverlayHandle = GetOverlayHandle("progressBar", progressBarTransform != null ? progressBarTransform : transform, progressBarWidthInMeters);
+                }
 
                 if (progressBarOverlayHandle != OpenVR.k_ulOverlayHandleInvalid)
                 {
@@ -150,7 +158,9 @@ namespace Valve.VR
                     RenderTexture.active = renderTexture;
 
                     if (Event.current.type == EventType.Repaint)
+                    {
                         GL.Clear(false, true, Color.clear);
+                    }
 
                     GUILayout.BeginArea(new Rect(0, 0, w, h));
 
@@ -219,7 +229,9 @@ namespace Valve.VR
         void Update()
         {
             if (_active != this)
+            {
                 return;
+            }
 
             alpha = Mathf.Clamp01(alpha + fadeRate * Time.deltaTime);
 
@@ -227,10 +239,14 @@ namespace Valve.VR
             if (overlay != null)
             {
                 if (loadingScreenOverlayHandle != OpenVR.k_ulOverlayHandleInvalid)
+                {
                     overlay.SetOverlayAlpha(loadingScreenOverlayHandle, alpha);
+                }
 
                 if (progressBarOverlayHandle != OpenVR.k_ulOverlayHandleInvalid)
+                {
                     overlay.SetOverlayAlpha(progressBarOverlayHandle, alpha);
+                }
             }
         }
 
@@ -244,7 +260,9 @@ namespace Valve.VR
             {
                 Transform hmd = transform;
                 if (Camera.main != null)
+                {
                     hmd = Camera.main.transform;
+                }
 
                 Quaternion rot = Quaternion.Euler(0.0f, hmd.eulerAngles.y, 0.0f);
                 Vector3 pos = hmd.position + (rot * new Vector3(0.0f, 0.0f, loadingScreenDistance));
@@ -327,7 +345,9 @@ namespace Valve.VR
 
             // Continue waiting for the overlays to fully fade in before continuing.
             while (alpha < 1.0f)
+            {
                 yield return null;
+            }
 
             // Keep us from getting destroyed when loading the new level, otherwise this coroutine will get stopped prematurely.
             transform.parent = null;
@@ -433,14 +453,21 @@ namespace Valve.VR
 
             // Finally, stick around long enough for our overlays to fully fade out.
             while (alpha > 0.0f)
+            {
                 yield return null;
+            }
 
             if (overlay != null)
             {
                 if (progressBarOverlayHandle != OpenVR.k_ulOverlayHandleInvalid)
+                {
                     overlay.HideOverlay(progressBarOverlayHandle);
+                }
+
                 if (loadingScreenOverlayHandle != OpenVR.k_ulOverlayHandleInvalid)
+                {
                     overlay.HideOverlay(loadingScreenOverlayHandle);
+                }
             }
 
             Destroy(gameObject);
@@ -457,13 +484,18 @@ namespace Valve.VR
 
             var overlay = OpenVR.Overlay;
             if (overlay == null)
+            {
                 return handle;
+            }
 
             var key = SteamVR_Overlay.key + "." + overlayName;
 
             var error = overlay.FindOverlay(key, ref handle);
             if (error != EVROverlayError.None)
+            {
                 error = overlay.CreateOverlay(key, overlayName, ref handle);
+            }
+
             if (error == EVROverlayError.None)
             {
                 overlay.ShowOverlay(handle);

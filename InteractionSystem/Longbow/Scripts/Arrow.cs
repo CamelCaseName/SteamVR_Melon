@@ -87,7 +87,9 @@ namespace Valve.VR.InteractionSystem
             Rigidbody rb = this.gameObject.AddComponent<Rigidbody>();
             rb.isKinematic = true;
             if (shaftRB == null)
+            {
                 shaftRB = rb;
+            }
 
             shaftRB.mass = initialMass;
             shaftRB.drag = initialDrag;
@@ -108,10 +110,7 @@ namespace Valve.VR.InteractionSystem
 
             airReleaseSound.Play();
 
-            if (glintParticle != null)
-            {
-                glintParticle.Play();
-            }
+            glintParticle?.Play();
 
             if (gameObject.GetComponentInChildren<FireSource>().isBurning)
             {
@@ -146,7 +145,9 @@ namespace Valve.VR.InteractionSystem
             for (int rigidBodyIndex = 0; rigidBodyIndex < rigidBodies.Length; rigidBodyIndex++)
             {
                 if (rigidBodies[rigidBodyIndex].isKinematic == false || force)
+                {
                     rigidBodies[rigidBodyIndex].collisionDetectionMode = newMode;
+                }
             }
         }
 
@@ -175,10 +176,7 @@ namespace Valve.VR.InteractionSystem
                     return;
                 }
 
-                if (glintParticle != null)
-                {
-                    glintParticle.Stop(true);
-                }
+                glintParticle?.Stop(true);
 
                 // Only play hit sounds if we're moving quickly
                 if (rbSpeed > 0.1f)

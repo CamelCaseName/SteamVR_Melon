@@ -469,10 +469,7 @@ namespace Valve.VR.InteractionSystem
                 }
             }
 
-            if (playAreaPreviewTransform != null)
-            {
-                playAreaPreviewTransform.gameObject.SetActive(showPlayAreaPreview);
-            }
+            playAreaPreviewTransform?.gameObject.SetActive(showPlayAreaPreview);
 
             if (!showOffsetReticle)
             {
@@ -664,10 +661,7 @@ namespace Valve.VR.InteractionSystem
             invalidReticleTransform.gameObject.SetActive(false);
             offsetReticleTransform.gameObject.SetActive(false);
 
-            if (playAreaPreviewTransform != null)
-            {
-                playAreaPreviewTransform.gameObject.SetActive(false);
-            }
+            playAreaPreviewTransform?.gameObject.SetActive(false);
 
             if (onActivateObjectTransform.gameObject.activeSelf)
             {
@@ -900,9 +894,14 @@ namespace Valve.VR.InteractionSystem
                 player.trackingOriginTransform.position = teleportPosition + playerFeetOffset;
 
                 if (player.leftHand != null && player.leftHand.currentAttachedObjectInfo.HasValue)
+                {
                     player.leftHand.ResetAttachedTransform(player.leftHand.currentAttachedObjectInfo.Value);
+                }
+
                 if (player.rightHand != null && player.rightHand.currentAttachedObjectInfo.HasValue)
+                {
                     player.rightHand.ResetAttachedTransform(player.rightHand.currentAttachedObjectInfo.Value);
+                }
             }
             else
             {
@@ -918,10 +917,7 @@ namespace Valve.VR.InteractionSystem
         {
             if (pointedAtTeleportMarker != hitTeleportMarker) //Pointing at a new teleport marker
             {
-                if (pointedAtTeleportMarker != null)
-                {
-                    pointedAtTeleportMarker.Highlight(false);
-                }
+                pointedAtTeleportMarker?.Highlight(false);
 
                 if (hitTeleportMarker != null)
                 {

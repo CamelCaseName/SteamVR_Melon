@@ -145,7 +145,9 @@ namespace Valve.VR.InteractionSystem
             get
             {
                 if (trackedObject != null)
+                {
                     return trackedObject.isActive;
+                }
 
                 return this.gameObject.activeInHierarchy;
             }
@@ -173,7 +175,10 @@ namespace Valve.VR.InteractionSystem
                     if (_hoveringInteractable != null)
                     {
                         if (spewDebugText)
+                        {
                             HandDebugLog("HoverEnd " + _hoveringInteractable.gameObject);
+                        }
+
                         _hoveringInteractable.SendMessage("OnHandHoverEnd", this, SendMessageOptions.DontRequireReceiver);
 
                         //Note: The _hoveringInteractable can change after sending the OnHandHoverEnd message so we need to check it again before broadcasting this message
@@ -188,7 +193,10 @@ namespace Valve.VR.InteractionSystem
                     if (_hoveringInteractable != null)
                     {
                         if (spewDebugText)
+                        {
                             HandDebugLog("HoverBegin " + _hoveringInteractable.gameObject);
+                        }
+
                         _hoveringInteractable.SendMessage("OnHandHoverBegin", this, SendMessageOptions.DontRequireReceiver);
 
                         //Note: The _hoveringInteractable can change after sending the OnHandHoverBegin message so we need to check it again before broadcasting this message
@@ -240,7 +248,10 @@ namespace Valve.VR.InteractionSystem
             get
             {
                 if (currentAttachedObjectInfo.HasValue)
+                {
                     return currentAttachedObjectInfo.Value.allowTeleportWhileAttachedToHand;
+                }
+
                 return null;
             }
         }
@@ -250,7 +261,9 @@ namespace Valve.VR.InteractionSystem
             get
             {
                 if (mainRenderModel != null)
+                {
                     return mainRenderModel.GetSkeleton();
+                }
 
                 return null;
             }
@@ -258,38 +271,30 @@ namespace Valve.VR.InteractionSystem
 
         public void ShowController(bool permanent = false)
         {
-            if (mainRenderModel != null)
-                mainRenderModel.SetControllerVisibility(true, permanent);
+            mainRenderModel?.SetControllerVisibility(true, permanent);
 
-            if (hoverhighlightRenderModel != null)
-                hoverhighlightRenderModel.SetControllerVisibility(true, permanent);
+            hoverhighlightRenderModel?.SetControllerVisibility(true, permanent);
         }
 
         public void HideController(bool permanent = false)
         {
-            if (mainRenderModel != null)
-                mainRenderModel.SetControllerVisibility(false, permanent);
+            mainRenderModel?.SetControllerVisibility(false, permanent);
 
-            if (hoverhighlightRenderModel != null)
-                hoverhighlightRenderModel.SetControllerVisibility(false, permanent);
+            hoverhighlightRenderModel?.SetControllerVisibility(false, permanent);
         }
 
         public void ShowSkeleton(bool permanent = false)
         {
-            if (mainRenderModel != null)
-                mainRenderModel.SetHandVisibility(true, permanent);
+            mainRenderModel?.SetHandVisibility(true, permanent);
 
-            if (hoverhighlightRenderModel != null)
-                hoverhighlightRenderModel.SetHandVisibility(true, permanent);
+            hoverhighlightRenderModel?.SetHandVisibility(true, permanent);
         }
 
         public void HideSkeleton(bool permanent = false)
         {
-            if (mainRenderModel != null)
-                mainRenderModel.SetHandVisibility(false, permanent);
+            mainRenderModel?.SetHandVisibility(false, permanent);
 
-            if (hoverhighlightRenderModel != null)
-                hoverhighlightRenderModel.SetHandVisibility(false, permanent);
+            hoverhighlightRenderModel?.SetHandVisibility(false, permanent);
         }
 
         public bool HasSkeleton()
@@ -309,8 +314,7 @@ namespace Valve.VR.InteractionSystem
 
         public void SetVisibility(bool visible)
         {
-            if (mainRenderModel != null)
-                mainRenderModel.SetVisibility(visible);
+            mainRenderModel?.SetVisibility(visible);
         }
 
         public void SetSkeletonRangeOfMotion(EVRSkeletalMotionRange newRangeOfMotion, float blendOverSeconds = 0.1f)
@@ -378,13 +382,14 @@ namespace Valve.VR.InteractionSystem
 
             //Detach the object if it is already attached so that it can get re-attached at the top of the stack
             if (ObjectIsAttached(objectToAttach))
+            {
                 DetachObject(objectToAttach);
+            }
 
             //Detach from the other hand if requested
             if (attachedObject.HasAttachFlag(AttachmentFlags.DetachFromOtherHand))
             {
-                if (otherHand != null)
-                    otherHand.DetachObject(objectToAttach);
+                otherHand?.DetachObject(objectToAttach);
             }
 
             if (attachedObject.HasAttachFlag(AttachmentFlags.DetachOthers))
@@ -416,26 +421,37 @@ namespace Valve.VR.InteractionSystem
                 }
 
                 if (attachedObject.interactable.useHandObjectAttachmentPoint)
+                {
                     attachedObject.handAttachmentPointTransform = objectAttachmentPoint;
+                }
 
                 if (attachedObject.interactable.hideHandOnAttach)
+                {
                     Hide();
+                }
 
                 if (attachedObject.interactable.hideSkeletonOnAttach && mainRenderModel != null && mainRenderModel.displayHandByDefault)
+                {
                     HideSkeleton();
+                }
 
                 if (attachedObject.interactable.hideControllerOnAttach && mainRenderModel != null && mainRenderModel.displayControllerByDefault)
+                {
                     HideController();
+                }
 
                 if (attachedObject.interactable.handAnimationOnPickup != 0)
+                {
                     SetAnimationState(attachedObject.interactable.handAnimationOnPickup);
+                }
 
                 if (attachedObject.interactable.setRangeOfMotionOnPickup != SkeletalMotionRangeChange.None)
+                {
                     SetTemporarySkeletonRangeOfMotion(attachedObject.interactable.setRangeOfMotionOnPickup);
-
+                }
             }
 
-            attachedObject.originalParent = objectToAttach.transform.parent != null ? objectToAttach.transform.parent.gameObject : null;
+            attachedObject.originalParent = objectToAttach.transform.parent?.gameObject;
 
             attachedObject.attachedRigidbody = objectToAttach.GetComponent<Rigidbody>();
             if (attachedObject.attachedRigidbody != null)
@@ -549,7 +565,9 @@ namespace Valve.VR.InteractionSystem
                 {
                     attachedObject.collisionDetectionMode = attachedObject.attachedRigidbody.collisionDetectionMode;
                     if (attachedObject.collisionDetectionMode == CollisionDetectionMode.Continuous)
+                    {
                         attachedObject.attachedRigidbody.collisionDetectionMode = CollisionDetectionMode.Discrete;
+                    }
 
                     attachedObject.attachedRigidbody.isKinematic = true;
                 }
@@ -574,7 +592,10 @@ namespace Valve.VR.InteractionSystem
             UpdateHovering();
 
             if (spewDebugText)
+            {
                 HandDebugLog("AttachObject " + objectToAttach);
+            }
+
             objectToAttach.SendMessage("OnAttachedToHand", this, SendMessageOptions.DontRequireReceiver);
         }
 
@@ -583,7 +604,9 @@ namespace Valve.VR.InteractionSystem
             for (int attachedIndex = 0; attachedIndex < attachedObjects.Count; attachedIndex++)
             {
                 if (attachedObjects[attachedIndex].attachedObject == go)
+                {
                     return true;
+                }
             }
 
             return false;
@@ -605,7 +628,9 @@ namespace Valve.VR.InteractionSystem
             if (index != -1)
             {
                 if (spewDebugText)
+                {
                     HandDebugLog("DetachObject " + objectToDetach);
+                }
 
                 GameObject prevTopObject = currentAttachedObject;
 
@@ -613,19 +638,29 @@ namespace Valve.VR.InteractionSystem
                 if (attachedObjects[index].interactable != null)
                 {
                     if (attachedObjects[index].interactable.hideHandOnAttach)
+                    {
                         Show();
+                    }
 
                     if (attachedObjects[index].interactable.hideSkeletonOnAttach && mainRenderModel != null && mainRenderModel.displayHandByDefault)
+                    {
                         ShowSkeleton();
+                    }
 
                     if (attachedObjects[index].interactable.hideControllerOnAttach && mainRenderModel != null && mainRenderModel.displayControllerByDefault)
+                    {
                         ShowController();
+                    }
 
                     if (attachedObjects[index].interactable.handAnimationOnPickup != 0)
+                    {
                         StopAnimation();
+                    }
 
                     if (attachedObjects[index].interactable.setRangeOfMotionOnPickup != SkeletalMotionRangeChange.None)
+                    {
                         ResetTemporarySkeletonRangeOfMotion();
+                    }
                 }
 
                 Transform parentTransform = null;
@@ -656,7 +691,9 @@ namespace Valve.VR.InteractionSystem
                     if (attachedObjects[index].attachedObject != null)
                     {
                         if (attachedObjects[index].attachedRigidbody != null)
+                        {
                             attachedObjects[index].attachedRigidbody.useGravity = attachedObjects[index].attachedRigidbodyUsedGravity;
+                        }
                     }
                 }
 
@@ -669,7 +706,9 @@ namespace Valve.VR.InteractionSystem
                 if (attachedObjects[index].attachedObject != null)
                 {
                     if (attachedObjects[index].interactable == null || (attachedObjects[index].interactable != null && attachedObjects[index].interactable.isDestroying == false))
+                    {
                         attachedObjects[index].attachedObject.SetActive(true);
+                    }
 
                     attachedObjects[index].attachedObject.SendMessage("OnDetachedFromHand", this, SendMessageOptions.DontRequireReceiver);
                 }
@@ -693,10 +732,8 @@ namespace Valve.VR.InteractionSystem
 
             CleanUpAttachedObjectStack();
 
-            if (mainRenderModel != null)
-                mainRenderModel.MatchHandToTransform(mainRenderModel.transform);
-            if (hoverhighlightRenderModel != null)
-                hoverhighlightRenderModel.MatchHandToTransform(hoverhighlightRenderModel.transform);
+            mainRenderModel?.MatchHandToTransform(mainRenderModel.transform);
+            hoverhighlightRenderModel?.MatchHandToTransform(hoverhighlightRenderModel.transform);
         }
 
 
@@ -715,7 +752,9 @@ namespace Valve.VR.InteractionSystem
             if (isActive)
             {
                 if (timeOffset == 0)
+                {
                     return Player.instance.trackingOriginTransform.TransformVector(trackedObject.GetVelocity());
+                }
                 else
                 {
                     Vector3 velocity;
@@ -745,7 +784,9 @@ namespace Valve.VR.InteractionSystem
             if (isActive)
             {
                 if (timeOffset == 0)
+                {
                     return Player.instance.trackingOriginTransform.TransformDirection(trackedObject.GetAngularVelocity());
+                }
                 else
                 {
                     Vector3 velocity;
@@ -780,10 +821,14 @@ namespace Valve.VR.InteractionSystem
             inputFocusAction = SteamVR_Events.InputFocusAction(OnInputFocus);
 
             if (hoverSphereTransform == null)
+            {
                 hoverSphereTransform = this.transform;
+            }
 
             if (objectAttachmentPoint == null)
+            {
                 objectAttachmentPoint = this.transform;
+            }
 
             applicationLostFocusObject = new GameObject("_application_lost_focus");
             applicationLostFocusObject.transform.parent = transform;
@@ -794,7 +839,9 @@ namespace Valve.VR.InteractionSystem
                 trackedObject = this.gameObject.GetComponent<SteamVR_Behaviour_Pose>();
 
                 if (trackedObject != null)
+                {
                     trackedObject.onTransformUpdatedEvent += OnTransformUpdated;
+                }
             }
         }
 
@@ -822,9 +869,13 @@ namespace Valve.VR.InteractionSystem
             }
 
             if (this.gameObject.layer == 0)
+            {
                 MelonLoader.MelonLogger.Warning("[HPVR Interaction] Hand is on default layer. This puts unnecessary strain on hover checks as it is always true for hand colliders (which are then ignored).", this);
+            }
             else
+            {
                 hoverLayerMask &= ~(1 << this.gameObject.layer); //ignore self for hovering
+            }
 
             // allocate array for colliders
             overlappingColliders = new Collider[ColliderArraySize];
@@ -861,10 +912,14 @@ namespace Valve.VR.InteractionSystem
             }
 
             if (hoverLocked)
+            {
                 return;
+            }
 
             if (applicationLostFocusObject.activeSelf)
+            {
                 return;
+            }
 
             float closestDistance = float.MaxValue;
             Interactable closestInteractable = null;
@@ -904,7 +959,9 @@ namespace Valve.VR.InteractionSystem
             int numColliding = Physics.OverlapSphereNonAlloc(hoverPosition, hoverRadius, overlappingColliders, hoverLayerMask.value);
 
             if (numColliding >= ColliderArraySize)
+            {
                 MelonLoader.MelonLogger.Warning("[HPVR Interaction] This hand is overlapping the max number of colliders: " + ColliderArraySize + ". Some collisions may be missed. Increase ColliderArraySize on Hand.cs");
+            }
 
             // DebugVar
             int iActualColliderCount = 0;
@@ -915,13 +972,17 @@ namespace Valve.VR.InteractionSystem
                 Collider collider = overlappingColliders[colliderIndex];
 
                 if (collider == null)
+                {
                     continue;
+                }
 
                 Interactable contacting = collider.GetComponentInParent<Interactable>();
 
                 // Yeah, it's null, skip
                 if (contacting == null)
+                {
                     continue;
+                }
 
                 // Ignore this collider for hovering
                 IgnoreHovering ignore = collider.GetComponent<IgnoreHovering>();
@@ -945,7 +1006,9 @@ namespace Valve.VR.InteractionSystem
                 }
 
                 if (hoveringOverAttached)
+                {
                     continue;
+                }
 
                 // Best candidate so far...
                 float distance = Vector3.Distance(contacting.transform.position, hoverPosition);
@@ -975,7 +1038,9 @@ namespace Valve.VR.InteractionSystem
                 prevOverlappingColliders = iActualColliderCount;
 
                 if (spewDebugText)
+                {
                     HandDebugLog("Found " + iActualColliderCount + " overlapping colliders.");
+                }
             }
 
             return foundCloser;
@@ -1105,10 +1170,7 @@ namespace Valve.VR.InteractionSystem
             UpdateNoSteamVRFallback();
 
             GameObject attachedObject = currentAttachedObject;
-            if (attachedObject != null)
-            {
-                attachedObject.SendMessage("HandAttachedUpdate", this, SendMessageOptions.DontRequireReceiver);
-            }
+            attachedObject?.SendMessage("HandAttachedUpdate", this, SendMessageOptions.DontRequireReceiver);
 
             if (hoveringInteractable)
             {
@@ -1169,15 +1231,11 @@ namespace Valve.VR.InteractionSystem
                             targetHandRotation = objectT.rotation * localSkeleRot;
                         }
 
-                        if (mainRenderModel != null)
-                            mainRenderModel.SetHandRotation(targetHandRotation);
-                        if (hoverhighlightRenderModel != null)
-                            hoverhighlightRenderModel.SetHandRotation(targetHandRotation);
+                        mainRenderModel?.SetHandRotation(targetHandRotation);
+                        hoverhighlightRenderModel?.SetHandRotation(targetHandRotation);
 
-                        if (mainRenderModel != null)
-                            mainRenderModel.SetHandPosition(targetHandPosition);
-                        if (hoverhighlightRenderModel != null)
-                            hoverhighlightRenderModel.SetHandPosition(targetHandPosition);
+                        mainRenderModel?.SetHandPosition(targetHandPosition);
+                        hoverhighlightRenderModel?.SetHandPosition(targetHandPosition);
                     }
                 }
             }
@@ -1193,7 +1251,9 @@ namespace Valve.VR.InteractionSystem
                     if (attachedInfo.HasAttachFlag(AttachmentFlags.VelocityMovement))
                     {
                         if (attachedInfo.interactable.attachEaseIn == false || attachedInfo.interactable.snapAttachEaseInCompleted)
+                        {
                             UpdateAttachedVelocity(attachedInfo);
+                        }
 
                         /*if (attachedInfo.interactable.handFollowTransformPosition)
                         {
@@ -1306,13 +1366,16 @@ namespace Valve.VR.InteractionSystem
             if (float.IsNaN(velocityTarget.x) == false && float.IsInfinity(velocityTarget.x) == false)
             {
                 if (noSteamVRFallbackCamera)
+                {
                     velocityTarget /= 10; //hacky fix for fallback
+                }
 
                 realNumbers = true;
             }
             else
+            {
                 velocityTarget = Vector3.zero;
-
+            }
 
             Quaternion targetItemRotation = TargetItemRotation(attachedObjectInfo);
             Quaternion rotationDelta = targetItemRotation * Quaternion.Inverse(attachedObjectInfo.attachedObject.transform.rotation);
@@ -1323,19 +1386,25 @@ namespace Valve.VR.InteractionSystem
             rotationDelta.ToAngleAxis(out angle, out axis);
 
             if (angle > 180)
+            {
                 angle -= 360;
+            }
 
             if (angle != 0 && float.IsNaN(axis.x) == false && float.IsInfinity(axis.x) == false)
             {
                 angularTarget = angle * axis * angularVelocityMagic * Time.deltaTime;
 
                 if (noSteamVRFallbackCamera)
+                {
                     angularTarget /= 10; //hacky fix for fallback
+                }
 
                 realNumbers &= true;
             }
             else
+            {
                 angularTarget = Vector3.zero;
+            }
 
             return realNumbers;
         }
@@ -1403,7 +1472,10 @@ namespace Valve.VR.InteractionSystem
         public void HoverLock(Interactable interactable)
         {
             if (spewDebugText)
+            {
                 HandDebugLog("HoverLock " + interactable);
+            }
+
             hoverLocked = true;
             hoveringInteractable = interactable;
         }
@@ -1417,7 +1489,9 @@ namespace Valve.VR.InteractionSystem
         public void HoverUnlock(Interactable interactable)
         {
             if (spewDebugText)
+            {
                 HandDebugLog("HoverUnlock " + interactable);
+            }
 
             if (hoveringInteractable == interactable)
             {
@@ -1458,30 +1532,48 @@ namespace Valve.VR.InteractionSystem
                 if (noSteamVRFallbackCamera)
                 {
                     if (Input.GetMouseButtonDown(0))
+                    {
                         return explicitType;
+                    }
                     else
+                    {
                         return GrabTypes.None;
+                    }
                 }
 
                 if (explicitType == GrabTypes.Pinch && grabPinchAction.GetStateDown(handType))
+                {
                     return GrabTypes.Pinch;
+                }
+
                 if (explicitType == GrabTypes.Grip && grabGripAction.GetStateDown(handType))
+                {
                     return GrabTypes.Grip;
+                }
             }
             else
             {
                 if (noSteamVRFallbackCamera)
                 {
                     if (Input.GetMouseButtonDown(0))
+                    {
                         return GrabTypes.Grip;
+                    }
                     else
+                    {
                         return GrabTypes.None;
+                    }
                 }
 
                 if (grabPinchAction != null && grabPinchAction.GetStateDown(handType))
+                {
                     return GrabTypes.Pinch;
+                }
+
                 if (grabGripAction != null && grabGripAction.GetStateDown(handType))
+                {
                     return GrabTypes.Grip;
+                }
             }
 
             return GrabTypes.None;
@@ -1494,30 +1586,48 @@ namespace Valve.VR.InteractionSystem
                 if (noSteamVRFallbackCamera)
                 {
                     if (Input.GetMouseButtonUp(0))
+                    {
                         return explicitType;
+                    }
                     else
+                    {
                         return GrabTypes.None;
+                    }
                 }
 
                 if (explicitType == GrabTypes.Pinch && grabPinchAction.GetStateUp(handType))
+                {
                     return GrabTypes.Pinch;
+                }
+
                 if (explicitType == GrabTypes.Grip && grabGripAction.GetStateUp(handType))
+                {
                     return GrabTypes.Grip;
+                }
             }
             else
             {
                 if (noSteamVRFallbackCamera)
                 {
                     if (Input.GetMouseButtonUp(0))
+                    {
                         return GrabTypes.Grip;
+                    }
                     else
+                    {
                         return GrabTypes.None;
+                    }
                 }
 
                 if (grabPinchAction.GetStateUp(handType))
+                {
                     return GrabTypes.Pinch;
+                }
+
                 if (grabGripAction.GetStateUp(handType))
+                {
                     return GrabTypes.Grip;
+                }
             }
 
             return GrabTypes.None;
@@ -1541,9 +1651,13 @@ namespace Valve.VR.InteractionSystem
             if (noSteamVRFallbackCamera)
             {
                 if (Input.GetMouseButton(0))
+                {
                     return true;
+                }
                 else
+                {
                     return false;
+                }
             }
 
             switch (type)
@@ -1564,9 +1678,13 @@ namespace Valve.VR.InteractionSystem
             if (noSteamVRFallbackCamera)
             {
                 if (Input.GetMouseButton(0))
+                {
                     return true;
+                }
                 else
+                {
                     return false;
+                }
             }
 
             switch (type)
@@ -1592,30 +1710,47 @@ namespace Valve.VR.InteractionSystem
             if (noSteamVRFallbackCamera)
             {
                 if (Input.GetMouseButton(0))
+                {
                     return preferred;
+                }
                 else
+                {
                     return GrabTypes.None;
+                }
             }
 
             if (preferred == GrabTypes.Pinch)
             {
                 if (grabPinchAction.GetState(handType))
+                {
                     return GrabTypes.Pinch;
+                }
                 else if (forcePreference)
+                {
                     return GrabTypes.None;
+                }
             }
             if (preferred == GrabTypes.Grip)
             {
                 if (grabGripAction.GetState(handType))
+                {
                     return GrabTypes.Grip;
+                }
                 else if (forcePreference)
+                {
                     return GrabTypes.None;
+                }
             }
 
             if (grabPinchAction.GetState(handType))
+            {
                 return GrabTypes.Pinch;
+            }
+
             if (grabGripAction.GetState(handType))
+            {
                 return GrabTypes.Grip;
+            }
 
             return GrabTypes.None;
         }
@@ -1625,18 +1760,23 @@ namespace Valve.VR.InteractionSystem
         private void InitController()
         {
             if (spewDebugText)
+            {
                 HandDebugLog("Hand " + name + " connected with type " + handType.ToString());
+            }
 
             bool hadOldRendermodel = mainRenderModel != null;
             EVRSkeletalMotionRange oldRM_rom = EVRSkeletalMotionRange.WithController;
             if (hadOldRendermodel)
+            {
                 oldRM_rom = mainRenderModel.GetSkeletonRangeOfMotion;
-
+            }
 
             foreach (RenderModel r in renderModels)
             {
                 if (r != null)
+                {
                     Destroy(r.gameObject);
+                }
             }
 
             renderModels.Clear();
@@ -1657,7 +1797,9 @@ namespace Valve.VR.InteractionSystem
             renderModels.Add(mainRenderModel);
 
             if (hadOldRendermodel)
+            {
                 mainRenderModel.SetSkeletonRangeOfMotion(oldRM_rom);
+            }
 
             this.BroadcastMessage("SetInputSource", (int)handType, SendMessageOptions.DontRequireReceiver); // let child objects know we've initialized
             this.BroadcastMessage("OnHandInitialized", deviceIndex, SendMessageOptions.DontRequireReceiver); // let child objects know we've initialized
@@ -1668,7 +1810,9 @@ namespace Valve.VR.InteractionSystem
             renderModelPrefab = prefab;
 
             if (mainRenderModel != null && isPoseValid)
+            {
                 InitController();
+            }
         }
 
         public void SetHoverRenderModel(RenderModel hoverRenderModel)

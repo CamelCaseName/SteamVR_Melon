@@ -93,10 +93,7 @@ namespace Valve.VR.InteractionSystem
             ignitionTime = Time.time;
 
             // Play the fire ignition sound if there is one
-            if ( ignitionSound != null )
-            {
-                ignitionSound.Play();
-            }
+            ignitionSound?.Play();
 
             if ( customParticles != null )
             {

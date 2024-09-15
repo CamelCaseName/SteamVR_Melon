@@ -289,7 +289,9 @@ namespace Valve.VR
             get
             {
                 if (active)
+                {
                     return actionData.activeOrigin;
+                }
 
                 return 0;
             }
@@ -335,8 +337,9 @@ namespace Valve.VR
             base.Initialize();
 
             if (actionData_size == 0)
+            {
                 actionData_size = (uint)Marshal.SizeOf(typeof(InputDigitalActionData_t));
-
+            }
         }
 
         /// <summary>
@@ -350,48 +353,72 @@ namespace Valve.VR
             {
                 delegates = onStateDown.GetInvocationList();
                 if (delegates != null)
+                {
                     foreach (Delegate existingDelegate in delegates)
+                    {
                         onStateDown -= (SteamVR_Action_Boolean.StateDownHandler)existingDelegate;
+                    }
+                }
             }
 
             if (onStateUp != null)
             {
                 delegates = onStateUp.GetInvocationList();
                 if (delegates != null)
+                {
                     foreach (Delegate existingDelegate in delegates)
+                    {
                         onStateUp -= (SteamVR_Action_Boolean.StateUpHandler)existingDelegate;
+                    }
+                }
             }
 
             if (onState != null)
             {
                 delegates = onState.GetInvocationList();
                 if (delegates != null)
+                {
                     foreach (Delegate existingDelegate in delegates)
+                    {
                         onState -= (SteamVR_Action_Boolean.StateHandler)existingDelegate;
+                    }
+                }
             }
 
             if (onChange != null)
             {
                 delegates = onChange.GetInvocationList();
                 if (delegates != null)
+                {
                     foreach (Delegate existingDelegate in delegates)
+                    {
                         onChange -= (SteamVR_Action_Boolean.ChangeHandler)existingDelegate;
+                    }
+                }
             }
 
             if (onUpdate != null)
             {
                 delegates = onUpdate.GetInvocationList();
                 if (delegates != null)
+                {
                     foreach (Delegate existingDelegate in delegates)
+                    {
                         onUpdate -= (SteamVR_Action_Boolean.UpdateHandler)existingDelegate;
+                    }
+                }
             }
 
             if (onActiveChange != null)
             {
                 delegates = onActiveChange.GetInvocationList();
                 if (delegates != null)
+                {
                     foreach (Delegate existingDelegate in delegates)
+                    {
                         onActiveChange -= (SteamVR_Action_Boolean.ActiveChangeHandler)existingDelegate;
+                    }
+                }
             }
         }
 
@@ -405,36 +432,51 @@ namespace Valve.VR
 
             EVRInputError err = OpenVR.Input.GetDigitalActionData(action.handle, ref actionData, actionData_size, inputSourceHandle);
             if (err != EVRInputError.None)
+            {
                 MelonLoader.MelonLogger.Error("[HPVR] GetDigitalActionData error (" + action.fullPath + "): " + err.ToString() + " handle: " + action.handle.ToString());
+            }
 
             if (changed)
+            {
                 changedTime = Time.realtimeSinceStartup + actionData.fUpdateTime;
+            }
 
             updateTime = Time.realtimeSinceStartup;
 
             if (active)
             {
                 if (onStateDown != null && stateDown)
+                {
                     onStateDown.Invoke(booleanAction, inputSource);
+                }
 
                 if (onStateUp != null && stateUp)
+                {
                     onStateUp.Invoke(booleanAction, inputSource);
+                }
 
                 if (onState != null && state)
+                {
                     onState.Invoke(booleanAction, inputSource);
+                }
 
                 if (onChange != null && changed)
+                {
                     onChange.Invoke(booleanAction, inputSource, state);
+                }
 
-                if (onUpdate != null)
-                    onUpdate.Invoke(booleanAction, inputSource, state);
+                onUpdate?.Invoke(booleanAction, inputSource, state);
             }
 
             if (onActiveBindingChange != null && lastActiveBinding != activeBinding)
+            {
                 onActiveBindingChange.Invoke(booleanAction, inputSource, activeBinding);
+            }
 
             if (onActiveChange != null && lastActive != active)
+            {
                 onActiveChange.Invoke(booleanAction, inputSource, activeBinding);
+            }
         }
     }
 

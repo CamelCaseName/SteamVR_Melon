@@ -16,10 +16,7 @@ namespace Valve.VR.InteractionSystem.Sample
             for (int handIndex = 0; handIndex < Player.instance.hands.Length; handIndex++)
             {
                 Hand hand = Player.instance.hands[handIndex];
-                if (hand != null)
-                {
-                    hand.SetSkeletonRangeOfMotion(Valve.VR.EVRSkeletalMotionRange.WithController);
-                }
+                hand?.SetSkeletonRangeOfMotion(Valve.VR.EVRSkeletalMotionRange.WithController);
             }
         }
 
@@ -28,10 +25,7 @@ namespace Valve.VR.InteractionSystem.Sample
             for (int handIndex = 0; handIndex < Player.instance.hands.Length; handIndex++)
             {
                 Hand hand = Player.instance.hands[handIndex];
-                if (hand != null)
-                {
-                    hand.SetSkeletonRangeOfMotion(Valve.VR.EVRSkeletalMotionRange.WithoutController);
-                }
+                hand?.SetSkeletonRangeOfMotion(Valve.VR.EVRSkeletalMotionRange.WithoutController);
             }
         }
 
@@ -40,10 +34,7 @@ namespace Valve.VR.InteractionSystem.Sample
             for (int handIndex = 0; handIndex < Player.instance.hands.Length; handIndex++)
             {
                 Hand hand = Player.instance.hands[handIndex];
-                if (hand != null)
-                {
-                    hand.ShowController(true);
-                }
+                hand?.ShowController(true);
             }
         }
 
@@ -55,9 +46,14 @@ namespace Valve.VR.InteractionSystem.Sample
                 if (hand != null)
                 {
                     if (hand.handType == SteamVR_Input_Sources.RightHand)
+                    {
                         hand.SetRenderModel(prefabs.rightPrefab);
+                    }
+
                     if (hand.handType == SteamVR_Input_Sources.LeftHand)
+                    {
                         hand.SetRenderModel(prefabs.leftPrefab);
+                    }
                 }
             }
         }
@@ -67,10 +63,7 @@ namespace Valve.VR.InteractionSystem.Sample
             for (int handIndex = 0; handIndex < Player.instance.hands.Length; handIndex++)
             {
                 Hand hand = Player.instance.hands[handIndex];
-                if (hand != null)
-                {
-                    hand.HideController(true);
-                }
+                hand?.HideController(true);
             }
         }
     }

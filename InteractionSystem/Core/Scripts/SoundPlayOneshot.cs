@@ -58,20 +58,14 @@ namespace Valve.VR.InteractionSystem
         //-------------------------------------------------
         public void Pause()
         {
-            if (thisAudioSource != null)
-            {
-                thisAudioSource.Pause();
-            }
+            thisAudioSource?.Pause();
         }
 
 
         //-------------------------------------------------
         public void UnPause()
         {
-            if (thisAudioSource != null)
-            {
-                thisAudioSource.UnPause();
-            }
+            thisAudioSource?.UnPause();
         }
     }
 }

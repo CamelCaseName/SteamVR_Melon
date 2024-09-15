@@ -78,14 +78,12 @@ namespace Valve.VR
                         else if (key == "disableStandardAssets")
                         {
                             var field = c.GetType().GetField(key);
-                            if (field != null)
-                                field.SetValue(c, bool.Parse(split[1]));
+                            field?.SetValue(c, bool.Parse(split[1]));
                         }
                         else
                         {
                             var field = c.GetType().GetField(key);
-                            if (field != null)
-                                field.SetValue(c, float.Parse(split[1]));
+                            field?.SetValue(c, float.Parse(split[1]));
                         }
 #endif
                     }
@@ -164,7 +162,10 @@ namespace Valve.VR
                 vrcam = Camera.main;
 
                 if (target == vrcam.transform)
+                {
                     return;
+                }
+
                 target = vrcam.transform;
             }
             else
@@ -172,7 +173,10 @@ namespace Valve.VR
                 vrcam = steamVR_Camera.camera;
 
                 if (target == steamVR_Camera.head)
+                {
                     return;
+                }
+
                 target = steamVR_Camera.head;
             }
 
@@ -213,7 +217,9 @@ namespace Valve.VR
 
             // Strip children of cloned object (AudioListener in particular).
             while (offset.childCount > 0)
+            {
                 DestroyImmediate(offset.GetChild(0).gameObject);
+            }
 
             // Setup clipping quad (using camera clip causes problems with shadows).
             clipQuad = GameObject.CreatePrimitive(PrimitiveType.Quad);
@@ -238,7 +244,9 @@ namespace Valve.VR
         public float GetTargetDistance()
         {
             if (target == null)
+            {
                 return config.near + 0.01f;
+            }
 
             var offset = cam.transform;
             var forward = new Vector3(offset.forward.x, 0.0f, offset.forward.z).normalized;
@@ -363,13 +371,19 @@ namespace Valve.VR
                     cameraRects[i] = cam.rect;
 
                     if (cam == this.cam)
+                    {
                         continue;
+                    }
 
                     if (cam.targetTexture != null)
+                    {
                         continue;
+                    }
 
                     if (cam.GetComponent<SteamVR_Camera>() != null)
+                    {
                         continue;
+                    }
 
                     cam.rect = new Rect(0.5f, 0.0f, 0.5f, 0.5f);
                 }
@@ -420,7 +434,9 @@ namespace Valve.VR
                 {
                     var cam = cameras[i];
                     if (cam != null)
+                    {
                         cam.rect = cameraRects[i];
+                    }
                 }
                 cameras = null;
                 cameraRects = null;

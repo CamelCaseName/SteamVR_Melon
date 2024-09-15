@@ -45,13 +45,17 @@ namespace Valve.VR
             }
 
             if (usingSpeakers)
+            {
                 SteamVR_Events.NewPosesApplied.Listen(OnNewPosesApplied);
+            }
         }
 
         void OnDisable()
         {
             if (usingSpeakers)
+            {
                 SteamVR_Events.NewPosesApplied.Remove(OnNewPosesApplied);
+            }
         }
     }
 }

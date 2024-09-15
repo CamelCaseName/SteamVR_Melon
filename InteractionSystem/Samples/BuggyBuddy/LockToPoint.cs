@@ -27,7 +27,9 @@ namespace Valve.VR.InteractionSystem.Sample
         {
             bool used = false;
             if (interactable != null)
+            {
                 used = interactable.attachedToHand;
+            }
 
             if (used)
             {
@@ -52,7 +54,9 @@ namespace Valve.VR.InteractionSystem.Sample
 
                     body.velocity = Vector3.Lerp(body.velocity, Vector3.zero, Time.fixedDeltaTime * 4);
                     if (body.useGravity)
+                    {
                         body.AddForce(-Physics.gravity);
+                    }
 
                     transform.position = Vector3.Lerp(transform.position, snapTo.position, Time.fixedDeltaTime * t * 3);
                     transform.rotation = Quaternion.Slerp(transform.rotation, snapTo.rotation, Time.fixedDeltaTime * t * 2);

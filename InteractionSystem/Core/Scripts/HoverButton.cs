@@ -44,7 +44,9 @@ namespace Valve.VR.InteractionSystem
         private void Start()
         {
             if (movingPart == null && this.transform.childCount > 0)
+            {
                 movingPart = this.transform.GetChild(0);
+            }
 
             startPosition = movingPart.localPosition;
             endPosition = startPosition + localMoveDistance;
@@ -72,9 +74,13 @@ namespace Valve.VR.InteractionSystem
             float lerp = Mathf.InverseLerp(0, localMoveDistance.magnitude, distanceDifference);
 
             if (lerp > engageAtPercent)
+            {
                 engaged = true;
+            }
             else if (lerp < disengageAtPercent)
+            {
                 engaged = false;
+            }
 
             movingPart.localPosition = Vector3.Lerp(startPosition, endPosition, lerp);
 
@@ -101,11 +107,19 @@ namespace Valve.VR.InteractionSystem
             buttonUp = wasEngaged == true && isEngaged == false;
 
             if (buttonDown && onButtonDown != null)
+            {
                 onButtonDown.Send(lastHoveredHand);
+            }
+
             if (buttonUp && onButtonUp != null)
+            {
                 onButtonUp.Send(lastHoveredHand);
+            }
+
             if (isEngaged && onButtonIsPressed != null)
+            {
                 onButtonIsPressed.Send(lastHoveredHand);
+            }
         }
     }
 }

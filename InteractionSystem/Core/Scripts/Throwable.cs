@@ -149,8 +149,7 @@ namespace Valve.VR.InteractionSystem
 
             rigidbody.interpolation = RigidbodyInterpolation.None;
 
-            if (velocityEstimator != null)
-                velocityEstimator.BeginEstimatingVelocity();
+            velocityEstimator?.BeginEstimatingVelocity();
 
             attachTime = Time.time;
             attachPosition = transform.position;
@@ -183,7 +182,9 @@ namespace Valve.VR.InteractionSystem
         public virtual void GetReleaseVelocities(Hand hand, out Vector3 velocity, out Vector3 angularVelocity)
         {
             if (hand.noSteamVRFallbackCamera && releaseVelocityStyle != ReleaseStyle.NoChange)
+            {
                 releaseVelocityStyle = ReleaseStyle.ShortEstimation; // only type that works with fallback hand is short estimation.
+            }
 
             switch (releaseVelocityStyle)
             {
@@ -246,8 +247,7 @@ namespace Valve.VR.InteractionSystem
                 //MelonLoader.MelonCoroutines.Start( LateDetach( hand ) );
             }
 
-            if (onHeldUpdate != null)
-                onHeldUpdate.Send(hand);
+            onHeldUpdate?.Send(hand);
         }
 
 
@@ -265,8 +265,7 @@ namespace Valve.VR.InteractionSystem
         {
             gameObject.SetActive( true );
 
-            if (velocityEstimator != null)
-                velocityEstimator.BeginEstimatingVelocity();
+            velocityEstimator?.BeginEstimatingVelocity();
         }
 
 
@@ -275,8 +274,7 @@ namespace Valve.VR.InteractionSystem
         {
             gameObject.SetActive( false );
 
-            if (velocityEstimator != null)
-                velocityEstimator.FinishEstimatingVelocity();
+            velocityEstimator?.FinishEstimatingVelocity();
         }
     }
 

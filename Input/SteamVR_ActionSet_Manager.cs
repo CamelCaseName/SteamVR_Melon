@@ -20,9 +20,13 @@ namespace Valve.VR
             get
             {
                 if (currentArraySize <= 0)
+                {
                     return null;
+                }
                 else
+                {
                     return poolActiveActionSetArrays[currentArraySize];
+                }
             }
         }
 
@@ -74,7 +78,9 @@ namespace Valve.VR
                     {
                         EVRInputError err = OpenVR.Input.UpdateActionState(rawActiveActionSetArray, activeActionSetSize);
                         if (err != EVRInputError.None)
+                        {
                             MelonLoader.MelonLogger.Error("[HPVR] UpdateActionState error: " + err.ToString());
+                        }
                         //else MelonLoader.MelonLogger.Msg("Action sets activated: " + activeActionSets.Length);
                     }
                 }
@@ -147,7 +153,9 @@ namespace Valve.VR
             currentArraySize = newArraySize;
 
             if (Application.isEditor || updateDebugTextInBuilds)
+            {
                 UpdateDebugText();
+            }
         }
 
         public static SteamVR_ActionSet GetSetFromHandle(ulong handle)
@@ -156,7 +164,9 @@ namespace Valve.VR
             {
                 SteamVR_ActionSet set = SteamVR_Input.actionSets[actionSetIndex];
                 if (set.handle == handle)
+                {
                     return set;
+                }
             }
 
             return null;

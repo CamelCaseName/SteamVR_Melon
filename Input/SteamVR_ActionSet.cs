@@ -31,7 +31,9 @@ namespace Valve.VR
             get
             {
                 if (initialized == false)
+                {
                     Initialize();
+                }
 
                 return setData.allActions;
             }
@@ -43,7 +45,9 @@ namespace Valve.VR
             get
             {
                 if (initialized == false)
+                {
                     Initialize();
+                }
 
                 return setData.nonVisualInActions;
             }
@@ -55,7 +59,9 @@ namespace Valve.VR
             get
             {
                 if (initialized == false)
+                {
                     Initialize();
+                }
 
                 return setData.visualActions;
             }
@@ -67,7 +73,9 @@ namespace Valve.VR
             get
             {
                 if (initialized == false)
+                {
                     Initialize();
+                }
 
                 return setData.poseActions;
             }
@@ -79,7 +87,9 @@ namespace Valve.VR
             get
             {
                 if (initialized == false)
+                {
                     Initialize();
+                }
 
                 return setData.skeletonActions;
             }
@@ -91,7 +101,9 @@ namespace Valve.VR
             get
             {
                 if (initialized == false)
+                {
                     Initialize();
+                }
 
                 return setData.outActionArray;
             }
@@ -104,7 +116,9 @@ namespace Valve.VR
             get
             {
                 if (initialized == false)
+                {
                     Initialize();
+                }
 
                 return setData.fullPath;
             }
@@ -114,7 +128,9 @@ namespace Valve.VR
             get
             {
                 if (initialized == false)
+                {
                     Initialize();
+                }
 
                 return setData.usage;
             }
@@ -125,7 +141,9 @@ namespace Valve.VR
             get
             {
                 if (initialized == false)
+                {
                     Initialize();
+                }
 
                 return setData.handle;
             }
@@ -254,9 +272,13 @@ namespace Valve.VR
         public bool ShowBindingHints(ISteamVR_Action_In originToHighlight = null)
         {
             if (originToHighlight == null)
+            {
                 return SteamVR_Input.ShowBindingHints(this);
+            }
             else
+            {
                 return SteamVR_Input.ShowBindingHints(originToHighlight);
+            }
         }
 
 
@@ -299,7 +321,9 @@ namespace Valve.VR
         public bool Equals(SteamVR_ActionSet other)
         {
             if (ReferenceEquals(null, other))
+            {
                 return false;
+            }
 
             return this.actionSetPath == other.actionSetPath;
         }
@@ -309,15 +333,22 @@ namespace Valve.VR
             if (ReferenceEquals(null, other))
             {
                 if (string.IsNullOrEmpty(this.actionSetPath)) //if we haven't set a path, say this action set is equal to null
+                {
                     return true;
+                }
+
                 return false;
             }
 
             if (ReferenceEquals(this, other))
+            {
                 return true;
+            }
 
             if (other is SteamVR_ActionSet)
+            {
                 return this.Equals((SteamVR_ActionSet)other);
+            }
 
             return false;
         }
@@ -325,9 +356,13 @@ namespace Valve.VR
         public override int GetHashCode()
         {
             if (actionSetPath == null)
+            {
                 return 0;
+            }
             else
+            {
                 return actionSetPath.GetHashCode();
+            }
         }
 
         public static bool operator !=(SteamVR_ActionSet set1, SteamVR_ActionSet set2)
@@ -341,9 +376,13 @@ namespace Valve.VR
             bool set2null = (ReferenceEquals(null, set2) || string.IsNullOrEmpty(set2.actionSetPath) || set2.GetActionSetData() == null);
 
             if (set1null && set2null)
+            {
                 return true;
+            }
             else if (set1null != set2null)
+            {
                 return false;
+            }
 
             return set1.Equals(set2);
         }
@@ -456,7 +495,9 @@ namespace Valve.VR
             handle = newHandle;
 
             if (err != EVRInputError.None)
+            {
                 MelonLoader.MelonLogger.Error("[HPVR] GetActionSetHandle (" + fullPath + ") error: " + err.ToString());
+            }
 
             initialized = true;
         }
@@ -470,7 +511,9 @@ namespace Valve.VR
             int sourceIndex = (int)source;
 
             if (initialized)
+            {
                 return rawSetActive[sourceIndex] || rawSetActive[0];
+            }
 
             return false;
         }
@@ -484,7 +527,10 @@ namespace Valve.VR
             int sourceIndex = (int)source;
 
             if (initialized)
+            {
                 return rawSetLastChanged[sourceIndex];
+            }
+
             return 0;
         }
 
@@ -499,7 +545,9 @@ namespace Valve.VR
             int sourceIndex = (int)activateForSource;
 
             if (disableAllOtherActionSets)
+            {
                 SteamVR_ActionSet_Manager.DisableAllActionSets();
+            }
 
             if (rawSetActive[sourceIndex] == false)
             {

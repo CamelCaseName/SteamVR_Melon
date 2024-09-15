@@ -96,9 +96,13 @@ namespace Valve.VR
                 {
                     MelonLoader.MelonLogger.Error("[HPVR] Failed to set skybox override with error: " + error);
                     if (error == EVRCompositorError.TextureIsOnWrongDevice)
+                    {
                         MelonLoader.MelonLogger.Msg("[HPVR] Set your graphics driver to use the same video card as the headset is plugged into for Unity.");
+                    }
                     else if (error == EVRCompositorError.TextureUsesUnsupportedFormat)
+                    {
                         MelonLoader.MelonLogger.Msg("[HPVR] Ensure skybox textures are not compressed and have no mipmaps.");
+                    }
                 }
             }
         }
@@ -106,8 +110,7 @@ namespace Valve.VR
         static public void ClearOverride()
         {
             var compositor = OpenVR.Compositor;
-            if (compositor != null)
-                compositor.ClearSkyboxOverride();
+            compositor?.ClearSkyboxOverride();
         }
 
         void OnEnable()

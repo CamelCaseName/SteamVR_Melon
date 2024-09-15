@@ -89,11 +89,15 @@ namespace Valve.VR.InteractionSystem.Sample
             public void UpdateFinger(float deltaTime)
             {
                 if (deltaTime == 0)
+                {
                     return;
+                }
 
                 float squeezeValue = 0;
                 if (squeezyAction != null && squeezyAction.GetActive(inputSource))
+                {
                     squeezeValue = squeezyAction.GetAxis(inputSource);
+                }
 
                 squeezySmooth = Mathf.Lerp(squeezySmooth, Mathf.Sqrt(squeezeValue), deltaTime * 10);
 
@@ -104,11 +108,20 @@ namespace Valve.VR.InteractionSystem.Sample
 
                 float boneRot = 0;
                 if (referenceAxis == eulerAxis.X)
+                {
                     boneRot = referenceBone.localEulerAngles.x;
+                }
+
                 if (referenceAxis == eulerAxis.Y)
+                {
                     boneRot = referenceBone.localEulerAngles.y;
+                }
+
                 if (referenceAxis == eulerAxis.Z)
+                {
                     boneRot = referenceBone.localEulerAngles.z;
+                }
+
                 boneRot = FixAngle(boneRot);
 
                 pos = Mathf.InverseLerp(referenceAngles.x, referenceAngles.y, boneRot);
@@ -193,7 +206,10 @@ namespace Valve.VR.InteractionSystem.Sample
             private float FixAngle(float ang)
             {
                 if (ang > 180)
+                {
                     ang = -360 + ang;
+                }
+
                 return ang;
             }
 

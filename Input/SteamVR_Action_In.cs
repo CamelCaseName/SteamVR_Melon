@@ -179,7 +179,9 @@ namespace Valve.VR
             for (int sourceIndex = 0; sourceIndex < updatingSources.Count; sourceIndex++)
             {
                 if (isUpdatingSourceIndex == updatingSources[sourceIndex])
+                {
                     return true;
+                }
             }
 
             return false;
@@ -214,7 +216,9 @@ namespace Valve.VR
                 sources[sourceIndex].isUpdating = true;
 
                 if (SteamVR_Input.isStartupFrame == false)
+                {
                     sources[sourceIndex].UpdateValue();
+                }
             }
         }
 
@@ -295,7 +299,9 @@ namespace Valve.VR
             base.Initialize();
 
             if (inputOriginInfo_size == 0)
+            {
                 inputOriginInfo_size = (uint)Marshal.SizeOf(typeof(InputOriginInfo_t));
+            }
         }
 
         protected void UpdateOriginTrackedDeviceInfo()
@@ -305,7 +311,9 @@ namespace Valve.VR
                 EVRInputError err = OpenVR.Input.GetOriginTrackedDeviceInfo(activeOrigin, ref inputOriginInfo, inputOriginInfo_size);
 
                 if (err != EVRInputError.None)
+                {
                     MelonLoader.MelonLogger.Error("[HPVR] GetOriginTrackedDeviceInfo error (" + fullPath + "): " + err.ToString() + " handle: " + handle.ToString() + " activeOrigin: " + activeOrigin.ToString() + " active: " + active);
+                }
 
                 lastInputOriginInfo = inputOriginInfo;
                 lastOriginGetFrame = Time.frameCount;

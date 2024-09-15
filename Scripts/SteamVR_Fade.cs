@@ -44,8 +44,7 @@ namespace Valve.VR
         static public void View(Color newColor, float duration)
         {
             var compositor = OpenVR.Compositor;
-            if (compositor != null)
-                compositor.FadeToColor(duration, newColor.r, newColor.g, newColor.b, newColor.a, false);
+            compositor?.FadeToColor(duration, newColor.r, newColor.g, newColor.b, newColor.a, false);
         }
 
 #if TEST_FADE_VIEW

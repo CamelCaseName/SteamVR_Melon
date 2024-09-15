@@ -45,15 +45,21 @@ namespace Valve.VR
                 GameObject steamVRObject = null;
 
                 if (forceUnityVRToOpenVR)
+                {
                     forcingInitialization = true;
+                }
 
                 SteamVR_Render renderInstance = GameObject.FindObjectOfType<SteamVR_Render>();
                 if (renderInstance != null)
+                {
                     steamVRObject = renderInstance.gameObject;
+                }
 
                 SteamVR_Behaviour behaviourInstance = GameObject.FindObjectOfType<SteamVR_Behaviour>();
                 if (behaviourInstance != null)
+                {
                     steamVRObject = behaviourInstance.gameObject;
+                }
 
                 if (steamVRObject == null)
                 {
@@ -65,22 +71,30 @@ namespace Valve.VR
                 {
                     behaviourInstance = steamVRObject.GetComponent<SteamVR_Behaviour>();
                     if (behaviourInstance == null)
+                    {
                         behaviourInstance = steamVRObject.AddComponent<SteamVR_Behaviour>();
+                    }
 
                     if (renderInstance != null)
+                    {
                         behaviourInstance.steamvr_render = renderInstance;
+                    }
                     else
                     {
                         behaviourInstance.steamvr_render = steamVRObject.GetComponent<SteamVR_Render>();
                         if (behaviourInstance.steamvr_render == null)
+                        {
                             behaviourInstance.steamvr_render = steamVRObject.AddComponent<SteamVR_Render>();
+                        }
                     }
 
                     _instance = behaviourInstance;
                 }
 
                 if (_instance != null && _instance.doNotDestroy)
+                {
                     GameObject.DontDestroyOnLoad(_instance.transform.root.gameObject);
+                }
 
                 initializing = false;
             }
@@ -91,7 +105,9 @@ namespace Valve.VR
             isPlaying = true;
 
             if (initializeSteamVROnAwake && forcingInitialization == false)
+            {
                 InitializeSteamVR();
+            }
         }
 
         public void InitializeSteamVR(bool forceUnityVRToOpenVR = false)
@@ -101,12 +117,19 @@ namespace Valve.VR
                 forcingInitialization = true;
 
                 if (initializeCoroutine != null)
+                {
                     MelonLoader.MelonCoroutines.Stop(initializeCoroutine);
+                }
 
                 if (XRSettings.loadedDeviceName == openVRDeviceName)
+                {
                     EnableOpenVR();
+                }
                 else
+                {
                     initializeCoroutine = DoInitializeSteamVR(forceUnityVRToOpenVR);
+                }
+
                 MelonLoader.MelonCoroutines.Start(initializeCoroutine);
             }
             else

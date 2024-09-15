@@ -335,7 +335,9 @@ namespace Valve.VR
         public Vector3[] GetBonePositions(bool copy = false)
         {
             if (copy)
+            {
                 return (Vector3[])sourceMap[SteamVR_Input_Sources.Any].bonePositions.Clone();
+            }
 
             return sourceMap[SteamVR_Input_Sources.Any].bonePositions;
         }
@@ -347,7 +349,9 @@ namespace Valve.VR
         public Quaternion[] GetBoneRotations(bool copy = false)
         {
             if (copy)
+            {
                 return (Quaternion[])sourceMap[SteamVR_Input_Sources.Any].boneRotations.Clone();
+            }
 
             return sourceMap[SteamVR_Input_Sources.Any].boneRotations;
         }
@@ -359,7 +363,9 @@ namespace Valve.VR
         public Vector3[] GetLastBonePositions(bool copy = false)
         {
             if (copy)
+            {
                 return (Vector3[])sourceMap[SteamVR_Input_Sources.Any].lastBonePositions.Clone();
+            }
 
             return sourceMap[SteamVR_Input_Sources.Any].lastBonePositions;
         }
@@ -371,7 +377,9 @@ namespace Valve.VR
         public Quaternion[] GetLastBoneRotations(bool copy = false)
         {
             if (copy)
+            {
                 return (Quaternion[])sourceMap[SteamVR_Input_Sources.Any].lastBoneRotations.Clone();
+            }
 
             return sourceMap[SteamVR_Input_Sources.Any].lastBoneRotations;
         }
@@ -451,9 +459,13 @@ namespace Valve.VR
         public float[] GetFingerCurls(bool copy = false)
         {
             if (copy)
+            {
                 return (float[])sourceMap[SteamVR_Input_Sources.Any].fingerCurls.Clone();
+            }
             else
+            {
                 return sourceMap[SteamVR_Input_Sources.Any].fingerCurls;
+            }
         }
 
         /// <summary>
@@ -463,9 +475,13 @@ namespace Valve.VR
         public float[] GetLastFingerCurls(bool copy = false)
         {
             if (copy)
+            {
                 return (float[])sourceMap[SteamVR_Input_Sources.Any].lastFingerCurls.Clone();
+            }
             else
+            {
                 return sourceMap[SteamVR_Input_Sources.Any].lastFingerCurls;
+            }
         }
 
         /// <summary>
@@ -475,9 +491,13 @@ namespace Valve.VR
         public float[] GetFingerSplays(bool copy = false)
         {
             if (copy)
+            {
                 return (float[])sourceMap[SteamVR_Input_Sources.Any].fingerSplays.Clone();
+            }
             else
+            {
                 return sourceMap[SteamVR_Input_Sources.Any].fingerSplays;
+            }
         }
 
         /// <summary>
@@ -487,9 +507,13 @@ namespace Valve.VR
         public float[] GetLastFingerSplays(bool copy = false)
         {
             if (copy)
+            {
                 return (float[])sourceMap[SteamVR_Input_Sources.Any].lastFingerSplays.Clone();
+            }
             else
+            {
                 return sourceMap[SteamVR_Input_Sources.Any].lastFingerSplays;
+            }
         }
 
         /// <summary>
@@ -874,7 +898,9 @@ namespace Valve.VR
             base.Initialize();
 
             if (skeletonActionData_size == 0)
+            {
                 skeletonActionData_size = (uint)Marshal.SizeOf(typeof(InputSkeletalActionData_t));
+            }
         }
 
 
@@ -891,56 +917,84 @@ namespace Valve.VR
             {
                 delegates = onActiveChange.GetInvocationList();
                 if (delegates != null)
+                {
                     foreach (Delegate existingDelegate in delegates)
+                    {
                         onActiveChange -= (SteamVR_Action_Skeleton.ActiveChangeHandler)existingDelegate;
+                    }
+                }
             }
 
             if (onActiveBindingChange != null)
             {
                 delegates = onActiveBindingChange.GetInvocationList();
                 if (delegates != null)
+                {
                     foreach (Delegate existingDelegate in delegates)
+                    {
                         onActiveBindingChange -= (SteamVR_Action_Skeleton.ActiveChangeHandler)existingDelegate;
+                    }
+                }
             }
 
             if (onChange != null)
             {
                 delegates = onChange.GetInvocationList();
                 if (delegates != null)
+                {
                     foreach (Delegate existingDelegate in delegates)
+                    {
                         onChange -= (SteamVR_Action_Skeleton.ChangeHandler)existingDelegate;
+                    }
+                }
             }
 
             if (onUpdate != null)
             {
                 delegates = onUpdate.GetInvocationList();
                 if (delegates != null)
+                {
                     foreach (Delegate existingDelegate in delegates)
+                    {
                         onUpdate -= (SteamVR_Action_Skeleton.UpdateHandler)existingDelegate;
+                    }
+                }
             }
 
             if (onTrackingChanged != null)
             {
                 delegates = onTrackingChanged.GetInvocationList();
                 if (delegates != null)
+                {
                     foreach (Delegate existingDelegate in delegates)
+                    {
                         onTrackingChanged -= (SteamVR_Action_Skeleton.TrackingChangeHandler)existingDelegate;
+                    }
+                }
             }
 
             if (onValidPoseChanged != null)
             {
                 delegates = onValidPoseChanged.GetInvocationList();
                 if (delegates != null)
+                {
                     foreach (Delegate existingDelegate in delegates)
+                    {
                         onValidPoseChanged -= (SteamVR_Action_Skeleton.ValidPoseChangeHandler)existingDelegate;
+                    }
+                }
             }
 
             if (onDeviceConnectedChanged != null)
             {
                 delegates = onDeviceConnectedChanged.GetInvocationList();
                 if (delegates != null)
+                {
                     foreach (Delegate existingDelegate in delegates)
+                    {
                         onDeviceConnectedChanged -= (SteamVR_Action_Skeleton.DeviceConnectedChangeHandler)existingDelegate;
+                    }
+                }
             }
         }
 
@@ -996,7 +1050,9 @@ namespace Valve.VR
                 {
                     error = OpenVR.Input.GetSkeletalBoneData(handle, skeletalTransformSpace, rangeOfMotion, tempBoneTransforms);
                     if (error != EVRInputError.None)
+                    {
                         MelonLoader.MelonLogger.Error("[HPVR] GetSkeletalBoneData error (" + fullPath + "): " + error.ToString() + " handle: " + handle.ToString());
+                    }
 
                     for (int boneIndex = 0; boneIndex < tempBoneTransforms.Length; boneIndex++)
                     {
@@ -1040,10 +1096,14 @@ namespace Valve.VR
             }
 
             if (changed)
+            {
                 changedTime = Time.realtimeSinceStartup;
+            }
 
             if (skipStateAndEventUpdates == false)
+            {
                 CheckAndSendEvents();
+            }
         }
 
         /// <summary>
@@ -1059,7 +1119,9 @@ namespace Valve.VR
             uint boneCount = 0;
             EVRInputError error = OpenVR.Input.GetBoneCount(handle, ref boneCount);
             if (error != EVRInputError.None)
+            {
                 MelonLoader.MelonLogger.Error("[HPVR] GetBoneCount error (" + fullPath + "): " + error.ToString() + " handle: " + handle.ToString());
+            }
 
             return boneCount;
         }
@@ -1079,7 +1141,9 @@ namespace Valve.VR
 
             EVRInputError error = OpenVR.Input.GetBoneHierarchy(handle, parentIndicies);
             if (error != EVRInputError.None)
+            {
                 MelonLoader.MelonLogger.Error("[HPVR] GetBoneHierarchy error (" + fullPath + "): " + error.ToString() + " handle: " + handle.ToString());
+            }
 
             return parentIndicies;
         }
@@ -1092,7 +1156,9 @@ namespace Valve.VR
             StringBuilder stringBuilder = new StringBuilder(255);
             EVRInputError error = OpenVR.Input.GetBoneName(handle, boneIndex, stringBuilder, 255);
             if (error != EVRInputError.None)
+            {
                 MelonLoader.MelonLogger.Error("[HPVR] GetBoneName error (" + fullPath + "): " + error.ToString() + " handle: " + handle.ToString());
+            }
 
             return stringBuilder.ToString();
         }
@@ -1111,7 +1177,9 @@ namespace Valve.VR
 
             EVRInputError error = OpenVR.Input.GetSkeletalReferenceTransforms(handle, transformSpace, referencePose, boneTransforms);
             if (error != EVRInputError.None)
+            {
                 MelonLoader.MelonLogger.Error("[HPVR] GetSkeletalReferenceTransforms error (" + fullPath + "): " + error.ToString() + " handle: " + handle.ToString());
+            }
 
             for (int transformIndex = 0; transformIndex < boneTransforms.Length; transformIndex++)
             {
@@ -1152,7 +1220,9 @@ namespace Valve.VR
 
             EVRInputError error = OpenVR.Input.GetSkeletalTrackingLevel(handle, ref skeletalTrackingLevel);
             if (error != EVRInputError.None)
+            {
                 MelonLoader.MelonLogger.Error("[HPVR] GetSkeletalTrackingLevel error (" + fullPath + "): " + error.ToString() + " handle: " + handle.ToString());
+            }
 
             return skeletalTrackingLevel;
         }
@@ -1179,7 +1249,9 @@ namespace Valve.VR
             {
                 EVRInputError error = OpenVR.Input.GetSkeletalSummaryData(handle, summaryType, ref skeletalSummaryData);
                 if (error != EVRInputError.None)
+                {
                     MelonLoader.MelonLogger.Error("[HPVR] GetSkeletalSummaryData error (" + fullPath + "): " + error.ToString() + " handle: " + handle.ToString());
+                }
 
                 fingerCurls[0] = skeletalSummaryData.flFingerCurl0;
                 fingerCurls[1] = skeletalSummaryData.flFingerCurl1;
@@ -1198,25 +1270,36 @@ namespace Valve.VR
         protected override void CheckAndSendEvents()
         {
             if (trackingState != lastTrackingState && onTrackingChanged != null)
+            {
                 onTrackingChanged.Invoke(skeletonAction, trackingState);
+            }
 
             if (poseIsValid != lastPoseIsValid && onValidPoseChanged != null)
+            {
                 onValidPoseChanged.Invoke(skeletonAction, poseIsValid);
+            }
 
             if (deviceIsConnected != lastDeviceIsConnected && onDeviceConnectedChanged != null)
+            {
                 onDeviceConnectedChanged.Invoke(skeletonAction, deviceIsConnected);
+            }
 
             if (changed && onChange != null)
+            {
                 onChange.Invoke(skeletonAction);
+            }
 
             if (active != lastActive && onActiveChange != null)
+            {
                 onActiveChange.Invoke(skeletonAction, active);
+            }
 
             if (activeBinding != lastActiveBinding && onActiveBindingChange != null)
+            {
                 onActiveBindingChange.Invoke(skeletonAction, activeBinding);
+            }
 
-            if (onUpdate != null)
-                onUpdate.Invoke(skeletonAction);
+            onUpdate?.Invoke(skeletonAction);
         }
     }
 

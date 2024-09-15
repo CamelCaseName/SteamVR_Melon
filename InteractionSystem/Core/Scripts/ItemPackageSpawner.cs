@@ -261,7 +261,9 @@ namespace Valve.VR.InteractionSystem
         private void RemoveMatchingItemsFromHandStack( ItemPackage package, Hand hand )
         {
             if (hand == null)
+            {
                 return;
+            }
 
             for ( int i = 0; i < hand.AttachedObjects.Count; i++ )
             {

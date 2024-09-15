@@ -118,7 +118,9 @@ namespace Valve.VR.InteractionSystem
 
             // Couldn't grab onto a body
             if (holdingBody == null)
+            {
                 return;
+            }
 
             // Create a fixed joint from the hand to the holding body
             if (attachMode == AttachMode.FixedJoint)

@@ -211,7 +211,9 @@ public static class SteamVR_Utils
     public static string GetBadMD5HashFromFile(string filePath)
     {
         if (File.Exists(filePath) == false)
+        {
             return null;
+        }
 
         string data = File.ReadAllText(filePath);
         return GetBadMD5Hash(data + secretKey);
@@ -220,14 +222,21 @@ public static class SteamVR_Utils
     public static string SanitizePath(string path, bool allowLeadingSlash = true)
     {
         if (path.Contains("\\\\"))
+        {
             path = path.Replace("\\\\", "\\");
+        }
+
         if (path.Contains("//"))
+        {
             path = path.Replace("//", "/");
+        }
 
         if (allowLeadingSlash == false)
         {
             if (path[0] == '/' || path[0] == '\\')
+            {
                 path = path.Substring(1);
+            }
         }
 
         return path;
@@ -236,12 +245,18 @@ public static class SteamVR_Utils
     public static System.Type FindType(string typeName)
     {
         var type = System.Type.GetType(typeName);
-        if (type != null) return type;
+        if (type != null)
+        {
+            return type;
+        }
+
         foreach (var a in System.AppDomain.CurrentDomain.GetAssemblies())
         {
             type = a.GetType(typeName);
             if (type != null)
+            {
                 return type;
+            }
         }
         return null;
     }
@@ -480,7 +495,9 @@ public static class SteamVR_Utils
         var result = (system != null) ? fn(system, args) : null;
 
         if (initOpenVR)
+        {
             OpenVR.Shutdown();
+        }
 
         return result;
     }
@@ -503,7 +520,10 @@ public static class SteamVR_Utils
         if (camera == null)
         {
             if (tempCamera == null)
+            {
                 tempCamera = new GameObject().AddComponent<Camera>();
+            }
+
             camera = tempCamera;
         }
 

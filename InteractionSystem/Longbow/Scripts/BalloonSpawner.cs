@@ -87,22 +87,13 @@ namespace Valve.VR.InteractionSystem
 
             if ( sendSpawnMessageToParent )
             {
-                if ( transform.parent != null )
-                {
-                    transform.parent.SendMessage( "OnBalloonSpawned", balloon, SendMessageOptions.DontRequireReceiver );
-                }
+                transform.parent?.SendMessage( "OnBalloonSpawned", balloon, SendMessageOptions.DontRequireReceiver );
             }
 
             if ( playSounds )
             {
-                if ( inflateSound != null )
-                {
-                    inflateSound.Play();
-                }
-                if ( stretchSound != null )
-                {
-                    stretchSound.Play();
-                }
+                inflateSound?.Play();
+                stretchSound?.Play();
             }
             balloon.GetComponentInChildren<Balloon>().SetColor( color );
             if ( spawnDirectionTransform != null )

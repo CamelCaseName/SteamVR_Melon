@@ -96,7 +96,9 @@ namespace Valve.VR
             name = name.Replace('/', '_').Replace(' ', '_');
 
             if (char.IsLetter(name[0]) == false)
+            {
                 name = "_" + name;
+            }
 
             for (int charIndex = 0; charIndex < name.Length; charIndex++)
             {
@@ -124,7 +126,9 @@ namespace Valve.VR
                 string bindingPath = Path.Combine(path, binding.binding_url);
 
                 if (File.Exists(bindingPath))
+                {
                     files.Add(bindingPath);
+                }
                 else
                 {
                     if (throwErrors)
@@ -148,7 +152,9 @@ namespace Valve.VR
 
                 bool exists = false;
                 if (File.Exists(newFilePath))
+                {
                     exists = true;
+                }
 
                 if (exists)
                 {
@@ -194,12 +200,16 @@ namespace Valve.VR
                 int stringStart = jsonText.IndexOf(findString);
 
                 if (stringStart == -1)
+                {
                     return; //no app key
+                }
 
                 int stringEnd = jsonText.IndexOf("\",", stringStart);
 
                 if (stringEnd == -1)
+                {
                     return; //no end?
+                }
 
                 stringEnd += findString_appKeyEnd.Length;
 
@@ -303,7 +313,9 @@ namespace Valve.VR
             {
                 int lastIndex = name.LastIndexOf('/');
                 if (lastIndex == name.Length - 1)
+                {
                     return string.Empty;
+                }
 
                 return SteamVR_Input_ActionFile.GetShortName(name);
             }
@@ -344,10 +356,14 @@ namespace Valve.VR
             {
                 SteamVR_Input_ActionFile_ActionSet set = (SteamVR_Input_ActionFile_ActionSet)obj;
                 if (set == this)
+                {
                     return true;
+                }
 
                 if (set.name == this.name)
+                {
                     return true;
+                }
 
                 return false;
             }
@@ -388,7 +404,9 @@ namespace Valve.VR
             get
             {
                 if (_requirementValues == null)
+                {
                     _requirementValues = System.Enum.GetNames(typeof(SteamVR_Input_ActionFile_Action_Requirements));
+                }
 
                 return _requirementValues;
             }
@@ -486,7 +504,9 @@ namespace Valve.VR
             get
             {
                 if (type.ToLower() == SteamVR_Input_ActionFile_ActionTypes.vibration)
+                {
                     return SteamVR_ActionDirections.Out;
+                }
 
                 return SteamVR_ActionDirections.In;
             }
@@ -501,7 +521,9 @@ namespace Valve.VR
             {
                 int setEnd = name.IndexOf('/', prefix.Length);
                 if (setEnd == -1)
+                {
                     return string.Empty;
+                }
 
                 return name.Substring(0, setEnd);
             }
@@ -523,10 +545,14 @@ namespace Valve.VR
             {
                 SteamVR_Input_ActionFile_Action action = (SteamVR_Input_ActionFile_Action)obj;
                 if (this == obj)
+                {
                     return true;
+                }
 
                 if (this.name == action.name && this.type == action.type && this.skeleton == action.skeleton && this.requirement == action.requirement)
+                {
                     return true;
+                }
 
                 return false;
             }
@@ -555,17 +581,25 @@ namespace Valve.VR
         public SteamVR_Input_ActionFile_LocalizationItem(Dictionary<string, string> dictionary)
         {
             if (dictionary == null)
+            {
                 return;
+            }
 
             if (dictionary.ContainsKey(languageTagKeyName))
+            {
                 language = (string)dictionary[languageTagKeyName];
+            }
             else
+            {
                 MelonLoader.MelonLogger.Msg("[HPVR] Input: Error in actions file, no language_tag in localization array item.");
+            }
 
             foreach (KeyValuePair<string, string> item in dictionary)
             {
                 if (item.Key != languageTagKeyName)
+                {
                     items.Add(item.Key, (string)item.Value);
+                }
             }
         }
     }

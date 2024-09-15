@@ -25,13 +25,17 @@ namespace Valve.VR.InteractionSystem.Sample
         private void Update()
         {
             if (Player.instance == null)
+            {
                 return;
+            }
 
             Transform cam = Camera.main.transform;
             bool lookingAt = (Vector3.Angle(cam.forward, transform.position - cam.position) < 90);
 
             if (lookingAt == false)
+            {
                 return;
+            }
 
             for (int handIndex = 0; handIndex < Player.instance.hands.Length; handIndex++)
             {
