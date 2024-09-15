@@ -87,12 +87,12 @@ namespace SteamVR_Melon.Standalone
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         private delegate IntPtr FindAndLoadUnityPlugin(IntPtr name, out IntPtr loadedModule, byte param3);
 
-        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-        private delegate IntPtr CallbackPointer();
+        //[UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        //private delegate IntPtr CallbackPointer();
 
-        private static CallbackPointer ourGetRenderEventFunc;
+        //private static CallbackPointer ourGetRenderEventFunc;
 
-        public static IntPtr GetRenderEventFunc() => ourGetRenderEventFunc();
+        //public static IntPtr GetRenderEventFunc() => ourGetRenderEventFunc();
 
     }
 }

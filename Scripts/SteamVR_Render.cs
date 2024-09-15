@@ -394,6 +394,7 @@ namespace Valve.VR
         {
             if (success)
             {
+                MelonLogger.Msg("hooking screenshots");
                 OpenVR.Screenshots.HookScreenshot(screenshotTypes);
             }
         }
@@ -443,7 +444,7 @@ namespace Valve.VR
             }
         }
 
-        void Update()
+        public void Update()
         {
             if (SteamVR.active == false)
             {
@@ -457,6 +458,7 @@ namespace Valve.VR
                 return;
             }
 
+            //MelonLogger.Msg("polling vrevents");
             UpdatePoses();
 
             var vrEvent = new VREvent_t();

@@ -79,11 +79,11 @@ namespace SteamVR_Melon.Util
             for (int i = 0; i < system.subSystemList.Count; i++)
             {
                 PlayerLoopSystem item = system.subSystemList[i];
-                MelonLogger.Msg($"{item.type?.Name ?? "none"} {(item.loopConditionFunction == null ? IntPtr.Zero : ((nint)item.loopConditionFunction - (nint)adress)):x} {item.updateDelegate?.method_info?.Name ?? "none"} {(item.updateFunction == null ? IntPtr.Zero : ((nint)item.updateFunction - (nint)adress)):x}");
+                //MelonLogger.Msg($"{item.type?.Name ?? "none"} {(item.loopConditionFunction == null ? IntPtr.Zero : ((nint)item.loopConditionFunction - (nint)adress)):x} {item.updateDelegate?.method_info?.Name ?? "none"} {(item.updateFunction == null ? IntPtr.Zero : ((nint)item.updateFunction - (nint)adress)):x}");
 
                 foreach (PlayerLoopSystem item2 in item.subSystemList)
                 {
-                    MelonLogger.Msg($"      {item2.type?.Name ?? "none"} {(item2.loopConditionFunction == null ? IntPtr.Zero : ((nint)item.loopConditionFunction - (nint)adress)):x} {item2.updateDelegate?.method_info?.Name ?? "none"} {(item2.updateFunction == null ? IntPtr.Zero : ((nint)item.updateFunction - (nint)adress)):x}");
+                    //MelonLogger.Msg($"      {item2.type?.Name ?? "none"} {(item2.loopConditionFunction == null ? IntPtr.Zero : ((nint)item.loopConditionFunction - (nint)adress)):x} {item2.updateDelegate?.method_info?.Name ?? "none"} {(item2.updateFunction == null ? IntPtr.Zero : ((nint)item.updateFunction - (nint)adress)):x}");
                 }
             }
         }
@@ -100,7 +100,7 @@ namespace SteamVR_Melon.Util
             InvokeOnBeforeRender();
         }
 
-        private static Camera OnPreRenderCam = null;
+        //private static Camera OnPreRenderCam = null;
 
 
         [RegisterTypeInIl2Cpp(true)]
