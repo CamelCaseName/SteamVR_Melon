@@ -25,10 +25,12 @@ namespace Valve.VR
 
         public Camera camera { get; private set; }
 
-        public new Transform transform { get { return base.transform; } }
+        public new Transform transform { get { return base.transform;  }  }
 
         private Transform _ears;
         public Transform ears { get { return _ears; } }
+
+        public static SteamVR_Camera instance = null;
 
         public Ray GetRay()
         {
@@ -331,6 +333,7 @@ namespace Valve.VR
             }
 
             MelonLogger.Msg("[HPVR] ...done");
+            instance = this;
             //MelonLogger.Msg("origin: " + head.parent.name +"/" + origin.name + " - head: " + transform.parent.name + "/" + (origin.GetChild(0)?.name ?? "none") + "/" + head.name + " - eye: " + (origin.GetChild(0)?.GetChild(0)?.name ?? "none") + "/" + this.name);
         }
 
