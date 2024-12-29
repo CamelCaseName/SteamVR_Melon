@@ -4,6 +4,7 @@ using System;
 using System.Collections;
 using System.Runtime.InteropServices;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using Mathf = HPVR.Util.Mathf;
 
 namespace Valve.VR
@@ -58,7 +59,7 @@ namespace Valve.VR
 
         void AddInternal(SteamVR_Camera vrcam)
         {
-            MelonLogger.Msg("[hpvr] adding " + vrcam);
+            MelonLogger.Msg("[hpvr] " + SceneManager.GetActiveScene().name + " adding " + vrcam);
             var camera = vrcam.GetComponent<Camera>();
             var length = cameras.Length;
             var sorted = new SteamVR_Camera[length + 1];

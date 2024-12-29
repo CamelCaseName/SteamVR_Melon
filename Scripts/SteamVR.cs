@@ -10,6 +10,7 @@ using SteamVR_Melon.Util;
 using System.IO;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.Experimental.Rendering;
 using UnityEngine.XR;
 
 namespace Valve.VR
@@ -162,7 +163,7 @@ namespace Valve.VR
             errorLog += "To attempt to force OpenVR initialization call SteamVR.Initialize(true). ";
 
 
-            MelonLoader.MelonLogger.Warning(errorLog);
+            MelonLogger.Warning(errorLog);
         }
 
         private static SteamVR CreateInstance()
@@ -178,6 +179,19 @@ namespace Valve.VR
                 //VRShaders.TryLoadShaders();
 
                 OpenVR.Init(ref error, EVRApplicationType.VRApplication_Scene, "");
+
+                if(error == EVRInitError.Init_HmdNotFound)
+                {
+                    MelonLogger.Error("#####################################################################");
+                    MelonLogger.Error("###                                                               ###");
+                    MelonLogger.Error("###  YOU NEED TO HAVE YOUR VR HEADSET CONNECTED BEFORE STARTING!  ###");
+                    MelonLogger.Error("###                                                               ###");
+                    MelonLogger.Error("#####################################################################");
+                    initializedState = InitializedStates.InitializeFailure;
+                    SteamVR_Events.Initialized.Send(false);
+                    return null;
+
+                }
                 MelonLogger.Msg("openvr init returned: " + error);
                 CVRSystem system = OpenVR.System;
                 string manifestFile = GetManifestFile();
