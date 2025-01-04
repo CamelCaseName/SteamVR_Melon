@@ -4,13 +4,13 @@
 //
 //=============================================================================
 
+using Assets.SteamVR_Melon.Standalone;
 using MelonLoader;
 using SteamVR_Melon.Standalone;
 using SteamVR_Melon.Util;
 using System.IO;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.Experimental.Rendering;
 using UnityEngine.XR;
 
 namespace Valve.VR
@@ -180,7 +180,7 @@ namespace Valve.VR
 
                 OpenVR.Init(ref error, EVRApplicationType.VRApplication_Scene, "");
 
-                if(error == EVRInitError.Init_HmdNotFound)
+                if (error == EVRInitError.Init_HmdNotFound)
                 {
                     MelonLogger.Error("#####################################################################");
                     MelonLogger.Error("###                                                               ###");
@@ -190,8 +190,8 @@ namespace Valve.VR
                     initializedState = InitializedStates.InitializeFailure;
                     SteamVR_Events.Initialized.Send(false);
                     return null;
-
                 }
+
                 MelonLogger.Msg("openvr init returned: " + error);
                 CVRSystem system = OpenVR.System;
                 string manifestFile = GetManifestFile();
@@ -239,24 +239,21 @@ namespace Valve.VR
                 }
 
                 settings = SteamVR_Settings.instance;
-
                 if (Application.isEditor)
                 {
                     IdentifyEditorApplication();
                 }
 
                 SteamVR_Input.IdentifyActionsFile();
-
                 if (SteamVR_Settings.instance.inputUpdateMode != SteamVR_UpdateModes.Nothing || SteamVR_Settings.instance.poseUpdateMode != SteamVR_UpdateModes.Nothing)
                 {
                     MelonLogger.Msg("activating steamvr input");
                     SteamVR_Input.Initialize();
-
                 }
             }
             catch (System.Exception e)
             {
-                MelonLoader.MelonLogger.Error("[HPVR] " + e);
+                MelonLogger.Error("[HPVR] " + e);
                 SteamVR_Events.Initialized.Send(false);
                 return null;
             }
@@ -264,7 +261,7 @@ namespace Valve.VR
             _enabled = true;
             initializedState = InitializedStates.InitializeSuccess;
             SteamVR_Events.Initialized.Send(true);
-            MelonLogger.Msg("[HPVR] returning SteamVR Object");
+            MelonLogger.Msg("returning SteamVR Object");
             return new SteamVR();
         }
 
@@ -728,9 +725,8 @@ namespace Valve.VR
 
         private SteamVR()
         {
-
             hmd = OpenVR.System;
-            MelonLoader.MelonLogger.Msg($"[HPVR] Initialized. Connected to {hmd_TrackingSystemName} : {hmd_ModelNumber} : {hmd_SerialNumber} :: {hmd_Type}");
+            MelonLoader.MelonLogger.Msg($"Initialized. Connected to {hmd_TrackingSystemName} : {hmd_ModelNumber} : {hmd_SerialNumber} :: {hmd_Type}");
 
             compositor = OpenVR.Compositor;
             overlay = OpenVR.Overlay;
@@ -740,14 +736,14 @@ namespace Valve.VR
             hmd.GetRecommendedRenderTargetSize(ref w, ref h);
             sceneWidth = (float)w;
             sceneHeight = (float)h;
-            MelonLogger.Msg($"[HPVR] hmd res: {sceneWidth}:{sceneHeight}");
+            MelonLogger.Msg($"hmd res: {sceneWidth}:{sceneHeight}");
 
             float l_left = 0.0f, l_right = 0.0f, l_top = 0.0f, l_bottom = 0.0f;
             hmd.GetProjectionRaw(EVREye.Eye_Left, ref l_left, ref l_right, ref l_top, ref l_bottom);
 
             float r_left = 0.0f, r_right = 0.0f, r_top = 0.0f, r_bottom = 0.0f;
             hmd.GetProjectionRaw(EVREye.Eye_Right, ref r_left, ref r_right, ref r_top, ref r_bottom);
-            MelonLogger.Msg($"[HPVR] hmd projection: {r_left}{r_right}{r_top}{r_bottom}");
+            MelonLogger.Msg($"hmd projection: {r_left}{r_right}{r_top}{r_bottom}");
 
             tanHalfFov = new Vector2(
                 Mathf.Max(-l_left, l_right, -r_left, r_right),

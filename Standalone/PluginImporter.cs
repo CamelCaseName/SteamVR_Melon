@@ -77,18 +77,18 @@ namespace SteamVR_Melon.Standalone
 
             var name_ = name;
             var strPtr = Marshal.StringToHGlobalAnsi(name);
-            MelonLogger.Msg($"[HPVR] loading plugin {strPtr:x} ({name})");
+            MelonLogger.Msg($"loading plugin {strPtr:x} ({name})");
 
             var retName = method(strPtr, out var loaded, 1);
 
-            MelonLogger.Msg("[HPVR] unity loaded the plugin from: " + Marshal.PtrToStringAnsi(retName));
+            MelonLogger.Msg("unity loaded the plugin from: " + Marshal.PtrToStringAnsi(retName));
 
             if (loaded == IntPtr.Zero)
             {
-                MelonLogger.Error("[HPVR] Module load failed");
+                MelonLogger.Error("Module load failed");
                 return;
             }
-            MelonLogger.Msg("[HPVR] plugin loaded");
+            MelonLogger.Msg("plugin loaded");
 
             Marshal.FreeHGlobal(strPtr);
         }
