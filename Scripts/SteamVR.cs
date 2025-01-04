@@ -176,7 +176,7 @@ namespace Valve.VR
 
                 PluginImporter.LoadPlugin(OpenVRMagic.openvr_api);
                 UnityHooks.Init();
-                //VRShaders.TryLoadShaders();
+                VRShaders.TryLoadShaders();
 
                 OpenVR.Init(ref error, EVRApplicationType.VRApplication_Scene, "");
 
