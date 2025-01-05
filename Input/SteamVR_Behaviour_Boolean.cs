@@ -15,7 +15,7 @@ namespace Valve.VR
     /// <para>Provides editor accessible events: OnPress, OnPressDown, OnPressUp, OnChange, and OnUpdate.</para>
     /// <para>Provides script accessible events: OnPressEvent, OnPressDownEvent, OnPressUpEvent, OnChangeEvent, and OnUpdateEvent.</para>
     /// </summary>
-    [MelonLoader.RegisterTypeInIl2Cpp(true)]
+    [MelonLoader.RegisterTypeInIl2Cpp()]
     public class SteamVR_Behaviour_Boolean : MonoBehaviour
     {
         public SteamVR_Behaviour_Boolean(IntPtr value) : base(value) { }
@@ -29,36 +29,42 @@ namespace Valve.VR
         public SteamVR_Behaviour_BooleanEvent onChange;
 
         /// <summary>This C# event fires whenever a change happens in the action</summary>
+        [Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp]
         public event ChangeHandler onChangeEvent;
 
         /// <summary>This UnityEvent fires whenever the action is updated</summary>
         public SteamVR_Behaviour_BooleanEvent onUpdate;
 
         /// <summary>This C# event fires whenever the action is updated</summary>
+        [Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp]
         public event UpdateHandler onUpdateEvent;
 
         /// <summary>This UnityEvent will fire whenever the boolean action is true and gets updated</summary>
         public SteamVR_Behaviour_BooleanEvent onPress;
 
         /// <summary>This C# event will fire whenever the boolean action is true and gets updated</summary>
+        [Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp]
         public event StateHandler onPressEvent;
 
         /// <summary>This UnityEvent will fire whenever the boolean action has changed from false to true in the last update</summary>
         public SteamVR_Behaviour_BooleanEvent onPressDown;
 
         /// <summary>This C# event will fire whenever the boolean action has changed from false to true in the last update</summary>
+        [Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp]
         public event StateDownHandler onPressDownEvent;
 
         /// <summary>This UnityEvent will fire whenever the boolean action has changed from true to false in the last update</summary>
         public SteamVR_Behaviour_BooleanEvent onPressUp;
 
         /// <summary>This C# event will fire whenever the boolean action has changed from true to false in the last update</summary>
+        [Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp]
         public event StateUpHandler onPressUpEvent;
 
         /// <summary>Returns true if this action is currently bound and its action set is active</summary>
         public bool isActive { get { return booleanAction[inputSource].active; } }
 
         /// <summary>Returns the action set that this action is in.</summary>
+        [Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp]
         public SteamVR_ActionSet actionSet { get { if (booleanAction != null) { return booleanAction.actionSet; } else { return null; } } }
 
 
@@ -79,6 +85,7 @@ namespace Valve.VR
             RemoveHandlers();
         }
 
+        [Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp]
         protected void AddHandlers()
         {
             booleanAction[inputSource].onUpdate += SteamVR_Behaviour_Boolean_OnUpdate;
@@ -88,6 +95,7 @@ namespace Valve.VR
             booleanAction[inputSource].onStateUp += SteamVR_Behaviour_Boolean_OnStateUp;
         }
 
+        [Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp]
         protected void RemoveHandlers()
         {
 
@@ -101,6 +109,7 @@ namespace Valve.VR
             }
         }
 
+        [Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp]
         private void SteamVR_Behaviour_Boolean_OnStateUp(SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource)
         {
             onPressUp?.Send(this, fromSource, false);
@@ -108,6 +117,7 @@ namespace Valve.VR
             onPressUpEvent?.Invoke(this, fromSource);
         }
 
+        [Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp]
         private void SteamVR_Behaviour_Boolean_OnStateDown(SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource)
         {
             onPressDown?.Send(this, fromSource, true);
@@ -115,6 +125,7 @@ namespace Valve.VR
             onPressDownEvent?.Invoke(this, fromSource);
         }
 
+        [Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp]
         private void SteamVR_Behaviour_Boolean_OnState(SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource)
         {
             onPress?.Send(this, fromSource, true);
@@ -122,6 +133,7 @@ namespace Valve.VR
             onPressEvent?.Invoke(this, fromSource);
         }
 
+        [Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp]
         private void SteamVR_Behaviour_Boolean_OnUpdate(SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource, bool newState)
         {
             onUpdate?.Send(this, fromSource, newState);
@@ -129,6 +141,7 @@ namespace Valve.VR
             onUpdateEvent?.Invoke(this, fromSource, newState);
         }
 
+        [Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp]
         private void SteamVR_Behaviour_Boolean_OnChange(SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource, bool newState)
         {
             onChange?.Send(this, fromSource, newState);
@@ -147,6 +160,7 @@ namespace Valve.VR
         /// <item><description>VRInputString_All - All of the above. E.g. "Left Hand Vive Controller Trackpad"</description></item>
         /// </list>
         /// </param>
+        [Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp]
         public string GetLocalizedName(params EVRInputStringBits[] localizedParts)
         {
             if (booleanAction != null)

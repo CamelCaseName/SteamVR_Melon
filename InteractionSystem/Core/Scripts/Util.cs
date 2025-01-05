@@ -712,7 +712,7 @@ namespace Valve.VR.InteractionSystem
     //-------------------------------------------------------------------------
     //Component used by the static AfterTimer function
     //-------------------------------------------------------------------------
-    [MelonLoader.RegisterTypeInIl2Cpp(true)]
+    [MelonLoader.RegisterTypeInIl2Cpp()]
     [System.Serializable]
     public class AfterTimer_Component : MonoBehaviour
     {
@@ -723,6 +723,7 @@ namespace Valve.VR.InteractionSystem
         private bool triggerOnEarlyDestroy = false;
 
         //-------------------------------------------------
+        [Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp]
         public void Init(float _time, System.Action _callback, bool earlydestroy)
         {
             triggerTime = _time;
@@ -734,6 +735,7 @@ namespace Valve.VR.InteractionSystem
 
 
         //-------------------------------------------------
+        [Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp]
         private IEnumerator Wait()
         {
             yield return new WaitForSeconds(triggerTime);

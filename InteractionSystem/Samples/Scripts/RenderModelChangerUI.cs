@@ -38,7 +38,7 @@ using System;
 using UnityEngine;
 namespace Valve.VR.InteractionSystem.Sample
 {
-    [MelonLoader.RegisterTypeInIl2Cpp(true)]
+    [MelonLoader.RegisterTypeInIl2Cpp()]
     public class RenderModelChangerUI : MonoBehaviour
     {
         public RenderModelChangerUI(IntPtr va) : base(va) { }

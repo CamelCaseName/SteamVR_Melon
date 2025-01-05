@@ -11,7 +11,7 @@ using System;
 namespace Valve.VR.InteractionSystem.Sample
 {
     //-------------------------------------------------------------------------
-    [MelonLoader.RegisterTypeInIl2Cpp(true)]
+    [MelonLoader.RegisterTypeInIl2Cpp()]
     public class InteractableExample : MonoBehaviour
     {
 		public InteractableExample(IntPtr value) : base(value) { }

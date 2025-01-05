@@ -6,6 +6,7 @@
 
 using UnityEngine;
 using System.Collections;
+using Il2CppInterop.Runtime.InteropTypes.Arrays;
 
 namespace Valve.VR
 {
@@ -27,6 +28,7 @@ namespace Valve.VR
             newPosesAction.enabled = true;
         }
 
+        [Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp]
         private static void OnNewPoses(TrackedDevicePose_t[] poses)
         {
             if (cameraIndex != -1)

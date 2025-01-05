@@ -5,6 +5,7 @@
 //=============================================================================
 
 #if UNITY_UGUI_UI || !UNITY_2019_2_OR_NEWER
+using Il2CppInterop.Runtime.Attributes;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -15,7 +16,7 @@ using UnityEngine.UI;
 namespace Valve.VR.InteractionSystem
 {
     //-------------------------------------------------------------------------
-    [MelonLoader.RegisterTypeInIl2Cpp(true)]
+    [MelonLoader.RegisterTypeInIl2Cpp()]
     public class ControllerButtonHints : MonoBehaviour
     {
         public ControllerButtonHints(IntPtr value) : base(value) { }
@@ -175,6 +176,7 @@ namespace Valve.VR.InteractionSystem
         private Dictionary<string, Transform> componentTransformMap = new Dictionary<string, Transform>();
 
         //-------------------------------------------------
+        [HideFromIl2Cpp]
         void OnRenderModelLoaded(SteamVR_RenderModel renderModel, bool succeess)
         {
             //Only initialize when the render model for the controller hints has been loaded
@@ -193,6 +195,7 @@ namespace Valve.VR.InteractionSystem
                 MelonLoader.MelonCoroutines.Start(DoInitialize(renderModel));
             }
         }
+        [HideFromIl2Cpp]
         private IEnumerator DoInitialize(SteamVR_RenderModel renderModel)
         {
             while (renderModel.initializedAttachPoints == false)
@@ -267,6 +270,7 @@ namespace Valve.VR.InteractionSystem
 
 
         //-------------------------------------------------
+        [Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp]
         private void CreateAndAddButtonInfo(ISteamVR_Action_In action, SteamVR_Input_Sources inputSource)
         {
             Transform buttonTransform = null;
@@ -472,6 +476,7 @@ namespace Valve.VR.InteractionSystem
 
 
         //-------------------------------------------------
+        [Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp]
         private void ShowButtonHint(params ISteamVR_Action_In_Source[] actions)
         {
             renderModel.gameObject.SetActive(true);
@@ -526,6 +531,7 @@ namespace Valve.VR.InteractionSystem
 
 
         //-------------------------------------------------
+        [Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp]
         private void HideButtonHint(params ISteamVR_Action_In_Source[] actions)
         {
             Color baseColor = usingMaterial.GetColor(colorID);
@@ -552,6 +558,7 @@ namespace Valve.VR.InteractionSystem
 
 
         //-------------------------------------------------
+        [Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp]
         private bool IsButtonHintActive(ISteamVR_Action_In_Source action)
         {
             if (actionHintInfos.ContainsKey(action))
@@ -571,6 +578,7 @@ namespace Valve.VR.InteractionSystem
 
 
         //-------------------------------------------------
+        [HideFromIl2Cpp]
         private IEnumerator TestButtonHints()
         {
             while (true)
@@ -590,6 +598,7 @@ namespace Valve.VR.InteractionSystem
 
 
         //-------------------------------------------------
+        [HideFromIl2Cpp]
         private IEnumerator TestTextHints()
         {
             while (true)
@@ -650,6 +659,7 @@ namespace Valve.VR.InteractionSystem
 
 
         //-------------------------------------------------
+        [Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp]
         private void UpdateTextHint(ActionHintInfo hintInfo)
         {
             Transform playerTransform = player.hmdTransform;
@@ -687,6 +697,7 @@ namespace Valve.VR.InteractionSystem
 
 
         //-------------------------------------------------
+        [Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp]
         private void ShowText(ISteamVR_Action_In_Source action, string text, bool highlightButton = true)
         {
             if (actionHintInfos.ContainsKey(action))
@@ -718,6 +729,7 @@ namespace Valve.VR.InteractionSystem
 
 
         //-------------------------------------------------
+        [Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp]
         private void HideText(ISteamVR_Action_In_Source action)
         {
             if (actionHintInfos.ContainsKey(action))
@@ -749,6 +761,7 @@ namespace Valve.VR.InteractionSystem
 
 
         //-------------------------------------------------
+        [Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp]
         private string GetActiveHintText(ISteamVR_Action_In_Source action)
         {
             if (actionHintInfos.ContainsKey(action))
@@ -784,6 +797,7 @@ namespace Valve.VR.InteractionSystem
 
 
         //-------------------------------------------------
+        [Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp]
         public static void ShowButtonHint(Hand hand, params ISteamVR_Action_In_Source[] actions)
         {
             ControllerButtonHints hints = GetControllerButtonHints(hand);
@@ -792,6 +806,7 @@ namespace Valve.VR.InteractionSystem
 
 
         //-------------------------------------------------
+        [Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp]
         public static void HideButtonHint(Hand hand, params ISteamVR_Action_In_Source[] actions)
         {
             ControllerButtonHints hints = GetControllerButtonHints(hand);
@@ -808,6 +823,7 @@ namespace Valve.VR.InteractionSystem
 
 
         //-------------------------------------------------
+        [Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp]
         public static bool IsButtonHintActive(Hand hand, ISteamVR_Action_In_Source action)
         {
             ControllerButtonHints hints = GetControllerButtonHints(hand);

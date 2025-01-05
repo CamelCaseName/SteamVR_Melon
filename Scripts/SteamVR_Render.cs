@@ -10,7 +10,7 @@ using Mathf = HPVR.Util.Mathf;
 namespace Valve.VR
 {
 
-    [MelonLoader.RegisterTypeInIl2Cpp(true)]
+    [MelonLoader.RegisterTypeInIl2Cpp()]
     public class SteamVR_Render : MonoBehaviour
     {
         public SteamVR_Render(IntPtr value) : base(value) { }
@@ -20,6 +20,7 @@ namespace Valve.VR
 
         public static EVREye eye { get; private set; }
 
+        [Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp]
         public static SteamVR_Render instance { get { return SteamVR_Behaviour.instance.steamvr_render; } }
 
         static private bool isQuitting;
@@ -29,6 +30,7 @@ namespace Valve.VR
             SteamVR.SafeDispose();
         }
 
+        [Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp]
         static public void Add(SteamVR_Camera vrcam)
         {
             if (!isQuitting)
@@ -37,6 +39,7 @@ namespace Valve.VR
             }
         }
 
+        [Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp]
         static public void Remove(SteamVR_Camera vrcam)
         {
             if (!isQuitting && instance != null)
@@ -45,6 +48,7 @@ namespace Valve.VR
             }
         }
 
+        [Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp]
         static public SteamVR_Camera Top()
         {
             if (!isQuitting)
@@ -57,6 +61,7 @@ namespace Valve.VR
 
         private SteamVR_Camera[] cameras = new SteamVR_Camera[0];
 
+        [Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp]
         void AddInternal(SteamVR_Camera vrcam)
         {
             MelonLogger.Msg("[hpvr] " + SceneManager.GetActiveScene().name + " adding " + vrcam);
@@ -82,6 +87,7 @@ namespace Valve.VR
             cameras = sorted;
         }
 
+        [Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp]
         void RemoveInternal(SteamVR_Camera vrcam)
         {
             var length = cameras.Length;
@@ -150,6 +156,7 @@ namespace Valve.VR
 
         private WaitForEndOfFrame waitForEndOfFrame = new WaitForEndOfFrame();
 
+        [Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp]
         private IEnumerator RenderLoop()
         {
             while (Application.isPlaying)
@@ -315,6 +322,7 @@ namespace Valve.VR
             }
         }
 
+        [Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp]
         private string GetScreenshotFilename(uint screenshotHandle, EVRScreenshotPropertyFilenames screenshotPropertyFilename)
         {
             var error = EVRScreenshotError.None;
@@ -338,6 +346,7 @@ namespace Valve.VR
             return null;
         }
 
+        [Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp]
         private void OnRequestScreenshot(VREvent_t vrEvent)
         {
             var screenshotHandle = vrEvent.data.screenshot.handle;

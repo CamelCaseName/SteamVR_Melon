@@ -12,7 +12,7 @@ using UnityEngine;
 
 namespace Valve.VR
 {
-    [MelonLoader.RegisterTypeInIl2Cpp(true)]
+    [MelonLoader.RegisterTypeInIl2Cpp()]
     public class SteamVR_RenderModel : MonoBehaviour
     {
         public SteamVR_RenderModel(System.IntPtr value) : base(value) { }
@@ -106,6 +106,7 @@ namespace Valve.VR
             }
         }
 
+        [Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp]
         private void OnModelSkinSettingsHaveChanged(VREvent_t vrEvent)
         {
             if (!string.IsNullOrEmpty(renderModelName))
@@ -172,6 +173,7 @@ namespace Valve.VR
             }
         }
 
+        [Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp]
         IEnumerator SetModelAsync(string newRenderModelName)
         {
             meshRenderers.Clear();
@@ -363,6 +365,7 @@ namespace Valve.VR
             return false;
         }
 
+        [Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp]
         RenderModel LoadRenderModel(CVRRenderModels renderModels, string renderModelName, string baseName)
         {
             var pRenderModel = System.IntPtr.Zero;
@@ -515,6 +518,7 @@ namespace Valve.VR
             return new RenderModel(mesh, material);
         }
 
+        [Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp]
         IEnumerator FreeRenderModel(System.IntPtr pRenderModel)
         {
             yield return new WaitForSeconds(1.0f);
@@ -575,6 +579,7 @@ namespace Valve.VR
             }
         }
 
+        [Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp]
         private bool LoadComponents(RenderModelInterfaceHolder holder, string renderModelName)
         {
             // Disable existing components (we will re-enable them if referenced by this new model).
@@ -805,6 +810,7 @@ namespace Valve.VR
 
         Dictionary<int, string> nameCache;
 
+        [Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp]
         public void UpdateComponents(CVRRenderModels renderModels)
         {
             if (renderModels == null)
@@ -889,6 +895,7 @@ namespace Valve.VR
             }
         }
 
+        [Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp]
         public void SetInputSource(SteamVR_Input_Sources newInputSource)
         {
             inputSource = newInputSource;

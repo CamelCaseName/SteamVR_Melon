@@ -5,7 +5,7 @@ using Valve.VR;
 
 namespace Standalone
 {
-    [MelonLoader.RegisterTypeInIl2Cpp(true)]
+    [MelonLoader.RegisterTypeInIl2Cpp()]
     public class SteamVR_GameView : MonoBehaviour
     {
         public SteamVR_GameView(IntPtr value) : base(value) { }

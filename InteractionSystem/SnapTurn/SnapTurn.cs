@@ -4,11 +4,12 @@
 
 using UnityEngine;
 using System.Collections;
+using Il2CppInterop.Runtime.Attributes;
 
 namespace Valve.VR.InteractionSystem
 {
     //-----------------------------------------------------------------------------
-    [MelonLoader.RegisterTypeInIl2Cpp(true)]
+    [MelonLoader.RegisterTypeInIl2Cpp()]
     public class SnapTurn : MonoBehaviour
     {
         public SnapTurn(System.IntPtr value) : base(value) { }
@@ -52,6 +53,7 @@ namespace Valve.VR.InteractionSystem
         }
 
 
+        [HideFromIl2Cpp]
         private void Update()
         {
             Player player = Player.instance;
@@ -96,6 +98,7 @@ namespace Valve.VR.InteractionSystem
 
 
         private IEnumerator rotateCoroutine;
+        [HideFromIl2Cpp]
         public void RotatePlayer(float angle)
         {
             if (rotateCoroutine != null)
@@ -109,6 +112,7 @@ namespace Valve.VR.InteractionSystem
         }
 
         //-----------------------------------------------------
+        [HideFromIl2Cpp]
         private IEnumerator DoRotatePlayer(float angle)
         {
             Player player = Player.instance;

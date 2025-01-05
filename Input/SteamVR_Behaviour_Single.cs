@@ -10,7 +10,7 @@ namespace Valve.VR
     /// <summary>
     /// SteamVR_Behaviour_Single simplifies the use of single actions. It gives an event to subscribe to for when the action has changed.
     /// </summary>
-    [MelonLoader.RegisterTypeInIl2Cpp(true)]
+    [MelonLoader.RegisterTypeInIl2Cpp()]
     public class SteamVR_Behaviour_Single : MonoBehaviour
     {
         public SteamVR_Behaviour_Single(IntPtr value) : base(value) { }
@@ -78,6 +78,7 @@ namespace Valve.VR
             }
         }
 
+        [Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp]
         private void SteamVR_Behaviour_Single_OnUpdate(SteamVR_Action_Single fromAction, SteamVR_Input_Sources fromSource, float newAxis, float newDelta)
         {
             onUpdate?.Send(this, fromSource, newAxis, newDelta);
@@ -85,6 +86,7 @@ namespace Valve.VR
             onUpdateEvent?.Invoke(this, fromSource, newAxis, newDelta);
         }
 
+        [Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp]
         private void SteamVR_Behaviour_Single_OnChange(SteamVR_Action_Single fromAction, SteamVR_Input_Sources fromSource, float newAxis, float newDelta)
         {
             onChange?.Send(this, fromSource, newAxis, newDelta);
@@ -92,6 +94,7 @@ namespace Valve.VR
             onChangeEvent?.Invoke(this, fromSource, newAxis, newDelta);
         }
 
+        [Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp]
         private void SteamVR_Behaviour_Single_OnAxis(SteamVR_Action_Single fromAction, SteamVR_Input_Sources fromSource, float newAxis, float newDelta)
         {
             onAxis?.Send(this, fromSource, newAxis, newDelta);
@@ -111,6 +114,7 @@ namespace Valve.VR
         /// <item><description>VRInputString_All - All of the above. E.g. "Left Hand Vive Controller Trackpad"</description></item>
         /// </list>
         /// </param>
+        [Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp]
         public string GetLocalizedName(params EVRInputStringBits[] localizedParts)
         {
             if (singleAction != null)

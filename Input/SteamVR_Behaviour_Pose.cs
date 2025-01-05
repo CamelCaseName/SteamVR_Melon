@@ -1,5 +1,6 @@
 ﻿//======= Copyright (c) Valve Corporation, All rights reserved. ===============
 
+using MelonLoader;
 using System;
 using System.Threading;
 using UnityEngine;
@@ -12,7 +13,7 @@ namespace Valve.VR
     /// This component simplifies the use of Pose actions. Adding it to a gameobject will auto set that transform's position and rotation every update to match the pose.
     /// Advanced velocity estimation is handled through a buffer of the last 30 updates.
     /// </summary>
-    [MelonLoader.RegisterTypeInIl2Cpp(true)]
+    [MelonLoader.RegisterTypeInIl2Cpp()]
     public class SteamVR_Behaviour_Pose : MonoBehaviour
     {
         public SteamVR_Behaviour_Pose(IntPtr value) : base(value) { }
@@ -23,6 +24,7 @@ namespace Valve.VR
 
         /// <summary>If not set, relative to parent</summary>
         public Transform origin;
+        public new Transform transform;
 
         /// <summary>Returns whether or not the current pose is in a valid state</summary>
         public bool isValid { get { return poseAction[inputSource].poseIsValid; } }
@@ -113,6 +115,7 @@ namespace Valve.VR
             historyBuffer.Clear();
         }
 
+        [Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp]
         private void SteamVR_Behaviour_Pose_OnUpdate(SteamVR_Action_Pose fromAction, SteamVR_Input_Sources fromSource)
         {
             UpdateHistoryBuffer();
@@ -126,24 +129,34 @@ namespace Valve.VR
         {
             CheckDeviceIndex();
 
-            if (origin != null)
+            if (transform is not null)
             {
-                transform.position = origin.transform.TransformPoint(poseAction[inputSource].localPosition);
-                transform.rotation = origin.rotation * poseAction[inputSource].localRotation;
-            }
-            else
-            {
-                transform.localPosition = poseAction[inputSource].localPosition;
-                transform.localRotation = poseAction[inputSource].localRotation;
+                if (origin == null)
+                {
+                    origin = this.transform.parent;
+                }
+                if (origin != null)
+                {
+                    MelonLogger.Msg(origin.transform?.name ?? "origin transform is null");
+                    transform.position = origin.transform.TransformPoint(poseAction[inputSource].localPosition);
+                    transform.rotation = origin.rotation * poseAction[inputSource].localRotation;
+                }
+                else
+                {
+                    transform.localPosition = poseAction[inputSource].localPosition;
+                    transform.localRotation = poseAction[inputSource].localRotation;
+                }
             }
         }
 
+        [Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp]
         private void SteamVR_Behaviour_Pose_OnChange(SteamVR_Action_Pose fromAction, SteamVR_Input_Sources fromSource)
         {
             onTransformChanged?.Send(this, fromSource);
             onTransformChangedEvent?.Invoke(this, fromSource);
         }
 
+        [Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp]
         protected virtual void OnDeviceConnectedChanged(SteamVR_Action_Pose changedAction, SteamVR_Input_Sources changedSource, bool connected)
         {
             CheckDeviceIndex();
@@ -152,6 +165,7 @@ namespace Valve.VR
             onConnectedChangedEvent?.Invoke(this, inputSource, connected);
         }
 
+        [Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp]
         protected virtual void OnTrackingChanged(SteamVR_Action_Pose changedAction, SteamVR_Input_Sources changedSource, ETrackingResult trackingChanged)
         {
             onTrackingChanged?.Send(this, inputSource, trackingChanged);
@@ -241,6 +255,7 @@ namespace Valve.VR
         /// <item><description>VRInputString_All - All of the above. E.g. "Left Hand Vive Controller Trackpad"</description></item>
         /// </list>
         /// </param>
+        [Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp]
         public string GetLocalizedName(params EVRInputStringBits[] localizedParts)
         {
             if (poseAction != null)

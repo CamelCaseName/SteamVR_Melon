@@ -8,13 +8,14 @@ using UnityEngine;
 using UnityEngine.Events;
 using System.Collections;
 using System;
+using Il2CppInterop.Runtime.Attributes;
 
 namespace Valve.VR.InteractionSystem
 {
 
     //-------------------------------------------------------------------------
 
-    [MelonLoader.RegisterTypeInIl2Cpp(true)]
+    [MelonLoader.RegisterTypeInIl2Cpp()]
     public class CircularDrive : MonoBehaviour
 	{
 		public CircularDrive(IntPtr value) : base(value) { }
@@ -195,8 +196,9 @@ namespace Valve.VR.InteractionSystem
 		}
 
 
-		//-------------------------------------------------
-		private IEnumerator HapticPulses( Hand hand, float flMagnitude, int nCount )
+        //-------------------------------------------------
+        [HideFromIl2Cpp]
+        private IEnumerator HapticPulses( Hand hand, float flMagnitude, int nCount )
 		{
 			if ( hand != null )
 			{
@@ -224,8 +226,9 @@ namespace Valve.VR.InteractionSystem
 		}
 
 
-		//-------------------------------------------------
-		private void OnHandHoverEnd( Hand hand )
+        //-------------------------------------------------
+        [HideFromIl2Cpp]
+        private void OnHandHoverEnd( Hand hand )
 		{
             hand.HideGrabHint();
 
@@ -240,8 +243,9 @@ namespace Valve.VR.InteractionSystem
 		}
 
         private GrabTypes grabbedWithType;
-		//-------------------------------------------------
-		private void HandHoverUpdate( Hand hand )
+        //-------------------------------------------------
+        [HideFromIl2Cpp]
+        private void HandHoverUpdate( Hand hand )
         {
             GrabTypes startingGrabType = hand.GetGrabStarting();
             bool isGrabEnding = hand.IsGrabbingWithType(grabbedWithType) == false;
@@ -442,10 +446,11 @@ namespace Valve.VR.InteractionSystem
 		}
 
 
-		//-------------------------------------------------
-		// Computes the angle to rotate the game object based on the change in the transform
-		//-------------------------------------------------
-		private void ComputeAngle( Hand hand )
+        //-------------------------------------------------
+        // Computes the angle to rotate the game object based on the change in the transform
+        //-------------------------------------------------
+        [HideFromIl2Cpp]
+        private void ComputeAngle( Hand hand )
 		{
 			Vector3 toHandProjected = ComputeToTransformProjected( hand.hoverSphereTransform );
 

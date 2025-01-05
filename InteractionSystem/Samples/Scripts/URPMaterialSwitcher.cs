@@ -7,7 +7,7 @@ using System;
 using UnityEditor;
 #endif
 
-[MelonLoader.RegisterTypeInIl2Cpp(true)]
+[MelonLoader.RegisterTypeInIl2Cpp()]
 public class URPMaterialSwitcher : MonoBehaviour
 {
 	public URPMaterialSwitcher(IntPtr value) : base(value) { }

@@ -4,6 +4,7 @@
 //
 //=============================================================================
 
+using Il2CppInterop.Runtime.Attributes;
 using System;
 using System.Collections;
 using UnityEngine;
@@ -11,7 +12,7 @@ using UnityEngine;
 namespace Valve.VR.InteractionSystem.Sample
 {
     //-------------------------------------------------------------------------
-    [MelonLoader.RegisterTypeInIl2Cpp(true)]
+    [MelonLoader.RegisterTypeInIl2Cpp()]
     public class ControllerHintsExample : MonoBehaviour
     {
         public ControllerHintsExample(IntPtr value) : base(value) { }
@@ -70,6 +71,7 @@ namespace Valve.VR.InteractionSystem.Sample
         //-------------------------------------------------
         // Cycles through all the button hints on the controller
         //-------------------------------------------------
+        [HideFromIl2Cpp]
         private IEnumerator TestButtonHints(Hand hand)
         {
             ControllerButtonHints.HideAllButtonHints(hand);
@@ -98,6 +100,7 @@ namespace Valve.VR.InteractionSystem.Sample
         //-------------------------------------------------
         // Cycles through all the text hints on the controller
         //-------------------------------------------------
+        [HideFromIl2Cpp]
         private IEnumerator TestTextHints(Hand hand)
         {
             ControllerButtonHints.HideAllTextHints(hand);

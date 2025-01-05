@@ -13,7 +13,7 @@ namespace Valve.VR
     /// <summary>
     /// Simplifies the use of the Vector2 action. Provides an onChange event that fires whenever the vector2 changes.
     /// </summary>
-    [MelonLoader.RegisterTypeInIl2Cpp(true)]
+    [MelonLoader.RegisterTypeInIl2Cpp()]
     public class SteamVR_Behaviour_Vector2 : MonoBehaviour
     {
         public SteamVR_Behaviour_Vector2(IntPtr value) : base(value) { }
@@ -81,18 +81,21 @@ namespace Valve.VR
             }
         }
 
+        [Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp]
         private void SteamVR_Behaviour_Vector2_OnUpdate(SteamVR_Action_Vector2 fromAction, SteamVR_Input_Sources fromSource, Vector2 newAxis, Vector2 newDelta)
         {
             onUpdate?.Send(this, fromSource, newAxis, newDelta);
             onUpdateEvent?.Invoke(this, fromSource, newAxis, newDelta);
         }
 
+        [Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp]
         private void SteamVR_Behaviour_Vector2_OnChange(SteamVR_Action_Vector2 fromAction, SteamVR_Input_Sources fromSource, Vector2 newAxis, Vector2 newDelta)
         {
             onChange?.Send(this, fromSource, newAxis, newDelta);
             onChangeEvent?.Invoke(this, fromSource, newAxis, newDelta);
         }
 
+        [Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp]
         private void SteamVR_Behaviour_Vector2_OnAxis(SteamVR_Action_Vector2 fromAction, SteamVR_Input_Sources fromSource, Vector2 newAxis, Vector2 newDelta)
         {
             onAxis?.Send(this, fromSource, newAxis, newDelta);
@@ -110,6 +113,7 @@ namespace Valve.VR
         /// <item><description>VRInputString_All - All of the above. E.g. "Left Hand Vive Controller Trackpad"</description></item>
         /// </list>
         /// </param>
+        [Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp]
         public string GetLocalizedName(params EVRInputStringBits[] localizedParts)
         {
             if (vector2Action != null)

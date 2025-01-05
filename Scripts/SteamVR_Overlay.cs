@@ -10,7 +10,7 @@ using UnityEngine;
 namespace Valve.VR
 {
     //todo fix
-    //[MelonLoader.RegisterTypeInIl2Cpp(true)]
+    //[MelonLoader.RegisterTypeInIl2Cpp()]
     public class SteamVR_Overlay : MonoBehaviour
     {
         public SteamVR_Overlay(IntPtr value): base(value) { }

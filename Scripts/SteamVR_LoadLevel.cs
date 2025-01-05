@@ -13,7 +13,7 @@ using System;
 
 namespace Valve.VR
 {
-    [MelonLoader.RegisterTypeInIl2Cpp(true)]
+    [MelonLoader.RegisterTypeInIl2Cpp()]
     public class SteamVR_LoadLevel : MonoBehaviour
     {
         public SteamVR_LoadLevel(IntPtr value) : base(value) { }
@@ -251,6 +251,7 @@ namespace Valve.VR
         }
 
         // Corourtine to handle all the steps across loading boundaries.
+        [Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp]
         IEnumerator LoadLevel()
         {
             // Optionally rotate loading screen transform around the camera into view.

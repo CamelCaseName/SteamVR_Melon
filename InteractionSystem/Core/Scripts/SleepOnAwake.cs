@@ -11,7 +11,7 @@ using System;
 namespace Valve.VR.InteractionSystem
 {
     //-------------------------------------------------------------------------
-    [MelonLoader.RegisterTypeInIl2Cpp(true)]
+    [MelonLoader.RegisterTypeInIl2Cpp()]
     public class SleepOnAwake : MonoBehaviour
     {
         public SleepOnAwake(IntPtr value) : base(value) { }

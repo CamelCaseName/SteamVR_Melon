@@ -12,7 +12,7 @@ using System;
 namespace Valve.VR.InteractionSystem
 {
     //-------------------------------------------------------------------------
-    [MelonLoader.RegisterTypeInIl2Cpp(true)]
+    [MelonLoader.RegisterTypeInIl2Cpp()]
     public class SpawnAndAttachAfterControllerIsTracking : MonoBehaviour
 	{
 		public SpawnAndAttachAfterControllerIsTracking(IntPtr value) : base(value) { }

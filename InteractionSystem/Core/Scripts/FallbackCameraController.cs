@@ -11,7 +11,7 @@ using System;
 namespace Valve.VR.InteractionSystem
 {
     //-------------------------------------------------------------------------
-    [MelonLoader.RegisterTypeInIl2Cpp(true)]
+    [MelonLoader.RegisterTypeInIl2Cpp()]
     public class FallbackCameraController : MonoBehaviour
     {
         public FallbackCameraController(IntPtr value) : base(value) { }

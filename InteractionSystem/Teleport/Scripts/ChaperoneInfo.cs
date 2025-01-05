@@ -8,11 +8,12 @@ using UnityEngine;
 using UnityEngine.Events;
 using System.Collections;
 using System;
+using Il2CppInterop.Runtime.Attributes;
 
 namespace Valve.VR.InteractionSystem
 {
     //-------------------------------------------------------------------------
-    [MelonLoader.RegisterTypeInIl2Cpp(true)]
+    [MelonLoader.RegisterTypeInIl2Cpp()]
     public class ChaperoneInfo : MonoBehaviour
     {
         public ChaperoneInfo(IntPtr value) : base(value) { }
@@ -46,6 +47,7 @@ namespace Valve.VR.InteractionSystem
 
 
         //-------------------------------------------------
+        [HideFromIl2Cpp]
         IEnumerator Start()
         {
             // Uncomment for roomscale testing

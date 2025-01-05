@@ -11,7 +11,7 @@ using System;
 namespace Valve.VR.InteractionSystem
 {
     //-------------------------------------------------------------------------
-    [MelonLoader.RegisterTypeInIl2Cpp(true)]
+    [MelonLoader.RegisterTypeInIl2Cpp()]
     public class Unparent : MonoBehaviour
     {
         public Unparent(IntPtr value) : base(value) { }

@@ -12,7 +12,7 @@ using System;
 namespace Valve.VR.InteractionSystem
 {
     //-------------------------------------------------------------------------
-    [MelonLoader.RegisterTypeInIl2Cpp(true)]
+    [MelonLoader.RegisterTypeInIl2Cpp()]
     public class Throwable : MonoBehaviour
     {
         public Throwable(IntPtr value) : base(value) { }
@@ -252,6 +252,7 @@ namespace Valve.VR.InteractionSystem
 
 
         //-------------------------------------------------
+        [Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp]
         protected virtual IEnumerator LateDetach( Hand hand )
         {
             yield return new WaitForEndOfFrame();

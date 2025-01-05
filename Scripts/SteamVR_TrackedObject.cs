@@ -4,13 +4,14 @@
 //
 //=============================================================================
 
+using Il2CppInterop.Runtime.InteropTypes.Arrays;
 using MelonLoader;
 using System;
 using UnityEngine;
 
 namespace Valve.VR
 {
-    [MelonLoader.RegisterTypeInIl2Cpp(true)]
+    [MelonLoader.RegisterTypeInIl2Cpp()]
     public class SteamVR_TrackedObject : MonoBehaviour
     {
         public SteamVR_TrackedObject(IntPtr value) : base(value) { }
@@ -43,6 +44,7 @@ namespace Valve.VR
 
         public bool isValid { get; private set; }
 
+        [Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp]
         private void OnNewPoses(TrackedDevicePose_t[] poses)
         {
             if (index == EIndex.None)

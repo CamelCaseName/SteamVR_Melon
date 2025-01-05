@@ -7,7 +7,7 @@ using System;
 
 namespace Valve.VR.InteractionSystem.Sample
 {
-    [MelonLoader.RegisterTypeInIl2Cpp(true)]
+    [MelonLoader.RegisterTypeInIl2Cpp()]
     public class ButtonEffect : MonoBehaviour
     {
         public ButtonEffect(IntPtr value) : base(value) { }

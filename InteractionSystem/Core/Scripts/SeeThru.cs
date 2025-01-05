@@ -12,7 +12,7 @@ using System;
 namespace Valve.VR.InteractionSystem
 {
     //-------------------------------------------------------------------------
-    [MelonLoader.RegisterTypeInIl2Cpp(true)]
+    [MelonLoader.RegisterTypeInIl2Cpp()]
     public class SeeThru : MonoBehaviour
     {
         public SeeThru(IntPtr value) : base(value) { }

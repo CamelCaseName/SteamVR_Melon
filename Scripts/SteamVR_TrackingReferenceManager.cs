@@ -1,11 +1,12 @@
-﻿using System;
+﻿using Il2CppInterop.Runtime.InteropTypes.Arrays;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace Valve.VR
 {
-    [MelonLoader.RegisterTypeInIl2Cpp(true)]
+    [MelonLoader.RegisterTypeInIl2Cpp()]
     public class SteamVR_TrackingReferenceManager : MonoBehaviour
     {
         public SteamVR_TrackingReferenceManager(IntPtr value) : base(value) { }
@@ -22,6 +23,7 @@ namespace Valve.VR
             SteamVR_Events.NewPoses.Remove(OnNewPoses);
         }
 
+        [Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp]
         private void OnNewPoses(TrackedDevicePose_t[] poses)
         {
             if (poses == null)

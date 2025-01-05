@@ -1,10 +1,11 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System;
+using Il2CppInterop.Runtime.Attributes;
 
 namespace Valve.VR.InteractionSystem.Sample
 {
-    [MelonLoader.RegisterTypeInIl2Cpp(true)]
+    [MelonLoader.RegisterTypeInIl2Cpp()]
     public class ButtonExample : MonoBehaviour
     {
         public ButtonExample(IntPtr value) : base(value) { }
@@ -12,16 +13,19 @@ namespace Valve.VR.InteractionSystem.Sample
 
         public GameObject prefab;
 
+        [HideFromIl2Cpp]
         private void Start()
         {
             hoverButton.onButtonDown.Listen(OnButtonDown);
         }
 
+        [HideFromIl2Cpp]
         private void OnButtonDown(Hand hand)
         {
             MelonLoader.MelonCoroutines.Start(DoPlant());
         }
 
+        [HideFromIl2Cpp]
         private IEnumerator DoPlant()
         {
             GameObject planting = GameObject.Instantiate<GameObject>(prefab);

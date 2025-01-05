@@ -10,7 +10,7 @@ using UnityEngine.Events;
 
 namespace Valve.VR
 {
-    [MelonLoader.RegisterTypeInIl2Cpp(true)]
+    [MelonLoader.RegisterTypeInIl2Cpp()]
     public class SteamVR_Behaviour_Vector3 : MonoBehaviour
     {
         public SteamVR_Behaviour_Vector3(IntPtr value) : base(value) { }
@@ -79,18 +79,21 @@ namespace Valve.VR
             }
         }
 
+        [Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp]
         private void SteamVR_Behaviour_Vector3_OnUpdate(SteamVR_Action_Vector3 fromAction, SteamVR_Input_Sources fromSource, Vector3 newAxis, Vector3 newDelta)
         {
             onUpdate?.Send(this, fromSource, newAxis, newDelta);
             onUpdateEvent?.Invoke(this, fromSource, newAxis, newDelta);
         }
 
+        [Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp]
         private void SteamVR_Behaviour_Vector3_OnChange(SteamVR_Action_Vector3 fromAction, SteamVR_Input_Sources fromSource, Vector3 newAxis, Vector3 newDelta)
         {
             onChange?.Send(this, fromSource, newAxis, newDelta);
             onChangeEvent?.Invoke(this, fromSource, newAxis, newDelta);
         }
 
+        [Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp]
         private void SteamVR_Behaviour_Vector3_OnAxis(SteamVR_Action_Vector3 fromAction, SteamVR_Input_Sources fromSource, Vector3 newAxis, Vector3 newDelta)
         {
             onAxis?.Send(this, fromSource, newAxis, newDelta);
@@ -108,6 +111,7 @@ namespace Valve.VR
         /// <item><description>VRInputString_All - All of the above. E.g. "Left Hand Vive Controller Trackpad"</description></item>
         /// </list>
         /// </param>
+        [Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp]
         public string GetLocalizedName(params EVRInputStringBits[] localizedParts)
         {
             if (vector3Action != null)

@@ -13,7 +13,7 @@ using Mathf = HPVR.Util.Mathf;
 namespace Valve.VR.InteractionSystem
 {
     //-------------------------------------------------------------------------
-    [MelonLoader.RegisterTypeInIl2Cpp(true)]
+    [MelonLoader.RegisterTypeInIl2Cpp()]
     public class VelocityEstimator : MonoBehaviour
     {
         public VelocityEstimator(IntPtr value) : base(value) { }
@@ -123,6 +123,7 @@ namespace Valve.VR.InteractionSystem
         }
 
         //-------------------------------------------------
+        [Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp]
         private IEnumerator EstimateVelocityCoroutine()
         {
             sampleCount = 0;

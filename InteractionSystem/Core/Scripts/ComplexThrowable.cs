@@ -13,7 +13,7 @@ namespace Valve.VR.InteractionSystem
 {
     //-------------------------------------------------------------------------
 
-    [MelonLoader.RegisterTypeInIl2Cpp(true)]
+    [MelonLoader.RegisterTypeInIl2Cpp()]
     public class ComplexThrowable : MonoBehaviour
     {
         public ComplexThrowable(IntPtr value) : base(value) { }
@@ -59,6 +59,7 @@ namespace Valve.VR.InteractionSystem
 
 
         //-------------------------------------------------
+        [Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp]
         private void OnHandHoverBegin(Hand hand)
         {
             if (holdingHands.IndexOf(hand) == -1)
@@ -72,6 +73,7 @@ namespace Valve.VR.InteractionSystem
 
 
         //-------------------------------------------------
+        [Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp]
         private void OnHandHoverEnd(Hand hand)
         {
             if (holdingHands.IndexOf(hand) == -1)
@@ -85,6 +87,7 @@ namespace Valve.VR.InteractionSystem
 
 
         //-------------------------------------------------
+        [Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp]
         private void HandHoverUpdate(Hand hand)
         {
             GrabTypes startingGrabType = hand.GetGrabStarting();
@@ -97,6 +100,7 @@ namespace Valve.VR.InteractionSystem
 
 
         //-------------------------------------------------
+        [Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp]
         private void PhysicsAttach(Hand hand, GrabTypes startingGrabType)
         {
             PhysicsDetach(hand);
@@ -150,6 +154,7 @@ namespace Valve.VR.InteractionSystem
 
 
         //-------------------------------------------------
+        [Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp]
         private bool PhysicsDetach(Hand hand)
         {
             int i = holdingHands.IndexOf(hand);

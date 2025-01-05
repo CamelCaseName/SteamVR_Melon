@@ -7,7 +7,7 @@ using Valve.VR.InteractionSystem;
 
 namespace Valve.VR.InteractionSystem.Sample
 {
-    [MelonLoader.RegisterTypeInIl2Cpp(true)]
+    [MelonLoader.RegisterTypeInIl2Cpp()]
     public class SquishyToy : MonoBehaviour
     {
         public SquishyToy(IntPtr value) : base(value) { }

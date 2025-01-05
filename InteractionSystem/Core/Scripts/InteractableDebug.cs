@@ -9,11 +9,12 @@ using UnityEngine.Events;
 using System.Collections;
 using System.Collections.Generic;
 using System;
+using Il2CppInterop.Runtime.InteropTypes.Arrays;
 
 namespace Valve.VR.InteractionSystem
 {
     //-------------------------------------------------------------------------
-    [MelonLoader.RegisterTypeInIl2Cpp(true)]
+    [MelonLoader.RegisterTypeInIl2Cpp()]
     public class InteractableDebug : MonoBehaviour
     {
         public InteractableDebug(IntPtr value) : base(value) { }
@@ -125,7 +126,7 @@ namespace Valve.VR.InteractionSystem
             }
         }
 
-        public Collider[] GetColliders()
+        public Il2CppReferenceArray<Collider> GetColliders()
         {
             return colliders;
         }
@@ -184,7 +185,7 @@ namespace Valve.VR.InteractionSystem
             baseMarker.transform.position = attachedToHand.transform.position;
             baseMarker.transform.forward = forward;
 
-            ColorThing(markerColor, baseMarker.GetComponentsInChildren<Renderer>());
+            ColorThing(markerColor, baseMarker.GetComponentsInChildren<Renderer>().Cast<Il2CppReferenceArray<Renderer>>());
 
             if (destroyAfter > 0)
             {
@@ -197,7 +198,7 @@ namespace Valve.VR.InteractionSystem
             ColorThing(newColor, selfRenderers);
         }
 
-        private void ColorThing(Color newColor, Renderer[] renderers)
+        private void ColorThing(Color newColor, Il2CppReferenceArray<Renderer> renderers)
         {
             for (int rendererIndex = 0; rendererIndex < renderers.Length; rendererIndex++)
             {

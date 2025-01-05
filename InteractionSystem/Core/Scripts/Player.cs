@@ -8,6 +8,7 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using System;
+using Il2CppInterop.Runtime.Attributes;
 
 namespace Valve.VR.InteractionSystem
 {
@@ -15,7 +16,7 @@ namespace Valve.VR.InteractionSystem
     // Singleton representing the local VR player/user, with methods for getting
     // the player's hands, head, tracking origin, and guesses for various properties.
     //-------------------------------------------------------------------------
-    [MelonLoader.RegisterTypeInIl2Cpp(true)]
+    [MelonLoader.RegisterTypeInIl2Cpp()]
     public class Player : MonoBehaviour
     {
         public Player(IntPtr value) : base(value) { }
@@ -276,6 +277,7 @@ namespace Valve.VR.InteractionSystem
 
 
         //-------------------------------------------------
+        [HideFromIl2Cpp]
         private IEnumerator Start()
         {
             _instance = this;

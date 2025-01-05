@@ -7,11 +7,12 @@
 using UnityEngine;
 using System.Collections;
 using System;
+using Il2CppInterop.Runtime.Attributes;
 
 namespace Valve.VR.InteractionSystem
 {
     //-------------------------------------------------------------------------
-    [MelonLoader.RegisterTypeInIl2Cpp(true)]
+    [MelonLoader.RegisterTypeInIl2Cpp()]
     public class DistanceHaptics : MonoBehaviour
 	{
 		public DistanceHaptics(IntPtr value) : base(value) { }
@@ -21,8 +22,9 @@ namespace Valve.VR.InteractionSystem
 		public AnimationCurve distanceIntensityCurve = AnimationCurve.Linear( 0.0f, 800.0f, 1.0f, 800.0f );
 		public AnimationCurve pulseIntervalCurve = AnimationCurve.Linear( 0.0f, 0.01f, 1.0f, 0.0f );
 
-		//-------------------------------------------------
-		IEnumerator Start()
+        //-------------------------------------------------
+        [HideFromIl2Cpp]
+        IEnumerator Start()
 		{
 			while ( true )
 			{

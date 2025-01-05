@@ -5,6 +5,7 @@
 //=============================================================================
 
 using Assets.SteamVR_Melon.Standalone;
+using Il2CppInterop.Runtime.InteropTypes.Arrays;
 using MelonLoader;
 using SteamVR_Melon.Standalone;
 using SteamVR_Melon.Util;
@@ -678,6 +679,7 @@ namespace Valve.VR
             SteamVR.connected[i] = connected;
         }
 
+        [Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp]
         private void OnNewPoses(TrackedDevicePose_t[] poses)
         {
             // Update eye offsets to account for IPD changes.
@@ -695,7 +697,7 @@ namespace Valve.VR
 
             if (poses.Length > OpenVR.k_unTrackedDeviceIndex_Hmd)
             {
-                var result = poses[OpenVR.k_unTrackedDeviceIndex_Hmd].eTrackingResult;
+                var result = poses[(int)OpenVR.k_unTrackedDeviceIndex_Hmd].eTrackingResult;
 
                 var initializing = result == ETrackingResult.Uninitialized;
                 if (initializing != SteamVR.initializing)

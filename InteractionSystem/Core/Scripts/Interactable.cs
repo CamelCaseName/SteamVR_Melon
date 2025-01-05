@@ -11,7 +11,7 @@ using UnityEngine;
 namespace Valve.VR.InteractionSystem
 {
     //-------------------------------------------------------------------------
-    [MelonLoader.RegisterTypeInIl2Cpp(true)]
+    [MelonLoader.RegisterTypeInIl2Cpp()]
     public class Interactable : MonoBehaviour
     {
         public Interactable(IntPtr value) : base(value) { }
@@ -36,7 +36,9 @@ namespace Valve.VR.InteractionSystem
         public delegate void OnAttachedToHandDelegate(Hand hand);
         public delegate void OnDetachedFromHandDelegate(Hand hand);
 
+        [Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp]
         public event OnAttachedToHandDelegate onAttachedToHand;
+        [Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp]
         public event OnDetachedFromHandDelegate onDetachedFromHand;
 
 

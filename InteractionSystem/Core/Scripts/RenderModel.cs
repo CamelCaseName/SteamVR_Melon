@@ -6,7 +6,7 @@ using System;
 
 namespace Valve.VR.InteractionSystem
 {
-    [MelonLoader.RegisterTypeInIl2Cpp(true)]
+    [MelonLoader.RegisterTypeInIl2Cpp()]
     public class RenderModel : MonoBehaviour
     {
         public RenderModel(IntPtr value) : base(value) { }
@@ -28,6 +28,7 @@ namespace Valve.VR.InteractionSystem
         public bool displayControllerByDefault = true;
         protected Material delayedSetMaterial;
 
+        [Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp]
         public event Action onControllerLoaded;
 
         protected SteamVR_Events.Action renderModelLoadedAction;
@@ -104,6 +105,7 @@ namespace Valve.VR.InteractionSystem
             }
         }
 
+        [Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp]
         protected virtual void OnSkeletonActiveChange(SteamVR_Action_Skeleton changedAction, bool newState)
         {
             if (newState)

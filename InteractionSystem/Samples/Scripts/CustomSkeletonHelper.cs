@@ -8,7 +8,7 @@ using System;
 
 namespace Valve.VR.InteractionSystem.Sample
 {
-    [MelonLoader.RegisterTypeInIl2Cpp(true)]
+    [MelonLoader.RegisterTypeInIl2Cpp()]
     public class CustomSkeletonHelper : MonoBehaviour
     {
         public CustomSkeletonHelper(IntPtr value) : base(value) { }

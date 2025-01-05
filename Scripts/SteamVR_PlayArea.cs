@@ -12,7 +12,7 @@ using UnityEngine.Rendering;
 
 namespace Valve.VR
 {
-    [MelonLoader.RegisterTypeInIl2Cpp(true)]
+    [MelonLoader.RegisterTypeInIl2Cpp()]
     public class SteamVR_PlayArea : MonoBehaviour
     {
         public SteamVR_PlayArea(IntPtr value) : base(value) { }
@@ -241,6 +241,7 @@ namespace Valve.VR
             }
         }
 
+        [Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp]
         IEnumerator UpdateBounds()
         {
             GetComponent<MeshFilter>().mesh = null; // clear existing

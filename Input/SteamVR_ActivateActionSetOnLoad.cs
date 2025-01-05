@@ -9,7 +9,7 @@ namespace Valve.VR
     /// <summary>
     /// Automatically activates an action set on Start() and deactivates the set on OnDestroy(). Optionally deactivating all other sets as well.
     /// </summary>
-    [MelonLoader.RegisterTypeInIl2Cpp(true)]
+    [MelonLoader.RegisterTypeInIl2Cpp()]
     public class SteamVR_ActivateActionSetOnLoad : MonoBehaviour
     {
         public SteamVR_ActivateActionSetOnLoad(IntPtr value) : base(value) { }

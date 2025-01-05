@@ -11,7 +11,7 @@ using Valve.VR;
 
 namespace Valve.VR
 {
-    [MelonLoader.RegisterTypeInIl2Cpp(true)]
+    [MelonLoader.RegisterTypeInIl2Cpp()]
     public class SteamVR_ExternalCamera : MonoBehaviour
     {
         public SteamVR_ExternalCamera(IntPtr value) : base(value) { }
@@ -124,6 +124,7 @@ namespace Valve.VR
     }
 #endif
 
+        [Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp]
         public void SetupPose(SteamVR_Action_Pose newCameraPose, SteamVR_Input_Sources newCameraSource)
         {
             cameraPose = newCameraPose;
@@ -142,6 +143,7 @@ namespace Valve.VR
             trackedObject.SetDeviceIndex(deviceIndex);
         }
 
+        [Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp]
         void OnChanged(object source, System.IO.FileSystemEventArgs e)
         {
             ReadConfig();

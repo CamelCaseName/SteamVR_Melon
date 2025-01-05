@@ -1,13 +1,14 @@
 ﻿using SteamVR_Melon.Util;
 using System;
 using System.Collections;
+using System.Threading.Tasks;
 using UnityEngine;
 
 using UnityEngine.XR;
 
 namespace Valve.VR
 {
-    [MelonLoader.RegisterTypeInIl2Cpp(true)]
+    [MelonLoader.RegisterTypeInIl2Cpp()]
     public class SteamVR_Behaviour : MonoBehaviour
     {
         public SteamVR_Behaviour(IntPtr value) : base(value) { }
@@ -118,7 +119,6 @@ namespace Valve.VR
 
                 if (initializeCoroutine != null)
                 {
-                    MelonLoader.MelonCoroutines.Stop(initializeCoroutine);
                 }
 
                 if (XRSettings.loadedDeviceName == openVRDeviceName)
@@ -127,10 +127,8 @@ namespace Valve.VR
                 }
                 else
                 {
-                    initializeCoroutine = DoInitializeSteamVR(forceUnityVRToOpenVR);
+                    initializeCoroutine = Task.Factory.StartNew(new Action(() => DoInitializeSteamVR(forceUnityVRToOpenVR)));
                 }
-
-                MelonLoader.MelonCoroutines.Start(initializeCoroutine);
             }
             else
             {
@@ -138,16 +136,15 @@ namespace Valve.VR
             }
         }
 
-        private IEnumerator initializeCoroutine;
+        private Task initializeCoroutine;
 
         private bool loadedOpenVRDeviceSuccess = false;
-        private IEnumerator DoInitializeSteamVR(bool forceUnityVRToOpenVR = false)
+        private void DoInitializeSteamVR(bool forceUnityVRToOpenVR = false)
         {
             XRDevice.add_deviceLoaded(new Action<string>(XRDevice_deviceLoaded));
             XRSettings.LoadDeviceByName(openVRDeviceName);
             while (loadedOpenVRDeviceSuccess == false)
             {
-                yield return null;
             }
             XRDevice.remove_deviceLoaded(new Action<string>(XRDevice_deviceLoaded));
             EnableOpenVR();

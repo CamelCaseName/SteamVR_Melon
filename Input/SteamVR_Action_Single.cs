@@ -18,22 +18,27 @@ namespace Valve.VR
         public delegate void UpdateHandler(SteamVR_Action_Single fromAction, SteamVR_Input_Sources fromSource, float newAxis, float newDelta);
 
         /// <summary><strong>[Shortcut to: SteamVR_Input_Sources.Any]</strong> This event fires whenever the axis changes by more than the specified changeTolerance</summary>
+        [Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp]
         public event ChangeHandler onChange
         { add { sourceMap[SteamVR_Input_Sources.Any].onChange += value; } remove { sourceMap[SteamVR_Input_Sources.Any].onChange -= value; } }
 
         /// <summary><strong>[Shortcut to: SteamVR_Input_Sources.Any]</strong> This event fires whenever the action is updated</summary>
+        [Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp]
         public event UpdateHandler onUpdate
         { add { sourceMap[SteamVR_Input_Sources.Any].onUpdate += value; } remove { sourceMap[SteamVR_Input_Sources.Any].onUpdate -= value; } }
 
         /// <summary><strong>[Shortcut to: SteamVR_Input_Sources.Any]</strong> This event will fire whenever the float value of the action is non-zero</summary>
+        [Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp]
         public event AxisHandler onAxis
         { add { sourceMap[SteamVR_Input_Sources.Any].onAxis += value; } remove { sourceMap[SteamVR_Input_Sources.Any].onAxis -= value; } }
 
         /// <summary><strong>[Shortcut to: SteamVR_Input_Sources.Any]</strong> This event fires when the active state (ActionSet active and binding active) changes</summary>
+        [Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp]
         public event ActiveChangeHandler onActiveChange
         { add { sourceMap[SteamVR_Input_Sources.Any].onActiveChange += value; } remove { sourceMap[SteamVR_Input_Sources.Any].onActiveChange -= value; } }
 
         /// <summary><strong>[Shortcut to: SteamVR_Input_Sources.Any]</strong> This event fires when the active state of the binding changes</summary>
+        [Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp]
         public event ActiveChangeHandler onActiveBindingChange
         { add { sourceMap[SteamVR_Input_Sources.Any].onActiveBindingChange += value; } remove { sourceMap[SteamVR_Input_Sources.Any].onActiveBindingChange -= value; } }
 
@@ -185,18 +190,23 @@ namespace Valve.VR
         public float changeTolerance = Mathf.Epsilon;
 
         /// <summary>Event fires when the value of the action is non-zero</summary>
+        [Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp]
         public event SteamVR_Action_Single.AxisHandler onAxis;
 
         /// <summary>Event fires when the active state (ActionSet active and binding active) changes</summary>
+        [Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp]
         public event SteamVR_Action_Single.ActiveChangeHandler onActiveChange;
 
         /// <summary>Event fires when the active state of the binding changes</summary>
+        [Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp]
         public event SteamVR_Action_Single.ActiveChangeHandler onActiveBindingChange;
 
         /// <summary>This event fires whenever the axis changes by more than the specified changeTolerance</summary>
+        [Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp]
         public event SteamVR_Action_Single.ChangeHandler onChange;
 
         /// <summary>Event fires when the action is updated</summary>
+        [Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp]
         public event SteamVR_Action_Single.UpdateHandler onUpdate;
 
         /// <summary>The current float value of the action.

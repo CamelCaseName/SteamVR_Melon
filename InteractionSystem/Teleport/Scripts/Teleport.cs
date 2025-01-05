@@ -12,7 +12,7 @@ using System;
 namespace Valve.VR.InteractionSystem
 {
     //-------------------------------------------------------------------------
-    [MelonLoader.RegisterTypeInIl2Cpp(true)]
+    [MelonLoader.RegisterTypeInIl2Cpp()]
     public class Teleport : MonoBehaviour
     {
         public Teleport(IntPtr value) : base(value) { }
@@ -974,6 +974,7 @@ namespace Valve.VR.InteractionSystem
 
 
         //-------------------------------------------------
+        [Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp]
         private IEnumerator TeleportHintCoroutine()
         {
             float prevBreakTime = Time.time;

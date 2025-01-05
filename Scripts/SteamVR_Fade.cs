@@ -26,7 +26,7 @@ using Valve.VR;
 
 namespace Valve.VR
 {
-    [MelonLoader.RegisterTypeInIl2Cpp(true)]
+    [MelonLoader.RegisterTypeInIl2Cpp()]
     public class SteamVR_Fade : MonoBehaviour
     {
         public SteamVR_Fade(IntPtr value) : base(value) { }

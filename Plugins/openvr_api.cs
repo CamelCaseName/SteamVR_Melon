@@ -6233,6 +6233,7 @@ namespace Valve.VR
         public VRTextureDepthInfo_t depth;
     }
     [StructLayout(LayoutKind.Sequential)]
+
     public struct TrackedDevicePose_t
     {
         public HmdMatrix34_t mDeviceToAbsoluteTracking;

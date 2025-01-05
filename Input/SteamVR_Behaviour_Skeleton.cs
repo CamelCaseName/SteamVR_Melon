@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace Valve.VR
 {
-    [MelonLoader.RegisterTypeInIl2Cpp(true)]
+    [MelonLoader.RegisterTypeInIl2Cpp()]
     public class SteamVR_Behaviour_Skeleton : MonoBehaviour
     {
         public SteamVR_Behaviour_Skeleton(IntPtr value) : base(value) { }
@@ -312,6 +312,7 @@ namespace Valve.VR
         */
         public SteamVR_ActionSet actionSet
         {
+            [Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp]
             get
             {
                 return skeletonAction.actionSet;
@@ -377,12 +378,14 @@ namespace Valve.VR
             }
         }
 
+        [Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp]
         private void OnDeviceConnectedChanged(SteamVR_Action_Skeleton fromAction, bool deviceConnected)
         {
             onConnectedChanged?.Send(this, inputSource, deviceConnected);
             onConnectedChangedEvent?.Invoke(this, inputSource, deviceConnected);
         }
 
+        [Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp]
         private void OnTrackingChanged(SteamVR_Action_Skeleton fromAction, ETrackingResult trackingState)
         {
             onTrackingChanged?.Send(this, inputSource, trackingState);
@@ -491,6 +494,7 @@ namespace Valve.VR
         /// Note: This will ignore the root position and rotation of the pose.
         /// </summary>
         /// <param name="overTime">How long you want the blend to take (in seconds)</param>
+        [Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp]
         public void BlendToPoser(SteamVR_Skeleton_Poser poser, float overTime = 0.1f)
         {
             if (poser == null)
@@ -533,6 +537,7 @@ namespace Valve.VR
         }
 
 
+        [Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp]
         protected IEnumerator DoBlendRoutine(float blendToAmount, float overTime)
         {
             float startTime = Time.time;
@@ -550,6 +555,7 @@ namespace Valve.VR
             blendRoutine = null;
         }
 
+        [Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp]
         protected void RangeOfMotionBlend(EVRSkeletalMotionRange newRangeOfMotion, float blendOverSeconds)
         {
             if (rangeOfMotionBlendRoutine != null)
@@ -567,6 +573,7 @@ namespace Valve.VR
             }
         }
 
+        [Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp]
         protected void TemporaryRangeOfMotionBlend(EVRSkeletalMotionRange newRangeOfMotion, float blendOverSeconds)
         {
             if (rangeOfMotionBlendRoutine != null)
@@ -612,6 +619,7 @@ namespace Valve.VR
             }
         }
 
+        [Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp]
         protected IEnumerator DoRangeOfMotionBlend(EVRSkeletalMotionRange oldRangeOfMotion, EVRSkeletalMotionRange newRangeOfMotion, float overTime)
         {
             float startTime = Time.time;
@@ -992,6 +1000,7 @@ namespace Valve.VR
         /// Returns an array of positions/rotations that represent the state of each bone in a reference pose.
         /// </summary>
         /// <param name="referencePose">Which reference pose to return</param>
+        [Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp]
         public void ForceToReferencePose(EVRSkeletalReferencePose referencePose)
         {
             bool temporarySession = false;

@@ -14,7 +14,7 @@ using UnityEngine;
 
 namespace Valve.VR
 {
-    [MelonLoader.RegisterTypeInIl2Cpp(true)]
+    [MelonLoader.RegisterTypeInIl2Cpp()]
     public class SteamVR_Camera : MonoBehaviour
     {
         public SteamVR_Camera(IntPtr value) : base(value) { }
