@@ -64,7 +64,7 @@ namespace Valve.VR
         [Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp]
         void AddInternal(SteamVR_Camera vrcam)
         {
-            MelonLogger.Msg("[hpvr] " + SceneManager.GetActiveScene().name + " adding " + vrcam);
+            MelonLogger.Msg("[HPVR] " + SceneManager.GetActiveScene().name + " adding " + vrcam);
             var camera = vrcam.GetComponent<Camera>();
             var length = cameras.Length;
             var sorted = new SteamVR_Camera[length + 1];

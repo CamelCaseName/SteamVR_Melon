@@ -1,24 +1,29 @@
 ﻿//======= Copyright (c) Valve Corporation, All rights reserved. ===============
 
+using Il2CppInterop.Runtime.Attributes;
+using Il2CppInterop.Runtime.Injection;
 using System;
-using System.Collections;
-using UnityEngine;
-using Valve.VR;
-
+using System.Collections.Generic;
 using System.Linq;
+using UnityEngine;
 
 namespace Valve.VR
 {
-    public class SteamVR_Skeleton_Pose : ScriptableObject
+    [MelonLoader.RegisterTypeInIl2Cpp()]
+    public class SteamVR_Skeleton_Pose : MonoBehaviour
     {
-        public SteamVR_Skeleton_Pose_Hand leftHand = new SteamVR_Skeleton_Pose_Hand(SteamVR_Input_Sources.LeftHand);
-        public SteamVR_Skeleton_Pose_Hand rightHand = new SteamVR_Skeleton_Pose_Hand(SteamVR_Input_Sources.RightHand);
+        public SteamVR_Skeleton_Pose(IntPtr p) : base(p) { }
+        public SteamVR_Skeleton_Pose() : base(ClassInjector.DerivedConstructorPointer<SteamVR_Skeleton_Pose>()) => ClassInjector.DerivedConstructorBody(this);
+
+        public SteamVR_Skeleton_Pose_Hand leftHand = new(SteamVR_Input_Sources.LeftHand);
+        public SteamVR_Skeleton_Pose_Hand rightHand = new(SteamVR_Input_Sources.RightHand);
 
         protected const int leftHandInputSource = (int)SteamVR_Input_Sources.LeftHand;
         protected const int rightHandInputSource = (int)SteamVR_Input_Sources.RightHand;
 
         public bool applyToSkeletonRoot = true;
 
+        [HideFromIl2Cpp]
         public SteamVR_Skeleton_Pose_Hand GetHand(int hand)
         {
             if (hand == leftHandInputSource)
@@ -33,6 +38,7 @@ namespace Valve.VR
             return null;
         }
 
+        [HideFromIl2Cpp]
         public SteamVR_Skeleton_Pose_Hand GetHand(SteamVR_Input_Sources hand)
         {
             if (hand == SteamVR_Input_Sources.LeftHand)
@@ -51,6 +57,8 @@ namespace Valve.VR
     [Serializable]
     public class SteamVR_Skeleton_Pose_Hand
     {
+        public SteamVR_Skeleton_Pose_Hand() { }
+
         public SteamVR_Input_Sources inputSource;
 
         public SteamVR_Skeleton_FingerExtensionTypes thumbFingerMovementType = SteamVR_Skeleton_FingerExtensionTypes.Static;
@@ -100,8 +108,8 @@ namespace Valve.VR
         public Vector3 position;
         public Quaternion rotation;
 
-        public Vector3[] bonePositions;
-        public Quaternion[] boneRotations;
+        public List<Vector3> bonePositions;
+        public List<Quaternion> boneRotations;
 
         public SteamVR_Skeleton_Pose_Hand(SteamVR_Input_Sources source)
         {

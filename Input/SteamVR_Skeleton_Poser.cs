@@ -26,20 +26,15 @@ namespace Valve.VR
         public SteamVR_Skeleton_Pose skeletonMainPose;
         public List<SteamVR_Skeleton_Pose> skeletonAdditionalPoses = new List<SteamVR_Skeleton_Pose>();
 
+        public bool showLeftPreview = false;
 
-        protected bool showLeftPreview = false;
+        public bool showRightPreview = true; //show the right hand by default
 
+        public GameObject previewLeftInstance;
 
-        protected bool showRightPreview = true; //show the right hand by default
+        public GameObject previewRightInstance;
 
-
-        protected GameObject previewLeftInstance;
-
-
-        protected GameObject previewRightInstance;
-
-
-        protected int previewPoseSelection = 0;
+        public int previewPoseSelection = 0;
 
         public int blendPoseCount { get { return blendPoses.Length; } }
 
@@ -48,16 +43,15 @@ namespace Valve.VR
         public SteamVR_Skeleton_PoseSnapshot blendedSnapshotL;
         public SteamVR_Skeleton_PoseSnapshot blendedSnapshotR;
 
-        private SkeletonBlendablePose[] blendPoses;
+        public SkeletonBlendablePose[] blendPoses;
 
-        private int boneCount;
+        public int boneCount;
 
-        private bool poseUpdatedThisFrame;
+        public bool poseUpdatedThisFrame;
 
         public float scale;
 
-
-        protected void Awake()
+        public void Initialize()
         {
             if (previewLeftInstance != null)
             {
@@ -70,19 +64,19 @@ namespace Valve.VR
             }
 
             blendPoses = new SkeletonBlendablePose[skeletonAdditionalPoses.Count + 1];
-            for (int i = 0; i < blendPoseCount; i++)
+            if (blendPoseCount > 0)
             {
-                blendPoses[i] = new SkeletonBlendablePose(GetPoseByIndex(i));
-                blendPoses[i].PoseToSnapshots();
+                for (int i = 0; i < blendPoseCount; i++)
+                {
+                    blendPoses[i] = new SkeletonBlendablePose(GetPoseByIndex(i));
+                    blendPoses[i].PoseToSnapshots();
+                }
             }
-
-            boneCount = skeletonMainPose.leftHand.bonePositions.Length;
+            boneCount = skeletonMainPose?.leftHand?.bonePositions?.Count ?? 0;
             // NOTE: Is there a better way to get the bone count? idk
             blendedSnapshotL = new SteamVR_Skeleton_PoseSnapshot(boneCount, SteamVR_Input_Sources.LeftHand);
             blendedSnapshotR = new SteamVR_Skeleton_PoseSnapshot(boneCount, SteamVR_Input_Sources.RightHand);
         }
-
-
 
         /// <summary>
         /// Set the blending value of a blendingBehaviour. Works best on Manual type behaviours.
@@ -166,7 +160,6 @@ namespace Valve.VR
             return behaviour;
         }
 
-
         [Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp]
         public SteamVR_Skeleton_Pose GetPoseByIndex(int index)
         {
@@ -210,7 +203,6 @@ namespace Valve.VR
         {
             return GetBlendedPose(skeletonBehaviour.skeletonAction, skeletonBehaviour.inputSource);
         }
-
 
         /// <summary>
         /// Updates all pose animation and blending. Can be called from different places without performance concerns, as it will only let itself run once per frame.
@@ -368,8 +360,8 @@ namespace Valve.VR
             public SkeletonBlendablePose(SteamVR_Skeleton_Pose p)
             {
                 pose = p;
-                snapshotR = new SteamVR_Skeleton_PoseSnapshot(p.rightHand.bonePositions.Length, SteamVR_Input_Sources.RightHand);
-                snapshotL = new SteamVR_Skeleton_PoseSnapshot(p.leftHand.bonePositions.Length, SteamVR_Input_Sources.LeftHand);
+                snapshotR = new SteamVR_Skeleton_PoseSnapshot(p.rightHand.bonePositions.Count, SteamVR_Input_Sources.RightHand);
+                snapshotL = new SteamVR_Skeleton_PoseSnapshot(p.leftHand.bonePositions.Count, SteamVR_Input_Sources.LeftHand);
             }
 
             /// <summary>
@@ -478,7 +470,6 @@ namespace Valve.VR
             }
         }
 
-
         //this is broken
         public Vector3 GetTargetHandPosition(SteamVR_Behaviour_Skeleton hand, Transform origin)
         {
@@ -540,9 +531,7 @@ namespace Valve.VR
             }
         }
 
-
     }
-
 
     /// <summary>
     /// Simple mask for fingers
@@ -600,5 +589,4 @@ namespace Valve.VR
 
         public static readonly SteamVR_Skeleton_HandMask fullMask = new SteamVR_Skeleton_HandMask();
     };
-
 }

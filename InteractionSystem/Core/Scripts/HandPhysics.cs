@@ -4,6 +4,7 @@
 //
 //=============================================================================
 
+using MelonLoader;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -35,19 +36,33 @@ namespace Valve.VR.InteractionSystem
 
         public void Initialize(GameObject HandColliderPrefab)
         {
+            int i = 0;
             hand = GetComponent<Hand>();
-            //spawn hand collider and link it to us
-
-            handCollider = ((GameObject)Instantiate(HandColliderPrefab)).GetComponent<HandCollider>();
+            var t = HandColliderPrefab;
+            handCollider = t.GetComponent<HandCollider>();
+            MelonLogger.Msg(handCollider?.ToString() ?? "collider null");
+            foreach (var m in t.GetComponents<MonoBehaviour>())
+            {
+                MelonLogger.Msg(m?.ToString() ?? " wtf");
+            }
+            MelonLogger.Msg(t.transform.childCount + " children");
+            MelonLogger.Msg(i++);
             Vector3 localPosition = handCollider.transform.localPosition;
+            MelonLogger.Msg(i++);
             Quaternion localRotation = handCollider.transform.localRotation;
+            MelonLogger.Msg(i++);
 
             handCollider.transform.parent = Player.instance.transform;
+            MelonLogger.Msg(i++);
             handCollider.transform.localPosition = localPosition;
+            MelonLogger.Msg(i++);
             handCollider.transform.localRotation = localRotation;
+            MelonLogger.Msg(i++);
             handCollider.hand = this;
+            MelonLogger.Msg(i++);
 
             GetComponent<SteamVR_Behaviour_Pose>().onTransformUpdated.Listen(UpdateHand);
+            MelonLogger.Msg(i++);
         }
 
         // cached transformations

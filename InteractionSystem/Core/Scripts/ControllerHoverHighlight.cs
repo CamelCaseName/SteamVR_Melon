@@ -31,7 +31,7 @@ namespace Valve.VR.InteractionSystem
 
         protected void OnHandInitialized(int deviceIndex)
         {
-            GameObject renderModelGameObject = GameObject.Instantiate(hand.renderModelPrefab);
+            GameObject renderModelGameObject = hand.renderModelPrefab;
             renderModelGameObject.transform.parent = this.transform;
             renderModelGameObject.transform.localPosition = Vector3.zero;
             renderModelGameObject.transform.localRotation = Quaternion.identity;

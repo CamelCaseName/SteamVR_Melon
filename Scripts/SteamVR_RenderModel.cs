@@ -26,6 +26,7 @@ namespace Valve.VR
         public string modelOverride;
 
         public Shader shader;
+        private bool initialized = false;
 
         public bool verbose = false;
 
@@ -705,7 +706,7 @@ namespace Valve.VR
             modelSkinSettingsHaveChangedAction = SteamVR_Events.SystemAction(EVREventType.VREvent_ModelSkinSettingsHaveChanged, new System.Action<VREvent_t>(OnModelSkinSettingsHaveChanged));
         }
 
-        void OnEnable()
+        public void Initialize()
         {
 #if UNITY_EDITOR
             if (!Application.isPlaying)
@@ -727,6 +728,7 @@ namespace Valve.VR
             deviceConnectedAction.enabled = true;
             hideRenderModelsAction.enabled = true;
             modelSkinSettingsHaveChangedAction.enabled = true;
+            initialized = true;
         }
 
         void OnDisable()
@@ -802,7 +804,7 @@ namespace Valve.VR
             }
 #endif
             // Update component transforms dynamically.
-            if (updateDynamically)
+            if (initialized && updateDynamically)
             {
                 UpdateComponents(OpenVR.RenderModels);
             }

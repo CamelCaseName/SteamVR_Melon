@@ -1,5 +1,6 @@
 ﻿//======= Copyright (c) Valve Corporation, All rights reserved. ===============
 
+using Il2CppInterop.Runtime.Attributes;
 using System;
 using System.Collections;
 using UnityEngine;
@@ -207,7 +208,7 @@ namespace Valve.VR
             }
         }
 
-
+        private bool initialized = false;
 
         public Transform root { get { return bones[SteamVR_Skeleton_JointIndexes.root]; } }
         public Transform wrist { get { return bones[SteamVR_Skeleton_JointIndexes.wrist]; } }
@@ -310,6 +311,7 @@ namespace Valve.VR
             }
         }
         */
+        [HideFromIl2Cpp]
         public SteamVR_ActionSet actionSet
         {
             [Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp]
@@ -327,7 +329,7 @@ namespace Valve.VR
             }
         }
 
-        protected virtual void Awake()
+        public virtual void Initialize()
         {
             SteamVR.Initialize();
 
@@ -340,6 +342,7 @@ namespace Valve.VR
             auxs = new Transform[] { thumbAux, indexAux, middleAux, ringAux, pinkyAux };
 
             CheckSkeletonAction();
+            initialized = true;
         }
 
         protected virtual void CheckSkeletonAction()
@@ -357,13 +360,16 @@ namespace Valve.VR
 
         protected virtual void OnEnable()
         {
-            CheckSkeletonAction();
-            SteamVR_Input.onSkeletonsUpdated += SteamVR_Input_OnSkeletonsUpdated;
-
-            if (skeletonAction != null)
+            if (initialized)
             {
-                skeletonAction.onDeviceConnectedChanged += OnDeviceConnectedChanged;
-                skeletonAction.onTrackingChanged += OnTrackingChanged;
+                CheckSkeletonAction();
+                SteamVR_Input.onSkeletonsUpdated += SteamVR_Input_OnSkeletonsUpdated;
+
+                if (skeletonAction != null)
+                {
+                    skeletonAction.onDeviceConnectedChanged += OnDeviceConnectedChanged;
+                    skeletonAction.onTrackingChanged += OnTrackingChanged;
+                }
             }
         }
 
@@ -440,6 +446,7 @@ namespace Valve.VR
         /// </summary>
         /// <param name="newRangeOfMotion">The new range of motion you want to apply (temporarily)</param>
         /// <param name="blendOverSeconds">How long you want the blend to the new range of motion to take (in seconds)</param>
+        [HideFromIl2Cpp]
         public void SetTemporaryRangeOfMotion(EVRSkeletalMotionRange newRangeOfMotion, float blendOverSeconds = 0.1f)
         {
             if (rangeOfMotion != newRangeOfMotion || temporaryRangeOfMotion != newRangeOfMotion)
@@ -466,6 +473,7 @@ namespace Valve.VR
         /// WithController being the best estimation of where fingers are wrapped around the controller (pressing buttons, etc).
         /// WithoutController being a range between a flat hand and a fist.</param>
         /// <param name="blendOverSeconds">How long you want the blend to the new range of motion to take (in seconds)</param>
+        [HideFromIl2Cpp]
         public void SetRangeOfMotion(EVRSkeletalMotionRange newRangeOfMotion, float blendOverSeconds = 0.1f)
         {
             if (rangeOfMotion != newRangeOfMotion)
@@ -828,7 +836,7 @@ namespace Valve.VR
         {
             if (bones == null || bones.Length == 0)
             {
-                Awake();
+                Initialize();
             }
 
             return bones[joint];
@@ -1007,7 +1015,7 @@ namespace Valve.VR
             if (Application.isEditor && Application.isPlaying == false)
             {
                 temporarySession = SteamVR.InitializeTemporarySession(true);
-                Awake();
+                Initialize();
 
 #if UNITY_EDITOR
                 //gotta wait a bit for steamvr input to startup //todo: implement steamvr_input.isready

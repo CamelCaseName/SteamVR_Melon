@@ -73,7 +73,7 @@ namespace Valve.VR
         protected SteamVR_HistoryBuffer historyBuffer = new SteamVR_HistoryBuffer(30);
 
 
-        protected virtual void Start()
+        public virtual void Start()
         {
             if (poseAction == null)
             {
@@ -135,9 +135,8 @@ namespace Valve.VR
                 {
                     origin = this.transform.parent;
                 }
-                if (origin != null)
+                if (origin != null && origin.transform is not null)
                 {
-                    MelonLogger.Msg(origin.transform?.name ?? "origin transform is null");
                     transform.position = origin.transform.TransformPoint(poseAction[inputSource].localPosition);
                     transform.rotation = origin.rotation * poseAction[inputSource].localRotation;
                 }

@@ -325,6 +325,6 @@
   </PropertyGroup>
 
     <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-        <Exec Command="copy .\bin\x64\Debug\net6.0\SteamVR_Melon.dll &quot;..\HPVR\Resources\SteamVR_Melon.dll&quot; /y" />
+        <Exec Command="copy .\bin\x64\Debug\net6.0\SteamVR_Melon.dll &quot;..\HPVR\Resources\SteamVR_Melon.dll&quot; /y &amp; del &quot;G:\SteamLibrary\steamapps\common\House Party\UserLibs\SteamVR_Melon.dll&quot;" />
     </Target>
 </Project>

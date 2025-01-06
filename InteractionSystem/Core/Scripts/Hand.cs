@@ -12,6 +12,7 @@ using System.Collections.ObjectModel;
 using UnityEngine.Events;
 using System.Threading;
 using Il2CppInterop.Runtime.Attributes;
+using MelonLoader;
 
 namespace Valve.VR.InteractionSystem
 {
@@ -19,7 +20,7 @@ namespace Valve.VR.InteractionSystem
     // Links with an appropriate SteamVR controller and facilitates
     // interactions with objects in the virtual world.
     //-------------------------------------------------------------------------
-    
+
     [MelonLoader.RegisterTypeInIl2Cpp()]
     public class Hand : MonoBehaviour
     {
@@ -80,11 +81,11 @@ namespace Valve.VR.InteractionSystem
         private float noSteamVRFallbackInteractorDistance = -1.0f;
 
         public GameObject renderModelPrefab;
-        
+
         public List<RenderModel> renderModels = new List<RenderModel>();
-        
+
         public RenderModel mainRenderModel;
-        
+
         public RenderModel hoverhighlightRenderModel;
 
         public bool showDebugText = false;
@@ -362,7 +363,6 @@ namespace Valve.VR.InteractionSystem
                 renderModels[renderModelIndex].StopAnimation();
             }
         }
-
 
         //-------------------------------------------------
         // Attach a GameObject to this GameObject
@@ -742,7 +742,6 @@ namespace Valve.VR.InteractionSystem
             hoverhighlightRenderModel?.MatchHandToTransform(hoverhighlightRenderModel.transform);
         }
 
-
         //-------------------------------------------------
         // Get the world velocity of the VR Hand.
         //-------------------------------------------------
@@ -773,7 +772,6 @@ namespace Valve.VR.InteractionSystem
 
             return Vector3.zero;
         }
-
 
         //-------------------------------------------------
         // Get the world space angular velocity of the VR Hand.
@@ -813,16 +811,14 @@ namespace Valve.VR.InteractionSystem
             angularVelocity = Player.instance.trackingOriginTransform.TransformDirection(angularVelocity);
         }
 
-
         //-------------------------------------------------
         private void CleanUpAttachedObjectStack()
         {
             attachedObjects.RemoveAll(l => l.attachedObject == null);
         }
 
-
         //-------------------------------------------------
-        protected virtual void Awake()
+        public virtual void Awake()
         {
             inputFocusAction = SteamVR_Events.InputFocusAction(OnInputFocus);
 
@@ -867,18 +863,18 @@ namespace Valve.VR.InteractionSystem
 
         //-------------------------------------------------
         [HideFromIl2Cpp]
-        protected virtual IEnumerator Start()
+        public virtual IEnumerator Start()
         {
             // save off player instance
             playerInstance = Player.instance;
             if (!playerInstance)
             {
-                MelonLoader.MelonLogger.Error("[HPVR Interaction] No player instance found in Hand Start()", this);
+                MelonLoader.MelonLogger.Error("[HPVR Interaction] No player instance found in Hand Start()");
             }
 
             if (this.gameObject.layer == 0)
             {
-                MelonLoader.MelonLogger.Warning("[HPVR Interaction] Hand is on default layer. This puts unnecessary strain on hover checks as it is always true for hand colliders (which are then ignored).", this);
+                MelonLoader.MelonLogger.Warning("[HPVR Interaction] Hand is on default layer. This puts unnecessary strain on hover checks as it is always true for hand colliders (which are then ignored).");
             }
             else
             {
@@ -909,7 +905,6 @@ namespace Valve.VR.InteractionSystem
                 yield return null;
             }
         }
-
 
         //-------------------------------------------------
         protected virtual void UpdateHovering()
@@ -957,104 +952,111 @@ namespace Valve.VR.InteractionSystem
         [Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp]
         protected virtual bool CheckHoveringForTransform(Vector3 hoverPosition, float hoverRadius, ref float closestDistance, ref Interactable closestInteractable, Color debugColor)
         {
-            bool foundCloser = false;
-
-            // null out old vals
-            for (int i = 0; i < overlappingColliders.Length; ++i)
+            try
             {
-                overlappingColliders[i] = null;
-            }
+                bool foundCloser = false;
 
-            int numColliding = Physics.OverlapSphereNonAlloc(hoverPosition, hoverRadius, overlappingColliders, hoverLayerMask.value);
-
-            if (numColliding >= ColliderArraySize)
-            {
-                MelonLoader.MelonLogger.Warning("[HPVR Interaction] This hand is overlapping the max number of colliders: " + ColliderArraySize + ". Some collisions may be missed. Increase ColliderArraySize on Hand.cs");
-            }
-
-            // DebugVar
-            int iActualColliderCount = 0;
-
-            // Pick the closest hovering
-            for (int colliderIndex = 0; colliderIndex < overlappingColliders.Length; colliderIndex++)
-            {
-                Collider collider = overlappingColliders[colliderIndex];
-
-                if (collider == null)
+                // null out old vals
+                for (int i = 0; i < overlappingColliders.Length; ++i)
                 {
-                    continue;
+                    overlappingColliders[i] = null;
                 }
 
-                Interactable contacting = collider.GetComponentInParent<Interactable>();
+                int numColliding = Physics.OverlapSphereNonAlloc(hoverPosition, hoverRadius, overlappingColliders, hoverLayerMask.value);
 
-                // Yeah, it's null, skip
-                if (contacting == null)
+                if (numColliding >= ColliderArraySize)
                 {
-                    continue;
+                    MelonLoader.MelonLogger.Warning("[HPVR Interaction] This hand is overlapping the max number of colliders: " + ColliderArraySize + ". Some collisions may be missed. Increase ColliderArraySize on Hand.cs");
                 }
 
-                // Ignore this collider for hovering
-                IgnoreHovering ignore = collider.GetComponent<IgnoreHovering>();
-                if (ignore != null)
+                // DebugVar
+                int iActualColliderCount = 0;
+
+                // Pick the closest hovering
+                for (int colliderIndex = 0; colliderIndex < overlappingColliders.Length; colliderIndex++)
                 {
-                    if (ignore.onlyIgnoreHand == null || ignore.onlyIgnoreHand == this)
+                    Collider collider = overlappingColliders[colliderIndex];
+
+                    if (collider == null)
                     {
                         continue;
                     }
+
+                    Interactable contacting = collider.GetComponentInParent<Interactable>();
+
+                    // Yeah, it's null, skip
+                    if (contacting == null)
+                    {
+                        continue;
+                    }
+
+                    // Ignore this collider for hovering
+                    IgnoreHovering ignore = collider.GetComponent<IgnoreHovering>();
+                    if (ignore != null)
+                    {
+                        if (ignore.onlyIgnoreHand == null || ignore.onlyIgnoreHand == this)
+                        {
+                            continue;
+                        }
+                    }
+
+                    // Can't hover over the object if it's attached
+                    bool hoveringOverAttached = false;
+                    for (int attachedIndex = 0; attachedIndex < attachedObjects.Count; attachedIndex++)
+                    {
+                        if (attachedObjects[attachedIndex].attachedObject == contacting.gameObject)
+                        {
+                            hoveringOverAttached = true;
+                            break;
+                        }
+                    }
+
+                    if (hoveringOverAttached)
+                    {
+                        continue;
+                    }
+
+                    // Best candidate so far...
+                    float distance = Vector3.Distance(contacting.transform.position, hoverPosition);
+                    //float distance = Vector3.Distance(collider.bounds.center, hoverPosition);
+                    bool lowerPriority = false;
+                    if (closestInteractable != null)
+                    { // compare to closest interactable to check priority
+                        lowerPriority = contacting.hoverPriority < closestInteractable.hoverPriority;
+                    }
+                    bool isCloser = (distance < closestDistance);
+                    if (isCloser && !lowerPriority)
+                    {
+                        closestDistance = distance;
+                        closestInteractable = contacting;
+                        foundCloser = true;
+                    }
+                    iActualColliderCount++;
                 }
 
-                // Can't hover over the object if it's attached
-                bool hoveringOverAttached = false;
-                for (int attachedIndex = 0; attachedIndex < attachedObjects.Count; attachedIndex++)
+                if (showDebugInteractables && foundCloser)
                 {
-                    if (attachedObjects[attachedIndex].attachedObject == contacting.gameObject)
+                    Debug.DrawLine(hoverPosition, closestInteractable.transform.position, debugColor, .05f, false);
+                }
+
+                if (iActualColliderCount > 0 && iActualColliderCount != prevOverlappingColliders)
+                {
+                    prevOverlappingColliders = iActualColliderCount;
+
+                    if (spewDebugText)
                     {
-                        hoveringOverAttached = true;
-                        break;
+                        HandDebugLog("Found " + iActualColliderCount + " overlapping colliders.");
                     }
                 }
 
-                if (hoveringOverAttached)
-                {
-                    continue;
-                }
-
-                // Best candidate so far...
-                float distance = Vector3.Distance(contacting.transform.position, hoverPosition);
-                //float distance = Vector3.Distance(collider.bounds.center, hoverPosition);
-                bool lowerPriority = false;
-                if (closestInteractable != null)
-                { // compare to closest interactable to check priority
-                    lowerPriority = contacting.hoverPriority < closestInteractable.hoverPriority;
-                }
-                bool isCloser = (distance < closestDistance);
-                if (isCloser && !lowerPriority)
-                {
-                    closestDistance = distance;
-                    closestInteractable = contacting;
-                    foundCloser = true;
-                }
-                iActualColliderCount++;
+                return foundCloser;
             }
-
-            if (showDebugInteractables && foundCloser)
+            catch (Exception e)
             {
-                Debug.DrawLine(hoverPosition, closestInteractable.transform.position, debugColor, .05f, false);
+                MelonLogger.Error(e);
+                return false;
             }
-
-            if (iActualColliderCount > 0 && iActualColliderCount != prevOverlappingColliders)
-            {
-                prevOverlappingColliders = iActualColliderCount;
-
-                if (spewDebugText)
-                {
-                    HandDebugLog("Found " + iActualColliderCount + " overlapping colliders.");
-                }
-            }
-
-            return foundCloser;
         }
-
 
         //-------------------------------------------------
         [Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp]
@@ -1101,7 +1103,6 @@ namespace Valve.VR.InteractionSystem
                 }
             }
         }
-
 
         //-------------------------------------------------
         private void UpdateDebugText()
@@ -1152,7 +1153,6 @@ namespace Valve.VR.InteractionSystem
             }
         }
 
-
         //-------------------------------------------------
         protected virtual void OnEnable()
         {
@@ -1164,7 +1164,6 @@ namespace Valve.VR.InteractionSystem
             InvokeRepeating("UpdateDebugText", hoverUpdateBegin, hoverUpdateInterval);
         }
 
-
         //-------------------------------------------------
         protected virtual void OnDisable()
         {
@@ -1172,7 +1171,6 @@ namespace Valve.VR.InteractionSystem
 
             CancelInvoke();
         }
-
 
         //-------------------------------------------------
         protected virtual void Update()
@@ -1420,7 +1418,6 @@ namespace Valve.VR.InteractionSystem
             return realNumbers;
         }
 
-
         //-------------------------------------------------
         protected virtual void OnInputFocus(bool hasFocus)
         {
@@ -1464,7 +1461,6 @@ namespace Valve.VR.InteractionSystem
             }
         }
 
-
         //-------------------------------------------------
         private void HandDebugLog(string msg)
         {
@@ -1473,7 +1469,6 @@ namespace Valve.VR.InteractionSystem
                 MelonLoader.MelonLogger.Msg("[HPVR Interaction] Hand (" + this.name + "): " + msg);
             }
         }
-
 
         //-------------------------------------------------
         // Continue to hover over this object indefinitely, whether or not the Hand moves out of its interaction trigger volume.
@@ -1491,7 +1486,6 @@ namespace Valve.VR.InteractionSystem
             hoverLocked = true;
             hoveringInteractable = interactable;
         }
-
 
         //-------------------------------------------------
         // Stop hovering over this object indefinitely.
@@ -1768,7 +1762,6 @@ namespace Valve.VR.InteractionSystem
             return GrabTypes.None;
         }
 
-
         //-------------------------------------------------
         private void InitController()
         {
@@ -1794,7 +1787,7 @@ namespace Valve.VR.InteractionSystem
 
             renderModels.Clear();
 
-            GameObject renderModelInstance = GameObject.Instantiate(renderModelPrefab);
+            GameObject renderModelInstance = renderModelPrefab;
             renderModelInstance.layer = gameObject.layer;
             renderModelInstance.tag = gameObject.tag;
             renderModelInstance.transform.parent = this.transform;

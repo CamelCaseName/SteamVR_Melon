@@ -35,7 +35,7 @@ namespace Valve.VR.InteractionSystem
 
         protected SteamVR_Input_Sources inputSource;
 
-        protected void Awake()
+        public void Awake()
         {
             renderModelLoadedAction = SteamVR_Events.RenderModelLoadedAction(OnRenderModelLoaded);
 
@@ -44,11 +44,11 @@ namespace Valve.VR.InteractionSystem
             InitializeController();
         }
 
-        protected void InitializeHand()
+        public void InitializeHand()
         {
             if (handPrefab != null)
             {
-                handInstance = GameObject.Instantiate(handPrefab);
+                handInstance = handPrefab;
                 handInstance.transform.parent = this.transform;
                 handInstance.transform.localPosition = Vector3.zero;
                 handInstance.transform.localRotation = Quaternion.identity;
@@ -75,7 +75,7 @@ namespace Valve.VR.InteractionSystem
             }
         }
 
-        protected void InitializeController()
+        public void InitializeController()
         {
             if (controllerPrefab != null)
             {
