@@ -35,9 +35,6 @@ namespace Valve.VR.InteractionSystem
         ///<summary>These objects are enabled when SteamVR is available</summary>
         public GameObject rigSteamVR;
 
-        ///<summary>These objects are enabled when SteamVR is not available, or when the user toggles out of VR</summary>
-        public GameObject rig2DFallback;
-
         ///<summary>The audio listener for this player</summary>
         public Transform audioListener;
 
@@ -45,7 +42,6 @@ namespace Valve.VR.InteractionSystem
         public SteamVR_Action_Boolean headsetOnHead = SteamVR_Input.GetBooleanAction("HeadsetOnHead");
 
         public bool allowToggleTo2D = true;
-
 
         //-------------------------------------------------
         // Singleton instance of the Player. Only one can exist at a time.
@@ -55,14 +51,13 @@ namespace Valve.VR.InteractionSystem
         {
             get
             {
-                if ( _instance == null )
+                if (_instance == null)
                 {
                     _instance = FindObjectOfType<Player>();
                 }
                 return _instance;
             }
         }
-
 
         //-------------------------------------------------
         // Get the number of active Hands.
@@ -72,9 +67,9 @@ namespace Valve.VR.InteractionSystem
             get
             {
                 int count = 0;
-                for ( int i = 0; i < hands.Length; i++ )
+                for (int i = 0; i < hands.Length; i++)
                 {
-                    if ( hands[i].gameObject.activeInHierarchy )
+                    if (hands[i].gameObject.activeInHierarchy)
                     {
                         count++;
                     }
@@ -83,22 +78,21 @@ namespace Valve.VR.InteractionSystem
             }
         }
 
-
         //-------------------------------------------------
         // Get the i-th active Hand.
         //
         // i - Zero-based index of the active Hand to get
         //-------------------------------------------------
-        public Hand GetHand( int i )
+        public Hand GetHand(int i)
         {
-            for ( int j = 0; j < hands.Length; j++ )
+            for (int j = 0; j < hands.Length; j++)
             {
-                if ( !hands[j].gameObject.activeInHierarchy )
+                if (!hands[j].gameObject.activeInHierarchy)
                 {
                     continue;
                 }
 
-                if ( i > 0 )
+                if (i > 0)
                 {
                     i--;
                     continue;
@@ -110,20 +104,19 @@ namespace Valve.VR.InteractionSystem
             return null;
         }
 
-
         //-------------------------------------------------
         public Hand leftHand
         {
             get
             {
-                for ( int j = 0; j < hands.Length; j++ )
+                for (int j = 0; j < hands.Length; j++)
                 {
-                    if ( !hands[j].gameObject.activeInHierarchy )
+                    if (!hands[j].gameObject.activeInHierarchy)
                     {
                         continue;
                     }
 
-                    if ( hands[j].handType != SteamVR_Input_Sources.LeftHand)
+                    if (hands[j].handType != SteamVR_Input_Sources.LeftHand)
                     {
                         continue;
                     }
@@ -135,20 +128,19 @@ namespace Valve.VR.InteractionSystem
             }
         }
 
-
         //-------------------------------------------------
         public Hand rightHand
         {
             get
             {
-                for ( int j = 0; j < hands.Length; j++ )
+                for (int j = 0; j < hands.Length; j++)
                 {
-                    if ( !hands[j].gameObject.activeInHierarchy )
+                    if (!hands[j].gameObject.activeInHierarchy)
                     {
                         continue;
                     }
 
-                    if ( hands[j].handType != SteamVR_Input_Sources.RightHand)
+                    if (hands[j].handType != SteamVR_Input_Sources.RightHand)
                     {
                         continue;
                     }
@@ -172,7 +164,6 @@ namespace Valve.VR.InteractionSystem
             }
         }
 
-
         //-------------------------------------------------
         // Get the HMD transform. This might return the fallback camera transform if SteamVR is unavailable or disabled.
         //-------------------------------------------------
@@ -194,7 +185,6 @@ namespace Valve.VR.InteractionSystem
             }
         }
 
-
         //-------------------------------------------------
         // Height of the eyes above the ground - useful for estimating player height.
         //-------------------------------------------------
@@ -203,15 +193,14 @@ namespace Valve.VR.InteractionSystem
             get
             {
                 Transform hmd = hmdTransform;
-                if ( hmd )
+                if (hmd)
                 {
-                    Vector3 eyeOffset = Vector3.Project( hmd.position - trackingOriginTransform.position, trackingOriginTransform.up );
+                    Vector3 eyeOffset = Vector3.Project(hmd.position - trackingOriginTransform.position, trackingOriginTransform.up);
                     return eyeOffset.magnitude / trackingOriginTransform.lossyScale.x;
                 }
                 return 0.0f;
             }
         }
-
 
         //-------------------------------------------------
         // Guess for the world-space position of the player's feet, directly beneath the HMD.
@@ -221,14 +210,13 @@ namespace Valve.VR.InteractionSystem
             get
             {
                 Transform hmd = hmdTransform;
-                if ( hmd )
+                if (hmd)
                 {
-                    return trackingOriginTransform.position + Vector3.ProjectOnPlane( hmd.position - trackingOriginTransform.position, trackingOriginTransform.up );
+                    return trackingOriginTransform.position + Vector3.ProjectOnPlane(hmd.position - trackingOriginTransform.position, trackingOriginTransform.up);
                 }
                 return trackingOriginTransform.position;
             }
         }
-
 
         //-------------------------------------------------
         // Guess for the world-space direction of the player's hips/torso. This is effectively just the gaze direction projected onto the floor plane.
@@ -238,10 +226,10 @@ namespace Valve.VR.InteractionSystem
             get
             {
                 Transform hmd = hmdTransform;
-                if ( hmd )
+                if (hmd)
                 {
-                    Vector3 direction = Vector3.ProjectOnPlane( hmd.forward, trackingOriginTransform.up );
-                    if ( Vector3.Dot( hmd.up, trackingOriginTransform.up ) < 0.0f )
+                    Vector3 direction = Vector3.ProjectOnPlane(hmd.forward, trackingOriginTransform.up);
+                    if (Vector3.Dot(hmd.up, trackingOriginTransform.up) < 0.0f)
                     {
                         // The HMD is upside-down. Either
                         // -The player is bending over backwards
@@ -254,11 +242,10 @@ namespace Valve.VR.InteractionSystem
             }
         }
 
-
         //-------------------------------------------------
-        private void Awake()
+        public void Init()
         {
-            if ( trackingOriginTransform == null )
+            if (trackingOriginTransform == null)
             {
                 trackingOriginTransform = this.transform;
             }
@@ -275,10 +262,9 @@ namespace Valve.VR.InteractionSystem
 #endif
         }
 
-
         //-------------------------------------------------
         [HideFromIl2Cpp]
-        private IEnumerator Start()
+        public IEnumerator Start()
         {
             _instance = this;
 
@@ -287,15 +273,9 @@ namespace Valve.VR.InteractionSystem
                 yield return null;
             }
 
-            if ( SteamVR.instance != null )
+            if (SteamVR.instance != null)
             {
-                ActivateRig( rigSteamVR );
-            }
-            else
-            {
-#if !HIDE_DEBUG_UI
-                ActivateRig( rig2DFallback );
-#endif
+                ActivateRig(rigSteamVR);
             }
         }
 
@@ -310,11 +290,11 @@ namespace Valve.VR.InteractionSystem
             {
                 if (headsetOnHead.GetStateDown(SteamVR_Input_Sources.Head))
                 {
-                    MelonLoader.MelonLogger.Msg("SteamVR Interaction System Headset placed on head");
+                    MelonLoader.MelonLogger.Msg("[HPVR] Headset placed on head");
                 }
                 else if (headsetOnHead.GetStateUp(SteamVR_Input_Sources.Head))
                 {
-                    MelonLoader.MelonLogger.Msg("SteamVR Interaction System Headset removed");
+                    MelonLoader.MelonLogger.Msg("[HPVR] Headset removed");
                 }
             }
         }
@@ -322,7 +302,7 @@ namespace Valve.VR.InteractionSystem
         //-------------------------------------------------
         void OnDrawGizmos()
         {
-            if ( this != instance )
+            if (this != instance)
             {
                 return;
             }
@@ -332,34 +312,34 @@ namespace Valve.VR.InteractionSystem
             //		"Gizmos" folder should make them work again.
 
             Gizmos.color = Color.white;
-            Gizmos.DrawIcon( feetPositionGuess, "vr_interaction_system_feet.png" );
+            Gizmos.DrawIcon(feetPositionGuess, "vr_interaction_system_feet.png");
 
             Gizmos.color = Color.cyan;
-            Gizmos.DrawLine( feetPositionGuess, feetPositionGuess + trackingOriginTransform.up * eyeHeight );
+            Gizmos.DrawLine(feetPositionGuess, feetPositionGuess + trackingOriginTransform.up * eyeHeight);
 
             // Body direction arrow
             Gizmos.color = Color.blue;
             Vector3 bodyDirection = bodyDirectionGuess;
-            Vector3 bodyDirectionTangent = Vector3.Cross( trackingOriginTransform.up, bodyDirection );
+            Vector3 bodyDirectionTangent = Vector3.Cross(trackingOriginTransform.up, bodyDirection);
             Vector3 startForward = feetPositionGuess + trackingOriginTransform.up * eyeHeight * 0.75f;
             Vector3 endForward = startForward + bodyDirection * 0.33f;
-            Gizmos.DrawLine( startForward, endForward );
-            Gizmos.DrawLine( endForward, endForward - 0.033f * ( bodyDirection + bodyDirectionTangent ) );
-            Gizmos.DrawLine( endForward, endForward - 0.033f * ( bodyDirection - bodyDirectionTangent ) );
+            Gizmos.DrawLine(startForward, endForward);
+            Gizmos.DrawLine(endForward, endForward - 0.033f * (bodyDirection + bodyDirectionTangent));
+            Gizmos.DrawLine(endForward, endForward - 0.033f * (bodyDirection - bodyDirectionTangent));
 
             Gizmos.color = Color.red;
             int count = handCount;
-            for ( int i = 0; i < count; i++ )
+            for (int i = 0; i < count; i++)
             {
-                Hand hand = GetHand( i );
+                Hand hand = GetHand(i);
 
-                if ( hand.handType == SteamVR_Input_Sources.LeftHand)
+                if (hand.handType == SteamVR_Input_Sources.LeftHand)
                 {
-                    Gizmos.DrawIcon( hand.transform.position, "vr_interaction_system_left_hand.png" );
+                    Gizmos.DrawIcon(hand.transform.position, "vr_interaction_system_left_hand.png");
                 }
-                else if ( hand.handType == SteamVR_Input_Sources.RightHand)
+                else if (hand.handType == SteamVR_Input_Sources.RightHand)
                 {
-                    Gizmos.DrawIcon( hand.transform.position, "vr_interaction_system_right_hand.png" );
+                    Gizmos.DrawIcon(hand.transform.position, "vr_interaction_system_right_hand.png");
                 }
                 else
                 {
@@ -383,16 +363,15 @@ namespace Valve.VR.InteractionSystem
             }
         }
 
-
         //-------------------------------------------------
         public void Draw2DDebug()
         {
-            if ( !allowToggleTo2D )
+            if (!allowToggleTo2D)
             {
                 return;
             }
 
-            if ( !SteamVR.active )
+            if (!SteamVR.active)
             {
                 return;
             }
@@ -402,36 +381,29 @@ namespace Valve.VR.InteractionSystem
             int left = Screen.width / 2 - width / 2;
             int top = Screen.height - height - 10;
 
-            string text = ( rigSteamVR.activeSelf ) ? "2D Debug" : "VR";
+            string text = (rigSteamVR.activeSelf) ? "2D Debug" : "VR";
 
-            if ( GUI.Button( new Rect( left, top, width, height ), text ) )
+            if (GUI.Button(new Rect(left, top, width, height), text))
             {
-                if ( rigSteamVR.activeSelf )
+                if (!rigSteamVR.activeSelf)
                 {
-                    ActivateRig( rig2DFallback );
-                }
-                else
-                {
-                    ActivateRig( rigSteamVR );
+                    ActivateRig(rigSteamVR);
                 }
             }
         }
 
-
         //-------------------------------------------------
-        private void ActivateRig( GameObject rig )
+        private void ActivateRig(GameObject rig)
         {
-            rigSteamVR.SetActive( rig == rigSteamVR );
-            rig2DFallback.SetActive( rig == rig2DFallback );
+            rigSteamVR.SetActive(rig == rigSteamVR);
 
-            if ( audioListener )
+            if (audioListener)
             {
                 audioListener.transform.parent = hmdTransform;
                 audioListener.transform.localPosition = Vector3.zero;
                 audioListener.transform.localRotation = Quaternion.identity;
             }
         }
-
 
         //-------------------------------------------------
         public void PlayerShotSelf()

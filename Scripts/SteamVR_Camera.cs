@@ -280,7 +280,6 @@ namespace Valve.VR
         // performed at startup, once the hmd has been identified.
         public void Expand()
         {
-            MelonLogger.Msg("[HPVR] expanding...");
             var _origin = transform.parent;
             if (_origin == null)
             {
@@ -332,7 +331,7 @@ namespace Valve.VR
                 name += eyeSuffix;
             }
 
-            MelonLogger.Msg("[HPVR] ...done");
+            MelonLogger.Msg("[HPVR] SteamVR Camera expanded");
             instance = this;
             //MelonLogger.Msg("origin: " + head.parent.name +"/" + origin.name + " - head: " + transform.parent.name + "/" + (origin.GetChild(0)?.name ?? "none") + "/" + head.name + " - eye: " + (origin.GetChild(0)?.GetChild(0)?.name ?? "none") + "/" + this.name);
         }

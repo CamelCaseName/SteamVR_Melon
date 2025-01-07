@@ -26,9 +26,9 @@ namespace Valve.VR.InteractionSystem
             /// <summary>Starting at tip and going down. Max 2.</summary>
             public Transform[] thumbColliders = new Transform[1];
             /// <summary>Starting at tip and going down. Max 3.</summary>
-            public Transform[] indexColliders = new Transform[2];
+            public Transform[] indexColliders = new Transform[3];
             /// <summary>Starting at tip and going down. Max 3.</summary>
-            public Transform[] middleColliders = new Transform[2];
+            public Transform[] middleColliders = new Transform[3];
             /// <summary>Starting at tip and going down. Max 3.</summary>
             public Transform[] ringColliders = new Transform[2];
             /// <summary>Starting at tip and going down. Max 3.</summary>

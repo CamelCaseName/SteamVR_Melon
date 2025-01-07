@@ -697,7 +697,9 @@ namespace Valve.VR
             return true;
         }
 
-        SteamVR_Events.Action deviceConnectedAction, hideRenderModelsAction, modelSkinSettingsHaveChangedAction;
+        SteamVR_Events.Action deviceConnectedAction;
+        SteamVR_Events.Action hideRenderModelsAction;
+        SteamVR_Events.Action modelSkinSettingsHaveChangedAction;
 
         SteamVR_RenderModel()
         {
@@ -708,10 +710,6 @@ namespace Valve.VR
 
         public void Initialize()
         {
-#if UNITY_EDITOR
-            if (!Application.isPlaying)
-                return;
-#endif
             if (!string.IsNullOrEmpty(modelOverride))
             {
                 MelonLogger.Msg("[HPVR] " + modelOverrideWarning);
@@ -725,84 +723,39 @@ namespace Valve.VR
                 UpdateModel();
             }
 
+            var t = transform.GetComponent<SteamVR_Behaviour_Pose>();
+            if (t is not null)
+            {
+                t.OnDeviceIndex += SetDeviceIndex;
+            }
+            t = transform.GetComponent<SteamVR_Behaviour_Pose>();
+            if (t is not null)
+            {
+                t.OnInputSource += SetInputSource;
+            }
+
+            deviceConnectedAction = SteamVR_Events.DeviceConnectedAction(new System.Action<int, bool>(OnDeviceConnected));
+            hideRenderModelsAction = SteamVR_Events.HideRenderModelsAction(new System.Action<bool>(OnHideRenderModels));
+            modelSkinSettingsHaveChangedAction = SteamVR_Events.SystemAction(EVREventType.VREvent_ModelSkinSettingsHaveChanged, new System.Action<VREvent_t>(OnModelSkinSettingsHaveChanged));
+
             deviceConnectedAction.enabled = true;
             hideRenderModelsAction.enabled = true;
             modelSkinSettingsHaveChangedAction.enabled = true;
             initialized = true;
         }
 
-        void OnDisable()
+        protected void OnDisable()
         {
-#if UNITY_EDITOR
-            if (!Application.isPlaying)
-                return;
-#endif
-            deviceConnectedAction.enabled = false;
-            hideRenderModelsAction.enabled = false;
-            modelSkinSettingsHaveChangedAction.enabled = false;
+            if (deviceConnectedAction is not null)
+            { deviceConnectedAction.enabled = false; }
+            if (hideRenderModelsAction is not null)
+            { hideRenderModelsAction.enabled = false; }
+            if (modelSkinSettingsHaveChangedAction is not null)
+            { modelSkinSettingsHaveChangedAction.enabled = false; }
         }
 
-#if UNITY_EDITOR
-        Hashtable values;
-#endif
         void Update()
         {
-#if UNITY_EDITOR
-            if (!Application.isPlaying)
-            {
-                // See if anything has changed since this gets called whenever anything gets touched.
-                var fields = GetType().GetFields(System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public);
-
-                bool modified = false;
-
-                if (values == null)
-                {
-                    modified = true;
-                }
-                else
-                {
-                    foreach (var f in fields)
-                    {
-                        if (!values.Contains(f))
-                        {
-                            modified = true;
-                            break;
-                        }
-
-                        var v0 = values[f];
-                        var v1 = f.GetValue(this);
-                        if (v1 != null)
-                        {
-                            if (!v1.Equals(v0))
-                            {
-                                modified = true;
-                                break;
-                            }
-                        }
-                        else if (v0 != null)
-                        {
-                            modified = true;
-                            break;
-                        }
-                    }
-                }
-
-                if (modified)
-                {
-                    if (renderModelName != modelOverride)
-                    {
-                        renderModelName = modelOverride;
-                        SetModel(modelOverride);
-                    }
-
-                    values = new Hashtable();
-                    foreach (var f in fields)
-                        values[f] = f.GetValue(this);
-                }
-
-                return; // Do not update transforms (below) when not playing in Editor (to avoid keeping OpenVR running all the time).
-            }
-#endif
             // Update component transforms dynamically.
             if (initialized && updateDynamically)
             {

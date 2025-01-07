@@ -134,7 +134,7 @@ namespace Valve.VR
 
         public class Event
         {
-            public event System.Action OnEvent;
+            public event System.Action OnEvent = new(() => { });
 
             public void Listen(System.Action action) { OnEvent += action; }
             public void Remove(System.Action action) { OnEvent -= action; }
@@ -153,7 +153,7 @@ namespace Valve.VR
 
         public class Event<T>
         {
-            public event System.Action<T> OnEvent;
+            public event System.Action<T> OnEvent = new((T t0) => { });
 
             public void Listen(System.Action<T> action) { OnEvent += action; }
             public void Remove(System.Action<T> action) { OnEvent -= action; }
@@ -181,7 +181,7 @@ namespace Valve.VR
 
         public class Event<T0, T1>
         {
-            public event System.Action<T0, T1> OnEvent;
+            public event System.Action<T0, T1> OnEvent = new((T0 t0, T1 t1) => { });
 
             public void Listen(System.Action<T0, T1> action) { OnEvent += action; }
             public void Remove(System.Action<T0, T1> action) { OnEvent -= action; }
@@ -208,7 +208,7 @@ namespace Valve.VR
 
         public class Event<T0, T1, T2>
         {
-            public event System.Action<T0, T1, T2> OnEvent;
+            public event System.Action<T0, T1, T2> OnEvent = new((T0 t0, T1 t1, T2 t2) => { });
 
             public void Listen(System.Action<T0, T1, T2> action) { OnEvent += action; }
             public void Remove(System.Action<T0, T1, T2> action) { OnEvent -= action; }
@@ -234,7 +234,7 @@ namespace Valve.VR
         }
         public class Event<T0, T1, T2, T3>
         {
-            public event System.Action<T0, T1, T2, T3> OnEvent;
+            public event System.Action<T0, T1, T2, T3> OnEvent = new((T0 t0, T1 t1, T2 t2, T3 t3) => { });
 
             public void Listen(System.Action<T0, T1, T2, T3> action) { OnEvent += action; }
             public void Remove(System.Action<T0, T1, T2, T3> action) { OnEvent -= action; }

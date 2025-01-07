@@ -13,6 +13,7 @@ using UnityEngine.Events;
 using System.Threading;
 using Il2CppInterop.Runtime.Attributes;
 using MelonLoader;
+using Il2CppInterop.Runtime;
 
 namespace Valve.VR.InteractionSystem
 {
@@ -82,11 +83,24 @@ namespace Valve.VR.InteractionSystem
 
         public GameObject renderModelPrefab;
 
-        public List<RenderModel> renderModels = new List<RenderModel>();
+        public List<RenderModel> renderModels = new();
 
         public RenderModel mainRenderModel;
 
         public RenderModel hoverhighlightRenderModel;
+
+        [HideFromIl2Cpp]
+        public event Action OnParentHandInputFocusAcquired;
+        [HideFromIl2Cpp]
+        public event Action OnParentHandInputFocusLost;
+        [HideFromIl2Cpp]
+        public event Action<int> OnHandInitialized;
+        [HideFromIl2Cpp]
+        public event Action<SteamVR_Input_Sources> OnInputSource;
+        [HideFromIl2Cpp]
+        public event Action<Interactable> OnParentHandHoverBegin;
+        [HideFromIl2Cpp]
+        public event Action<Interactable> OnParentHandHoverEnd;
 
         public bool showDebugText = false;
         public bool spewDebugText = false;
@@ -189,7 +203,7 @@ namespace Valve.VR.InteractionSystem
                         //Note: The _hoveringInteractable can change after sending the OnHandHoverEnd message so we need to check it again before broadcasting this message
                         if (_hoveringInteractable != null)
                         {
-                            this.BroadcastMessage("OnParentHandHoverEnd", _hoveringInteractable, SendMessageOptions.DontRequireReceiver); // let objects attached to the hand know that a hover has ended
+                            OnParentHandHoverEnd.Invoke(_hoveringInteractable); // let objects attached to the hand know that a hover has ended
                         }
                     }
 
@@ -207,7 +221,7 @@ namespace Valve.VR.InteractionSystem
                         //Note: The _hoveringInteractable can change after sending the OnHandHoverBegin message so we need to check it again before broadcasting this message
                         if (_hoveringInteractable != null)
                         {
-                            this.BroadcastMessage("OnParentHandHoverBegin", _hoveringInteractable, SendMessageOptions.DontRequireReceiver); // let objects attached to the hand know that a hover has begun
+                            OnParentHandHoverBegin.Invoke(_hoveringInteractable); // let objects attached to the hand know that a hover has begun
                         }
                     }
                 }
@@ -818,7 +832,7 @@ namespace Valve.VR.InteractionSystem
         }
 
         //-------------------------------------------------
-        public virtual void Awake()
+        public virtual void Initialize()
         {
             inputFocusAction = SteamVR_Events.InputFocusAction(OnInputFocus);
 
@@ -845,6 +859,13 @@ namespace Valve.VR.InteractionSystem
                     trackedObject.onTransformUpdatedEvent += OnTransformUpdated;
                 }
             }
+
+            OnHandInitialized = new((int i) => { });
+            OnInputSource = new((SteamVR_Input_Sources i) => { });
+            OnParentHandHoverBegin = new((Interactable i) => { });
+            OnParentHandHoverEnd = new((Interactable i) => { });
+            OnParentHandInputFocusAcquired = new(() => { });
+            OnParentHandInputFocusLost = new(() => { });
         }
 
         protected virtual void OnDestroy()
@@ -1154,7 +1175,7 @@ namespace Valve.VR.InteractionSystem
         }
 
         //-------------------------------------------------
-        protected virtual void OnEnable()
+        public virtual void FinishInit()
         {
             inputFocusAction.enabled = true;
 
@@ -1426,13 +1447,13 @@ namespace Valve.VR.InteractionSystem
                 DetachObject(applicationLostFocusObject, true);
                 applicationLostFocusObject.SetActive(false);
                 UpdateHovering();
-                BroadcastMessage("OnParentHandInputFocusAcquired", SendMessageOptions.DontRequireReceiver);
+                OnParentHandInputFocusLost.Invoke();
             }
             else
             {
                 applicationLostFocusObject.SetActive(true);
                 AttachObject(applicationLostFocusObject, GrabTypes.Scripted, AttachmentFlags.ParentToHand);
-                BroadcastMessage("OnParentHandInputFocusLost", SendMessageOptions.DontRequireReceiver);
+                OnParentHandInputFocusAcquired.Invoke();
             }
         }
 
@@ -1769,7 +1790,6 @@ namespace Valve.VR.InteractionSystem
             {
                 HandDebugLog("Hand " + name + " connected with type " + handType.ToString());
             }
-
             bool hadOldRendermodel = mainRenderModel != null;
             EVRSkeletalMotionRange oldRM_rom = EVRSkeletalMotionRange.WithController;
             if (hadOldRendermodel)
@@ -1786,20 +1806,17 @@ namespace Valve.VR.InteractionSystem
             }
 
             renderModels.Clear();
-
-            GameObject renderModelInstance = renderModelPrefab;
-            renderModelInstance.layer = gameObject.layer;
-            renderModelInstance.tag = gameObject.tag;
-            renderModelInstance.transform.parent = this.transform;
-            renderModelInstance.transform.localPosition = Vector3.zero;
-            renderModelInstance.transform.localRotation = Quaternion.identity;
-            renderModelInstance.transform.localScale = renderModelPrefab.transform.localScale;
+            renderModelPrefab.layer = gameObject.layer;
+            renderModelPrefab.tag = gameObject.tag;
+            renderModelPrefab.transform.parent = this.transform;
+            renderModelPrefab.transform.localPosition = Vector3.zero;
+            renderModelPrefab.transform.localRotation = Quaternion.identity;
+            renderModelPrefab.transform.localScale = renderModelPrefab.transform.localScale;
 
             //TriggerHapticPulse(800);  //pulse on controller init
 
             int deviceIndex = trackedObject.GetDeviceIndex();
-
-            mainRenderModel = renderModelInstance.GetComponent<RenderModel>();
+            mainRenderModel = renderModelPrefab.GetComponent(Il2CppType.Of<RenderModel>()).Cast<RenderModel>();
             renderModels.Add(mainRenderModel);
 
             if (hadOldRendermodel)
@@ -1807,8 +1824,8 @@ namespace Valve.VR.InteractionSystem
                 mainRenderModel.SetSkeletonRangeOfMotion(oldRM_rom);
             }
 
-            this.BroadcastMessage("SetInputSource", (int)handType, SendMessageOptions.DontRequireReceiver); // let child objects know we've initialized
-            this.BroadcastMessage("OnHandInitialized", deviceIndex, SendMessageOptions.DontRequireReceiver); // let child objects know we've initialized
+            OnInputSource.Invoke(handType); // let child objects know we've initialized
+            OnHandInitialized.Invoke(deviceIndex); // let child objects know we've initialized
         }
 
         public void SetRenderModel(GameObject prefab)

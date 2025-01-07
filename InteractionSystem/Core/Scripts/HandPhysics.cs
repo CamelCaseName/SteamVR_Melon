@@ -4,6 +4,7 @@
 //
 //=============================================================================
 
+using Il2CppInterop.Runtime;
 using MelonLoader;
 using System;
 using System.Collections;
@@ -24,6 +25,7 @@ namespace Valve.VR.InteractionSystem
 
 
         public Hand hand;
+        public SteamVR_Behaviour_Pose pose;
 
         // distance at which hand will teleport back to controller
         const float handResetDistance = 0.6f;
@@ -36,33 +38,26 @@ namespace Valve.VR.InteractionSystem
 
         public void Initialize(GameObject HandColliderPrefab)
         {
-            int i = 0;
-            hand = GetComponent<Hand>();
-            var t = HandColliderPrefab;
-            handCollider = t.GetComponent<HandCollider>();
-            MelonLogger.Msg(handCollider?.ToString() ?? "collider null");
-            foreach (var m in t.GetComponents<MonoBehaviour>())
+            try
             {
-                MelonLogger.Msg(m?.ToString() ?? " wtf");
+                int i = 0;
+                handCollider = HandColliderPrefab.GetComponent(Il2CppType.Of<HandCollider>()).Cast<HandCollider>();
+                Vector3 localPosition = handCollider.transform.localPosition;
+                Quaternion localRotation = handCollider.transform.localRotation;
+
+                handCollider.transform.parent = Player.instance.transform;
+                handCollider.transform.localPosition = localPosition;
+                handCollider.transform.localRotation = localRotation;
+                handCollider.hand = this;
+
+                pose.onTransformUpdated.Listen(UpdateHand);
             }
-            MelonLogger.Msg(t.transform.childCount + " children");
-            MelonLogger.Msg(i++);
-            Vector3 localPosition = handCollider.transform.localPosition;
-            MelonLogger.Msg(i++);
-            Quaternion localRotation = handCollider.transform.localRotation;
-            MelonLogger.Msg(i++);
-
-            handCollider.transform.parent = Player.instance.transform;
-            MelonLogger.Msg(i++);
-            handCollider.transform.localPosition = localPosition;
-            MelonLogger.Msg(i++);
-            handCollider.transform.localRotation = localRotation;
-            MelonLogger.Msg(i++);
-            handCollider.hand = this;
-            MelonLogger.Msg(i++);
-
-            GetComponent<SteamVR_Behaviour_Pose>().onTransformUpdated.Listen(UpdateHand);
-            MelonLogger.Msg(i++);
+            catch (Exception e)
+            {
+                MelonLogger.Error("CONTROLLER NOT FOUND");
+                MelonLogger.Error(e);
+                MelonLogger.Error(e.InnerException.ToString() ?? "");
+            }
         }
 
         // cached transformations

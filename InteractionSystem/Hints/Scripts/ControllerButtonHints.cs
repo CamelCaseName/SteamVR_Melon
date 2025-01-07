@@ -100,6 +100,12 @@ namespace Valve.VR.InteractionSystem
             renderModelLoadedAction = SteamVR_Events.RenderModelLoadedAction(OnRenderModelLoaded);
 
             colorID = Shader.PropertyToID("_BaseColor");
+
+            var t = transform.GetComponent<SteamVR_Behaviour_Pose>();
+            if (t is not null)
+            {
+                t.OnInputSource += SetInputSource;
+            }
         }
 
 
@@ -136,6 +142,7 @@ namespace Valve.VR.InteractionSystem
 
 
         //-------------------------------------------------
+        //todo bind to event
         private void OnParentHandInputFocusLost()
         {
             //Hide all the hints when the controller is no longer the primary attached object
@@ -144,6 +151,7 @@ namespace Valve.VR.InteractionSystem
         }
 
 
+        //todo bind to event
         public virtual void SetInputSource(SteamVR_Input_Sources newInputSource)
         {
             inputSource = newInputSource;
@@ -153,6 +161,7 @@ namespace Valve.VR.InteractionSystem
         //-------------------------------------------------
         // Gets called when the hand has been initialized and a render model has been set
         //-------------------------------------------------
+        //todo bind to event
         private void OnHandInitialized(int deviceIndex)
         {
             //Create a new render model for the controller hints

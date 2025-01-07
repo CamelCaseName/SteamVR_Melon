@@ -3,6 +3,7 @@
 using UnityEngine;
 using System.Collections;
 using System;
+using MelonLoader;
 
 namespace Valve.VR.InteractionSystem
 {
@@ -20,7 +21,6 @@ namespace Valve.VR.InteractionSystem
         protected string animatorParameterStateName = "AnimationState";
         protected int handAnimatorStateId = -1;
 
-
         public GameObject controllerPrefab;
         protected GameObject controllerInstance;
         protected Renderer[] controllerRenderers;
@@ -35,13 +35,18 @@ namespace Valve.VR.InteractionSystem
 
         protected SteamVR_Input_Sources inputSource;
 
-        public void Awake()
+        public void Initialize()
         {
             renderModelLoadedAction = SteamVR_Events.RenderModelLoadedAction(OnRenderModelLoaded);
-
+            onControllerLoaded = new(() => { });
             InitializeHand();
 
             InitializeController();
+            var t = transform.GetComponent<SteamVR_Behaviour_Pose>();
+            if (t is not null)
+            {
+                t.OnInputSource += SetInputSource;
+            }
         }
 
         public void InitializeHand()
@@ -118,7 +123,7 @@ namespace Valve.VR.InteractionSystem
             }
         }
 
-        protected void OnEnable()
+        public void InitAction()
         {
             renderModelLoadedAction.enabled = true;
         }

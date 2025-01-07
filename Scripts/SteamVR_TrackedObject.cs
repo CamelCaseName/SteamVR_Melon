@@ -92,6 +92,11 @@ namespace Valve.VR
         {
             newPosesAction = SteamVR_Events.NewPosesAction(OnNewPoses);
             MelonLogger.Msg("[HPVR] newposes action is null: " + (newPosesAction == null));
+            var t = transform.GetComponent<SteamVR_Behaviour_Pose>();
+            if (t is not null)
+            {
+                t.OnDeviceIndex += SetDeviceIndex;
+            }
         }
 
         private void Awake()

@@ -56,6 +56,7 @@ namespace Valve.VR.InteractionSystem
 
 
         //-------------------------------------------------
+        //todo bind to event
         protected void OnParentHandHoverBegin(Interactable other)
         {
             if (!this.isActiveAndEnabled)
@@ -71,6 +72,7 @@ namespace Valve.VR.InteractionSystem
 
 
         //-------------------------------------------------
+        //todo bind to event
         private void OnParentHandHoverEnd(Interactable other)
         {
             HideHighlight();
@@ -78,6 +80,7 @@ namespace Valve.VR.InteractionSystem
 
 
         //-------------------------------------------------
+        //todo bind to event
         private void OnParentHandInputFocusAcquired()
         {
             if (!this.isActiveAndEnabled)

@@ -1,11 +1,8 @@
 ﻿//======= Copyright (c) Valve Corporation, All rights reserved. ===============
 
-using MelonLoader;
+using Il2CppInterop.Runtime.Attributes;
 using System;
-using System.Threading;
 using UnityEngine;
-using UnityEngine.Events;
-using Valve.VR;
 
 namespace Valve.VR
 {
@@ -32,7 +29,6 @@ namespace Valve.VR
         /// <summary>Returns whether or not the pose action is bound and able to be updated</summary>
         public bool isActive { get { return poseAction[inputSource].active; } }
 
-
         /// <summary>This Unity event will fire whenever the position or rotation of this transform is updated.</summary>
         public SteamVR_Behaviour_PoseEvent onTransformUpdated;
 
@@ -47,7 +43,6 @@ namespace Valve.VR
 
         /// <summary>This Unity event will fire whenever the device's deviceIndex changes</summary>
         public SteamVR_Behaviour_Pose_DeviceIndexChangedEvent onDeviceIndexChanged;
-
 
         /// <summary>This C# event will fire whenever the position or rotation of this transform is updated.</summary>
         public UpdateHandler onTransformUpdatedEvent;
@@ -64,22 +59,31 @@ namespace Valve.VR
         /// <summary>This C# event will fire whenever the device's deviceIndex changes</summary>
         public DeviceIndexChangedHandler onDeviceIndexChangedEvent;
 
-
         /// <summary>Can be disabled to stop broadcasting bound device status changes</summary>
         public bool broadcastDeviceChanges = true;
+
+        [HideFromIl2Cpp]
+        public event InputSourceHandler OnInputSource = new((SteamVR_Input_Sources s) => { });
+        [HideFromIl2Cpp]
+        public event DeviceIndexHandler OnDeviceIndex = new((int i) => { });
 
         protected int deviceIndex = -1;
 
         protected SteamVR_HistoryBuffer historyBuffer = new SteamVR_HistoryBuffer(30);
 
-
-        public virtual void Start()
+        public virtual void Init()
         {
             if (poseAction == null)
             {
                 MelonLoader.MelonLogger.Error("[HPVR] No pose action set for this component", this);
                 return;
             }
+
+            onTrackingChanged = new();
+            onTransformChanged = new();
+            onTransformUpdated = new();
+            onDeviceIndexChanged = new();
+            onConnectedChanged = new();
 
             CheckDeviceIndex();
 
@@ -89,7 +93,7 @@ namespace Valve.VR
             }
         }
 
-        protected virtual void OnEnable()
+        public virtual void FinishInit()
         {
             SteamVR.Initialize();
 
@@ -183,8 +187,8 @@ namespace Valve.VR
 
                     if (broadcastDeviceChanges)
                     {
-                        this.gameObject.BroadcastMessage("SetInputSource", (int)inputSource, SendMessageOptions.DontRequireReceiver);
-                        this.gameObject.BroadcastMessage("SetDeviceIndex", deviceIndex, SendMessageOptions.DontRequireReceiver);
+                        OnInputSource.Invoke(inputSource);
+                        OnDeviceIndex.Invoke(deviceIndex);
                     }
 
                     onDeviceIndexChanged?.Send(this, inputSource, deviceIndex);
@@ -268,6 +272,8 @@ namespace Valve.VR
         public delegate void ActiveChangeHandler(SteamVR_Behaviour_Pose fromAction, SteamVR_Input_Sources fromSource, bool active);
         public delegate void ChangeHandler(SteamVR_Behaviour_Pose fromAction, SteamVR_Input_Sources fromSource);
         public delegate void UpdateHandler(SteamVR_Behaviour_Pose fromAction, SteamVR_Input_Sources fromSource);
+        public delegate void InputSourceHandler(SteamVR_Input_Sources s);
+        public delegate void DeviceIndexHandler(int i);
         public delegate void TrackingChangeHandler(SteamVR_Behaviour_Pose fromAction, SteamVR_Input_Sources fromSource, ETrackingResult trackingState);
         public delegate void ValidPoseChangeHandler(SteamVR_Behaviour_Pose fromAction, SteamVR_Input_Sources fromSource, bool validPose);
         public delegate void DeviceConnectedChangeHandler(SteamVR_Behaviour_Pose fromAction, SteamVR_Input_Sources fromSource, bool deviceConnected);
