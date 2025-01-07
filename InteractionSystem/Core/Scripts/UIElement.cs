@@ -4,7 +4,6 @@
 //
 //=============================================================================
 
-#if UNITY_UGUI_UI || !UNITY_2019_2_OR_NEWER
 using System;
 using UnityEngine;
 using UnityEngine.UI;
@@ -30,15 +29,14 @@ namespace Valve.VR.InteractionSystem
             }
         }
 
-
         //-------------------------------------------------
+        //todo not sure if these get called
         protected virtual void OnHandHoverBegin(Hand hand)
         {
             currentHand = hand;
             InputModule.instance.HoverBegin(gameObject);
             ControllerButtonHints.ShowButtonHint(hand, hand.uiInteractAction);
         }
-
 
         //-------------------------------------------------
         protected virtual void OnHandHoverEnd(Hand hand)
@@ -47,7 +45,6 @@ namespace Valve.VR.InteractionSystem
             ControllerButtonHints.HideButtonHint(hand, hand.uiInteractAction);
             currentHand = null;
         }
-
 
         //-------------------------------------------------
         protected virtual void HandHoverUpdate(Hand hand)
@@ -59,36 +56,10 @@ namespace Valve.VR.InteractionSystem
             }
         }
 
-
         //-------------------------------------------------
         protected virtual void OnButtonClick()
         {
             onHandClick.Send(currentHand);
         }
     }
-
-#if UNITY_EDITOR
-	//-------------------------------------------------------------------------
-	[UnityEditor.CustomEditor( typeof( UIElement ) )]
-	public class UIElementEditor : UnityEditor.Editor
-	{
-		//-------------------------------------------------
-		// Custom Inspector GUI allows us to click from within the UI
-		//-------------------------------------------------
-		public override void OnInspectorGUI()
-		{
-			DrawDefaultInspector();
-
-			UIElement uiElement = (UIElement)target;
-			if ( GUILayout.Button( "Click" ) )
-			{
-				InputModule.instance.Submit( uiElement.gameObject );
-			}
-		}
-	}
-#endif
 }
-#else
-using UnityEngine;
-namespace Valve.VR.InteractionSystem { public class UIElement : MonoBehaviour {} }
-#endif
