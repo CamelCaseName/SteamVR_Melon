@@ -358,7 +358,7 @@ namespace Valve.VR
             bones = skeletonRoot.GetComponentsInChildren<Transform>();
         }
 
-        protected virtual void OnEnable()
+        public virtual void FinishInit()
         {
             if (initialized)
             {
@@ -417,10 +417,7 @@ namespace Valve.VR
 
             if (blendPoser != null && skeletonBlend < 1)
             {
-                if (blendSnapshot == null)
-                {
-                    blendSnapshot = blendPoser.GetBlendedPose(this);
-                }
+                blendSnapshot ??= blendPoser.GetBlendedPose(this);
 
                 blendSnapshot = blendPoser.GetBlendedPose(this);
             }

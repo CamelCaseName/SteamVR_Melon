@@ -7,8 +7,6 @@
 using Il2CppInterop.Runtime;
 using MelonLoader;
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace Valve.VR.InteractionSystem
@@ -40,7 +38,6 @@ namespace Valve.VR.InteractionSystem
         {
             try
             {
-                int i = 0;
                 handCollider = HandColliderPrefab.GetComponent(Il2CppType.Of<HandCollider>()).Cast<HandCollider>();
                 Vector3 localPosition = handCollider.transform.localPosition;
                 Quaternion localRotation = handCollider.transform.localRotation;
