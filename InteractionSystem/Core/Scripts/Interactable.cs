@@ -41,7 +41,6 @@ namespace Valve.VR.InteractionSystem
         [Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp]
         public event OnDetachedFromHandDelegate onDetachedFromHand;
 
-
         /// <summary>Specify whether you want to snap to the hand's object attachment point, or just the raw hand</summary>
         public bool useHandObjectAttachmentPoint = true;
 
@@ -52,14 +51,12 @@ namespace Valve.VR.InteractionSystem
 
         public bool snapAttachEaseInCompleted = false;
 
-
         // /// <summary>The skeleton pose to apply when grabbing. Can only set this or handFollowTransform.</summary>
 
         public SteamVR_Skeleton_Poser skeletonPoser;
 
         /// <summary>Should the rendered hand lock on to and follow the object</summary>
         public bool handFollowTransform = true;
-
 
         /// <summary>Set whether or not you want this interactible to highlight when hovering over it</summary>
         public bool highlightOnHover = true;
@@ -93,11 +90,9 @@ namespace Valve.VR.InteractionSystem
             }
         }
 
-
         public bool isDestroying { get; protected set; }
         public bool isHovering { get; protected set; }
         public bool wasHovering { get; protected set; }
-
 
         private void Awake()
         {
@@ -106,15 +101,15 @@ namespace Valve.VR.InteractionSystem
 
         protected virtual void Start()
         {
-            if (highlightMat == null)
-            {
-                highlightMat = Resources.Load<Material>("SteamVR_HoverHighlight_URP");
-            }
+            //if (highlightMat == null)
+            //{
+            //    highlightMat = Resources.Load<Material>("SteamVR_HoverHighlight_URP");
+            //}
 
-            if (highlightMat == null)
-            {
-                MelonLoader.MelonLogger.Error("[HPVR Interaction] Hover Highlight Material is missing. Please create a material named 'SteamVR_HoverHighlight' and place it in a Resources folder", this);
-            }
+            //if (highlightMat == null)
+            //{
+            //    MelonLoader.MelonLogger.Error("[HPVR Interaction] Hover Highlight Material is missing. Please create a material named 'SteamVR_HoverHighlight' and place it in a Resources folder", this);
+            //}
 
             if (skeletonPoser != null)
             {
@@ -277,7 +272,6 @@ namespace Valve.VR.InteractionSystem
             }
         }
 
-
         /// <summary>
         /// Called when a Hand stops hovering over this object
         /// </summary>
@@ -311,7 +305,6 @@ namespace Valve.VR.InteractionSystem
             }
         }
 
-
         protected float blendToPoseTime = 0.1f;
         protected float releasePoseBlendTime = 0.2f;
 
@@ -343,7 +336,6 @@ namespace Valve.VR.InteractionSystem
 
             onDetachedFromHand?.Invoke(hand);
 
-
             if (skeletonPoser != null)
             {
                 hand.skeleton?.BlendToSkeleton(releasePoseBlendTime);
@@ -367,7 +359,6 @@ namespace Valve.VR.InteractionSystem
                 Destroy(highlightHolder);
             }
         }
-
 
         protected virtual void OnDisable()
         {

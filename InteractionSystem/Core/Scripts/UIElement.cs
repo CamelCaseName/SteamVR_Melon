@@ -15,7 +15,7 @@ namespace Valve.VR.InteractionSystem
     public class UIElement : MonoBehaviour
     {
         public UIElement(IntPtr L) : base(L) { }
-        public CustomEvents.UnityEventHand onHandClick;
+        public CustomEvents.UnityEventHand onHandClick = new();
 
         protected Hand currentHand;
 

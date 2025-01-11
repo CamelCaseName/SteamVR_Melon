@@ -4,16 +4,14 @@
 //
 //=============================================================================
 
-using UnityEngine;
+using Il2CppInterop.Runtime;
+using Il2CppInterop.Runtime.Attributes;
+using MelonLoader;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using UnityEngine.Events;
-using System.Threading;
-using Il2CppInterop.Runtime.Attributes;
-using MelonLoader;
-using Il2CppInterop.Runtime;
+using UnityEngine;
 
 namespace Valve.VR.InteractionSystem
 {
@@ -133,7 +131,7 @@ namespace Valve.VR.InteractionSystem
             }
         }
 
-        private List<AttachedObject> attachedObjects = new List<AttachedObject>();
+        private List<AttachedObject> attachedObjects = new();
 
         [Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp]
         public ReadOnlyCollection<AttachedObject> AttachedObjects
@@ -145,11 +143,10 @@ namespace Valve.VR.InteractionSystem
 
         private Interactable _hoveringInteractable;
 
-        private TextMesh debugText;
         private int prevOverlappingColliders = 0;
 
         private const int ColliderArraySize = 32;
-        private Collider[] overlappingColliders;
+        private Collider[] overlappingColliders = new Collider[ColliderArraySize];
 
         private Player playerInstance;
 
@@ -177,7 +174,6 @@ namespace Valve.VR.InteractionSystem
                 return trackedObject.isValid;
             }
         }
-
 
         //-------------------------------------------------
         // The Interactable object this Hand is currently hovering over
@@ -227,7 +223,6 @@ namespace Valve.VR.InteractionSystem
                 }
             }
         }
-
 
         //-------------------------------------------------
         // Active GameObject attached to this Hand
@@ -984,7 +979,7 @@ namespace Valve.VR.InteractionSystem
                 }
 
                 int numColliding = Physics.OverlapSphereNonAlloc(hoverPosition, hoverRadius, overlappingColliders, hoverLayerMask.value);
-
+                //we get some colliding speres here
                 if (numColliding >= ColliderArraySize)
                 {
                     MelonLoader.MelonLogger.Warning("[HPVR Interaction] This hand is overlapping the max number of colliders: " + ColliderArraySize + ". Some collisions may be missed. Increase ColliderArraySize on Hand.cs");
@@ -996,6 +991,8 @@ namespace Valve.VR.InteractionSystem
                 // Pick the closest hovering
                 for (int colliderIndex = 0; colliderIndex < overlappingColliders.Length; colliderIndex++)
                 {
+                    //todo investigate
+                    //MelonLogger.Msg();
                     Collider collider = overlappingColliders[colliderIndex];
 
                     if (collider == null)
@@ -1126,55 +1123,6 @@ namespace Valve.VR.InteractionSystem
         }
 
         //-------------------------------------------------
-        private void UpdateDebugText()
-        {
-            if (showDebugText)
-            {
-                if (debugText == null)
-                {
-                    debugText = new GameObject("_debug_text").AddComponent<TextMesh>();
-                    debugText.fontSize = 120;
-                    debugText.characterSize = 0.001f;
-                    debugText.transform.parent = transform;
-
-                    debugText.transform.localRotation = Quaternion.Euler(90.0f, 0.0f, 0.0f);
-                }
-
-                if (handType == SteamVR_Input_Sources.RightHand)
-                {
-                    debugText.transform.localPosition = new Vector3(-0.05f, 0.0f, 0.0f);
-                    debugText.alignment = TextAlignment.Right;
-                    debugText.anchor = TextAnchor.UpperRight;
-                }
-                else
-                {
-                    debugText.transform.localPosition = new Vector3(0.05f, 0.0f, 0.0f);
-                    debugText.alignment = TextAlignment.Left;
-                    debugText.anchor = TextAnchor.UpperLeft;
-                }
-
-                debugText.text = string.Format(
-                    "Hovering: {0}\n" +
-                    "Hover Lock: {1}\n" +
-                    "Attached: {2}\n" +
-                    "Total Attached: {3}\n" +
-                    "Type: {4}\n",
-                    (hoveringInteractable ? hoveringInteractable.gameObject.name : "null"),
-                    hoverLocked,
-                    (currentAttachedObject ? currentAttachedObject.name : "null"),
-                    attachedObjects.Count,
-                    handType.ToString());
-            }
-            else
-            {
-                if (debugText != null)
-                {
-                    Destroy(debugText.gameObject);
-                }
-            }
-        }
-
-        //-------------------------------------------------
         public virtual void FinishInit()
         {
             inputFocusAction.enabled = true;
@@ -1203,6 +1151,7 @@ namespace Valve.VR.InteractionSystem
 
             if (hoveringInteractable)
             {
+                MelonLogger.Msg("govering" + hoveringInteractable?.name ?? "");
                 hoveringInteractable.SendMessage("HandHoverUpdate", this, SendMessageOptions.DontRequireReceiver);
             }
         }

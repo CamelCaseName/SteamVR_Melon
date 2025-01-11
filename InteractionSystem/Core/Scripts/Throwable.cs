@@ -41,8 +41,6 @@ namespace Valve.VR.InteractionSystem
         ///<summary>When detaching the object, should it return to its original parent?</summary>
         public bool restoreOriginalParent = false;
 
-
-
         protected VelocityEstimator velocityEstimator;
         protected bool attached = false;
         protected float attachTime;
@@ -54,7 +52,6 @@ namespace Valve.VR.InteractionSystem
         public UnityEvent onDetachFromHand;
         public HandEvent onHeldUpdate;
 
-
         protected RigidbodyInterpolation hadInterpolation = RigidbodyInterpolation.None;
 
         protected Rigidbody rigidbody;
@@ -62,18 +59,14 @@ namespace Valve.VR.InteractionSystem
         
         public Interactable interactable;
 
-
         //-------------------------------------------------
         protected virtual void Awake()
         {
             velocityEstimator = GetComponent<VelocityEstimator>();
             interactable = GetComponent<Interactable>();
 
-
-
             rigidbody = GetComponent<Rigidbody>();
             rigidbody.maxAngularVelocity = 50.0f;
-
 
             if(attachmentOffset != null)
             {
@@ -82,7 +75,6 @@ namespace Valve.VR.InteractionSystem
             }
 
         }
-
 
         //-------------------------------------------------
         protected virtual void OnHandHoverBegin( Hand hand )
@@ -114,13 +106,11 @@ namespace Valve.VR.InteractionSystem
             }
         }
 
-
         //-------------------------------------------------
         protected virtual void OnHandHoverEnd( Hand hand )
         {
             hand.HideGrabHint();
         }
-
 
         //-------------------------------------------------
         protected virtual void HandHoverUpdate( Hand hand )
@@ -157,7 +147,6 @@ namespace Valve.VR.InteractionSystem
 
         }
 
-
         //-------------------------------------------------
         protected virtual void OnDetachedFromHand(Hand hand)
         {
@@ -177,7 +166,6 @@ namespace Valve.VR.InteractionSystem
             rigidbody.velocity = velocity;
             rigidbody.angularVelocity = angularVelocity;
         }
-
 
         public virtual void GetReleaseVelocities(Hand hand, out Vector3 velocity, out Vector3 angularVelocity)
         {
@@ -233,7 +221,6 @@ namespace Valve.VR.InteractionSystem
         protected virtual void HandAttachedUpdate(Hand hand)
         {
 
-
             if (hand.IsGrabEnding(this.gameObject))
             {
                 hand.DetachObject(gameObject, restoreOriginalParent);
@@ -250,7 +237,6 @@ namespace Valve.VR.InteractionSystem
             onHeldUpdate?.Send(hand);
         }
 
-
         //-------------------------------------------------
         [Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp]
         protected virtual IEnumerator LateDetach( Hand hand )
@@ -260,7 +246,6 @@ namespace Valve.VR.InteractionSystem
             hand.DetachObject( gameObject, restoreOriginalParent );
         }
 
-
         //-------------------------------------------------
         protected virtual void OnHandFocusAcquired( Hand hand )
         {
@@ -268,7 +253,6 @@ namespace Valve.VR.InteractionSystem
 
             velocityEstimator?.BeginEstimatingVelocity();
         }
-
 
         //-------------------------------------------------
         protected virtual void OnHandFocusLost( Hand hand )
