@@ -4,6 +4,7 @@
 //
 //=============================================================================
 
+using MelonLoader;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -94,7 +95,7 @@ namespace Valve.VR.InteractionSystem
         public bool isHovering { get; protected set; }
         public bool wasHovering { get; protected set; }
 
-        private void Awake()
+        protected virtual void Awake()
         {
             skeletonPoser = GetComponent<SteamVR_Skeleton_Poser>();
         }
@@ -260,6 +261,7 @@ namespace Valve.VR.InteractionSystem
         /// </summary>
         protected virtual void OnHandHoverBegin(Hand hand)
         {
+            MelonLogger.Msg(this.name + " is hovered");
             wasHovering = isHovering;
             isHovering = true;
 

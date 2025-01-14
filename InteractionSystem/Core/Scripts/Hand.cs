@@ -6,12 +6,14 @@
 
 using Il2CppInterop.Runtime;
 using Il2CppInterop.Runtime.Attributes;
+using Il2CppInterop.Runtime.InteropTypes.Arrays;
 using MelonLoader;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace Valve.VR.InteractionSystem
 {
@@ -146,13 +148,14 @@ namespace Valve.VR.InteractionSystem
         private int prevOverlappingColliders = 0;
 
         private const int ColliderArraySize = 32;
-        private Collider[] overlappingColliders = new Collider[ColliderArraySize];
+        private Il2CppReferenceArray<Collider> overlappingColliders = new Collider[ColliderArraySize];
 
         private Player playerInstance;
 
         private GameObject applicationLostFocusObject;
 
         private SteamVR_Events.Action inputFocusAction;
+        private static PhysicsScene handPhysicScene;
 
         public bool isActive
         {
@@ -191,7 +194,7 @@ namespace Valve.VR.InteractionSystem
                     {
                         if (spewDebugText)
                         {
-                            HandDebugLog("HoverEnd " + _hoveringInteractable.gameObject);
+                            HandDebugLog("HoverEnd " + _hoveringInteractable.gameObject.name);
                         }
 
                         _hoveringInteractable.SendMessage("OnHandHoverEnd", this, SendMessageOptions.DontRequireReceiver);
@@ -209,7 +212,7 @@ namespace Valve.VR.InteractionSystem
                     {
                         if (spewDebugText)
                         {
-                            HandDebugLog("HoverBegin " + _hoveringInteractable.gameObject);
+                            HandDebugLog("HoverBegin " + _hoveringInteractable.gameObject.name);
                         }
 
                         _hoveringInteractable.SendMessage("OnHandHoverBegin", this, SendMessageOptions.DontRequireReceiver);
@@ -965,6 +968,11 @@ namespace Valve.VR.InteractionSystem
             hoveringInteractable = closestInteractable;
         }
 
+        public static void UpdateScene()
+        {
+            handPhysicScene = PhysicsSceneExtensions.GetPhysicsScene_Internal(SceneManager.GetActiveScene());
+        }
+
         [Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp]
         protected virtual bool CheckHoveringForTransform(Vector3 hoverPosition, float hoverRadius, ref float closestDistance, ref Interactable closestInteractable, Color debugColor)
         {
@@ -978,7 +986,7 @@ namespace Valve.VR.InteractionSystem
                     overlappingColliders[i] = null;
                 }
 
-                int numColliding = Physics.OverlapSphereNonAlloc(hoverPosition, hoverRadius, overlappingColliders, hoverLayerMask.value);
+                int numColliding = PhysicsScene.OverlapSphereNonAlloc_Internal_Injected(ref handPhysicScene, ref hoverPosition, hoverRadius, overlappingColliders, hoverLayerMask.value, QueryTriggerInteraction.Ignore);
                 //we get some colliding speres here
                 if (numColliding >= ColliderArraySize)
                 {
@@ -989,10 +997,8 @@ namespace Valve.VR.InteractionSystem
                 int iActualColliderCount = 0;
 
                 // Pick the closest hovering
-                for (int colliderIndex = 0; colliderIndex < overlappingColliders.Length; colliderIndex++)
+                for (int colliderIndex = 0; colliderIndex < numColliding; colliderIndex++)
                 {
-                    //todo investigate
-                    //MelonLogger.Msg();
                     Collider collider = overlappingColliders[colliderIndex];
 
                     if (collider == null)
@@ -1001,12 +1007,13 @@ namespace Valve.VR.InteractionSystem
                     }
 
                     Interactable contacting = collider.GetComponentInParent<Interactable>();
-
                     // Yeah, it's null, skip
                     if (contacting == null)
                     {
                         continue;
                     }
+
+                    //MelonLogger.Msg(collider.name);
 
                     // Ignore this collider for hovering
                     IgnoreHovering ignore = collider.GetComponent<IgnoreHovering>();
@@ -1045,6 +1052,7 @@ namespace Valve.VR.InteractionSystem
                     bool isCloser = (distance < closestDistance);
                     if (isCloser && !lowerPriority)
                     {
+                        //MelonLogger.Msg(contacting.name + " is now closer");
                         closestDistance = distance;
                         closestInteractable = contacting;
                         foundCloser = true;
@@ -1151,7 +1159,6 @@ namespace Valve.VR.InteractionSystem
 
             if (hoveringInteractable)
             {
-                MelonLogger.Msg("govering" + hoveringInteractable?.name ?? "");
                 hoveringInteractable.SendMessage("HandHoverUpdate", this, SendMessageOptions.DontRequireReceiver);
             }
         }

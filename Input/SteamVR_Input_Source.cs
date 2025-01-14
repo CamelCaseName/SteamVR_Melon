@@ -79,7 +79,7 @@ namespace Valve.VR
                     MelonLoader.MelonLogger.Error("[HPVR] GetInputSourceHandle (" + path + ") error: " + err.ToString());
                 }
 
-                if (enumNames[enumIndex] == SteamVR_Input_Sources.Any.ToString()) //todo: temporary hack
+                if (enumNames[enumIndex] == SteamVR_Input_Sources.Any.ToString())
                 {
                     inputSourceHandlesBySource[enumIndex] = 0;
                     inputSourceSourcesByHandle.Add(0, (SteamVR_Input_Sources)enumIndex);

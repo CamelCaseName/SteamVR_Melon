@@ -4,24 +4,28 @@
 //
 //=============================================================================
 #if UNITY_UGUI_UI || !UNITY_2019_2_OR_NEWER
+using System;
 using UnityEngine;
-using System.Collections;
 using UnityEngine.EventSystems;
 
 namespace Valve.VR.InteractionSystem
 {
+    [MelonLoader.RegisterTypeInIl2Cpp]
     //-------------------------------------------------------------------------
     public class InputModule : BaseInputModule
     {
+        public InputModule(IntPtr value) : base(value) { }
+
         private GameObject submitObject;
 
         //-------------------------------------------------
         private static InputModule _instance;
+        private int callDepth = 0;
         public static InputModule instance
         {
             get
             {
-                if ( _instance == null )
+                if (_instance == null)
                 {
                     _instance = GameObject.FindObjectOfType<InputModule>();
                 }
@@ -30,11 +34,15 @@ namespace Valve.VR.InteractionSystem
             }
         }
 
-
         //-------------------------------------------------
         public override bool ShouldActivateModule()
         {
-            if ( !base.ShouldActivateModule() )
+            callDepth++;
+            if (callDepth > 5)
+            {
+                return submitObject != null;
+            }
+            if (!base.ShouldActivateModule())
             {
                 return false;
             }
@@ -42,39 +50,35 @@ namespace Valve.VR.InteractionSystem
             return submitObject != null;
         }
 
-
         //-------------------------------------------------
-        public void HoverBegin( GameObject gameObject )
+        public void HoverBegin(GameObject gameObject)
         {
-            PointerEventData pointerEventData = new PointerEventData( eventSystem );
-            ExecuteEvents.Execute( gameObject, pointerEventData, ExecuteEvents.pointerEnterHandler );
+            PointerEventData pointerEventData = new PointerEventData(eventSystem);
+            ExecuteEvents.Execute(gameObject, pointerEventData, ExecuteEvents.pointerEnterHandler);
         }
 
-
         //-------------------------------------------------
-        public void HoverEnd( GameObject gameObject )
+        public void HoverEnd(GameObject gameObject)
         {
-            PointerEventData pointerEventData = new PointerEventData( eventSystem );
+            PointerEventData pointerEventData = new PointerEventData(eventSystem);
             pointerEventData.selectedObject = null;
-            ExecuteEvents.Execute( gameObject, pointerEventData, ExecuteEvents.pointerExitHandler );
+            ExecuteEvents.Execute(gameObject, pointerEventData, ExecuteEvents.pointerExitHandler);
         }
 
-
         //-------------------------------------------------
-        public void Submit( GameObject gameObject )
+        public void Submit(GameObject gameObject)
         {
             submitObject = gameObject;
         }
 
-
         //-------------------------------------------------
         public override void Process()
         {
-            if ( submitObject )
+            if (submitObject)
             {
                 BaseEventData data = GetBaseEventData();
                 data.selectedObject = submitObject;
-                ExecuteEvents.Execute( submitObject, data, ExecuteEvents.submitHandler );
+                ExecuteEvents.Execute(submitObject, data, ExecuteEvents.submitHandler);
 
                 submitObject = null;
             }

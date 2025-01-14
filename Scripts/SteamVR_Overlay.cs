@@ -4,16 +4,16 @@
 //
 //=============================================================================
 
+using Il2CppInterop.Runtime.Attributes;
 using System;
 using UnityEngine;
 
 namespace Valve.VR
 {
-    //todo fix
-    //[MelonLoader.RegisterTypeInIl2Cpp()]
+    [MelonLoader.RegisterTypeInIl2Cpp()]
     public class SteamVR_Overlay : MonoBehaviour
     {
-        public SteamVR_Overlay(IntPtr value): base(value) { }
+        public SteamVR_Overlay(IntPtr value) : base(value) { }
 
         public Texture texture;
 
@@ -28,13 +28,14 @@ namespace Valve.VR
 
         public VROverlayInputMethod inputMethod = VROverlayInputMethod.None;
 
+        [HideFromIl2Cpp]
         static public SteamVR_Overlay instance { get; private set; }
 
         static public string key { get { return "unity:" + Application.companyName + "." + Application.productName; } }
 
         private ulong handle = OpenVR.k_ulOverlayHandleInvalid;
 
-        void OnEnable()
+        void Init()
         {
             var overlay = OpenVR.Overlay;
             if (overlay != null)
@@ -126,6 +127,7 @@ namespace Valve.VR
             }
         }
 
+        [HideFromIl2Cpp]
         public bool PollNextEvent(ref VREvent_t pEvent)
         {
             var overlay = OpenVR.Overlay;
@@ -146,6 +148,7 @@ namespace Valve.VR
             public float distance;
         }
 
+        [HideFromIl2Cpp]
         public bool ComputeIntersection(Vector3 source, Vector3 direction, ref IntersectionResults results)
         {
             var overlay = OpenVR.Overlay;

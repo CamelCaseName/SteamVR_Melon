@@ -741,7 +741,7 @@ namespace Valve.VR
             EVRInputError err = OpenVR.Input.GetPoseActionDataRelativeToNow(handle, universeOrigin, secondsFromNow, ref tempPoseActionData, poseActionData_size, inputSourceHandle);
             if (err != EVRInputError.None)
             {
-                MelonLoader.MelonLogger.Error("[HPVR] GetPoseActionData error (" + fullPath + "): " + err.ToString() + " handle: " + handle.ToString()); //todo: this should be an error
+                MelonLoader.MelonLogger.Error("[HPVR] GetPoseActionData error (" + fullPath + "): " + err.ToString() + " handle: " + handle.ToString());
 
                 velocityAtTime = Vector3.zero;
                 angularVelocityAtTime = Vector3.zero;
@@ -764,8 +764,7 @@ namespace Valve.VR
             EVRInputError err = OpenVR.Input.GetPoseActionDataRelativeToNow(handle, universeOrigin, secondsFromNow, ref tempPoseActionData, poseActionData_size, inputSourceHandle);
             if (err != EVRInputError.None)
             {
-                MelonLoader.MelonLogger.Error("[HPVR] GetPoseActionData error (" + fullPath + "): " + err.ToString() + " handle: " + handle.ToString()); //todo: this should be an error
-
+                MelonLoader.MelonLogger.Error("[HPVR] GetPoseActionData error (" + fullPath + "): " + err.ToString() + " handle: " + handle.ToString());
                 velocityAtTime = Vector3.zero;
                 angularVelocityAtTime = Vector3.zero;
                 positionAtTime = Vector3.zero;
