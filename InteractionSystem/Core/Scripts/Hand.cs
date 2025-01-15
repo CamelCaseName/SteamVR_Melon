@@ -197,7 +197,7 @@ namespace Valve.VR.InteractionSystem
                             HandDebugLog("HoverEnd " + _hoveringInteractable.gameObject.name);
                         }
 
-                        _hoveringInteractable.SendMessage("OnHandHoverEnd", this, SendMessageOptions.DontRequireReceiver);
+                        _hoveringInteractable.OnHandHoverEnd_Internal(this);
 
                         //Note: The _hoveringInteractable can change after sending the OnHandHoverEnd message so we need to check it again before broadcasting this message
                         if (_hoveringInteractable != null)
@@ -215,7 +215,7 @@ namespace Valve.VR.InteractionSystem
                             HandDebugLog("HoverBegin " + _hoveringInteractable.gameObject.name);
                         }
 
-                        _hoveringInteractable.SendMessage("OnHandHoverBegin", this, SendMessageOptions.DontRequireReceiver);
+                        _hoveringInteractable.OnHandHoverBegin_Internal(this);
 
                         //Note: The _hoveringInteractable can change after sending the OnHandHoverBegin message so we need to check it again before broadcasting this message
                         if (_hoveringInteractable != null)
@@ -421,7 +421,7 @@ namespace Valve.VR.InteractionSystem
 
             if (currentAttachedObject)
             {
-                currentAttachedObject.SendMessage("OnHandFocusLost", this, SendMessageOptions.DontRequireReceiver);
+                currentAttachedObject.GetComponent<Interactable>()?.OnHandFocusLost_Internal(this);
             }
 
             attachedObject.attachedObject = objectToAttach;
@@ -614,7 +614,7 @@ namespace Valve.VR.InteractionSystem
                 HandDebugLog("AttachObject " + objectToAttach);
             }
 
-            objectToAttach.SendMessage("OnAttachedToHand", this, SendMessageOptions.DontRequireReceiver);
+            objectToAttach.GetComponent<Interactable>()?.OnAttachedToHand_Internal(this);
         }
 
         public bool ObjectIsAttached(GameObject go)
@@ -728,7 +728,7 @@ namespace Valve.VR.InteractionSystem
                         attachedObjects[index].attachedObject.SetActive(true);
                     }
 
-                    attachedObjects[index].attachedObject.SendMessage("OnDetachedFromHand", this, SendMessageOptions.DontRequireReceiver);
+                    attachedObjects[index].attachedObject.GetComponent<Interactable>()?.OnDetachedFromHand_Internal(this);
                 }
 
                 attachedObjects.RemoveAt(index);
@@ -744,7 +744,7 @@ namespace Valve.VR.InteractionSystem
                 if (newTopObject != null && newTopObject != prevTopObject)
                 {
                     newTopObject.SetActive(true);
-                    newTopObject.SendMessage("OnHandFocusAcquired", this, SendMessageOptions.DontRequireReceiver);
+                    newTopObject.GetComponent<Interactable>()?.OnHandFocusAcquired_Internal(this);
                 }
             }
 
@@ -1007,12 +1007,13 @@ namespace Valve.VR.InteractionSystem
                     }
 
                     Interactable contacting = collider.GetComponentInParent<Interactable>();
+                    contacting ??= collider.GetComponent<Interactable>();
+                    contacting ??= collider.GetComponentInChildren<Interactable>();
                     // Yeah, it's null, skip
                     if (contacting == null)
                     {
                         continue;
                     }
-
                     //MelonLogger.Msg(collider.name);
 
                     // Ignore this collider for hovering
@@ -1155,11 +1156,11 @@ namespace Valve.VR.InteractionSystem
             UpdateNoSteamVRFallback();
 
             GameObject attachedObject = currentAttachedObject;
-            attachedObject?.SendMessage("HandAttachedUpdate", this, SendMessageOptions.DontRequireReceiver);
+            attachedObject?.GetComponent<Interactable>()?.HandAttachedUpdate_Internal(this);
 
             if (hoveringInteractable)
             {
-                hoveringInteractable.SendMessage("HandHoverUpdate", this, SendMessageOptions.DontRequireReceiver);
+                hoveringInteractable.HandHoverUpdate_Internal(this);
             }
         }
 

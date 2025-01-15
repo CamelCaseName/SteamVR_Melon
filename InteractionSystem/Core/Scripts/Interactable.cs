@@ -34,13 +34,23 @@ namespace Valve.VR.InteractionSystem
         /// <summary>The range of motion to set on the skeleton. None for no change.</summary>
         public SkeletalMotionRangeChange setRangeOfMotionOnPickup = SkeletalMotionRangeChange.None;
 
-        public delegate void OnAttachedToHandDelegate(Hand hand);
-        public delegate void OnDetachedFromHandDelegate(Hand hand);
+        [Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp]
+        public event Action<Hand> OnAttachedToHand = new((Hand h) => { });
+        [Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp]
+        public event Action<Hand> OnDetachedFromHand = new((Hand h) => { });
 
         [Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp]
-        public event OnAttachedToHandDelegate onAttachedToHand;
+        public event Action<Hand> HandHoverUpdate = new((Hand h) => { });
         [Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp]
-        public event OnDetachedFromHandDelegate onDetachedFromHand;
+        public event Action<Hand> HandAttachedUpdate = new((Hand h) => { });
+        [Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp]
+        public event Action<Hand> OnHandHoverBegin = new((Hand h) => { });
+        [Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp]
+        public event Action<Hand> OnHandHoverEnd = new((Hand h) => { });
+        [Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp]
+        public event Action<Hand> OnHandFocusLost = new((Hand h) => { });
+        [Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp]
+        public event Action<Hand> OnHandFocusAcquired = new((Hand h) => { });
 
         /// <summary>Specify whether you want to snap to the hand's object attachment point, or just the raw hand</summary>
         public bool useHandObjectAttachmentPoint = true;
@@ -259,7 +269,7 @@ namespace Valve.VR.InteractionSystem
         /// <summary>
         /// Called when a Hand starts hovering over this object
         /// </summary>
-        protected virtual void OnHandHoverBegin(Hand hand)
+        public virtual void OnHandHoverBegin_Internal(Hand hand)
         {
             MelonLogger.Msg(this.name + " is hovered");
             wasHovering = isHovering;
@@ -272,12 +282,13 @@ namespace Valve.VR.InteractionSystem
                 CreateHighlightRenderers();
                 UpdateHighlightRenderers();
             }
+            OnHandHoverBegin(hand);
         }
 
         /// <summary>
         /// Called when a Hand stops hovering over this object
         /// </summary>
-        protected virtual void OnHandHoverEnd(Hand hand)
+        public virtual void OnHandHoverEnd_Internal(Hand hand)
         {
             wasHovering = isHovering;
 
@@ -292,6 +303,12 @@ namespace Valve.VR.InteractionSystem
                     Destroy(highlightHolder);
                 }
             }
+            OnHandHoverEnd(hand);
+        }
+
+        public void HandHoverUpdate_Internal(Hand hand)
+        {
+            HandHoverUpdate(hand);
         }
 
         protected virtual void Update()
@@ -310,11 +327,11 @@ namespace Valve.VR.InteractionSystem
         protected float blendToPoseTime = 0.1f;
         protected float releasePoseBlendTime = 0.2f;
 
-        protected virtual void OnAttachedToHand(Hand hand)
+        public virtual void OnAttachedToHand_Internal(Hand hand)
         {
             activateActionSetOnAttach?.Activate(hand.handType);
 
-            onAttachedToHand?.Invoke(hand);
+            OnAttachedToHand?.Invoke(hand);
 
             if (skeletonPoser != null && hand.skeleton != null)
             {
@@ -324,7 +341,7 @@ namespace Valve.VR.InteractionSystem
             attachedToHand = hand;
         }
 
-        protected virtual void OnDetachedFromHand(Hand hand)
+        public virtual void OnDetachedFromHand_Internal(Hand hand)
         {
             if (activateActionSetOnAttach != null)
             {
@@ -336,7 +353,7 @@ namespace Valve.VR.InteractionSystem
                 }
             }
 
-            onDetachedFromHand?.Invoke(hand);
+            OnDetachedFromHand?.Invoke(hand);
 
             if (skeletonPoser != null)
             {
@@ -373,5 +390,13 @@ namespace Valve.VR.InteractionSystem
                 Destroy(highlightHolder);
             }
         }
+
+        internal void HandAttachedUpdate_Internal(Hand hand)
+        {
+            HandAttachedUpdate(hand);
+        }
+
+        internal void OnHandFocusAcquired_Internal(Hand hand) => OnHandFocusAcquired(hand);
+        internal void OnHandFocusLost_Internal(Hand hand) => OnHandFocusLost(hand);
     }
 }

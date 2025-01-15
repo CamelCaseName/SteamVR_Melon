@@ -4,6 +4,7 @@
 //
 //=============================================================================
 
+using MelonLoader;
 using System;
 using UnityEngine;
 using UnityEngine.UI;
@@ -19,9 +20,15 @@ namespace Valve.VR.InteractionSystem
 
         protected Hand currentHand;
 
+        private Interactable interactable;
+
         //-------------------------------------------------
         protected virtual void Awake()
         {
+            interactable = GetComponent<Interactable>();
+            interactable.OnHandHoverBegin += OnHandHoverBegin;
+            interactable.OnHandHoverEnd += OnHandHoverEnd;
+            interactable.HandHoverUpdate += HandHoverUpdate;
             Button button = GetComponent<Button>();
             if (button)
             {
@@ -31,7 +38,7 @@ namespace Valve.VR.InteractionSystem
 
         //-------------------------------------------------
         //todo not sure if these get called
-        protected virtual void OnHandHoverBegin(Hand hand)
+        private void OnHandHoverBegin(Hand hand)
         {
             currentHand = hand;
             InputModule.instance.HoverBegin(gameObject);
@@ -39,7 +46,7 @@ namespace Valve.VR.InteractionSystem
         }
 
         //-------------------------------------------------
-        protected virtual void OnHandHoverEnd(Hand hand)
+        private void OnHandHoverEnd(Hand hand)
         {
             InputModule.instance.HoverEnd(gameObject);
             ControllerButtonHints.HideButtonHint(hand, hand.uiInteractAction);
@@ -47,8 +54,9 @@ namespace Valve.VR.InteractionSystem
         }
 
         //-------------------------------------------------
-        protected virtual void HandHoverUpdate(Hand hand)
+        private void HandHoverUpdate(Hand hand)
         {
+            MelonLogger.Msg(hand?.name + " " + name);
             if (hand.uiInteractAction != null && hand.uiInteractAction.GetStateDown(hand.handType))
             {
                 InputModule.instance.Submit(gameObject);

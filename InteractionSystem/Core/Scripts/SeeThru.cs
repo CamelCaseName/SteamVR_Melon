@@ -110,16 +110,16 @@ namespace Valve.VR.InteractionSystem
         //-------------------------------------------------
         void OnEnable()
         {
-            interactable.onAttachedToHand += AttachedToHand;
-            interactable.onDetachedFromHand += DetachedFromHand;
+            interactable.OnAttachedToHand += AttachedToHand;
+            interactable.OnDetachedFromHand += DetachedFromHand;
         }
 
 
         //-------------------------------------------------
         void OnDisable()
         {
-            interactable.onAttachedToHand -= AttachedToHand;
-            interactable.onDetachedFromHand -= DetachedFromHand;
+            interactable.OnAttachedToHand -= AttachedToHand;
+            interactable.OnDetachedFromHand -= DetachedFromHand;
         }
 
 
