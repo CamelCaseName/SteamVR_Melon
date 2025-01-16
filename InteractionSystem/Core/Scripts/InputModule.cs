@@ -3,7 +3,6 @@
 // Purpose: Makes the hand act as an input module for Unity's event system
 //
 //=============================================================================
-#if UNITY_UGUI_UI || !UNITY_2019_2_OR_NEWER
 using System;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -51,17 +50,20 @@ namespace Valve.VR.InteractionSystem
         }
 
         //-------------------------------------------------
+        //todo check if hover events work for dropdowns and stuff
         public void HoverBegin(GameObject gameObject)
         {
-            PointerEventData pointerEventData = new PointerEventData(eventSystem);
+            PointerEventData pointerEventData = new(eventSystem);
             ExecuteEvents.Execute(gameObject, pointerEventData, ExecuteEvents.pointerEnterHandler);
         }
 
         //-------------------------------------------------
         public void HoverEnd(GameObject gameObject)
         {
-            PointerEventData pointerEventData = new PointerEventData(eventSystem);
-            pointerEventData.selectedObject = null;
+            PointerEventData pointerEventData = new(eventSystem)
+            {
+                selectedObject = null
+            };
             ExecuteEvents.Execute(gameObject, pointerEventData, ExecuteEvents.pointerExitHandler);
         }
 
@@ -85,7 +87,3 @@ namespace Valve.VR.InteractionSystem
         }
     }
 }
-#else //if we haven't run the xr install script yet use this
-using UnityEngine;
-namespace Valve.VR.InteractionSystem { public class InputModule : MonoBehaviour {} }
-#endif

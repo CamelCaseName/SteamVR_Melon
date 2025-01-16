@@ -90,17 +90,17 @@ namespace Valve.VR.InteractionSystem
         public RenderModel hoverhighlightRenderModel;
 
         [HideFromIl2Cpp]
-        public event Action OnParentHandInputFocusAcquired;
+        public event Action OnParentHandInputFocusAcquired = new(() => { });
         [HideFromIl2Cpp]
-        public event Action OnParentHandInputFocusLost;
+        public event Action OnParentHandInputFocusLost = new(() => { });
         [HideFromIl2Cpp]
-        public event Action<int> OnHandInitialized;
+        public event Action<int> OnHandInitialized = new((int i) => { });
         [HideFromIl2Cpp]
-        public event Action<SteamVR_Input_Sources> OnInputSource;
+        public event Action<SteamVR_Input_Sources> OnInputSource = new((SteamVR_Input_Sources i) => { });
         [HideFromIl2Cpp]
-        public event Action<Interactable> OnParentHandHoverBegin;
+        public event Action<Interactable> OnParentHandHoverBegin = new((Interactable i) => { });
         [HideFromIl2Cpp]
-        public event Action<Interactable> OnParentHandHoverEnd;
+        public event Action<Interactable> OnParentHandHoverEnd = new((Interactable i) => { });
 
         public bool showDebugText = false;
         public bool spewDebugText = false;
@@ -857,13 +857,6 @@ namespace Valve.VR.InteractionSystem
                     trackedObject.onTransformUpdatedEvent += OnTransformUpdated;
                 }
             }
-
-            OnHandInitialized = new((int i) => { });
-            OnInputSource = new((SteamVR_Input_Sources i) => { });
-            OnParentHandHoverBegin = new((Interactable i) => { });
-            OnParentHandHoverEnd = new((Interactable i) => { });
-            OnParentHandInputFocusAcquired = new(() => { });
-            OnParentHandInputFocusLost = new(() => { });
         }
 
         protected virtual void OnDestroy()
@@ -1158,10 +1151,7 @@ namespace Valve.VR.InteractionSystem
             GameObject attachedObject = currentAttachedObject;
             attachedObject?.GetComponent<Interactable>()?.HandAttachedUpdate_Internal(this);
 
-            if (hoveringInteractable)
-            {
-                hoveringInteractable.HandHoverUpdate_Internal(this);
-            }
+            hoveringInteractable?.HandHoverUpdate_Internal(this);
         }
 
         /// <summary>
@@ -1481,6 +1471,7 @@ namespace Valve.VR.InteractionSystem
             if (hoveringInteractable == interactable)
             {
                 hoverLocked = false;
+                hoveringInteractable = null;
             }
         }
 

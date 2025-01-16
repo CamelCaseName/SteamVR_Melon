@@ -21,10 +21,30 @@ namespace Valve.VR.InteractionSystem
         protected Hand currentHand;
 
         private Interactable interactable;
+        private RectTransform rect;
+        private Transform colliderRoot;
+        public static bool debugPlacements = false;
 
         //-------------------------------------------------
         protected virtual void Awake()
         {
+            var BoxGO = new GameObject(name + "Collider");
+            BoxGO.transform.parent = transform;
+            BoxGO.transform.localPosition = new(0, 0, -0.05f);
+
+            if (debugPlacements)
+            {
+                Material m = new(GameObject.Find("Floor").GetComponent<MeshRenderer>().material);
+                var mesh = BoxGO.AddComponent<MeshRenderer>();
+                mesh.material = m;
+                mesh.material.color = Color.white;
+            }
+
+            var collider = BoxGO.AddComponent<BoxCollider>();
+            rect = GetComponent<RectTransform>();
+            BoxGO.transform.localScale = new(rect.sizeDelta.x, rect.sizeDelta.y, 0.1f);
+            colliderRoot = BoxGO.transform;
+
             interactable = GetComponent<Interactable>();
             interactable.OnHandHoverBegin += OnHandHoverBegin;
             interactable.OnHandHoverEnd += OnHandHoverEnd;
@@ -68,6 +88,15 @@ namespace Valve.VR.InteractionSystem
         protected virtual void OnButtonClick()
         {
             onHandClick.Send(currentHand);
+        }
+
+        protected void Update()
+        {
+            //update collider if needed
+            if (rect.sizeDelta.x != colliderRoot.localScale.x || rect.sizeDelta.y != colliderRoot.localScale.y || colliderRoot.localScale.z != 0.1f)
+            {
+                colliderRoot.localScale = new(rect.sizeDelta.x, rect.sizeDelta.y, 0.1f);
+            }
         }
     }
 }
