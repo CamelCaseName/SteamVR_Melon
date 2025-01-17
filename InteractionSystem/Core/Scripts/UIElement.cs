@@ -31,6 +31,7 @@ namespace Valve.VR.InteractionSystem
             var BoxGO = new GameObject(name + "Collider");
             BoxGO.transform.parent = transform;
             BoxGO.transform.localPosition = new(0, 0, -0.05f);
+            BoxGO.layer = LayerMask.NameToLayer("UI");
 
             if (debugPlacements)
             {
@@ -62,14 +63,12 @@ namespace Valve.VR.InteractionSystem
         {
             currentHand = hand;
             InputModule.instance.HoverBegin(gameObject);
-            ControllerButtonHints.ShowButtonHint(hand, hand.uiInteractAction);
         }
 
         //-------------------------------------------------
         private void OnHandHoverEnd(Hand hand)
         {
             InputModule.instance.HoverEnd(gameObject);
-            ControllerButtonHints.HideButtonHint(hand, hand.uiInteractAction);
             currentHand = null;
         }
 
@@ -80,7 +79,6 @@ namespace Valve.VR.InteractionSystem
             if (hand.uiInteractAction != null && hand.uiInteractAction.GetStateDown(hand.handType))
             {
                 InputModule.instance.Submit(gameObject);
-                ControllerButtonHints.HideButtonHint(hand, hand.uiInteractAction);
             }
         }
 
