@@ -67,6 +67,43 @@ namespace Valve.VR.InteractionSystem
             ExecuteEvents.Execute(gameObject, pointerEventData, ExecuteEvents.pointerExitHandler);
         }
 
+        public void PointerUpdate(GameObject gameObject, Vector2 pointerPosition)
+        {
+            PointerEventData data = new(eventSystem)
+            {
+                position = pointerPosition
+            };
+            ExecuteEvents.Execute(gameObject, data, ExecuteEvents.pointerMoveHandler);
+        }
+
+        public void PointerPress(GameObject gameObject, Vector2 pointerPosition)
+        {
+            PointerEventData data = new(eventSystem)
+            {
+                position = pointerPosition,
+                pressPosition = pointerPosition
+            };
+            ExecuteEvents.Execute(gameObject, data, ExecuteEvents.pointerMoveHandler);
+        }
+
+        public void PointerEnter(GameObject gameObject, Vector2 pointerPosition)
+        {
+            PointerEventData data = new(eventSystem)
+            {
+                position = pointerPosition
+            };
+            ExecuteEvents.Execute(gameObject, data, ExecuteEvents.pointerEnterHandler);
+        }
+
+        public void PointerExit(GameObject gameObject, Vector2 pointerPosition)
+        {
+            PointerEventData data = new(eventSystem)
+            {
+                position = pointerPosition
+            };
+            ExecuteEvents.Execute(gameObject, data, ExecuteEvents.pointerExitHandler);
+        }
+
         //-------------------------------------------------
         public void Submit(GameObject gameObject)
         {

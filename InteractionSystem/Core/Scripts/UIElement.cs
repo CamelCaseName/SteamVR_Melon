@@ -4,7 +4,6 @@
 //
 //=============================================================================
 
-using MelonLoader;
 using System;
 using UnityEngine;
 using UnityEngine.UI;
@@ -24,10 +23,15 @@ namespace Valve.VR.InteractionSystem
         private RectTransform rect;
         private Transform colliderRoot;
         public static bool debugPlacements = false;
+        public Canvas canvas;
 
         //-------------------------------------------------
         protected virtual void Awake()
         {
+            canvas ??= GetComponent<Canvas>();
+            canvas ??= GetComponentInParent<Canvas>();
+            canvas ??= GetComponentInChildren<Canvas>();
+
             var BoxGO = new GameObject(name + "Collider");
             BoxGO.transform.parent = transform;
             BoxGO.transform.localPosition = new(0, 0, -0.05f);
@@ -73,12 +77,22 @@ namespace Valve.VR.InteractionSystem
         }
 
         //-------------------------------------------------
-        private void HandHoverUpdate(Hand hand)
+        private void HandHoverUpdate(Hand hand, Vector2 position, bool posIsValid)
         {
-            MelonLogger.Msg(hand?.name + " " + name);
             if (hand.uiInteractAction != null && hand.uiInteractAction.GetStateDown(hand.handType))
             {
-                InputModule.instance.Submit(gameObject);
+                if (posIsValid)
+                {
+                    InputModule.instance.PointerPress(gameObject, position);
+                }
+                else
+                {
+                    InputModule.instance.Submit(gameObject);
+                }
+            }
+            else if (posIsValid)
+            {
+                InputModule.instance.PointerUpdate(gameObject, position);
             }
         }
 

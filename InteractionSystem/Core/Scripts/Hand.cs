@@ -1151,7 +1151,10 @@ namespace Valve.VR.InteractionSystem
             GameObject attachedObject = currentAttachedObject;
             attachedObject?.GetComponent<Interactable>()?.HandAttachedUpdate_Internal(this);
 
-            hoveringInteractable?.HandHoverUpdate_Internal(this);
+            if (useControllerHoverComponent || useFingerJointHover || useHoverSphere)
+            {
+                hoveringInteractable?.HandHoverUpdate_Internal(this, Vector2.zero, false);
+            }
         }
 
         /// <summary>

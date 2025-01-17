@@ -40,7 +40,7 @@ namespace Valve.VR.InteractionSystem
         public event Action<Hand> OnDetachedFromHand = new((Hand h) => { });
 
         [Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp]
-        public event Action<Hand> HandHoverUpdate = new((Hand h) => { });
+        public event Action<Hand, Vector2, bool> HandHoverUpdate = new((Hand h, Vector2 v, bool b) => { });
         [Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp]
         public event Action<Hand> HandAttachedUpdate = new((Hand h) => { });
         [Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp]
@@ -78,7 +78,7 @@ namespace Valve.VR.InteractionSystem
         protected SkinnedMeshRenderer[] existingSkinnedRenderers;
         protected static Material highlightMat;
         /// <summary>An array of child gameObjects to not render a highlight for. Things like transparent parts, vfx, etc.</summary>
-        public GameObject[] hideHighlight = new GameObject[] { };
+        public GameObject[] hideHighlight = Array.Empty<GameObject>();
 
         /// <summary>Higher is better</summary>
         public int hoverPriority = 0;
@@ -87,7 +87,7 @@ namespace Valve.VR.InteractionSystem
         public Hand attachedToHand;
 
         [System.NonSerialized]
-        public List<Hand> hoveringHands = new List<Hand>();
+        public List<Hand> hoveringHands = new(2);
         public Hand hoveringHand
         {
             get
@@ -271,7 +271,6 @@ namespace Valve.VR.InteractionSystem
         /// </summary>
         public virtual void OnHandHoverBegin_Internal(Hand hand)
         {
-            MelonLogger.Msg(this.name + " is hovered");
             wasHovering = isHovering;
             isHovering = true;
 
@@ -306,9 +305,9 @@ namespace Valve.VR.InteractionSystem
             OnHandHoverEnd(hand);
         }
 
-        public void HandHoverUpdate_Internal(Hand hand)
+        public void HandHoverUpdate_Internal(Hand hand, Vector2 position, bool posIsValid)
         {
-            HandHoverUpdate(hand);
+            HandHoverUpdate(hand, position, posIsValid);
         }
 
         protected virtual void Update()
