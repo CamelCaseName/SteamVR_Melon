@@ -215,7 +215,7 @@ namespace Valve.VR.InteractionSystem
                             HandDebugLog("HoverBegin " + _hoveringInteractable.gameObject.name);
                         }
 
-                        _hoveringInteractable.OnHandHoverBegin_Internal(this);
+                        _hoveringInteractable.OnHandHoverBegin_Internal(this, Vector2.zero, false);
 
                         //Note: The _hoveringInteractable can change after sending the OnHandHoverBegin message so we need to check it again before broadcasting this message
                         if (_hoveringInteractable != null)

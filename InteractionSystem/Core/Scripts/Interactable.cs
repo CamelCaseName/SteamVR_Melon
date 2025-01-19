@@ -4,7 +4,6 @@
 //
 //=============================================================================
 
-using MelonLoader;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -44,7 +43,7 @@ namespace Valve.VR.InteractionSystem
         [Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp]
         public event Action<Hand> HandAttachedUpdate = new((Hand h) => { });
         [Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp]
-        public event Action<Hand> OnHandHoverBegin = new((Hand h) => { });
+        public event Action<Hand, Vector2, bool> OnHandHoverBegin = new((Hand h, Vector2 v, bool b) => { });
         [Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp]
         public event Action<Hand> OnHandHoverEnd = new((Hand h) => { });
         [Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp]
@@ -269,7 +268,7 @@ namespace Valve.VR.InteractionSystem
         /// <summary>
         /// Called when a Hand starts hovering over this object
         /// </summary>
-        public virtual void OnHandHoverBegin_Internal(Hand hand)
+        public virtual void OnHandHoverBegin_Internal(Hand hand, Vector2 position, bool PoseIsvalid)
         {
             wasHovering = isHovering;
             isHovering = true;
@@ -281,7 +280,7 @@ namespace Valve.VR.InteractionSystem
                 CreateHighlightRenderers();
                 UpdateHighlightRenderers();
             }
-            OnHandHoverBegin(hand);
+            OnHandHoverBegin(hand, position, PoseIsvalid);
         }
 
         /// <summary>
@@ -396,6 +395,7 @@ namespace Valve.VR.InteractionSystem
         }
 
         internal void OnHandFocusAcquired_Internal(Hand hand) => OnHandFocusAcquired(hand);
+        
         internal void OnHandFocusLost_Internal(Hand hand) => OnHandFocusLost(hand);
     }
 }

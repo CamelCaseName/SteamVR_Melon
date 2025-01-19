@@ -22,8 +22,9 @@ namespace Valve.VR.InteractionSystem
         private Interactable interactable;
         private RectTransform rect;
         private Transform colliderRoot;
-        public static bool debugPlacements = false;
+        public static readonly bool debugPlacements = false;
         public Canvas canvas;
+        bool startedMove = false;
 
         //-------------------------------------------------
         protected virtual void Awake()
@@ -45,8 +46,11 @@ namespace Valve.VR.InteractionSystem
                 mesh.material.color = Color.white;
             }
 
+            //if we are in a scrollbox or scrollview or whatever only enable if the item is visible, else hide completely or rescale to bounds
             var collider = BoxGO.AddComponent<BoxCollider>();
             rect = GetComponent<RectTransform>();
+            rect ??= GetComponentInChildren<RectTransform>();
+            rect ??= GetComponentInParent<RectTransform>();
             BoxGO.transform.localScale = new(rect.sizeDelta.x, rect.sizeDelta.y, 0.1f);
             colliderRoot = BoxGO.transform;
 
@@ -54,25 +58,37 @@ namespace Valve.VR.InteractionSystem
             interactable.OnHandHoverBegin += OnHandHoverBegin;
             interactable.OnHandHoverEnd += OnHandHoverEnd;
             interactable.HandHoverUpdate += HandHoverUpdate;
+
             Button button = GetComponent<Button>();
-            if (button)
-            {
-                button.onClick.AddListener(new Action(OnButtonClick));
-            }
+            button?.onClick.AddListener(new Action(OnButtonClick));
+            Toggle toggle = GetComponent<Toggle>();
+            toggle?.onValueChanged.AddListener(new Action<bool>(OnToggleChange));
+            Slider slider = GetComponent<Slider>();
+            slider?.onValueChanged.AddListener(new Action<float>(OnSliderChange));
+        }
+
+        private void OnSliderChange(float obj)
+        {
+            onHandClick.Send(currentHand);
+        }
+
+        private void OnToggleChange(bool obj)
+        {
+            onHandClick.Send(currentHand);
         }
 
         //-------------------------------------------------
         //todo not sure if these get called
-        private void OnHandHoverBegin(Hand hand)
+        private void OnHandHoverBegin(Hand hand, Vector2 position, bool poseIsValid)
         {
             currentHand = hand;
-            InputModule.instance.HoverBegin(gameObject);
+            InputModule.Instance.HoverBegin(gameObject, position, poseIsValid);
         }
 
         //-------------------------------------------------
         private void OnHandHoverEnd(Hand hand)
         {
-            InputModule.instance.HoverEnd(gameObject);
+            InputModule.Instance.HoverEnd(gameObject);
             currentHand = null;
         }
 
@@ -83,16 +99,26 @@ namespace Valve.VR.InteractionSystem
             {
                 if (posIsValid)
                 {
-                    InputModule.instance.PointerPress(gameObject, position);
+                    if (!startedMove)
+                    {
+                        startedMove = true;
+                        InputModule.Instance.PointerBeginPress(gameObject, position);
+                    }
+                    InputModule.Instance.PointerPressedUpdate(gameObject, position);
                 }
                 else
                 {
-                    InputModule.instance.Submit(gameObject);
+                    InputModule.Instance.Submit(gameObject);
                 }
             }
             else if (posIsValid)
             {
-                InputModule.instance.PointerUpdate(gameObject, position);
+                if (startedMove)
+                {
+                    startedMove = false;
+                    InputModule.Instance.PointerEndPress(gameObject, position);
+                }
+                InputModule.Instance.HoverUpdate(gameObject, position);
             }
         }
 
@@ -104,6 +130,12 @@ namespace Valve.VR.InteractionSystem
 
         protected void Update()
         {
+            if (canvas is null)
+            {
+                canvas ??= GetComponent<Canvas>();
+                canvas ??= GetComponentInParent<Canvas>();
+                canvas ??= GetComponentInChildren<Canvas>();
+            }
             //update collider if needed
             if (rect.sizeDelta.x != colliderRoot.localScale.x || rect.sizeDelta.y != colliderRoot.localScale.y || colliderRoot.localScale.z != 0.1f)
             {

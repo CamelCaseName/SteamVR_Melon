@@ -3,6 +3,7 @@
 // Purpose: Makes the hand act as an input module for Unity's event system
 //
 //=============================================================================
+using MelonLoader;
 using System;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -17,10 +18,18 @@ namespace Valve.VR.InteractionSystem
 
         private GameObject submitObject;
 
+        private static readonly float deadzone = 0;
+        private static readonly float pointerResScale = 0.1f;
+
+        private Vector2 lastPointerPos = Vector2.zero;
+        private Vector2 thisFramePointerPos = Vector2.zero;
+        private Vector2 pressPointerPos = Vector2.zero;
+        private bool isPressed = false;
+
         //-------------------------------------------------
         private static InputModule _instance;
         private int callDepth = 0;
-        public static InputModule instance
+        public static InputModule Instance
         {
             get
             {
@@ -31,6 +40,11 @@ namespace Valve.VR.InteractionSystem
 
                 return _instance;
             }
+        }
+
+        public void EndFrame()
+        {
+            lastPointerPos = thisFramePointerPos;
         }
 
         //-------------------------------------------------
@@ -51,9 +65,14 @@ namespace Valve.VR.InteractionSystem
 
         //-------------------------------------------------
         //todo check if hover events work for dropdowns and stuff
-        public void HoverBegin(GameObject gameObject)
+        public void HoverBegin(GameObject gameObject, Vector2 pointerPosition, bool PosIsValid)
         {
             PointerEventData pointerEventData = new(eventSystem);
+            if (PosIsValid)
+            {
+                thisFramePointerPos = pointerPosition;
+                pointerEventData.position = pointerPosition;
+            }
             ExecuteEvents.Execute(gameObject, pointerEventData, ExecuteEvents.pointerEnterHandler);
         }
 
@@ -67,41 +86,56 @@ namespace Valve.VR.InteractionSystem
             ExecuteEvents.Execute(gameObject, pointerEventData, ExecuteEvents.pointerExitHandler);
         }
 
-        public void PointerUpdate(GameObject gameObject, Vector2 pointerPosition)
+        public void HoverUpdate(GameObject gameObject, Vector2 pointerPosition)
         {
-            PointerEventData data = new(eventSystem)
-            {
-                position = pointerPosition
-            };
-            ExecuteEvents.Execute(gameObject, data, ExecuteEvents.pointerMoveHandler);
+            thisFramePointerPos = pointerPosition;
+
+            //todo investigate the slider scaling
+            AxisEventData axisData = GetAxisEventData((lastPointerPos.x - pointerPosition.x) * pointerResScale, (lastPointerPos.y - pointerPosition.y) * pointerResScale, deadzone);
+            ExecuteEvents.Execute(gameObject, axisData, ExecuteEvents.moveHandler);
+            lastPointerPos = thisFramePointerPos;
         }
 
-        public void PointerPress(GameObject gameObject, Vector2 pointerPosition)
+        public void PointerPressedUpdate(GameObject gameObject, Vector2 pointerPosition)
         {
+            thisFramePointerPos = pointerPosition;
             PointerEventData data = new(eventSystem)
             {
                 position = pointerPosition,
-                pressPosition = pointerPosition
+                pressPosition = pressPointerPos,
+                dragging = true
             };
-            ExecuteEvents.Execute(gameObject, data, ExecuteEvents.pointerMoveHandler);
+            ExecuteEvents.Execute(gameObject, data, ExecuteEvents.dragHandler);
         }
 
-        public void PointerEnter(GameObject gameObject, Vector2 pointerPosition)
+        public void PointerBeginPress(GameObject gameObject, Vector2 pointerPosition)
         {
+            thisFramePointerPos = pointerPosition;
+            if (!isPressed)
+            {
+                isPressed = true;
+                pressPointerPos = pointerPosition;
+            }
             PointerEventData data = new(eventSystem)
             {
-                position = pointerPosition
+                position = pointerPosition,
+                pressPosition = pressPointerPos
             };
-            ExecuteEvents.Execute(gameObject, data, ExecuteEvents.pointerEnterHandler);
+            ExecuteEvents.Execute(gameObject, data, ExecuteEvents.pointerDownHandler);
         }
 
-        public void PointerExit(GameObject gameObject, Vector2 pointerPosition)
+        public void PointerEndPress(GameObject gameObject, Vector2 pointerPosition)
         {
+            thisFramePointerPos = pointerPosition;
+            isPressed = false;
+
             PointerEventData data = new(eventSystem)
             {
-                position = pointerPosition
+                position = pointerPosition,
+                pressPosition = pointerPosition,
+                dragging = false
             };
-            ExecuteEvents.Execute(gameObject, data, ExecuteEvents.pointerExitHandler);
+            ExecuteEvents.Execute(gameObject, data, ExecuteEvents.dragHandler);
         }
 
         //-------------------------------------------------
@@ -113,13 +147,21 @@ namespace Valve.VR.InteractionSystem
         //-------------------------------------------------
         public override void Process()
         {
-            if (submitObject)
+            if (submitObject is not null)
             {
-                BaseEventData data = GetBaseEventData();
-                data.selectedObject = submitObject;
-                ExecuteEvents.Execute(submitObject, data, ExecuteEvents.submitHandler);
+                try
+                {
+                    BaseEventData data = GetBaseEventData();
+                    data.selectedObject = submitObject;
+                    ExecuteEvents.Execute(submitObject, data, ExecuteEvents.submitHandler);
 
-                submitObject = null;
+                    submitObject = null;
+                }
+                catch (Exception e)
+                {
+                    MelonLogger.Msg(e);
+                    MelonLogger.Msg(e.InnerException?.Message ?? "none");
+                }
             }
         }
     }
