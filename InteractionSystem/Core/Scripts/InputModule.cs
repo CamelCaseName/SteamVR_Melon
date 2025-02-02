@@ -7,7 +7,6 @@ using MelonLoader;
 using System;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.UIElements;
 
 namespace Valve.VR.InteractionSystem
 {
@@ -20,7 +19,7 @@ namespace Valve.VR.InteractionSystem
         private GameObject submitObject;
 
         private static readonly float deadzone = 0;
-        private static readonly float pointerResScale = 0.1f;
+        private static readonly float pointerResScale = 0.03f;
 
         private Vector2 lastPointerPos = Vector2.zero;
         private Vector2 thisFramePointerPos = Vector2.zero;
@@ -92,7 +91,7 @@ namespace Valve.VR.InteractionSystem
             thisFramePointerPos = pointerPosition;
 
             //todo investigate the slider scaling
-            AxisEventData axisData = GetAxisEventData((lastPointerPos.x - pointerPosition.x) * pointerResScale, (lastPointerPos.y - pointerPosition.y) * pointerResScale, deadzone);
+            AxisEventData axisData = GetAxisEventData((pointerPosition.x - lastPointerPos.x) * pointerResScale, (pointerPosition.y - lastPointerPos.y) * pointerResScale, deadzone);
             ExecuteEvents.Execute(gameObject, axisData, ExecuteEvents.moveHandler);
             lastPointerPos = thisFramePointerPos;
         }

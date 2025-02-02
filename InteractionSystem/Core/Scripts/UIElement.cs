@@ -4,6 +4,7 @@
 //
 //=============================================================================
 
+using MelonLoader;
 using System;
 using UnityEngine;
 using UnityEngine.UI;
@@ -79,6 +80,7 @@ namespace Valve.VR.InteractionSystem
 
             if (scrollRect is not null)
             {
+                MelonLogger.Msg(gameObject.name + " found scrollrect" + scrollRect.name);
                 UpdateColliderForScrollRect(collider);
             }
         }
@@ -148,20 +150,20 @@ namespace Valve.VR.InteractionSystem
         //-------------------------------------------------
         private void HandHoverUpdate(Hand hand, Vector2 position, bool posIsValid)
         {
-            if (hand.uiInteractAction != null && hand.uiInteractAction.GetStateDown(hand.handType))
+            if (hand.uiInteractAction != null && hand.uiInteractAction.GetStateUp(hand.handType))
             {
-                if (posIsValid)
+                InputModule.Instance.Submit(gameObject);
+            }
+            else if (hand.uiInteractAction != null && hand.uiInteractAction.GetState(hand.handType) && posIsValid)
+            {
+                if (!startedMove)
                 {
-                    if (!startedMove)
-                    {
-                        startedMove = true;
-                        InputModule.Instance.PointerBeginPress(gameObject, position);
-                    }
-                    InputModule.Instance.PointerPressedUpdate(gameObject, position);
+                    startedMove = true;
+                    InputModule.Instance.PointerBeginPress(gameObject, position);
                 }
                 else
                 {
-                    InputModule.Instance.Submit(gameObject);
+                    InputModule.Instance.PointerPressedUpdate(gameObject, position);
                 }
             }
             else if (posIsValid)
@@ -190,10 +192,7 @@ namespace Valve.VR.InteractionSystem
                 canvas ??= GetComponentInChildren<Canvas>();
             }
 
-            if (!colliderRoot.gameObject.active)
-            { return; }
-
-            if (partialVisible)
+            if (!colliderRoot.gameObject.active || partialVisible)
             { return; }
 
             //update collider if needed
