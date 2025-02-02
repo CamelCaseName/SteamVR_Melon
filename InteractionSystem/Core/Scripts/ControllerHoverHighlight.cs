@@ -27,6 +27,11 @@ namespace Valve.VR.InteractionSystem
         protected void Awake()
         {
             hand = GetComponentInParent<Hand>();
+            hand.OnHandInitialized += OnHandInitialized;
+            hand.OnParentHandHoverBegin += OnParentHandHoverBegin;
+            hand.OnParentHandHoverEnd += OnParentHandHoverEnd;
+            hand.OnParentHandInputFocusAcquired += OnParentHandInputFocusAcquired;
+            hand.OnParentHandInputFocusLost += OnParentHandInputFocusLost;
         }
 
         protected void OnHandInitialized(int deviceIndex)
@@ -36,7 +41,6 @@ namespace Valve.VR.InteractionSystem
             renderModelGameObject.transform.localPosition = Vector3.zero;
             renderModelGameObject.transform.localRotation = Quaternion.identity;
             renderModelGameObject.transform.localScale = hand.renderModelPrefab.transform.localScale;
-
 
             renderModel = renderModelGameObject.GetComponent<RenderModel>();
 
@@ -54,9 +58,7 @@ namespace Valve.VR.InteractionSystem
             renderModel.Hide();
         }
 
-
         //-------------------------------------------------
-        //todo bind to event
         protected void OnParentHandHoverBegin(Interactable other)
         {
             if (!this.isActiveAndEnabled)
@@ -70,17 +72,13 @@ namespace Valve.VR.InteractionSystem
             }
         }
 
-
         //-------------------------------------------------
-        //todo bind to event
         private void OnParentHandHoverEnd(Interactable other)
         {
             HideHighlight();
         }
 
-
         //-------------------------------------------------
-        //todo bind to event
         private void OnParentHandInputFocusAcquired()
         {
             if (!this.isActiveAndEnabled)
@@ -94,13 +92,11 @@ namespace Valve.VR.InteractionSystem
             }
         }
 
-
         //-------------------------------------------------
         private void OnParentHandInputFocusLost()
         {
             HideHighlight();
         }
-
 
         //-------------------------------------------------
         public void ShowHighlight()
@@ -117,7 +113,6 @@ namespace Valve.VR.InteractionSystem
 
             renderModel.Show();
         }
-
 
         //-------------------------------------------------
         public void HideHighlight()

@@ -7,6 +7,7 @@ using MelonLoader;
 using System;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UIElements;
 
 namespace Valve.VR.InteractionSystem
 {

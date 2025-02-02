@@ -25,6 +25,8 @@ namespace Valve.VR.InteractionSystem
         public static readonly bool debugPlacements = false;
         public Canvas canvas;
         bool startedMove = false;
+        private ScrollRect? scrollRect;
+        private bool partialVisible = false;
 
         //-------------------------------------------------
         protected virtual void Awake()
@@ -52,6 +54,7 @@ namespace Valve.VR.InteractionSystem
             rect ??= GetComponentInChildren<RectTransform>();
             rect ??= GetComponentInParent<RectTransform>();
             BoxGO.transform.localScale = new(rect.sizeDelta.x, rect.sizeDelta.y, 0.1f);
+            BoxGO.transform.localPosition = new(rect.localPosition.x, rect.localPosition.y, -0.05f);
             colliderRoot = BoxGO.transform;
 
             interactable = GetComponent<Interactable>();
@@ -65,6 +68,57 @@ namespace Valve.VR.InteractionSystem
             toggle?.onValueChanged.AddListener(new Action<bool>(OnToggleChange));
             Slider slider = GetComponent<Slider>();
             slider?.onValueChanged.AddListener(new Action<float>(OnSliderChange));
+
+            scrollRect = GetComponentInParent<ScrollRect>();
+            //todo if we are in a scrollview only show what is visible -> investigate more with explorer
+            //we can surely get the world coords of the scrollview rect and then the coords of our ui element and decide based on that
+            scrollRect?.onValueChanged.AddListener((Action<Vector2>)((Vector2 change) =>
+            {
+                UpdateColliderForScrollRect(collider);
+            }));
+
+            if (scrollRect is not null)
+            {
+                UpdateColliderForScrollRect(collider);
+            }
+        }
+
+        private void UpdateColliderForScrollRect(BoxCollider collider)
+        {
+            partialVisible = false;
+            var view = scrollRect.m_ViewBounds;
+            var coll = collider.bounds;
+            //item is fully visible
+            if (view.Contains(coll.min) && view.Contains(coll.max))
+            {
+                colliderRoot.gameObject.SetActive(true);
+            }
+            //partially visible
+            //todo test if the coordinates are all from the same origin/reference
+            else if (view.Intersects(coll))
+            {
+                // The min and max points
+                Vector3 min = new();
+                Vector3 max = new();
+
+                min.x = Mathf.Max(view.min.x, coll.min.x);
+                min.y = Mathf.Max(view.min.y, coll.min.y);
+                min.z = Mathf.Max(view.min.z, coll.min.z);
+
+                max.x = Mathf.Min(view.max.x, coll.max.x);
+                max.y = Mathf.Min(view.max.y, coll.max.y);
+                max.z = Mathf.Min(view.max.z, coll.max.z);
+
+                coll.SetMinMax(min, max);
+                partialVisible = true;
+                //set new collider bounds
+
+                colliderRoot.gameObject.SetActive(true);
+            }
+            else
+            {
+                colliderRoot.gameObject.SetActive(false);
+            }
         }
 
         private void OnSliderChange(float obj)
@@ -78,7 +132,6 @@ namespace Valve.VR.InteractionSystem
         }
 
         //-------------------------------------------------
-        //todo not sure if these get called
         private void OnHandHoverBegin(Hand hand, Vector2 position, bool poseIsValid)
         {
             currentHand = hand;
@@ -136,10 +189,22 @@ namespace Valve.VR.InteractionSystem
                 canvas ??= GetComponentInParent<Canvas>();
                 canvas ??= GetComponentInChildren<Canvas>();
             }
+
+            if (!colliderRoot.gameObject.active)
+            { return; }
+
+            if (partialVisible)
+            { return; }
+
             //update collider if needed
             if (rect.sizeDelta.x != colliderRoot.localScale.x || rect.sizeDelta.y != colliderRoot.localScale.y || colliderRoot.localScale.z != 0.1f)
             {
                 colliderRoot.localScale = new(rect.sizeDelta.x, rect.sizeDelta.y, 0.1f);
+            }
+
+            if (rect.localPosition != rect.localPosition + new Vector3(0, 0, -0.05f))
+            {
+                colliderRoot.localPosition = rect.localPosition + new Vector3(0, 0, -0.05f);
             }
         }
     }
