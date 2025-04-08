@@ -31,8 +31,8 @@ namespace SteamVR_Melon.Standalone
     {
         // 2019.4.1f1  : 0x786D00
         // 2019.4.21f1 : 0x792350
-        // 2020.3.16f1 : 0x5b71b0 cdecl FindAndLoadPlugin
-        // 2020.3.16f1 : 0x76e350 fastcall FindAndLoadPluginIl2CppWrapper
+        // 2022.3.16f1 : 0x5b71b0 cdecl FindAndLoadPlugin
+        // 2022.3.16f1 : 0x76e350 fastcall FindAndLoadPluginIl2CppWrapper
 
         /// <summary>
         /// Use this if you're using a different engine version. Decompile UnityPlayer.dll with IDA PRO and get the pdb files for it 
@@ -93,10 +93,9 @@ namespace SteamVR_Melon.Standalone
             Marshal.FreeHGlobal(strPtr);
         }
 
-
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         public delegate IntPtr FindAndLoadUnityPlugin(IntPtr name, out IntPtr loadedModule, byte param3);
-        public static FindAndLoadUnityPlugin method;
+        private static FindAndLoadUnityPlugin method;
 
         //[UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         //private delegate IntPtr CallbackPointer();

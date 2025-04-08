@@ -151,8 +151,10 @@ namespace Valve.VR.InteractionSystem
             {
                 try
                 {
-                    BaseEventData data = GetBaseEventData();
-                    data.selectedObject = submitObject;
+                    BaseEventData data = new(eventSystem)
+                    {
+                        selectedObject = submitObject
+                    };
                     ExecuteEvents.Execute(submitObject, data, ExecuteEvents.submitHandler);
 
                     submitObject = null;

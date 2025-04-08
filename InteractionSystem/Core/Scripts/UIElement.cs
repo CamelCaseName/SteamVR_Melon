@@ -23,7 +23,7 @@ namespace Valve.VR.InteractionSystem
         private Interactable interactable;
         private RectTransform rect;
         private Transform colliderRoot;
-        public static readonly bool debugPlacements = false;
+        public static readonly bool debugPlacements = true;
         public Canvas canvas;
         bool startedMove = false;
         private ScrollRect? scrollRect;
@@ -46,7 +46,8 @@ namespace Valve.VR.InteractionSystem
                 Material m = new(GameObject.Find("Floor").GetComponent<MeshRenderer>().material);
                 var mesh = BoxGO.AddComponent<MeshRenderer>();
                 mesh.material = m;
-                mesh.material.color = Color.white;
+                mesh.material.color = Color.red;
+                mesh.material.color.ColorWithAlpha(0.2f);
             }
 
             //if we are in a scrollbox or scrollview or whatever only enable if the item is visible, else hide completely or rescale to bounds
@@ -55,7 +56,7 @@ namespace Valve.VR.InteractionSystem
             rect ??= GetComponentInChildren<RectTransform>();
             rect ??= GetComponentInParent<RectTransform>();
             BoxGO.transform.localScale = new(rect.sizeDelta.x, rect.sizeDelta.y, 0.1f);
-            BoxGO.transform.localPosition = new(rect.localPosition.x, rect.localPosition.y, -0.05f);
+            BoxGO.transform.localPosition = new(0, 0, -0.05f);
             colliderRoot = BoxGO.transform;
 
             interactable = GetComponent<Interactable>();
@@ -152,10 +153,12 @@ namespace Valve.VR.InteractionSystem
         {
             if (hand.uiInteractAction != null && hand.uiInteractAction.GetStateUp(hand.handType))
             {
+                MelonLogger.Msg("submitting " + gameObject.name);
                 InputModule.Instance.Submit(gameObject);
             }
             else if (hand.uiInteractAction != null && hand.uiInteractAction.GetState(hand.handType) && posIsValid)
             {
+                MelonLogger.Msg("moving pressed pointer over " + gameObject.name);
                 if (!startedMove)
                 {
                     startedMove = true;
@@ -201,10 +204,11 @@ namespace Valve.VR.InteractionSystem
                 colliderRoot.localScale = new(rect.sizeDelta.x, rect.sizeDelta.y, 0.1f);
             }
 
-            if (rect.localPosition != rect.localPosition + new Vector3(0, 0, -0.05f))
-            {
-                colliderRoot.localPosition = rect.localPosition + new Vector3(0, 0, -0.05f);
-            }
+            //we dont have to adjust local position as we are already childs of the button!
+            //if (rect.localPosition != rect.localPosition + new Vector3(0, 0, -0.05f))
+            //{
+            //    colliderRoot.localPosition = rect.localPosition + new Vector3(0, 0, -0.05f);
+            //}
         }
     }
 }
