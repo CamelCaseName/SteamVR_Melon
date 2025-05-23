@@ -333,6 +333,7 @@ namespace Valve.VR
 
             MelonLogger.Msg("[HPVR] SteamVR Camera expanded");
             instance = this;
+            GameObject.DontDestroyOnLoad(this.gameObject);
             //MelonLogger.Msg("origin: " + head.parent.name +"/" + origin.name + " - head: " + transform.parent.name + "/" + (origin.GetChild(0)?.name ?? "none") + "/" + head.name + " - eye: " + (origin.GetChild(0)?.GetChild(0)?.name ?? "none") + "/" + this.name);
         }
 
@@ -389,7 +390,6 @@ namespace Valve.VR
         }
 
         #endregion
-
 
         public static void DumpRenderTexture(RenderTexture rt, string pngOutPath)
         {
