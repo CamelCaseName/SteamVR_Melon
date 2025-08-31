@@ -50,6 +50,8 @@ namespace Valve.VR.InteractionSystem
                 mesh.material.color.ColorWithAlpha(0.2f);
             }
 
+            //todo scrollviews still off
+
             //if we are in a scrollbox or scrollview or whatever only enable if the item is visible, else hide completely or rescale to bounds
             var collider = BoxGO.AddComponent<BoxCollider>();
             rect = GetComponent<RectTransform>();
