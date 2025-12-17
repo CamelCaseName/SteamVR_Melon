@@ -32,6 +32,9 @@ namespace Valve.VR.InteractionSystem
         ///<summary>Reference to the physics collider that follows the player's HMD position.</summary>
         public Collider headCollider;
 
+        ///<summary>Reference to the physics collider that follows the player's HMD position.</summary>
+        public Rigidbody playerBody;
+
         ///<summary>These objects are enabled when SteamVR is available</summary>
         public GameObject rigSteamVR;
 
