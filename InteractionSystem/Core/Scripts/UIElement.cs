@@ -12,7 +12,7 @@ using UnityEngine.UI;
 namespace Valve.VR.InteractionSystem
 {
     //-------------------------------------------------------------------------
-    [MelonLoader.RegisterTypeInIl2Cpp()]
+    [RegisterTypeInIl2Cpp()]
     public class UIElement : MonoBehaviour
     {
         public UIElement(IntPtr L) : base(L) { }

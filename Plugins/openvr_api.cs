@@ -4562,27 +4562,27 @@ namespace Valve.VR
 
     public class OpenVRInterop
     {
-        [DllImportAttribute("../Mods/HPVR_data/openvr_api.dll", EntryPoint = "VR_InitInternal", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("../Mods/HPVR_data/openvr_api.dll", EntryPoint = "VR_InitInternal", CallingConvention = CallingConvention.Cdecl)]
         internal static extern uint InitInternal(ref EVRInitError peError, EVRApplicationType eApplicationType);
-        [DllImportAttribute("../Mods/HPVR_data/openvr_api.dll", EntryPoint = "VR_InitInternal2", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("../Mods/HPVR_data/openvr_api.dll", EntryPoint = "VR_InitInternal2", CallingConvention = CallingConvention.Cdecl)]
         internal static extern uint InitInternal2(ref EVRInitError peError, EVRApplicationType eApplicationType, [In, MarshalAs(UnmanagedType.LPStr)] string pStartupInfo);
-        [DllImportAttribute("../Mods/HPVR_data/openvr_api.dll", EntryPoint = "VR_ShutdownInternal", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("../Mods/HPVR_data/openvr_api.dll", EntryPoint = "VR_ShutdownInternal", CallingConvention = CallingConvention.Cdecl)]
         internal static extern void ShutdownInternal();
-        [DllImportAttribute("../Mods/HPVR_data/openvr_api.dll", EntryPoint = "VR_IsHmdPresent", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("../Mods/HPVR_data/openvr_api.dll", EntryPoint = "VR_IsHmdPresent", CallingConvention = CallingConvention.Cdecl)]
         internal static extern bool IsHmdPresent();
-        [DllImportAttribute("../Mods/HPVR_data/openvr_api.dll", EntryPoint = "VR_IsRuntimeInstalled", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("../Mods/HPVR_data/openvr_api.dll", EntryPoint = "VR_IsRuntimeInstalled", CallingConvention = CallingConvention.Cdecl)]
         internal static extern bool IsRuntimeInstalled();
-        [DllImportAttribute("../Mods/HPVR_data/openvr_api.dll", EntryPoint = "VR_RuntimePath", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("../Mods/HPVR_data/openvr_api.dll", EntryPoint = "VR_RuntimePath", CallingConvention = CallingConvention.Cdecl)]
         internal static extern string RuntimePath();
-        [DllImportAttribute("../Mods/HPVR_data/openvr_api.dll", EntryPoint = "VR_GetRuntimePath", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("../Mods/HPVR_data/openvr_api.dll", EntryPoint = "VR_GetRuntimePath", CallingConvention = CallingConvention.Cdecl)]
         internal static extern bool GetRuntimePath(System.Text.StringBuilder pchPathBuffer, uint unBufferSize, ref uint punRequiredBufferSize);
-        [DllImportAttribute("../Mods/HPVR_data/openvr_api.dll", EntryPoint = "VR_GetStringForHmdError", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("../Mods/HPVR_data/openvr_api.dll", EntryPoint = "VR_GetStringForHmdError", CallingConvention = CallingConvention.Cdecl)]
         internal static extern IntPtr GetStringForHmdError(EVRInitError error);
-        [DllImportAttribute("../Mods/HPVR_data/openvr_api.dll", EntryPoint = "VR_GetGenericInterface", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("../Mods/HPVR_data/openvr_api.dll", EntryPoint = "VR_GetGenericInterface", CallingConvention = CallingConvention.Cdecl)]
         internal static extern IntPtr GetGenericInterface([In, MarshalAs(UnmanagedType.LPStr)] string pchInterfaceVersion, ref EVRInitError peError);
-        [DllImportAttribute("../Mods/HPVR_data/openvr_api.dll", EntryPoint = "VR_IsInterfaceVersionValid", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("../Mods/HPVR_data/openvr_api.dll", EntryPoint = "VR_IsInterfaceVersionValid", CallingConvention = CallingConvention.Cdecl)]
         internal static extern bool IsInterfaceVersionValid([In, MarshalAs(UnmanagedType.LPStr)] string pchInterfaceVersion);
-        [DllImportAttribute("../Mods/HPVR_data/openvr_api.dll", EntryPoint = "VR_GetInitToken", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("../Mods/HPVR_data/openvr_api.dll", EntryPoint = "VR_GetInitToken", CallingConvention = CallingConvention.Cdecl)]
         internal static extern uint GetInitToken();
     }
 

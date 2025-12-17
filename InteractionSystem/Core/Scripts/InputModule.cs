@@ -10,7 +10,7 @@ using UnityEngine.EventSystems;
 
 namespace Valve.VR.InteractionSystem
 {
-    [MelonLoader.RegisterTypeInIl2Cpp]
+    [RegisterTypeInIl2Cpp]
     //-------------------------------------------------------------------------
     public class InputModule : BaseInputModule
     {

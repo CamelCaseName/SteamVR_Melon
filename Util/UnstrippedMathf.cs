@@ -353,7 +353,7 @@ namespace HPVR.Util
             return delta;
         }
 
-        static internal long RandomToLong(System.Random r)
+        static internal long RandomToLong(Random r)
         {
             var buffer = new byte[8];
             r.NextBytes(buffer);

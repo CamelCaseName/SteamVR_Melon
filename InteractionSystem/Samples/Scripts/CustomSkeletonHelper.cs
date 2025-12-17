@@ -46,7 +46,7 @@ namespace Valve.VR.InteractionSystem.Sample
             RightToLeft
         }
 
-        [System.Serializable]
+        [Serializable]
         public class Retargetable
         {
             public Transform source;
@@ -59,7 +59,7 @@ namespace Valve.VR.InteractionSystem.Sample
             }
         }
 
-        [System.Serializable]
+        [Serializable]
         public class Thumb
         {
             public Retargetable metacarpal;
@@ -77,7 +77,7 @@ namespace Valve.VR.InteractionSystem.Sample
             }
         }
 
-        [System.Serializable]
+        [Serializable]
         public class Finger
         {
             public Retargetable metacarpal;

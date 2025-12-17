@@ -32,7 +32,7 @@ namespace Valve.VR
             public bool enabled { set { Enable(value); } }
         }
 
-        [System.Serializable]
+        [Serializable]
         public class ActionNoArgs : Action
         {
             public ActionNoArgs(Event _event, System.Action action)
@@ -57,7 +57,7 @@ namespace Valve.VR
             System.Action action;
         }
 
-        [System.Serializable]
+        [Serializable]
         public class Action<T> : Action
         {
             public Action(Event<T> _event, System.Action<T> action)
@@ -82,7 +82,7 @@ namespace Valve.VR
             System.Action<T> action;
         }
 
-        [System.Serializable]
+        [Serializable]
         public class Action<T0, T1> : Action
         {
             public Action(Event<T0, T1> _event, System.Action<T0, T1> action)
@@ -107,7 +107,7 @@ namespace Valve.VR
             System.Action<T0, T1> action;
         }
 
-        [System.Serializable]
+        [Serializable]
         public class Action<T0, T1, T2> : Action
         {
             public Action(Event<T0, T1, T2> _event, System.Action<T0, T1, T2> action)
@@ -234,10 +234,10 @@ namespace Valve.VR
         }
         public class Event<T0, T1, T2, T3>
         {
-            public event System.Action<T0, T1, T2, T3> OnEvent = new((T0 t0, T1 t1, T2 t2, T3 t3) => { });
+            public event Action<T0, T1, T2, T3> OnEvent = new((T0 t0, T1 t1, T2 t2, T3 t3) => { });
 
-            public void Listen(System.Action<T0, T1, T2, T3> action) { OnEvent += action; }
-            public void Remove(System.Action<T0, T1, T2, T3> action) { OnEvent -= action; }
+            public void Listen(Action<T0, T1, T2, T3> action) { OnEvent += action; }
+            public void Remove(Action<T0, T1, T2, T3> action) { OnEvent -= action; }
             public void Send(T0 arg0, T1 arg1, T2 arg2, T3 arg3)
             {
                 if (OnEvent != null)

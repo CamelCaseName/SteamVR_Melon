@@ -19,7 +19,7 @@ namespace Valve.VR
         private SteamVR_Action_Pose cameraPose = null;
         private SteamVR_Input_Sources cameraInputSource = SteamVR_Input_Sources.Camera;
 
-        [System.Serializable]
+        [Serializable]
         public struct Config
         {
             public float x, y, z;

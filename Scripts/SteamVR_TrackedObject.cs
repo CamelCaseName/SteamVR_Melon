@@ -11,7 +11,7 @@ using UnityEngine;
 
 namespace Valve.VR
 {
-    [MelonLoader.RegisterTypeInIl2Cpp()]
+    [RegisterTypeInIl2Cpp()]
     public class SteamVR_TrackedObject : MonoBehaviour
     {
         public SteamVR_TrackedObject(IntPtr value) : base(value) { }

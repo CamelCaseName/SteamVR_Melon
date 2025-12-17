@@ -20,7 +20,7 @@ namespace Valve.VR.InteractionSystem
 
         public FingerColliders fingerColliders;
 
-        [System.Serializable]
+        [Serializable]
         public class FingerColliders
         {
             /// <summary>Starting at tip and going down. Max 2.</summary>

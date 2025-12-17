@@ -18,7 +18,7 @@ namespace Valve.VR.InteractionSystem
     public class InteractableDebug : MonoBehaviour
     {
         public InteractableDebug(IntPtr value) : base(value) { }
-        [System.NonSerialized]
+        [NonSerialized]
         public Hand attachedToHand;
 
         public float simulateReleasesForXSecondsAroundRelease = 0;

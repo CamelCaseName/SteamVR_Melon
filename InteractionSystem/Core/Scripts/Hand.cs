@@ -22,7 +22,7 @@ namespace Valve.VR.InteractionSystem
     // interactions with objects in the virtual world.
     //-------------------------------------------------------------------------
 
-    [MelonLoader.RegisterTypeInIl2Cpp()]
+    [RegisterTypeInIl2Cpp()]
     public class Hand : MonoBehaviour
     {
         public Hand(IntPtr value) : base(value) { }
@@ -135,7 +135,7 @@ namespace Valve.VR.InteractionSystem
 
         private List<AttachedObject> attachedObjects = new();
 
-        [Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp]
+        [HideFromIl2Cpp]
         public ReadOnlyCollection<AttachedObject> AttachedObjects
         {
             get { return attachedObjects.AsReadOnly(); }
@@ -183,9 +183,9 @@ namespace Valve.VR.InteractionSystem
         //-------------------------------------------------
         public Interactable hoveringInteractable
         {
-            [Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp]
+            [HideFromIl2Cpp]
             get { return _hoveringInteractable; }
-            [Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp]
+            [HideFromIl2Cpp]
             set
             {
                 if (_hoveringInteractable != value)
@@ -260,7 +260,7 @@ namespace Valve.VR.InteractionSystem
             }
         }
 
-        [Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp]
+        [HideFromIl2Cpp]
         public AllowTeleportWhileAttachedToHand currentAttachedTeleportManager
         {
             get
@@ -274,7 +274,7 @@ namespace Valve.VR.InteractionSystem
             }
         }
 
-        [Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp]
+        [HideFromIl2Cpp]
         public SteamVR_Behaviour_Skeleton skeleton
         {
             get
@@ -867,7 +867,7 @@ namespace Valve.VR.InteractionSystem
             }
         }
 
-        [Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp]
+        [HideFromIl2Cpp]
         protected virtual void OnTransformUpdated(SteamVR_Behaviour_Pose updatedPose, SteamVR_Input_Sources updatedSource)
         {
             HandFollowUpdate();
@@ -966,7 +966,7 @@ namespace Valve.VR.InteractionSystem
             handPhysicScene = PhysicsSceneExtensions.GetPhysicsScene_Internal(SceneManager.GetActiveScene());
         }
 
-        [Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp]
+        [HideFromIl2Cpp]
         protected virtual bool CheckHoveringForTransform(Vector3 hoverPosition, float hoverRadius, ref float closestDistance, ref Interactable closestInteractable, Color debugColor)
         {
             try
@@ -1079,7 +1079,7 @@ namespace Valve.VR.InteractionSystem
         }
 
         //-------------------------------------------------
-        [Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp]
+        [HideFromIl2Cpp]
         protected virtual void UpdateNoSteamVRFallback()
         {
             if (noSteamVRFallbackCamera)
@@ -1160,7 +1160,7 @@ namespace Valve.VR.InteractionSystem
         /// <summary>
         /// Returns true when the hand is currently hovering over the interactable passed in
         /// </summary>
-        [Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp]
+        [HideFromIl2Cpp]
         public bool IsStillHovering(Interactable interactable)
         {
             return hoveringInteractable == interactable;
@@ -1446,12 +1446,12 @@ namespace Valve.VR.InteractionSystem
         //
         // interactable - The Interactable to hover over indefinitely.
         //-------------------------------------------------
-        [Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp]
+        [HideFromIl2Cpp]
         public void HoverLock(Interactable interactable)
         {
             if (spewDebugText)
             {
-                HandDebugLog("HoverLock " + interactable);
+                HandDebugLog("HoverLock " + interactable.name);
             }
 
             hoverLocked = true;
@@ -1463,12 +1463,12 @@ namespace Valve.VR.InteractionSystem
         //
         // interactable - The hover-locked Interactable to stop hovering over indefinitely.
         //-------------------------------------------------
-        [Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp]
+        [HideFromIl2Cpp]
         public void HoverUnlock(Interactable interactable)
         {
             if (spewDebugText)
             {
-                HandDebugLog("HoverUnlock " + interactable);
+                HandDebugLog("HoverUnlock " + interactable.name);
             }
 
             if (hoveringInteractable == interactable)
@@ -1789,7 +1789,7 @@ namespace Valve.VR.InteractionSystem
             }
         }
 
-        [Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp]
+        [HideFromIl2Cpp]
         public void SetHoverRenderModel(RenderModel hoverRenderModel)
         {
             hoverhighlightRenderModel = hoverRenderModel;
@@ -1802,6 +1802,6 @@ namespace Valve.VR.InteractionSystem
         }
     }
 
-    [System.Serializable]
+    [Serializable]
     public class HandEvent : SteamVR_Events.Event<Hand> { }
 }

@@ -119,7 +119,7 @@ namespace Valve.VR
             historyBuffer.Clear();
         }
 
-        [Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp]
+        [HideFromIl2Cpp]
         private void SteamVR_Behaviour_Pose_OnUpdate(SteamVR_Action_Pose fromAction, SteamVR_Input_Sources fromSource)
         {
             UpdateHistoryBuffer();
@@ -152,14 +152,14 @@ namespace Valve.VR
             }
         }
 
-        [Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp]
+        [HideFromIl2Cpp]
         private void SteamVR_Behaviour_Pose_OnChange(SteamVR_Action_Pose fromAction, SteamVR_Input_Sources fromSource)
         {
             onTransformChanged?.Send(this, fromSource);
             onTransformChangedEvent?.Invoke(this, fromSource);
         }
 
-        [Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp]
+        [HideFromIl2Cpp]
         protected virtual void OnDeviceConnectedChanged(SteamVR_Action_Pose changedAction, SteamVR_Input_Sources changedSource, bool connected)
         {
             CheckDeviceIndex();
@@ -168,7 +168,7 @@ namespace Valve.VR
             onConnectedChangedEvent?.Invoke(this, inputSource, connected);
         }
 
-        [Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp]
+        [HideFromIl2Cpp]
         protected virtual void OnTrackingChanged(SteamVR_Action_Pose changedAction, SteamVR_Input_Sources changedSource, ETrackingResult trackingChanged)
         {
             onTrackingChanged?.Send(this, inputSource, trackingChanged);
@@ -258,7 +258,7 @@ namespace Valve.VR
         /// <item><description>VRInputString_All - All of the above. E.g. "Left Hand Vive Controller Trackpad"</description></item>
         /// </list>
         /// </param>
-        [Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp]
+        [HideFromIl2Cpp]
         public string GetLocalizedName(params EVRInputStringBits[] localizedParts)
         {
             if (poseAction != null)

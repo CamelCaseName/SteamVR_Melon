@@ -10,7 +10,7 @@ using Mathf = HPVR.Util.Mathf;
 namespace Valve.VR
 {
 
-    [MelonLoader.RegisterTypeInIl2Cpp()]
+    [RegisterTypeInIl2Cpp()]
     public class SteamVR_Render : MonoBehaviour
     {
         public SteamVR_Render(IntPtr value) : base(value) { }

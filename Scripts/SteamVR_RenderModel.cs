@@ -12,7 +12,7 @@ using UnityEngine;
 
 namespace Valve.VR
 {
-    [MelonLoader.RegisterTypeInIl2Cpp()]
+    [RegisterTypeInIl2Cpp()]
     public class SteamVR_RenderModel : MonoBehaviour
     {
         public SteamVR_RenderModel(System.IntPtr value) : base(value) { }

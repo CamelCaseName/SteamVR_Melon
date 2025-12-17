@@ -15,7 +15,7 @@ namespace Valve.VR.InteractionSystem.Sample
         public SteamVR_Action_Single squeezyAction = SteamVR_Input.GetAction<SteamVR_Action_Single>("Squeeze");
         public SteamVR_Input_Sources inputSource;
 
-        [System.Serializable]
+        [Serializable]
         public class Finger
         {
             public float mass;

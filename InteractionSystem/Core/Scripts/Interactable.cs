@@ -82,10 +82,10 @@ namespace Valve.VR.InteractionSystem
         /// <summary>Higher is better</summary>
         public int hoverPriority = 0;
 
-        [System.NonSerialized]
+        [NonSerialized]
         public Hand attachedToHand;
 
-        [System.NonSerialized]
+        [NonSerialized]
         public List<Hand> hoveringHands = new(2);
         public Hand hoveringHand
         {

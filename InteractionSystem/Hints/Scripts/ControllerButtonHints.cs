@@ -272,7 +272,7 @@ namespace Valve.VR.InteractionSystem
         }
 
         //-------------------------------------------------
-        [Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp]
+        [HideFromIl2Cpp]
         private void CreateAndAddButtonInfo(ISteamVR_Action_In action, SteamVR_Input_Sources inputSource)
         {
             Transform buttonTransform = null;
@@ -476,7 +476,7 @@ namespace Valve.VR.InteractionSystem
         }
 
         //-------------------------------------------------
-        [Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp]
+        [HideFromIl2Cpp]
         private void ShowButtonHint(params ISteamVR_Action_In_Source[] actions)
         {
             renderModel.gameObject.SetActive(true);
@@ -529,7 +529,7 @@ namespace Valve.VR.InteractionSystem
         }
 
         //-------------------------------------------------
-        [Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp]
+        [HideFromIl2Cpp]
         private void HideButtonHint(params ISteamVR_Action_In_Source[] actions)
         {
             Color baseColor = usingMaterial.GetColor(colorID);
@@ -553,7 +553,7 @@ namespace Valve.VR.InteractionSystem
         }
 
         //-------------------------------------------------
-        [Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp]
+        [HideFromIl2Cpp]
         private bool IsButtonHintActive(ISteamVR_Action_In_Source action)
         {
             if (actionHintInfos.ContainsKey(action))
@@ -650,7 +650,7 @@ namespace Valve.VR.InteractionSystem
         }
 
         //-------------------------------------------------
-        [Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp]
+        [HideFromIl2Cpp]
         private void UpdateTextHint(ActionHintInfo hintInfo)
         {
             Transform playerTransform = player.hmdTransform;
@@ -687,7 +687,7 @@ namespace Valve.VR.InteractionSystem
 
 
         //-------------------------------------------------
-        [Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp]
+        [HideFromIl2Cpp]
         private void ShowText(ISteamVR_Action_In_Source action, string text, bool highlightButton = true)
         {
             if (actionHintInfos.ContainsKey(action))
@@ -718,7 +718,7 @@ namespace Valve.VR.InteractionSystem
         }
 
         //-------------------------------------------------
-        [Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp]
+        [HideFromIl2Cpp]
         private void HideText(ISteamVR_Action_In_Source action)
         {
             if (actionHintInfos.ContainsKey(action))
@@ -748,7 +748,7 @@ namespace Valve.VR.InteractionSystem
         }
 
         //-------------------------------------------------
-        [Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp]
+        [HideFromIl2Cpp]
         private string GetActiveHintText(ISteamVR_Action_In_Source action)
         {
             if (actionHintInfos.ContainsKey(action))
@@ -782,7 +782,7 @@ namespace Valve.VR.InteractionSystem
         }
 
         //-------------------------------------------------
-        [Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp]
+        [HideFromIl2Cpp]
         public static void ShowButtonHint(Hand hand, params ISteamVR_Action_In_Source[] actions)
         {
             ControllerButtonHints hints = GetControllerButtonHints(hand);
@@ -790,7 +790,7 @@ namespace Valve.VR.InteractionSystem
         }
 
         //-------------------------------------------------
-        [Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp]
+        [HideFromIl2Cpp]
         public static void HideButtonHint(Hand hand, params ISteamVR_Action_In_Source[] actions)
         {
             ControllerButtonHints hints = GetControllerButtonHints(hand);
@@ -805,7 +805,7 @@ namespace Valve.VR.InteractionSystem
         }
 
         //-------------------------------------------------
-        [Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp]
+        [HideFromIl2Cpp]
         public static bool IsButtonHintActive(Hand hand, ISteamVR_Action_In_Source action)
         {
             ControllerButtonHints hints = GetControllerButtonHints(hand);
