@@ -1,7 +1,6 @@
 ﻿//======= Copyright (c) Valve Corporation, All rights reserved. ===============
 
 using UnityEngine;
-using System.Collections;
 
 namespace Valve.VR
 {
@@ -93,7 +92,7 @@ namespace Valve.VR
 
     public class SteamVR_HistoryBuffer : SteamVR_RingBuffer<SteamVR_HistoryStep>
     {
-        public SteamVR_HistoryBuffer(int size) : base(size){}
+        public SteamVR_HistoryBuffer(int size) : base(size) { }
 
         public void Update(Vector3 position, Quaternion rotation, Vector3 velocity, Vector3 angularVelocity)
         {

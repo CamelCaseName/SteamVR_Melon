@@ -1,10 +1,9 @@
 ﻿//======= Copyright (c) Valve Corporation, All rights reserved. ===============
 
 #if UNITY_UGUI_UI || !UNITY_2019_2_OR_NEWER
-using UnityEngine;
-using System.Collections;
-using UnityEngine.UI;
 using System;
+using UnityEngine;
+using UnityEngine.UI;
 
 namespace Valve.VR.InteractionSystem.Sample
 {

@@ -2,9 +2,9 @@
 
 
 
-using UnityEngine;
-using System.Collections;
 using Il2CppInterop.Runtime.Attributes;
+using System.Collections;
+using UnityEngine;
 
 namespace Valve.VR.InteractionSystem
 {
@@ -158,7 +158,8 @@ namespace Valve.VR.InteractionSystem
             {
                 yield return null;
                 UpdateOrientation(fx);
-            };
+            }
+            ;
 
             fx.SetActive(false);
             canRotate = true;

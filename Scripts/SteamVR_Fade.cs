@@ -22,7 +22,6 @@
 using Assets.SteamVR_Melon.Standalone;
 using System;
 using UnityEngine;
-using Valve.VR;
 
 namespace Valve.VR
 {

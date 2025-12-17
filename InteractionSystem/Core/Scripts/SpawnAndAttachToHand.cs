@@ -4,9 +4,8 @@
 //
 //=============================================================================
 
-using UnityEngine;
-using System.Collections;
 using System;
+using UnityEngine;
 
 namespace Valve.VR.InteractionSystem
 {
@@ -20,21 +19,21 @@ namespace Valve.VR.InteractionSystem
 
 
         //-------------------------------------------------
-        public void SpawnAndAttach( Hand passedInhand )
+        public void SpawnAndAttach(Hand passedInhand)
         {
             Hand handToUse = passedInhand;
-            if ( passedInhand == null )
+            if (passedInhand == null)
             {
                 handToUse = hand;
             }
 
-            if ( handToUse == null )
+            if (handToUse == null)
             {
                 return;
             }
 
-            GameObject prefabObject = Instantiate( prefab ) as GameObject;
-            handToUse.AttachObject( prefabObject, GrabTypes.Scripted );
+            GameObject prefabObject = Instantiate(prefab) as GameObject;
+            handToUse.AttachObject(prefabObject, GrabTypes.Scripted);
         }
     }
 }

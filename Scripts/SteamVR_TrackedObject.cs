@@ -4,7 +4,6 @@
 //
 //=============================================================================
 
-using Il2CppInterop.Runtime.InteropTypes.Arrays;
 using MelonLoader;
 using System;
 using UnityEngine;

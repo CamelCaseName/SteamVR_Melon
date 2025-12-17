@@ -4,9 +4,8 @@
 //
 //=============================================================================
 
-using UnityEngine;
-using System.Collections;
 using System;
+using UnityEngine;
 
 namespace Valve.VR.InteractionSystem
 {
@@ -24,12 +23,12 @@ namespace Valve.VR.InteractionSystem
         //-------------------------------------------------
         void Awake()
         {
-            if ( skinnedMesh == null )
+            if (skinnedMesh == null)
             {
                 skinnedMesh = GetComponent<SkinnedMeshRenderer>();
             }
 
-            if ( linearMapping == null )
+            if (linearMapping == null)
             {
                 linearMapping = GetComponent<LinearMapping>();
             }
@@ -42,10 +41,10 @@ namespace Valve.VR.InteractionSystem
             float value = linearMapping.value;
 
             //No need to set the blend if our value hasn't changed.
-            if ( value != lastValue )
+            if (value != lastValue)
             {
-                float blendValue = Util.RemapNumberClamped( value, 0f, 1f, 1f, 100f );
-                skinnedMesh.SetBlendShapeWeight( 0, blendValue );
+                float blendValue = Util.RemapNumberClamped(value, 0f, 1f, 1f, 100f);
+                skinnedMesh.SetBlendShapeWeight(0, blendValue);
             }
 
             lastValue = value;

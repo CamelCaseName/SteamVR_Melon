@@ -4,9 +4,8 @@
 //
 //=============================================================================
 
-using UnityEngine;
-using System.Collections;
 using System;
+using UnityEngine;
 
 namespace Valve.VR.InteractionSystem
 {
@@ -19,7 +18,7 @@ namespace Valve.VR.InteractionSystem
         void Awake()
         {
             Rigidbody rigidbody = GetComponent<Rigidbody>();
-            if ( rigidbody )
+            if (rigidbody)
             {
                 rigidbody.Sleep();
             }

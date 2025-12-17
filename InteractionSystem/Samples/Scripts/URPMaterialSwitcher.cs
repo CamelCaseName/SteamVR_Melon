@@ -1,7 +1,5 @@
-﻿using UnityEngine;
-using System.Collections;
-using System.Collections.Generic;
-using System;
+﻿using System;
+using UnityEngine;
 
 #if UNITY_EDITOR && UNITY_URP
 using UnityEditor;
@@ -10,8 +8,8 @@ using UnityEditor;
 [MelonLoader.RegisterTypeInIl2Cpp()]
 public class URPMaterialSwitcher : MonoBehaviour
 {
-	public URPMaterialSwitcher(IntPtr value) : base(value) { }
-	public bool children = false;
+    public URPMaterialSwitcher(IntPtr value) : base(value) { }
+    public bool children = false;
 
 #if UNITY_EDITOR && UNITY_URP
 

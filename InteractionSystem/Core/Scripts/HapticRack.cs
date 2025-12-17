@@ -4,10 +4,9 @@
 //
 //=============================================================================
 
+using System;
 using UnityEngine;
 using UnityEngine.Events;
-using System.Collections;
-using System;
 
 namespace Valve.VR.InteractionSystem
 {
@@ -37,7 +36,7 @@ namespace Valve.VR.InteractionSystem
         //-------------------------------------------------
         void Awake()
         {
-            if ( linearMapping == null )
+            if (linearMapping == null)
             {
                 linearMapping = GetComponent<LinearMapping>();
             }
@@ -45,14 +44,14 @@ namespace Valve.VR.InteractionSystem
 
 
         //-------------------------------------------------
-        private void OnHandHoverBegin( Hand hand )
+        private void OnHandHoverBegin(Hand hand)
         {
             this.hand = hand;
         }
 
 
         //-------------------------------------------------
-        private void OnHandHoverEnd( Hand hand )
+        private void OnHandHoverEnd(Hand hand)
         {
             this.hand = null;
         }
@@ -61,8 +60,8 @@ namespace Valve.VR.InteractionSystem
         //-------------------------------------------------
         void Update()
         {
-            int currentToothIndex = Mathf.RoundToInt( linearMapping.value * teethCount - 0.5f );
-            if ( currentToothIndex != previousToothIndex )
+            int currentToothIndex = Mathf.RoundToInt(linearMapping.value * teethCount - 0.5f);
+            if (currentToothIndex != previousToothIndex)
             {
                 Pulse();
                 previousToothIndex = currentToothIndex;
@@ -73,10 +72,10 @@ namespace Valve.VR.InteractionSystem
         //-------------------------------------------------
         private void Pulse()
         {
-            if ( hand && (hand.isActive) && ( hand.GetBestGrabbingType() != GrabTypes.None ) )
+            if (hand && (hand.isActive) && (hand.GetBestGrabbingType() != GrabTypes.None))
             {
-                ushort duration = (ushort)UnityEngine.Random.Range( minimumPulseDuration, maximumPulseDuration + 1 );
-                hand.TriggerHapticPulse( duration );
+                ushort duration = (ushort)UnityEngine.Random.Range(minimumPulseDuration, maximumPulseDuration + 1);
+                hand.TriggerHapticPulse(duration);
 
                 onPulse.Invoke();
             }

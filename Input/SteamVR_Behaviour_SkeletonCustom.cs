@@ -14,94 +14,94 @@ namespace Valve.VR
         public SteamVR_Behaviour_SkeletonCustom(IntPtr value) : base(value) { }
         protected Transform _wrist;
 
-        
+
         protected Transform _thumbMetacarpal;
 
-        
+
         protected Transform _thumbProximal;
 
-        
+
         protected Transform _thumbMiddle;
 
-        
+
         protected Transform _thumbDistal;
 
-        
+
         protected Transform _thumbTip;
 
-        
+
         protected Transform _thumbAux;
 
-        
+
         protected Transform _indexMetacarpal;
 
-        
+
         protected Transform _indexProximal;
 
-        
+
         protected Transform _indexMiddle;
 
-        
+
         protected Transform _indexDistal;
 
-        
+
         protected Transform _indexTip;
 
-        
+
         protected Transform _indexAux;
 
-        
+
         protected Transform _middleMetacarpal;
 
-        
+
         protected Transform _middleProximal;
 
-        
+
         protected Transform _middleMiddle;
 
-        
+
         protected Transform _middleDistal;
 
-        
+
         protected Transform _middleTip;
 
-        
+
         protected Transform _middleAux;
 
-        
+
         protected Transform _ringMetacarpal;
 
-        
+
         protected Transform _ringProximal;
 
-        
+
         protected Transform _ringMiddle;
 
-        
+
         protected Transform _ringDistal;
 
-        
+
         protected Transform _ringTip;
 
-        
+
         protected Transform _ringAux;
 
-        
+
         protected Transform _pinkyMetacarpal;
 
-        
+
         protected Transform _pinkyProximal;
 
-        
+
         protected Transform _pinkyMiddle;
 
-        
+
         protected Transform _pinkyDistal;
 
-        
+
         protected Transform _pinkyTip;
 
-        
+
         protected Transform _pinkyAux;
 
 

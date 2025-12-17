@@ -5,33 +5,32 @@
 //
 //=============================================================================
 
-using UnityEngine;
-using System.Collections;
 using System;
+using UnityEngine;
 
 namespace Valve.VR.InteractionSystem
 {
     //-------------------------------------------------------------------------
     [MelonLoader.RegisterTypeInIl2Cpp()]
     public class SpawnAndAttachAfterControllerIsTracking : MonoBehaviour
-	{
-		public SpawnAndAttachAfterControllerIsTracking(IntPtr value) : base(value) { }
-		private Hand hand;
-		public GameObject itemPrefab;
+    {
+        public SpawnAndAttachAfterControllerIsTracking(IntPtr value) : base(value) { }
+        private Hand hand;
+        public GameObject itemPrefab;
 
 
-		//-------------------------------------------------
-		void Start()
-		{
-			hand = GetComponentInParent<Hand>();
-		}
+        //-------------------------------------------------
+        void Start()
+        {
+            hand = GetComponentInParent<Hand>();
+        }
 
 
-		//-------------------------------------------------
-		void Update()
-		{
-			if ( itemPrefab != null )
-			{
+        //-------------------------------------------------
+        void Update()
+        {
+            if (itemPrefab != null)
+            {
                 if (hand.isActive && hand.isPoseValid)
                 {
                     GameObject objectToAttach = GameObject.Instantiate(itemPrefab);
@@ -44,7 +43,7 @@ namespace Valve.VR.InteractionSystem
                     // To fix this we change the object's scale back to its original, pre-attach scale.
                     objectToAttach.transform.localScale = itemPrefab.transform.localScale;
                 }
-			}
-		}
-	}
+            }
+        }
+    }
 }

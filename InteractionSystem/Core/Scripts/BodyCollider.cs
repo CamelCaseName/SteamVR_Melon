@@ -4,9 +4,8 @@
 //
 //=============================================================================
 
-using UnityEngine;
-using System.Collections;
 using System;
+using UnityEngine;
 
 namespace Valve.VR.InteractionSystem
 {
@@ -30,8 +29,8 @@ namespace Valve.VR.InteractionSystem
         //-------------------------------------------------
         void FixedUpdate()
         {
-            float distanceFromFloor = Vector3.Dot( head.localPosition, Vector3.up );
-            capsuleCollider.height = Mathf.Max( capsuleCollider.radius, distanceFromFloor );
+            float distanceFromFloor = Vector3.Dot(head.localPosition, Vector3.up);
+            capsuleCollider.height = Mathf.Max(capsuleCollider.radius, distanceFromFloor);
             transform.localPosition = head.localPosition - 0.5f * distanceFromFloor * Vector3.up;
         }
     }

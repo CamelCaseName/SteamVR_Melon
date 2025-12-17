@@ -1,7 +1,7 @@
-﻿using UnityEngine;
-using System.Collections;
+﻿using Il2CppInterop.Runtime.Attributes;
 using System;
-using Il2CppInterop.Runtime.Attributes;
+using System.Collections;
+using UnityEngine;
 
 namespace Valve.VR.InteractionSystem.Sample
 {
@@ -30,9 +30,9 @@ namespace Valve.VR.InteractionSystem.Sample
         {
             GameObject planting = GameObject.Instantiate<GameObject>(prefab);
             planting.transform.position = this.transform.position;
-            planting.transform.rotation = Quaternion.Euler(0,UnityEngine.Random.value * 360f, 0);
+            planting.transform.rotation = Quaternion.Euler(0, UnityEngine.Random.value * 360f, 0);
 
-            planting.GetComponentInChildren<MeshRenderer>().material.SetColor("_TintColor",UnityEngine.Random.ColorHSV(0f, 1f, 1f, 1f, 0.5f, 1f));
+            planting.GetComponentInChildren<MeshRenderer>().material.SetColor("_TintColor", UnityEngine.Random.ColorHSV(0f, 1f, 1f, 1f, 0.5f, 1f));
 
             Rigidbody rigidbody = planting.GetComponent<Rigidbody>();
             if (rigidbody != null)

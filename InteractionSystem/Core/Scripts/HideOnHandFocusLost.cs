@@ -4,9 +4,8 @@
 //
 //=============================================================================
 
-using UnityEngine;
-using System.Collections;
 using System;
+using UnityEngine;
 
 namespace Valve.VR.InteractionSystem
 {
@@ -16,9 +15,9 @@ namespace Valve.VR.InteractionSystem
     {
         public HideOnHandFocusLost(IntPtr value) : base(value) { }
         //-------------------------------------------------
-        private void OnHandFocusLost( Hand hand )
+        private void OnHandFocusLost(Hand hand)
         {
-            gameObject.SetActive( false );
+            gameObject.SetActive(false);
         }
     }
 }

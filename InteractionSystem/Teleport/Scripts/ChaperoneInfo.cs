@@ -4,11 +4,10 @@
 //
 //=============================================================================
 
-using UnityEngine;
-using UnityEngine.Events;
-using System.Collections;
-using System;
 using Il2CppInterop.Runtime.Attributes;
+using System;
+using System.Collections;
+using UnityEngine;
 
 namespace Valve.VR.InteractionSystem
 {
@@ -23,7 +22,7 @@ namespace Valve.VR.InteractionSystem
         public bool roomscale { get; private set; }
 
         public static SteamVR_Events.Event Initialized = new SteamVR_Events.Event();
-        public static SteamVR_Events.Action InitializedAction( Action action ) { return new SteamVR_Events.ActionNoArgs( Initialized, action ); }
+        public static SteamVR_Events.Action InitializedAction(Action action) { return new SteamVR_Events.ActionNoArgs(Initialized, action); }
 
         //-------------------------------------------------
         private static ChaperoneInfo _instance;
@@ -31,15 +30,15 @@ namespace Valve.VR.InteractionSystem
         {
             get
             {
-                if ( _instance == null )
+                if (_instance == null)
                 {
-                    _instance = new GameObject( "[ChaperoneInfo]" ).AddComponent<ChaperoneInfo>();
+                    _instance = new GameObject("[ChaperoneInfo]").AddComponent<ChaperoneInfo>();
                     _instance.initialized = false;
                     _instance.playAreaSizeX = 1.0f;
                     _instance.playAreaSizeZ = 1.0f;
                     _instance.roomscale = false;
 
-                    DontDestroyOnLoad( _instance.gameObject );
+                    DontDestroyOnLoad(_instance.gameObject);
                 }
                 return _instance;
             }
@@ -60,7 +59,7 @@ namespace Valve.VR.InteractionSystem
 
             // Get interface pointer
             var chaperone = OpenVR.Chaperone;
-            if ( chaperone == null )
+            if (chaperone == null)
             {
                 MelonLoader.MelonLogger.Warning("[HPVR Interaction] Failed to get IVRChaperone interface.");
                 initialized = true;
@@ -68,17 +67,17 @@ namespace Valve.VR.InteractionSystem
             }
 
             // Get play area size
-            while ( true )
+            while (true)
             {
                 float px = 0.0f, pz = 0.0f;
-                if ( chaperone.GetPlayAreaSize( ref px, ref pz ) )
+                if (chaperone.GetPlayAreaSize(ref px, ref pz))
                 {
                     initialized = true;
                     playAreaSizeX = px;
                     playAreaSizeZ = pz;
-                    roomscale = Mathf.Max( px, pz ) > 1.01f;
+                    roomscale = Mathf.Max(px, pz) > 1.01f;
 
-                    MelonLoader.MelonLogger.Msg("[HPVR Interaction] ChaperoneInfo initialized. {2} play area {0:0.00}m x {1:0.00}m", px, pz, roomscale ? "Roomscale" : "Standing" );
+                    MelonLoader.MelonLogger.Msg("[HPVR Interaction] ChaperoneInfo initialized. {2} play area {0:0.00}m x {1:0.00}m", px, pz, roomscale ? "Roomscale" : "Standing");
 
                     ChaperoneInfo.Initialized.Send();
 

@@ -7,7 +7,6 @@
 using System;
 using UnityEngine;
 using UnityEngine.Rendering;
-using Valve.VR;
 
 namespace Valve.VR
 {
@@ -37,7 +36,7 @@ namespace Valve.VR
         public Config config;
         public string configPath;
 
-       public bool autoEnableDisableActionSet = true;
+        public bool autoEnableDisableActionSet = true;
 
         public void ReadConfig()
         {

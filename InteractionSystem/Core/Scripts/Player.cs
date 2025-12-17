@@ -4,11 +4,10 @@
 //
 //=============================================================================
 
-using UnityEngine;
-using System.Collections;
-using System.Collections.Generic;
-using System;
 using Il2CppInterop.Runtime.Attributes;
+using System;
+using System.Collections;
+using UnityEngine;
 
 namespace Valve.VR.InteractionSystem
 {

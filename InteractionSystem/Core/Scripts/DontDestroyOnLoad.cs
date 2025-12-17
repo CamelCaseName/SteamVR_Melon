@@ -4,21 +4,20 @@
 //
 //=============================================================================
 
-using UnityEngine;
-using System.Collections;
 using System;
+using UnityEngine;
 
 namespace Valve.VR.InteractionSystem
 {
     //-------------------------------------------------------------------------
     [MelonLoader.RegisterTypeInIl2Cpp()]
     public class DontDestroyOnLoad : MonoBehaviour
-	{
-		public DontDestroyOnLoad(IntPtr value) : base(value) { }
-		//-------------------------------------------------
-		void Awake()
-		{
-			DontDestroyOnLoad( this );
-		}
-	}
+    {
+        public DontDestroyOnLoad(IntPtr value) : base(value) { }
+        //-------------------------------------------------
+        void Awake()
+        {
+            DontDestroyOnLoad(this);
+        }
+    }
 }

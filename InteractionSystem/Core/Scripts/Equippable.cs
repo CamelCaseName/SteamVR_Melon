@@ -5,8 +5,6 @@
 //=============================================================================
 
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace Valve.VR.InteractionSystem
@@ -21,7 +19,7 @@ namespace Valve.VR.InteractionSystem
     [MelonLoader.RegisterTypeInIl2Cpp()]
     public class Equippable : MonoBehaviour
     {
-        public Equippable(IntPtr value): base(value) { }
+        public Equippable(IntPtr value) : base(value) { }
 
         /// <summary>Array of children you do not want to be mirrored. Text, logos, etc.</summary>
         public Transform[] antiFlip;
@@ -31,7 +29,7 @@ namespace Valve.VR.InteractionSystem
         private Vector3 initialScale;
         private Interactable interactable;
 
-        
+
         public SteamVR_Input_Sources attachedHandType
         {
             get

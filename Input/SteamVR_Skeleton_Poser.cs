@@ -1,12 +1,9 @@
 ﻿//======= Copyright (c) Valve Corporation, All rights reserved. ===============
 
-using System;
-using System.Collections;
-using UnityEngine;
-using Valve.VR;
-using System.Collections.Generic;
-using System.Linq;
 using Il2CppInterop.Runtime.InteropTypes.Arrays;
+using System;
+using System.Collections.Generic;
+using UnityEngine;
 
 namespace Valve.VR
 {

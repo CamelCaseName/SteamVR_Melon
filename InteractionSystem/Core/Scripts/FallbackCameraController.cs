@@ -4,9 +4,8 @@
 //
 //=============================================================================
 
-using UnityEngine;
-using System.Collections;
 using System;
+using UnityEngine;
 
 namespace Valve.VR.InteractionSystem
 {
@@ -34,11 +33,11 @@ namespace Valve.VR.InteractionSystem
         void Update()
         {
             float forward = 0.0f;
-            if ( Input.GetKey( KeyCode.W ) || Input.GetKey( KeyCode.UpArrow ) )
+            if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow))
             {
                 forward += 1.0f;
             }
-            if ( Input.GetKey( KeyCode.S ) || Input.GetKey( KeyCode.DownArrow ) )
+            if (Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.DownArrow))
             {
                 forward -= 1.0f;
             }
@@ -54,17 +53,17 @@ namespace Valve.VR.InteractionSystem
             }
 
             float right = 0.0f;
-            if ( Input.GetKey( KeyCode.D ) || Input.GetKey( KeyCode.RightArrow ) )
+            if (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow))
             {
                 right += 1.0f;
             }
-            if ( Input.GetKey( KeyCode.A ) || Input.GetKey( KeyCode.LeftArrow ) )
+            if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow))
             {
                 right -= 1.0f;
             }
 
             float currentSpeed = speed;
-            if ( Input.GetKey( KeyCode.LeftShift ) || Input.GetKey( KeyCode.RightShift ) )
+            if (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift))
             {
                 currentSpeed = shiftSpeed;
             }
@@ -73,22 +72,22 @@ namespace Valve.VR.InteractionSystem
             float deltaRealTime = realTimeNow - realTime;
             realTime = realTimeNow;
 
-            Vector3 delta = new Vector3( right, up, forward ) * currentSpeed * deltaRealTime;
+            Vector3 delta = new Vector3(right, up, forward) * currentSpeed * deltaRealTime;
 
-            transform.position += transform.TransformDirection( delta );
+            transform.position += transform.TransformDirection(delta);
 
             Vector3 mousePosition = Input.mousePosition;
 
-            if ( Input.GetMouseButtonDown( 1 ) /* right mouse */)
+            if (Input.GetMouseButtonDown(1) /* right mouse */)
             {
                 startMousePosition = mousePosition;
                 startEulerAngles = transform.localEulerAngles;
             }
 
-            if ( Input.GetMouseButton( 1 ) /* right mouse */)
+            if (Input.GetMouseButton(1) /* right mouse */)
             {
                 Vector3 offset = mousePosition - startMousePosition;
-                transform.localEulerAngles = startEulerAngles + new Vector3( -offset.y * 360.0f / Screen.height, offset.x * 360.0f / Screen.width, 0.0f );
+                transform.localEulerAngles = startEulerAngles + new Vector3(-offset.y * 360.0f / Screen.height, offset.x * 360.0f / Screen.width, 0.0f);
             }
         }
 
@@ -96,12 +95,12 @@ namespace Valve.VR.InteractionSystem
         //-------------------------------------------------
         void OnGUI()
         {
-            if ( showInstructions )
+            if (showInstructions)
             {
-                GUI.Label( new Rect( 10.0f, 10.0f, 600.0f, 400.0f ),
+                GUI.Label(new Rect(10.0f, 10.0f, 600.0f, 400.0f),
                     "WASD EQ/Arrow Keys to translate the camera\n" +
                     "Right mouse click to rotate the camera\n" +
-                    "Left mouse click for standard interactions.\n" );
+                    "Left mouse click for standard interactions.\n");
             }
         }
     }

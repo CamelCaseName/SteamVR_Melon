@@ -5,9 +5,8 @@
 //
 //=============================================================================
 
-using UnityEngine;
-using System.Collections;
 using System;
+using UnityEngine;
 
 namespace Valve.VR.InteractionSystem
 {
@@ -28,12 +27,12 @@ namespace Valve.VR.InteractionSystem
         //-------------------------------------------------
         void Awake()
         {
-            if ( audioSource == null )
+            if (audioSource == null)
             {
                 audioSource = GetComponent<AudioSource>();
             }
 
-            if ( linearMapping == null )
+            if (linearMapping == null)
             {
                 linearMapping = GetComponent<LinearMapping>();
             }
@@ -43,7 +42,7 @@ namespace Valve.VR.InteractionSystem
         //-------------------------------------------------
         void Update()
         {
-            if ( applyContinuously )
+            if (applyContinuously)
             {
                 Apply();
             }
@@ -53,9 +52,9 @@ namespace Valve.VR.InteractionSystem
         //-------------------------------------------------
         private void Apply()
         {
-            float y = pitchCurve.Evaluate( linearMapping.value );
+            float y = pitchCurve.Evaluate(linearMapping.value);
 
-            audioSource.pitch = Mathf.Lerp( minPitch, maxPitch, y );
+            audioSource.pitch = Mathf.Lerp(minPitch, maxPitch, y);
         }
     }
 }

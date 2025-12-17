@@ -5,7 +5,6 @@
 //=============================================================================
 
 using Assets.SteamVR_Melon.Standalone;
-using Il2CppInterop.Runtime.InteropTypes.Arrays;
 using MelonLoader;
 using SteamVR_Melon.Standalone;
 using SteamVR_Melon.Util;

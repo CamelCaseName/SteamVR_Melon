@@ -6,14 +6,13 @@
 
 using System;
 using UnityEngine;
-using Valve.VR;
 
 namespace Valve.VR
 {
     [MelonLoader.RegisterTypeInIl2Cpp()]
     public class SteamVR_Frustum : MonoBehaviour
     {
-        public SteamVR_Frustum(IntPtr value): base(value) { }
+        public SteamVR_Frustum(IntPtr value) : base(value) { }
 
         public SteamVR_TrackedObject.EIndex index;
 

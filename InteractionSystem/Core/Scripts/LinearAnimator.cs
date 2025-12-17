@@ -4,9 +4,8 @@
 //
 //=============================================================================
 
-using UnityEngine;
-using System.Collections;
 using System;
+using UnityEngine;
 
 namespace Valve.VR.InteractionSystem
 {
@@ -25,14 +24,14 @@ namespace Valve.VR.InteractionSystem
         //-------------------------------------------------
         void Awake()
         {
-            if ( animator == null )
+            if (animator == null)
             {
                 animator = GetComponent<Animator>();
             }
 
             animator.speed = 0.0f;
 
-            if ( linearMapping == null )
+            if (linearMapping == null)
             {
                 linearMapping = GetComponent<LinearMapping>();
             }
@@ -42,17 +41,17 @@ namespace Valve.VR.InteractionSystem
         //-------------------------------------------------
         void Update()
         {
-            if ( currentLinearMapping != linearMapping.value )
+            if (currentLinearMapping != linearMapping.value)
             {
                 currentLinearMapping = linearMapping.value;
                 animator.enabled = true;
-                animator.Play( 0, 0, currentLinearMapping );
+                animator.Play(0, 0, currentLinearMapping);
                 framesUnchanged = 0;
             }
             else
             {
                 framesUnchanged++;
-                if ( framesUnchanged > 2 )
+                if (framesUnchanged > 2)
                 {
                     animator.enabled = false;
                 }

@@ -1,8 +1,7 @@
 ﻿//======= Copyright (c) Valve Corporation, All rights reserved. ===============
 
-using UnityEngine;
-using System.Collections;
 using System;
+using UnityEngine;
 
 namespace Valve.VR.InteractionSystem.Sample
 {
@@ -25,7 +24,7 @@ namespace Valve.VR.InteractionSystem.Sample
             public Vector3 forwardAxis;
 
             public SkinnedMeshRenderer renderer;
-            
+
             public SteamVR_Action_Single squeezyAction;
             public SteamVR_Input_Sources inputSource;
 
@@ -40,7 +39,7 @@ namespace Valve.VR.InteractionSystem.Sample
             public eulerAxis referenceAxis;
 
 
-            
+
             public float flexAngle;
 
             private Vector3[] rotation;

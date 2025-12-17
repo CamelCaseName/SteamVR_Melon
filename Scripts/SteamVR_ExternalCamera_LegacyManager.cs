@@ -4,10 +4,6 @@
 //
 //=============================================================================
 
-using UnityEngine;
-using System.Collections;
-using Il2CppInterop.Runtime.InteropTypes.Arrays;
-
 namespace Valve.VR
 {
     public class SteamVR_ExternalCamera_LegacyManager

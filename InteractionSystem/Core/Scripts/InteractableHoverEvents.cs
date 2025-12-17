@@ -4,10 +4,9 @@
 //
 //=============================================================================
 
+using System;
 using UnityEngine;
 using UnityEngine.Events;
-using System.Collections;
-using System;
 
 namespace Valve.VR.InteractionSystem
 {
@@ -36,14 +35,14 @@ namespace Valve.VR.InteractionSystem
 
 
         //-------------------------------------------------
-        private void OnAttachedToHand( Hand hand )
+        private void OnAttachedToHand(Hand hand)
         {
             onAttachedToHand.Invoke();
         }
 
 
         //-------------------------------------------------
-        private void OnDetachedFromHand( Hand hand )
+        private void OnDetachedFromHand(Hand hand)
         {
             onDetachedFromHand.Invoke();
         }

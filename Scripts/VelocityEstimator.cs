@@ -32,7 +32,7 @@ namespace Valve.VR.InteractionSystem
         //-------------------------------------------------
         public void BeginEstimatingVelocity()
         {
-            if(routine != null)
+            if (routine != null)
             {
                 FinishEstimatingVelocity();
                 return;

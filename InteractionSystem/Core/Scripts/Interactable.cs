@@ -395,7 +395,7 @@ namespace Valve.VR.InteractionSystem
         }
 
         internal void OnHandFocusAcquired_Internal(Hand hand) => OnHandFocusAcquired(hand);
-        
+
         internal void OnHandFocusLost_Internal(Hand hand) => OnHandFocusLost(hand);
     }
 }

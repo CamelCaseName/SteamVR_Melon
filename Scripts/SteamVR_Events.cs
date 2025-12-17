@@ -17,7 +17,6 @@
 //
 //=============================================================================
 
-using Il2CppInterop.Runtime.InteropTypes.Arrays;
 using System;
 using UnityEngine;
 
@@ -289,10 +288,10 @@ namespace Valve.VR
         public static Event<float> LoadingFadeOut = new Event<float>();
         public static Action LoadingFadeOutAction(System.Action<float> action) { return new Action<float>(LoadingFadeOut, action); }
 
-        public static Event<TrackedDevicePose_t[]> NewPoses = new Event<TrackedDevicePose_t[]> ();
+        public static Event<TrackedDevicePose_t[]> NewPoses = new Event<TrackedDevicePose_t[]>();
         public static Action NewPosesAction(System.Action<TrackedDevicePose_t[]> action)
         {
-            return new Action<TrackedDevicePose_t[]> (NewPoses, action);
+            return new Action<TrackedDevicePose_t[]>(NewPoses, action);
         }
 
         public static Event NewPosesApplied = new Event();

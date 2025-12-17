@@ -4,11 +4,10 @@
 //
 //=============================================================================
 
-using UnityEngine;
 using System.Collections;
-using System.Runtime.InteropServices;
-using Valve.VR;
 using System.IO;
+using UnityEngine;
+using Valve.VR;
 
 public static class SteamVR_Utils
 {

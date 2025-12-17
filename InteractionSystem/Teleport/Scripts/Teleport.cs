@@ -4,10 +4,9 @@
 //
 //=============================================================================
 
-using UnityEngine;
-using UnityEngine.Events;
-using System.Collections;
 using System;
+using System.Collections;
+using UnityEngine;
 
 namespace Valve.VR.InteractionSystem
 {

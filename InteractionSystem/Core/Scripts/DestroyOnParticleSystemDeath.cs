@@ -4,9 +4,8 @@
 //
 //=============================================================================
 
-using UnityEngine;
-using System.Collections;
 using System;
+using UnityEngine;
 
 namespace Valve.VR.InteractionSystem
 {
@@ -22,16 +21,16 @@ namespace Valve.VR.InteractionSystem
         {
             particles = GetComponent<ParticleSystem>();
 
-            InvokeRepeating( "CheckParticleSystem", 0.1f, 0.1f );
+            InvokeRepeating("CheckParticleSystem", 0.1f, 0.1f);
         }
 
 
         //-------------------------------------------------
         private void CheckParticleSystem()
         {
-            if ( !particles.IsAlive() )
+            if (!particles.IsAlive())
             {
-                Destroy( this.gameObject );
+                Destroy(this.gameObject);
             }
         }
     }

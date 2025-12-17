@@ -4,9 +4,8 @@
 //
 //=============================================================================
 
-using UnityEngine;
-using System.Collections;
 using System;
+using UnityEngine;
 
 namespace Valve.VR.InteractionSystem
 {
@@ -22,7 +21,7 @@ namespace Valve.VR.InteractionSystem
         //-------------------------------------------------
         void Start()
         {
-            if ( !string.IsNullOrEmpty( tagFilter ) )
+            if (!string.IsNullOrEmpty(tagFilter))
             {
                 useTag = true;
             }
@@ -30,11 +29,11 @@ namespace Valve.VR.InteractionSystem
 
 
         //-------------------------------------------------
-        void OnTriggerEnter( Collider collider )
+        void OnTriggerEnter(Collider collider)
         {
-            if ( !useTag || ( useTag && collider.gameObject.tag == tagFilter ) )
+            if (!useTag || (useTag && collider.gameObject.tag == tagFilter))
             {
-                Destroy( collider.gameObject.transform.root.gameObject );
+                Destroy(collider.gameObject.transform.root.gameObject);
             }
         }
     }

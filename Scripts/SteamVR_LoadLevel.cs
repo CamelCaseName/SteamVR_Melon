@@ -4,12 +4,11 @@
 //
 //=============================================================================
 
-using UnityEngine;
-using System.Collections;
-using Valve.VR;
-using System.IO;
 using MelonLoader;
 using System;
+using System.Collections;
+using System.IO;
+using UnityEngine;
 
 namespace Valve.VR
 {
@@ -376,7 +375,7 @@ namespace Valve.VR
 #if UNITY_EDITOR
                     UnityEditor.EditorApplication.isPlaying = false;
 #elif !UNITY_METRO
-                System.Diagnostics.Process.GetCurrentProcess().Kill();
+                    System.Diagnostics.Process.GetCurrentProcess().Kill();
 #endif
                 }
             }

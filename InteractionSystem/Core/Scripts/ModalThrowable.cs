@@ -11,7 +11,7 @@ namespace Valve.VR.InteractionSystem
 {
     public class ModalThrowable : Throwable
     {
-        public ModalThrowable(IntPtr L) : base(L) { }   
+        public ModalThrowable(IntPtr L) : base(L) { }
         /// <summary>The local point which acts as a positional and rotational offset to use while held with a grip type grab</summary>
         public Transform gripOffset;
 

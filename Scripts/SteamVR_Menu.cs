@@ -199,7 +199,7 @@ namespace Valve.VR
             }
 
 #if !UNITY_EDITOR
-        if (GUILayout.Button("Exit"))
+            if (GUILayout.Button("Exit"))
             {
                 Application.Quit();
             }

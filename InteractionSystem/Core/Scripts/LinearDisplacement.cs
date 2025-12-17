@@ -4,9 +4,8 @@
 //
 //=============================================================================
 
-using UnityEngine;
-using System.Collections;
 using System;
+using UnityEngine;
 
 namespace Valve.VR.InteractionSystem
 {
@@ -25,7 +24,7 @@ namespace Valve.VR.InteractionSystem
         {
             initialPosition = transform.localPosition;
 
-            if ( linearMapping == null )
+            if (linearMapping == null)
             {
                 linearMapping = GetComponent<LinearMapping>();
             }
@@ -35,7 +34,7 @@ namespace Valve.VR.InteractionSystem
         //-------------------------------------------------
         void Update()
         {
-            if ( linearMapping )
+            if (linearMapping)
             {
                 transform.localPosition = initialPosition + linearMapping.value * displacement;
             }

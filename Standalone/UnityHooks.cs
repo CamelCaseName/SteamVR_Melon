@@ -1,11 +1,6 @@
 ﻿using Il2CppInterop.Runtime;
-using Il2CppInterop.Runtime.InteropTypes.Arrays;
-using Il2CppSystem.Globalization;
 using MelonLoader;
 using System;
-using System.Diagnostics;
-using System.Linq;
-using UnityEngine;
 using UnityEngine.LowLevel;
 using UnityEngine.PlayerLoop;
 

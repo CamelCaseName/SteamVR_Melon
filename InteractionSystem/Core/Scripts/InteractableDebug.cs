@@ -4,12 +4,10 @@
 //
 //=============================================================================
 
-using UnityEngine;
-using UnityEngine.Events;
-using System.Collections;
-using System.Collections.Generic;
-using System;
 using Il2CppInterop.Runtime.InteropTypes.Arrays;
+using System;
+using System.Collections.Generic;
+using UnityEngine;
 
 namespace Valve.VR.InteractionSystem
 {
@@ -46,7 +44,7 @@ namespace Valve.VR.InteractionSystem
             colliders = this.GetComponentsInChildren<Collider>();
         }
 
-        private void OnAttachedToHand( Hand hand )
+        private void OnAttachedToHand(Hand hand)
         {
             attachedToHand = hand;
 
@@ -86,7 +84,7 @@ namespace Valve.VR.InteractionSystem
         }
 
 
-        private void OnDetachedFromHand( Hand hand )
+        private void OnDetachedFromHand(Hand hand)
         {
             if (isThrowable)
             {

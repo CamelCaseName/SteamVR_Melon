@@ -4,12 +4,9 @@
 //
 //=============================================================================
 
-using UnityEngine;
-using System.Collections;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using UnityEngine.Events;
 using System;
+using UnityEngine;
+using UnityEngine.Events;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -43,7 +40,7 @@ namespace Valve.VR.InteractionSystem
         public bool requireReleaseActionToReturn = false;
         public bool showTriggerHint = false;
 
-        
+
         public Hand.AttachmentFlags attachmentFlags = Hand.defaultAttachmentFlags;
 
         public bool takeBackItem = false; // if a hand enters this trigger and has the item this spawner dispenses at the top of the stack, remove it from the stack
@@ -62,34 +59,34 @@ namespace Valve.VR.InteractionSystem
         //-------------------------------------------------
         private void CreatePreviewObject()
         {
-            if ( !useItemPackagePreview )
+            if (!useItemPackagePreview)
             {
                 return;
             }
 
             ClearPreview();
 
-            if ( useItemPackagePreview )
+            if (useItemPackagePreview)
             {
-                if ( itemPackage == null )
+                if (itemPackage == null)
                 {
                     return;
                 }
 
-                if ( useFadedPreview == false ) // if we don't have a spawned item out there, use the regular preview
+                if (useFadedPreview == false) // if we don't have a spawned item out there, use the regular preview
                 {
-                    if ( itemPackage.previewPrefab != null )
+                    if (itemPackage.previewPrefab != null)
                     {
-                        previewObject = Instantiate( itemPackage.previewPrefab, transform.position, Quaternion.identity ) as GameObject;
+                        previewObject = Instantiate(itemPackage.previewPrefab, transform.position, Quaternion.identity) as GameObject;
                         previewObject.transform.parent = transform;
                         previewObject.transform.localRotation = Quaternion.identity;
                     }
                 }
                 else // there's a spawned item out there. Use the faded preview
                 {
-                    if ( itemPackage.fadedPreviewPrefab != null )
+                    if (itemPackage.fadedPreviewPrefab != null)
                     {
-                        previewObject = Instantiate( itemPackage.fadedPreviewPrefab, transform.position, Quaternion.identity ) as GameObject;
+                        previewObject = Instantiate(itemPackage.fadedPreviewPrefab, transform.position, Quaternion.identity) as GameObject;
                         previewObject.transform.parent = transform;
                         previewObject.transform.localRotation = Quaternion.identity;
                     }
@@ -108,12 +105,12 @@ namespace Valve.VR.InteractionSystem
         //-------------------------------------------------
         private void VerifyItemPackage()
         {
-            if ( itemPackage == null )
+            if (itemPackage == null)
             {
                 ItemPackageNotValid();
             }
 
-            if ( itemPackage.itemPrefab == null )
+            if (itemPackage.itemPrefab == null)
             {
                 ItemPackageNotValid();
             }
@@ -124,22 +121,22 @@ namespace Valve.VR.InteractionSystem
         private void ItemPackageNotValid()
         {
             MelonLoader.MelonLogger.Error("[HPVR Interaction] ItemPackage assigned to " + gameObject.name + " is not valid. Destroying this game object.", this);
-            Destroy( gameObject );
+            Destroy(gameObject);
         }
 
 
         //-------------------------------------------------
         private void ClearPreview()
         {
-            foreach ( Transform child in transform )
+            foreach (Transform child in transform)
             {
-                if ( Time.time > 0 )
+                if (Time.time > 0)
                 {
-                    GameObject.Destroy( child.gameObject );
+                    GameObject.Destroy(child.gameObject);
                 }
                 else
                 {
-                    GameObject.DestroyImmediate( child.gameObject );
+                    GameObject.DestroyImmediate(child.gameObject);
                 }
             }
         }
@@ -148,7 +145,7 @@ namespace Valve.VR.InteractionSystem
         //-------------------------------------------------
         void Update()
         {
-            if ( ( itemIsSpawned == true ) && ( spawnedItem == null ) )
+            if ((itemIsSpawned == true) && (spawnedItem == null))
             {
                 itemIsSpawned = false;
                 useFadedPreview = false;
@@ -159,24 +156,24 @@ namespace Valve.VR.InteractionSystem
 
 
         //-------------------------------------------------
-        private void OnHandHoverBegin( Hand hand )
+        private void OnHandHoverBegin(Hand hand)
         {
-            ItemPackage currentAttachedItemPackage = GetAttachedItemPackage( hand );
+            ItemPackage currentAttachedItemPackage = GetAttachedItemPackage(hand);
 
-            if ( currentAttachedItemPackage == itemPackage ) // the item at the top of the hand's stack has an associated ItemPackage
+            if (currentAttachedItemPackage == itemPackage) // the item at the top of the hand's stack has an associated ItemPackage
             {
-                if ( takeBackItem && !requireReleaseActionToReturn ) // if we want to take back matching items and aren't waiting for a trigger press
+                if (takeBackItem && !requireReleaseActionToReturn) // if we want to take back matching items and aren't waiting for a trigger press
                 {
-                    TakeBackItem( hand );
+                    TakeBackItem(hand);
                 }
             }
 
             if (!requireGrabActionToTake) // we don't require trigger press for pickup. Spawn and attach object.
             {
-                SpawnAndAttachObject( hand, GrabTypes.Scripted );
+                SpawnAndAttachObject(hand, GrabTypes.Scripted);
             }
 
-            if (requireGrabActionToTake && showTriggerHint )
+            if (requireGrabActionToTake && showTriggerHint)
             {
                 hand.ShowGrabHint("PickUp");
             }
@@ -184,29 +181,29 @@ namespace Valve.VR.InteractionSystem
 
 
         //-------------------------------------------------
-        private void TakeBackItem( Hand hand )
+        private void TakeBackItem(Hand hand)
         {
-            RemoveMatchingItemsFromHandStack( itemPackage, hand );
+            RemoveMatchingItemsFromHandStack(itemPackage, hand);
 
-            if ( itemPackage.packageType == ItemPackage.ItemPackageType.TwoHanded )
+            if (itemPackage.packageType == ItemPackage.ItemPackageType.TwoHanded)
             {
-                RemoveMatchingItemsFromHandStack( itemPackage, hand.otherHand );
+                RemoveMatchingItemsFromHandStack(itemPackage, hand.otherHand);
             }
         }
 
 
         //-------------------------------------------------
-        private ItemPackage GetAttachedItemPackage( Hand hand )
+        private ItemPackage GetAttachedItemPackage(Hand hand)
         {
             GameObject currentAttachedObject = hand.currentAttachedObject;
 
-            if ( currentAttachedObject == null ) // verify the hand is holding something
+            if (currentAttachedObject == null) // verify the hand is holding something
             {
                 return null;
             }
 
             ItemPackageReference packageReference = hand.currentAttachedObject.GetComponent<ItemPackageReference>();
-            if ( packageReference == null ) // verify the item in the hand is matchable
+            if (packageReference == null) // verify the item in the hand is matchable
             {
                 return null;
             }
@@ -218,37 +215,37 @@ namespace Valve.VR.InteractionSystem
 
 
         //-------------------------------------------------
-        private void HandHoverUpdate( Hand hand )
+        private void HandHoverUpdate(Hand hand)
         {
-            if ( takeBackItem && requireReleaseActionToReturn )
+            if (takeBackItem && requireReleaseActionToReturn)
             {
                 if (hand.isActive)
                 {
-                    ItemPackage currentAttachedItemPackage = GetAttachedItemPackage( hand );
+                    ItemPackage currentAttachedItemPackage = GetAttachedItemPackage(hand);
                     if (currentAttachedItemPackage == itemPackage && hand.IsGrabEnding(currentAttachedItemPackage.gameObject))
                     {
-                        TakeBackItem( hand );
+                        TakeBackItem(hand);
                         return; // So that we don't pick up an ItemPackage the same frame that we return it
                     }
                 }
             }
 
-            if ( requireGrabActionToTake )
+            if (requireGrabActionToTake)
             {
                 GrabTypes startingGrab = hand.GetGrabStarting();
 
                 if (startingGrab != GrabTypes.None)
                 {
-                    SpawnAndAttachObject( hand, GrabTypes.Scripted);
+                    SpawnAndAttachObject(hand, GrabTypes.Scripted);
                 }
             }
         }
 
 
         //-------------------------------------------------
-        private void OnHandHoverEnd( Hand hand )
+        private void OnHandHoverEnd(Hand hand)
         {
-            if ( !justPickedUpItem && requireGrabActionToTake && showTriggerHint )
+            if (!justPickedUpItem && requireGrabActionToTake && showTriggerHint)
             {
                 hand.HideGrabHint();
             }
@@ -258,23 +255,23 @@ namespace Valve.VR.InteractionSystem
 
 
         //-------------------------------------------------
-        private void RemoveMatchingItemsFromHandStack( ItemPackage package, Hand hand )
+        private void RemoveMatchingItemsFromHandStack(ItemPackage package, Hand hand)
         {
             if (hand == null)
             {
                 return;
             }
 
-            for ( int i = 0; i < hand.AttachedObjects.Count; i++ )
+            for (int i = 0; i < hand.AttachedObjects.Count; i++)
             {
                 ItemPackageReference packageReference = hand.AttachedObjects[i].attachedObject.GetComponent<ItemPackageReference>();
-                if ( packageReference != null )
+                if (packageReference != null)
                 {
                     ItemPackage attachedObjectItemPackage = packageReference.itemPackage;
-                    if ( ( attachedObjectItemPackage != null ) && ( attachedObjectItemPackage == package ) )
+                    if ((attachedObjectItemPackage != null) && (attachedObjectItemPackage == package))
                     {
                         GameObject detachedItem = hand.AttachedObjects[i].attachedObject;
-                        hand.DetachObject( detachedItem );
+                        hand.DetachObject(detachedItem);
                     }
                 }
             }
@@ -282,17 +279,17 @@ namespace Valve.VR.InteractionSystem
 
 
         //-------------------------------------------------
-        private void RemoveMatchingItemTypesFromHand( ItemPackage.ItemPackageType packageType, Hand hand )
+        private void RemoveMatchingItemTypesFromHand(ItemPackage.ItemPackageType packageType, Hand hand)
         {
-            for ( int i = 0; i < hand.AttachedObjects.Count; i++ )
+            for (int i = 0; i < hand.AttachedObjects.Count; i++)
             {
                 ItemPackageReference packageReference = hand.AttachedObjects[i].attachedObject.GetComponent<ItemPackageReference>();
-                if ( packageReference != null )
+                if (packageReference != null)
                 {
-                    if ( packageReference.itemPackage.packageType == packageType )
+                    if (packageReference.itemPackage.packageType == packageType)
                     {
                         GameObject detachedItem = hand.AttachedObjects[i].attachedObject;
-                        hand.DetachObject( detachedItem );
+                        hand.DetachObject(detachedItem);
                     }
                 }
             }
@@ -300,65 +297,65 @@ namespace Valve.VR.InteractionSystem
 
 
         //-------------------------------------------------
-        private void SpawnAndAttachObject( Hand hand, GrabTypes grabType )
+        private void SpawnAndAttachObject(Hand hand, GrabTypes grabType)
         {
-            if ( hand.otherHand != null )
+            if (hand.otherHand != null)
             {
                 //If the other hand has this item package, take it back from the other hand
-                ItemPackage otherHandItemPackage = GetAttachedItemPackage( hand.otherHand );
-                if ( otherHandItemPackage == itemPackage )
+                ItemPackage otherHandItemPackage = GetAttachedItemPackage(hand.otherHand);
+                if (otherHandItemPackage == itemPackage)
                 {
-                    TakeBackItem( hand.otherHand );
+                    TakeBackItem(hand.otherHand);
                 }
             }
 
-            if ( showTriggerHint )
+            if (showTriggerHint)
             {
                 hand.HideGrabHint();
             }
 
-            if ( itemPackage.otherHandItemPrefab != null )
+            if (itemPackage.otherHandItemPrefab != null)
             {
-                if ( hand.otherHand.hoverLocked )
+                if (hand.otherHand.hoverLocked)
                 {
-                    MelonLoader.MelonLogger.Msg( "[HPVR Interaction] Not attaching objects because other hand is hoverlocked and we can't deliver both items." );
+                    MelonLoader.MelonLogger.Msg("[HPVR Interaction] Not attaching objects because other hand is hoverlocked and we can't deliver both items.");
                     return;
                 }
             }
 
             // if we're trying to spawn a one-handed item, remove one and two-handed items from this hand and two-handed items from both hands
-            if ( itemPackage.packageType == ItemPackage.ItemPackageType.OneHanded )
+            if (itemPackage.packageType == ItemPackage.ItemPackageType.OneHanded)
             {
-                RemoveMatchingItemTypesFromHand( ItemPackage.ItemPackageType.OneHanded, hand );
-                RemoveMatchingItemTypesFromHand( ItemPackage.ItemPackageType.TwoHanded, hand );
-                RemoveMatchingItemTypesFromHand( ItemPackage.ItemPackageType.TwoHanded, hand.otherHand );
+                RemoveMatchingItemTypesFromHand(ItemPackage.ItemPackageType.OneHanded, hand);
+                RemoveMatchingItemTypesFromHand(ItemPackage.ItemPackageType.TwoHanded, hand);
+                RemoveMatchingItemTypesFromHand(ItemPackage.ItemPackageType.TwoHanded, hand.otherHand);
             }
 
             // if we're trying to spawn a two-handed item, remove one and two-handed items from both hands
-            if ( itemPackage.packageType == ItemPackage.ItemPackageType.TwoHanded )
+            if (itemPackage.packageType == ItemPackage.ItemPackageType.TwoHanded)
             {
-                RemoveMatchingItemTypesFromHand( ItemPackage.ItemPackageType.OneHanded, hand );
-                RemoveMatchingItemTypesFromHand( ItemPackage.ItemPackageType.OneHanded, hand.otherHand );
-                RemoveMatchingItemTypesFromHand( ItemPackage.ItemPackageType.TwoHanded, hand );
-                RemoveMatchingItemTypesFromHand( ItemPackage.ItemPackageType.TwoHanded, hand.otherHand );
+                RemoveMatchingItemTypesFromHand(ItemPackage.ItemPackageType.OneHanded, hand);
+                RemoveMatchingItemTypesFromHand(ItemPackage.ItemPackageType.OneHanded, hand.otherHand);
+                RemoveMatchingItemTypesFromHand(ItemPackage.ItemPackageType.TwoHanded, hand);
+                RemoveMatchingItemTypesFromHand(ItemPackage.ItemPackageType.TwoHanded, hand.otherHand);
             }
 
-            spawnedItem = GameObject.Instantiate( itemPackage.itemPrefab );
-            spawnedItem.SetActive( true );
-            hand.AttachObject( spawnedItem, grabType, attachmentFlags );
+            spawnedItem = GameObject.Instantiate(itemPackage.itemPrefab);
+            spawnedItem.SetActive(true);
+            hand.AttachObject(spawnedItem, grabType, attachmentFlags);
 
-            if ( ( itemPackage.otherHandItemPrefab != null ) && ( hand.otherHand.isActive ) )
+            if ((itemPackage.otherHandItemPrefab != null) && (hand.otherHand.isActive))
             {
-                GameObject otherHandObjectToAttach = GameObject.Instantiate( itemPackage.otherHandItemPrefab );
-                otherHandObjectToAttach.SetActive( true );
-                hand.otherHand.AttachObject( otherHandObjectToAttach, grabType, attachmentFlags );
+                GameObject otherHandObjectToAttach = GameObject.Instantiate(itemPackage.otherHandItemPrefab);
+                otherHandObjectToAttach.SetActive(true);
+                hand.otherHand.AttachObject(otherHandObjectToAttach, grabType, attachmentFlags);
             }
 
             itemIsSpawned = true;
 
             justPickedUpItem = true;
 
-            if ( takeBackItem )
+            if (takeBackItem)
             {
                 useFadedPreview = true;
                 pickupEvent.Invoke();

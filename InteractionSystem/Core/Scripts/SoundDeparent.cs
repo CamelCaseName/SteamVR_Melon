@@ -5,9 +5,8 @@
 //
 //=============================================================================
 
-using UnityEngine;
-using System.Collections;
 using System;
+using UnityEngine;
 
 namespace Valve.VR.InteractionSystem
 {
@@ -34,9 +33,9 @@ namespace Valve.VR.InteractionSystem
             // move the sound object out from under the parent
             gameObject.transform.parent = null;
 
-            if ( destroyAfterPlayOnce )
+            if (destroyAfterPlayOnce)
             {
-                Destroy( gameObject, thisAudioSource.clip.length );
+                Destroy(gameObject, thisAudioSource.clip.length);
             }
         }
     }

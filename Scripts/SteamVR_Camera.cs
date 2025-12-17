@@ -25,7 +25,7 @@ namespace Valve.VR
 
         public Camera camera { get; private set; }
 
-        public new Transform transform { get { return base.transform;  }  }
+        public new Transform transform { get { return base.transform; } }
 
         private Transform _ears;
         public Transform ears { get { return _ears; } }

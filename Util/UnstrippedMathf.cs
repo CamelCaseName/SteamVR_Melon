@@ -2,7 +2,7 @@
 
 namespace HPVR.Util
 {
-    public  static partial class Mathf
+    public static partial class Mathf
     {
         // Returns the sine of angle /f/ in radians.
         public static float Sin(float f) { return (float)Math.Sin(f); }
@@ -311,9 +311,9 @@ namespace HPVR.Util
             return Abs(b - a) < Max(0.000001f * Max(Abs(a), Abs(b)), Epsilon * 8);
         }
 
-       
 
-       
+
+
 
         // Loops the value t, so that it is never larger than length and never smaller than 0.
         public static float Repeat(float t, float length)

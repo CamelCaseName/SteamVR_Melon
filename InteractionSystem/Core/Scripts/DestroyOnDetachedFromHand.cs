@@ -4,9 +4,8 @@
 //
 //=============================================================================
 
-using UnityEngine;
-using System.Collections;
 using System;
+using UnityEngine;
 
 namespace Valve.VR.InteractionSystem
 {
@@ -16,9 +15,9 @@ namespace Valve.VR.InteractionSystem
     {
         public DestroyOnDetachedFromHand(IntPtr value) : base(value) { }
         //-------------------------------------------------
-        private void OnDetachedFromHand( Hand hand )
+        private void OnDetachedFromHand(Hand hand)
         {
-            Destroy( gameObject );
+            Destroy(gameObject);
         }
     }
 }

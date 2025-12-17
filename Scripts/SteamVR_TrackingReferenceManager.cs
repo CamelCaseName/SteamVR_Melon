@@ -1,6 +1,4 @@
-﻿using Il2CppInterop.Runtime.InteropTypes.Arrays;
-using System;
-using System.Collections;
+﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
 

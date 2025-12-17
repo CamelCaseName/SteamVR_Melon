@@ -4,9 +4,8 @@
 //
 //=============================================================================
 
-using UnityEngine;
-using System.Collections;
 using System;
+using UnityEngine;
 
 namespace Valve.VR.InteractionSystem
 {
@@ -26,12 +25,12 @@ namespace Valve.VR.InteractionSystem
         //-------------------------------------------------
         void Awake()
         {
-            if ( animation == null )
+            if (animation == null)
             {
                 animation = GetComponent<Animation>();
             }
 
-            if ( linearMapping == null )
+            if (linearMapping == null)
             {
                 linearMapping = GetComponent<LinearMapping>();
             }
@@ -56,7 +55,7 @@ namespace Valve.VR.InteractionSystem
             float value = linearMapping.value;
 
             //No need to set the anim if our value hasn't changed.
-            if ( value != lastValue )
+            if (value != lastValue)
             {
                 animState.time = value * animLength;
             }
