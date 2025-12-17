@@ -2,14 +2,15 @@
 using System;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
+using UnityEngine;
 
 namespace SteamVR_Melon.Standalone
 {
     public class OpenVRMagic
     {
 
-        public static string openvr_api = "openvr_api";
-        public static string XRSDKOpenVR = "XRSDKOpenVR";
+        public const string openvr_api = "openvr_api";
+        public const string XRSDKOpenVR = "XRSDKOpenVR";
 
         public const int k_nRenderEventID_WaitGetPoses = 201510020;
 
@@ -29,20 +30,42 @@ namespace SteamVR_Melon.Standalone
 
     public static class PluginImporter
     {
-        // 2019.4.1f1  : 0x786D00
-        // 2019.4.21f1 : 0x792350
-        // 2022.3.16f1 : 0x5b71b0 cdecl FindAndLoadPlugin
-        // 2022.3.16f1 : 0x76e350 fastcall FindAndLoadPluginIl2CppWrapper
+        // need to use cdecl, fastcall is not supported by c#
+        // 2019.4.1f1  : 0x786D00 FindAndLoadUnityPlugin
+        // 2019.4.21f1 : 0x792350 FindAndLoadUnityPlugin
+        // 2022.3.16f1 : 0x5b71b0 cdecl FindAndLoadUnityPlugin
+        // 2022.3.16f1 : 0x76e350 fastcall FindAndLoadUnityPluginIl2CppWrapper
+        // 2022.3.62f2 : 0x5c4210 cdecl FindAndLoadUnityPlugin
+        // 2022.3.62f2 : 0x77a4a0 unknown FindAndLoadUnityPluginIl2CppWrapper
 
-        /// <summary>
-        /// Use this if you're using a different engine version. Decompile UnityPlayer.dll with IDA PRO and get the pdb files for it 
-        /// </summary>
-        public static void SetFindAndLoadPluginFunctionOffset(int offset)
+        private static int FindAndLoadUnityPluginOffset = 0x5c4210;
+
+        public static void UpdateOffsetForUnityVersion()
         {
-            FindAndLoadUnityPluginOffset = offset;
+            string version = Application.unityVersion;
+            MelonLogger.Msg(version);
+            switch (version)
+            {
+                case "2019.4.1f1":
+                    FindAndLoadUnityPluginOffset = 0x786D00;
+                    break;
+                case "2019.4.21f1":
+                    FindAndLoadUnityPluginOffset = 0x792350;
+                    break;
+                //house party < 1.4.2
+                case "2022.3.16f1":
+                    FindAndLoadUnityPluginOffset = 0x5b71b0;
+                    break;
+                //house party 1.4.2
+                case "2022.3.62f2":
+                    FindAndLoadUnityPluginOffset = 0x5c4210;
+                    break;
+                //office party
+                case "6000.2.9f1":
+                    FindAndLoadUnityPluginOffset = 0x5b71b0;
+                    break;
+            }
         }
-
-        public static int FindAndLoadUnityPluginOffset = 0x5b71b0;
 
         public static void GetPluginLoadFunction()
         {
@@ -96,13 +119,5 @@ namespace SteamVR_Melon.Standalone
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         public delegate IntPtr FindAndLoadUnityPlugin(IntPtr name, out IntPtr loadedModule, byte param3);
         private static FindAndLoadUnityPlugin method;
-
-        //[UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-        //private delegate IntPtr CallbackPointer();
-
-        //private static CallbackPointer ourGetRenderEventFunc;
-
-        //public static IntPtr GetRenderEventFunc() => ourGetRenderEventFunc();
-
     }
 }
