@@ -1449,13 +1449,13 @@ namespace Valve.VR.InteractionSystem
         [HideFromIl2Cpp]
         public void HoverLock(Interactable interactable)
         {
-            if (spewDebugText)
-            {
-                HandDebugLog("HoverLock " + interactable.name);
-            }
-
             hoverLocked = true;
             hoveringInteractable = interactable;
+
+            //if (spewDebugText && interactable is not null)
+            //{
+            //    HandDebugLog($"HoverLock {interactable?.name ?? "null"}");
+            //}
         }
 
         //-------------------------------------------------
@@ -1466,16 +1466,16 @@ namespace Valve.VR.InteractionSystem
         [HideFromIl2Cpp]
         public void HoverUnlock(Interactable interactable)
         {
-            if (spewDebugText)
-            {
-                HandDebugLog("HoverUnlock " + interactable.name);
-            }
-
             if (hoveringInteractable == interactable)
             {
                 hoverLocked = false;
                 hoveringInteractable = null;
             }
+
+            //if (spewDebugText && interactable is not null)
+            //{
+            //    HandDebugLog($"HoverUnLock {interactable?.name ?? "null"}");
+            //}
         }
 
         public void TriggerHapticPulse(ushort microSecondsDuration)

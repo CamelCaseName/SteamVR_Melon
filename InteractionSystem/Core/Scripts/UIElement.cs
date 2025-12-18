@@ -32,59 +32,66 @@ namespace Valve.VR.InteractionSystem
         //-------------------------------------------------
         protected virtual void Awake()
         {
-            canvas ??= GetComponent<Canvas>();
-            canvas ??= GetComponentInParent<Canvas>();
-            canvas ??= GetComponentInChildren<Canvas>();
-
-            var BoxGO = new GameObject(name + "Collider");
-            BoxGO.transform.parent = transform;
-            BoxGO.transform.localPosition = new(0, 0, -0.05f);
-            BoxGO.layer = LayerMask.NameToLayer("UI");
-
-            if (debugPlacements)
+            try
             {
-                Material m = new(GameObject.Find("Floor").GetComponent<MeshRenderer>().material);
-                var mesh = BoxGO.AddComponent<MeshRenderer>();
-                mesh.material = m;
-                mesh.material.color = Color.red;
-                mesh.material.color.ColorWithAlpha(0.2f);
+                canvas ??= GetComponent<Canvas>();
+                canvas ??= GetComponentInParent<Canvas>();
+                canvas ??= GetComponentInChildren<Canvas>();
+
+                var BoxGO = new GameObject(name + "Collider");
+                BoxGO.transform.parent = transform;
+                BoxGO.transform.localPosition = new(0, 0, -0.05f);
+                BoxGO.layer = LayerMask.NameToLayer("UI");
+
+                if (debugPlacements)
+                {
+                    Material m = new(GameObject.Find("Floor").GetComponent<MeshRenderer>().material);
+                    var mesh = BoxGO.AddComponent<MeshRenderer>();
+                    mesh.material = m;
+                    mesh.material.color = Color.red;
+                    mesh.material.color.ColorWithAlpha(0.2f);
+                }
+
+                //todo scrollviews still off
+
+                //if we are in a scrollbox or scrollview or whatever only enable if the item is visible, else hide completely or rescale to bounds
+                var collider = BoxGO.AddComponent<BoxCollider>();
+                rect = GetComponent<RectTransform>();
+                rect ??= GetComponentInChildren<RectTransform>();
+                rect ??= GetComponentInParent<RectTransform>();
+                BoxGO.transform.localScale = new(rect.sizeDelta.x, rect.sizeDelta.y, 0.1f);
+                BoxGO.transform.localPosition = new(0, 0, -0.05f);
+                colliderRoot = BoxGO.transform;
+
+                interactable = GetComponent<Interactable>();
+                interactable.OnHandHoverBegin += OnHandHoverBegin;
+                interactable.OnHandHoverEnd += OnHandHoverEnd;
+                interactable.HandHoverUpdate += HandHoverUpdate;
+
+                Button button = GetComponent<Button>();
+                button?.onClick.AddListener(new Action(OnButtonClick));
+                Toggle toggle = GetComponent<Toggle>();
+                toggle?.onValueChanged.AddListener(new Action<bool>(OnToggleChange));
+                Slider slider = GetComponent<Slider>();
+                slider?.onValueChanged.AddListener(new Action<float>(OnSliderChange));
+
+                scrollRect = GetComponentInParent<ScrollRect>();
+                //todo if we are in a scrollview only show what is visible -> investigate more with explorer
+                //we can surely get the world coords of the scrollview rect and then the coords of our ui element and decide based on that
+                scrollRect?.onValueChanged.AddListener((Action<Vector2>)((Vector2 change) =>
+                {
+                    UpdateColliderForScrollRect(collider);
+                }));
+
+                if (scrollRect is not null)
+                {
+                    MelonLogger.Msg(gameObject.name + " found scrollrect" + scrollRect.name);
+                    UpdateColliderForScrollRect(collider);
+                }
             }
-
-            //todo scrollviews still off
-
-            //if we are in a scrollbox or scrollview or whatever only enable if the item is visible, else hide completely or rescale to bounds
-            var collider = BoxGO.AddComponent<BoxCollider>();
-            rect = GetComponent<RectTransform>();
-            rect ??= GetComponentInChildren<RectTransform>();
-            rect ??= GetComponentInParent<RectTransform>();
-            BoxGO.transform.localScale = new(rect.sizeDelta.x, rect.sizeDelta.y, 0.1f);
-            BoxGO.transform.localPosition = new(0, 0, -0.05f);
-            colliderRoot = BoxGO.transform;
-
-            interactable = GetComponent<Interactable>();
-            interactable.OnHandHoverBegin += OnHandHoverBegin;
-            interactable.OnHandHoverEnd += OnHandHoverEnd;
-            interactable.HandHoverUpdate += HandHoverUpdate;
-
-            Button button = GetComponent<Button>();
-            button?.onClick.AddListener(new Action(OnButtonClick));
-            Toggle toggle = GetComponent<Toggle>();
-            toggle?.onValueChanged.AddListener(new Action<bool>(OnToggleChange));
-            Slider slider = GetComponent<Slider>();
-            slider?.onValueChanged.AddListener(new Action<float>(OnSliderChange));
-
-            scrollRect = GetComponentInParent<ScrollRect>();
-            //todo if we are in a scrollview only show what is visible -> investigate more with explorer
-            //we can surely get the world coords of the scrollview rect and then the coords of our ui element and decide based on that
-            scrollRect?.onValueChanged.AddListener((Action<Vector2>)((Vector2 change) =>
+            catch (Exception e)
             {
-                UpdateColliderForScrollRect(collider);
-            }));
-
-            if (scrollRect is not null)
-            {
-                MelonLogger.Msg(gameObject.name + " found scrollrect" + scrollRect.name);
-                UpdateColliderForScrollRect(collider);
+                MelonLogger.Error(e);
             }
         }
 
@@ -155,6 +162,8 @@ namespace Valve.VR.InteractionSystem
         {
             if (hand.uiInteractAction != null && hand.uiInteractAction.GetStateUp(hand.handType))
             {
+                //we get here correctly, but nothing happens. either unityexplorers fault or we need to just hook the internal bit where the action resides and call it ourselves...
+                //it is unityexplorers fault because of its own input system
                 MelonLogger.Msg("submitting " + gameObject.name);
                 InputModule.Instance.Submit(gameObject);
             }
