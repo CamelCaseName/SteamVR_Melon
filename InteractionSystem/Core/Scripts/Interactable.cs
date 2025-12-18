@@ -4,6 +4,7 @@
 //
 //=============================================================================
 
+using MelonLoader;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -34,22 +35,22 @@ namespace Valve.VR.InteractionSystem
         public SkeletalMotionRangeChange setRangeOfMotionOnPickup = SkeletalMotionRangeChange.None;
 
         [Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp]
-        public event Action<Hand> OnAttachedToHand = new((Hand h) => { });
+        public event Action<Hand> OnAttachedToHand = new(h => { });
         [Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp]
-        public event Action<Hand> OnDetachedFromHand = new((Hand h) => { });
+        public event Action<Hand> OnDetachedFromHand = new(h => { });
 
         [Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp]
-        public event Action<Hand, Vector2, bool> HandHoverUpdate = new((Hand h, Vector2 v, bool b) => { });
+        public event Action<Hand, Vector2, bool> HandHoverUpdate = new((h, v, b) => { });
         [Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp]
-        public event Action<Hand> HandAttachedUpdate = new((Hand h) => { });
+        public event Action<Hand> HandAttachedUpdate = new(h => { });
         [Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp]
-        public event Action<Hand, Vector2, bool> OnHandHoverBegin = new((Hand h, Vector2 v, bool b) => { });
+        public event Action<Hand, Vector2, bool> OnHandHoverBegin = new((h, v, b) => { });
         [Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp]
-        public event Action<Hand> OnHandHoverEnd = new((Hand h) => { });
+        public event Action<Hand> OnHandHoverEnd = new(h => { });
         [Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp]
-        public event Action<Hand> OnHandFocusLost = new((Hand h) => { });
+        public event Action<Hand> OnHandFocusLost = new(h => { });
         [Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp]
-        public event Action<Hand> OnHandFocusAcquired = new((Hand h) => { });
+        public event Action<Hand> OnHandFocusAcquired = new(h => { });
 
         /// <summary>Specify whether you want to snap to the hand's object attachment point, or just the raw hand</summary>
         public bool useHandObjectAttachmentPoint = true;
@@ -306,6 +307,8 @@ namespace Valve.VR.InteractionSystem
 
         public void HandHoverUpdate_Internal(Hand hand, Vector2 position, bool posIsValid)
         {
+            //we correctly get till here. the event works for UI, but not in game??
+            //MelonLogger.Msg("hover update called on " + name + " by " + hand.name + ", running for: " + HandHoverUpdate.GetInvocationList().Length);
             HandHoverUpdate(hand, position, posIsValid);
         }
 

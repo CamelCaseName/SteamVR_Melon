@@ -12,6 +12,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using Unity.Collections.LowLevel.Unsafe;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -1151,9 +1152,18 @@ namespace Valve.VR.InteractionSystem
             GameObject attachedObject = currentAttachedObject;
             attachedObject?.GetComponent<Interactable>()?.HandAttachedUpdate_Internal(this);
 
-            if (useControllerHoverComponent || useFingerJointHover || useHoverSphere)
+            if ((useControllerHoverComponent || useFingerJointHover || useHoverSphere) && hoveringInteractable is not null)
             {
-                hoveringInteractable?.HandHoverUpdate_Internal(this, Vector2.zero, false);
+                try
+                {
+                    MelonLogger.Msg("Hand Hover Update for " + hoveringInteractable?.name);
+                    hoveringInteractable?.HandHoverUpdate_Internal(this, Vector2.zero, false);
+                }
+                catch
+                {
+                    //MelonLogger.Msg("Hand interactable was null");
+                    hoveringInteractable = null;
+                }
             }
         }
 
@@ -1452,10 +1462,10 @@ namespace Valve.VR.InteractionSystem
             hoverLocked = true;
             hoveringInteractable = interactable;
 
-            //if (spewDebugText && interactable is not null)
-            //{
-            //    HandDebugLog($"HoverLock {interactable?.name ?? "null"}");
-            //}
+            if (spewDebugText && interactable is not null)
+            {
+                HandDebugLog($"HoverLock " + interactable);
+            }
         }
 
         //-------------------------------------------------
@@ -1472,10 +1482,10 @@ namespace Valve.VR.InteractionSystem
                 hoveringInteractable = null;
             }
 
-            //if (spewDebugText && interactable is not null)
-            //{
-            //    HandDebugLog($"HoverUnLock {interactable?.name ?? "null"}");
-            //}
+            if (spewDebugText && interactable is not null)
+            {
+                HandDebugLog($"HoverUnLock " + interactable);
+            }
         }
 
         public void TriggerHapticPulse(ushort microSecondsDuration)
