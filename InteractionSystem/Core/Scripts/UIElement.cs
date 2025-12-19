@@ -23,7 +23,7 @@ namespace Valve.VR.InteractionSystem
         private Interactable interactable;
         private RectTransform rect;
         private Transform colliderRoot;
-        public static readonly bool debugPlacements = true;
+        public static readonly bool debugPlacements = false;
         public Canvas canvas;
         bool startedMove = false;
         private ScrollRect? scrollRect;
@@ -43,13 +43,22 @@ namespace Valve.VR.InteractionSystem
                 BoxGO.transform.localPosition = new(0, 0, -0.05f);
                 BoxGO.layer = LayerMask.NameToLayer("UI");
 
+                //didnt work
                 if (debugPlacements)
                 {
-                    Material m = new(GameObject.Find("Floor").GetComponent<MeshRenderer>().material);
-                    var mesh = BoxGO.AddComponent<MeshRenderer>();
-                    mesh.material = m;
-                    mesh.material.color = Color.red;
-                    mesh.material.color.ColorWithAlpha(0.2f);
+                    GameObject floor = GameObject.Find("Floor");
+                    if (floor is not null)
+                    {
+                        var render = floor.GetComponent<MeshRenderer>();
+                        if (render is not null)
+                        {
+                            Material m = new(render.material);
+                            var mesh = BoxGO.AddComponent<MeshRenderer>();
+                            mesh.material = m;
+                            mesh.material.color = Color.red;
+                            mesh.material.color.ColorWithAlpha(0.2f);
+                        }
+                    }
                 }
 
                 //todo scrollviews still off
@@ -206,8 +215,20 @@ namespace Valve.VR.InteractionSystem
                 canvas ??= GetComponentInChildren<Canvas>();
             }
 
+            if (colliderRoot is null || colliderRoot?.gameObject is null)
+            {
+                return;
+            }
+
             if (!colliderRoot.gameObject.active || partialVisible)
-            { return; }
+            {
+                return;
+            }
+
+            if (rect is null)
+            {
+                return;
+            }
 
             //update collider if needed
             if (rect.sizeDelta.x != colliderRoot.localScale.x || rect.sizeDelta.y != colliderRoot.localScale.y || colliderRoot.localScale.z != 0.1f)

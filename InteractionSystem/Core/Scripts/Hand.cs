@@ -576,8 +576,6 @@ namespace Valve.VR.InteractionSystem
                 }
             }
 
-
-
             if (attachedObject.HasAttachFlag(AttachmentFlags.TurnOnKinematic))
             {
                 if (attachedObject.attachedRigidbody != null)
@@ -1156,7 +1154,7 @@ namespace Valve.VR.InteractionSystem
             {
                 try
                 {
-                    MelonLogger.Msg("Hand Hover Update for " + hoveringInteractable?.name);
+                    //MelonLogger.Msg("Hand Hover Update for " + hoveringInteractable?.name);
                     hoveringInteractable?.HandHoverUpdate_Internal(this, Vector2.zero, false);
                 }
                 catch
