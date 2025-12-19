@@ -1,5 +1,5 @@
 # SteamVR_Melon
-A modified SteamVR plugin that can be injected into Non-VR enabled Unity projects for VR rendering and VR input/interaction. Modified for IL2CPP with Melonloader. Needs SteamXR_Melon. This thing was made for Unity 2022.3.16f1
+A modified SteamVR plugin that can be injected into Non-VR enabled Unity projects for VR rendering and VR input/interaction. Modified for IL2CPP with Melonloader. Needs SteamXR_Melon. This thing was made for Unity 2022.3.62f2. Some other versions are in the comments in the Pluginimporter fiel.
 
 ## How to use:
 
