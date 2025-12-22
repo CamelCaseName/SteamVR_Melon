@@ -23,11 +23,13 @@ namespace Valve.VR.InteractionSystem
         private Interactable interactable;
         private RectTransform rect;
         private Transform colliderRoot;
-        public static readonly bool debugPlacements = false;
+        public static readonly bool debugPlacements = true;
         public Canvas canvas;
+        private BoxCollider collider;
         bool startedMove = false;
-        private ScrollRect? scrollRect;
+        private ScrollRect scrollRect;
         private bool partialVisible = false;
+        public event Action OnSubmit;
 
         //-------------------------------------------------
         protected virtual void Awake()
@@ -43,28 +45,10 @@ namespace Valve.VR.InteractionSystem
                 BoxGO.transform.localPosition = new(0, 0, -0.05f);
                 BoxGO.layer = LayerMask.NameToLayer("UI");
 
-                //didnt work
-                if (debugPlacements)
-                {
-                    GameObject floor = GameObject.Find("Floor");
-                    if (floor is not null)
-                    {
-                        var render = floor.GetComponent<MeshRenderer>();
-                        if (render is not null)
-                        {
-                            Material m = new(render.material);
-                            var mesh = BoxGO.AddComponent<MeshRenderer>();
-                            mesh.material = m;
-                            mesh.material.color = Color.red;
-                            mesh.material.color.ColorWithAlpha(0.2f);
-                        }
-                    }
-                }
-
                 //todo scrollviews still off
 
                 //if we are in a scrollbox or scrollview or whatever only enable if the item is visible, else hide completely or rescale to bounds
-                var collider = BoxGO.AddComponent<BoxCollider>();
+                collider = BoxGO.AddComponent<BoxCollider>();
                 rect = GetComponent<RectTransform>();
                 rect ??= GetComponentInChildren<RectTransform>();
                 rect ??= GetComponentInParent<RectTransform>();
@@ -101,6 +85,27 @@ namespace Valve.VR.InteractionSystem
             catch (Exception e)
             {
                 MelonLogger.Error(e);
+            }
+        }
+
+        public void SetDebugMesh(string prefabName)
+        {
+            //didnt work
+            if (debugPlacements)
+            {
+                GameObject floor = GameObject.Find(prefabName);
+                if (floor is not null)
+                {
+                    var render = floor.GetComponent<MeshRenderer>();
+                    if (render is not null)
+                    {
+                        Material m = new(render.material);
+                        var mesh = collider.gameObject.AddComponent<MeshRenderer>();
+                        mesh.material = m;
+                        mesh.material.color = Color.red;
+                        mesh.material.color.ColorWithAlpha(0.2f);
+                    }
+                }
             }
         }
 
@@ -175,6 +180,7 @@ namespace Valve.VR.InteractionSystem
                 //it is unityexplorers fault because of its own input system
                 MelonLogger.Msg("submitting " + gameObject.name);
                 InputModule.Instance.Submit(gameObject);
+                OnSubmit?.Invoke();
             }
             else if (hand.uiInteractAction != null && hand.uiInteractAction.GetState(hand.handType) && posIsValid)
             {
@@ -196,7 +202,7 @@ namespace Valve.VR.InteractionSystem
                     startedMove = false;
                     InputModule.Instance.PointerEndPress(gameObject, position);
                 }
-                InputModule.Instance.HoverUpdate(gameObject, position);
+                //InputModule.Instance.HoverUpdate(gameObject, position);
             }
         }
 

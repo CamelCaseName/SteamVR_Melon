@@ -95,13 +95,13 @@ namespace Valve.VR.InteractionSystem
         [HideFromIl2Cpp]
         public event Action OnParentHandInputFocusLost = new(() => { });
         [HideFromIl2Cpp]
-        public event Action<int> OnHandInitialized = new((int i) => { });
+        public event Action<int> OnHandInitialized = new(i => { });
         [HideFromIl2Cpp]
-        public event Action<SteamVR_Input_Sources> OnInputSource = new((SteamVR_Input_Sources i) => { });
+        public event Action<SteamVR_Input_Sources> OnInputSource = new(i => { });
         [HideFromIl2Cpp]
-        public event Action<Interactable> OnParentHandHoverBegin = new((Interactable i) => { });
+        public event Action<Interactable> OnParentHandHoverBegin = new(i => { });
         [HideFromIl2Cpp]
-        public event Action<Interactable> OnParentHandHoverEnd = new((Interactable i) => { });
+        public event Action<Interactable> OnParentHandHoverEnd = new(i => { });
 
         public bool showDebugText = false;
         public bool spewDebugText = false;
@@ -128,13 +128,13 @@ namespace Valve.VR.InteractionSystem
             public float attachTime;
             public AllowTeleportWhileAttachedToHand allowTeleportWhileAttachedToHand;
 
-            public bool HasAttachFlag(AttachmentFlags flag)
+            public readonly bool HasAttachFlag(AttachmentFlags flag)
             {
                 return (attachmentFlags & flag) == flag;
             }
         }
 
-        private List<AttachedObject> attachedObjects = new();
+        private readonly List<AttachedObject> attachedObjects = new();
 
         [HideFromIl2Cpp]
         public ReadOnlyCollection<AttachedObject> AttachedObjects
@@ -978,6 +978,7 @@ namespace Valve.VR.InteractionSystem
                     overlappingColliders[i] = null;
                 }
 
+                //todo investigate if we need the injected scenes
                 int numColliding = PhysicsScene.OverlapSphereNonAlloc_Internal_Injected(ref handPhysicScene, ref hoverPosition, hoverRadius, overlappingColliders, hoverLayerMask.value, QueryTriggerInteraction.Ignore);
                 //we get some colliding speres here
                 if (numColliding >= ColliderArraySize)
