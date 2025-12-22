@@ -184,7 +184,7 @@ namespace Valve.VR.InteractionSystem
             }
             else if (hand.uiInteractAction != null && hand.uiInteractAction.GetState(hand.handType) && posIsValid)
             {
-                MelonLogger.Msg("moving pressed pointer over " + gameObject.name);
+                //MelonLogger.Msg("moving pressed pointer over " + gameObject.name);
                 if (!startedMove)
                 {
                     startedMove = true;

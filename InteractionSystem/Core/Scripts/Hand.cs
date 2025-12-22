@@ -1475,11 +1475,8 @@ namespace Valve.VR.InteractionSystem
         [HideFromIl2Cpp]
         public void HoverUnlock(Interactable interactable)
         {
-            if (hoveringInteractable == interactable)
-            {
-                hoverLocked = false;
-                hoveringInteractable = null;
-            }
+            hoveringInteractable = null;
+            hoverLocked = false;
 
             if (spewDebugText && interactable is not null)
             {
