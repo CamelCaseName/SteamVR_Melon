@@ -738,7 +738,6 @@ namespace Valve.VR.InteractionSystem
 
                 hoverLocked = false;
 
-
                 //Give focus to the top most object on the stack if it changed
                 if (newTopObject != null && newTopObject != prevTopObject)
                 {
@@ -978,8 +977,7 @@ namespace Valve.VR.InteractionSystem
                     overlappingColliders[i] = null;
                 }
 
-                //todo investigate if we need the injected scenes
-                int numColliding = PhysicsScene.OverlapSphereNonAlloc_Internal_Injected(ref handPhysicScene, ref hoverPosition, hoverRadius, overlappingColliders, hoverLayerMask.value, QueryTriggerInteraction.Ignore);
+                int numColliding = PhysicsScene.OverlapSphereNonAlloc_Internal(handPhysicScene, hoverPosition, hoverRadius, overlappingColliders, hoverLayerMask.value, QueryTriggerInteraction.Ignore);
                 //we get some colliding speres here
                 if (numColliding >= ColliderArraySize)
                 {
