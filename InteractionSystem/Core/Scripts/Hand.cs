@@ -1005,7 +1005,7 @@ namespace Valve.VR.InteractionSystem
                     {
                         continue;
                     }
-                    //MelonLogger.Msg(collider.name);
+                    MelonLogger.Msg("hoversphere " + " " + handType.ToString() + " " + collider.name);
 
                     // Ignore this collider for hovering
                     IgnoreHovering ignore = collider.GetComponent<IgnoreHovering>();
@@ -1153,7 +1153,7 @@ namespace Valve.VR.InteractionSystem
             {
                 try
                 {
-                    //MelonLogger.Msg("Hand Hover Update for " + hoveringInteractable?.name);
+                    // MelonLogger.Msg("Hand Hover Update for " + hoveringInteractable?.name);
                     hoveringInteractable?.HandHoverUpdate_Internal(this, Vector2.zero, false);
                 }
                 catch
