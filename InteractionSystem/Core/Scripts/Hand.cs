@@ -12,7 +12,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using Unity.Collections.LowLevel.Unsafe;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -199,12 +198,19 @@ namespace Valve.VR.InteractionSystem
                         }
 
                         _hoveringInteractable.OnHandHoverEnd_Internal(this);
-
+                        if (hoverLocked)
+                        {
+                            HoverUnlock(_hoveringInteractable);
+                        }
                         //Note: The _hoveringInteractable can change after sending the OnHandHoverEnd message so we need to check it again before broadcasting this message
                         if (_hoveringInteractable != null)
                         {
                             OnParentHandHoverEnd.Invoke(_hoveringInteractable); // let objects attached to the hand know that a hover has ended
                         }
+                    }
+                    else
+                    {
+                        hoverLocked = false;
                     }
 
                     _hoveringInteractable = value;
@@ -934,11 +940,17 @@ namespace Valve.VR.InteractionSystem
                 return;
             }
 
+            if (!useHoverSphere && !useControllerHoverComponent && !useFingerJointHover)
+            {
+                return;
+            }
+
             float closestDistance = float.MaxValue;
             Interactable closestInteractable = null;
 
             if (useHoverSphere)
             {
+                //MelonLogger.Msg("checking hover sphere");
                 float scaledHoverRadius = hoverSphereRadius * Mathf.Abs(SteamVR_Utils.GetLossyScale(hoverSphereTransform));
                 CheckHoveringForTransform(hoverSphereTransform.position, scaledHoverRadius, ref closestDistance, ref closestInteractable, Color.green);
             }
@@ -956,6 +968,12 @@ namespace Valve.VR.InteractionSystem
             }
 
             // Hover on this one
+            // works
+            if (closestInteractable != null)
+            {
+                //MelonLogger.Msg($"got {closestInteractable.name}");
+            }
+
             hoveringInteractable = closestInteractable;
         }
 
@@ -997,6 +1015,8 @@ namespace Valve.VR.InteractionSystem
                         continue;
                     }
 
+                    //MelonLogger.Msg("collider name: " + collider.name);
+
                     Interactable contacting = collider.GetComponentInParent<Interactable>();
                     contacting ??= collider.GetComponent<Interactable>();
                     contacting ??= collider.GetComponentInChildren<Interactable>();
@@ -1005,7 +1025,7 @@ namespace Valve.VR.InteractionSystem
                     {
                         continue;
                     }
-                    MelonLogger.Msg("hoversphere " + " " + handType.ToString() + " " + collider.name);
+                    //MelonLogger.Msg("hoversphere2 " + " " + handType.ToString() + " " + contacting?.name);
 
                     // Ignore this collider for hovering
                     IgnoreHovering ignore = collider.GetComponent<IgnoreHovering>();
@@ -1016,6 +1036,7 @@ namespace Valve.VR.InteractionSystem
                             continue;
                         }
                     }
+                    //MelonLogger.Msg("hoversphere3 " + " " + handType.ToString() + " " + contacting?.name);
 
                     // Can't hover over the object if it's attached
                     bool hoveringOverAttached = false;
@@ -1032,6 +1053,7 @@ namespace Valve.VR.InteractionSystem
                     {
                         continue;
                     }
+                    //MelonLogger.Msg("hoversphere4 " + " " + handType.ToString() + " " + contacting?.name);
 
                     // Best candidate so far...
                     float distance = Vector3.Distance(contacting.transform.position, hoverPosition);
@@ -1044,13 +1066,14 @@ namespace Valve.VR.InteractionSystem
                     bool isCloser = (distance < closestDistance);
                     if (isCloser && !lowerPriority)
                     {
-                        //MelonLogger.Msg(contacting.name + " is now closer");
+                        MelonLogger.Msg(contacting.name + " is now closer");
                         closestDistance = distance;
                         closestInteractable = contacting;
                         foundCloser = true;
                     }
                     iActualColliderCount++;
                 }
+                //MelonLogger.Msg("hoversphere " + " " + handType.ToString() + " " + closestInteractable?.name);
 
                 if (showDebugInteractables && foundCloser)
                 {
@@ -1123,14 +1146,18 @@ namespace Valve.VR.InteractionSystem
         }
 
         //-------------------------------------------------
+        //OnEnable
         public virtual void FinishInit()
         {
             inputFocusAction.enabled = true;
 
             // Stagger updates between hands
-            float hoverUpdateBegin = ((otherHand != null) && (otherHand.GetInstanceID() < GetInstanceID())) ? (0.5f * hoverUpdateInterval) : (0.0f);
+            float hoverUpdateBegin = (handType == SteamVR_Input_Sources.LeftHand) ? (0.5f * hoverUpdateInterval) : (0.0f);
             InvokeRepeating("UpdateHovering", hoverUpdateBegin, hoverUpdateInterval);
-            InvokeRepeating("UpdateDebugText", hoverUpdateBegin, hoverUpdateInterval);
+            if (spewDebugText)
+            {
+                InvokeRepeating("UpdateDebugText", hoverUpdateBegin, hoverUpdateInterval);
+            }
         }
 
         //-------------------------------------------------
@@ -1153,7 +1180,7 @@ namespace Valve.VR.InteractionSystem
             {
                 try
                 {
-                    // MelonLogger.Msg("Hand Hover Update for " + hoveringInteractable?.name);
+                    //MelonLogger.Msg("Hand Hover Update for " + hoveringInteractable?.name);
                     hoveringInteractable?.HandHoverUpdate_Internal(this, Vector2.zero, false);
                 }
                 catch
@@ -1473,8 +1500,8 @@ namespace Valve.VR.InteractionSystem
         [HideFromIl2Cpp]
         public void HoverUnlock(Interactable interactable)
         {
-            hoveringInteractable = null;
             hoverLocked = false;
+            hoveringInteractable = null;
 
             if (spewDebugText && interactable is not null)
             {

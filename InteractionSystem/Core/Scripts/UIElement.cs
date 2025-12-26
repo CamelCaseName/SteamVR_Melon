@@ -174,7 +174,7 @@ namespace Valve.VR.InteractionSystem
         //-------------------------------------------------
         private void HandHoverUpdate(Hand hand, Vector2 position, bool posIsValid)
         {
-            if (hand.uiInteractAction != null && (hand.uiInteractAction.stateUp || hand.otherHand.uiInteractAction.stateUp))
+            if (hand.uiInteractAction != null && hand.uiInteractAction.stateUp)
             {
                 //we get here correctly, but nothing happens. either unityexplorers fault or we need to just hook the internal bit where the action resides and call it ourselves...
                 //it is unityexplorers fault because of its own input system
@@ -182,7 +182,7 @@ namespace Valve.VR.InteractionSystem
                 InputModule.Instance.Submit(gameObject);
                 OnSubmit?.Invoke();
             }
-            else if (hand.uiInteractAction != null && (hand.uiInteractAction.stateUp || hand.otherHand.uiInteractAction.stateUp) && posIsValid)
+            else if (hand.uiInteractAction != null && hand.uiInteractAction.stateUp && posIsValid)
             {
                 //MelonLogger.Msg("moving pressed pointer over " + gameObject.name);
                 if (!startedMove)
