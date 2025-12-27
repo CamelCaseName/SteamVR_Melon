@@ -149,25 +149,40 @@ namespace Valve.VR.InteractionSystem
 
         private void OnSliderChange(float obj)
         {
+            if (!enabled)
+            {
+                return;
+            }
             onHandClick.Send(currentHand);
         }
 
         private void OnToggleChange(bool obj)
         {
+            if (!enabled)
+            {
+                return;
+            }
             onHandClick.Send(currentHand);
         }
 
         //-------------------------------------------------
         private void OnHandHoverBegin(Hand hand, Vector2 position, bool poseIsValid)
         {
+            if (!enabled)
+            {
+                return;
+            }
             currentHand = hand;
-            //todo only if we dont already have one selected
             InputModule.Instance.HoverBegin(gameObject, position, poseIsValid);
         }
 
         //-------------------------------------------------
         private void OnHandHoverEnd(Hand hand)
         {
+            if (!enabled)
+            {
+                return;
+            }
             InputModule.Instance.HoverEnd(gameObject);
             currentHand = null;
         }
@@ -175,6 +190,10 @@ namespace Valve.VR.InteractionSystem
         //-------------------------------------------------
         private void HandHoverUpdate(Hand hand, Vector2 position, bool posIsValid)
         {
+            if (!enabled)
+            {
+                return;
+            }
             if (hand.uiInteractAction != null && hand.uiInteractAction.stateUp)
             {
                 //we get here correctly, but nothing happens. either unityexplorers fault or we need to just hook the internal bit where the action resides and call it ourselves...
@@ -210,6 +229,10 @@ namespace Valve.VR.InteractionSystem
         //-------------------------------------------------
         protected virtual void OnButtonClick()
         {
+            if (!enabled)
+            {
+                return;
+            }
             onHandClick.Send(currentHand);
         }
 
