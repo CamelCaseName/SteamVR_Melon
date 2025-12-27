@@ -17,35 +17,19 @@ namespace Valve.VR
     public class SteamVR_Input_ActionSet_default : Valve.VR.SteamVR_ActionSet
     {
         
-        public virtual SteamVR_Action_Boolean InteractUI
+        public virtual SteamVR_Action_Vector2 Move
         {
             get
             {
-                return SteamVR_Actions.default_InteractUI;
+                return SteamVR_Actions.default_Move;
             }
         }
         
-        public virtual SteamVR_Action_Boolean Teleport
+        public virtual SteamVR_Action_Boolean Grab
         {
             get
             {
-                return SteamVR_Actions.default_Teleport;
-            }
-        }
-        
-        public virtual SteamVR_Action_Boolean GrabPinch
-        {
-            get
-            {
-                return SteamVR_Actions.default_GrabPinch;
-            }
-        }
-        
-        public virtual SteamVR_Action_Boolean GrabGrip
-        {
-            get
-            {
-                return SteamVR_Actions.default_GrabGrip;
+                return SteamVR_Actions.default_Grab;
             }
         }
         
@@ -73,14 +57,6 @@ namespace Valve.VR
             }
         }
         
-        public virtual SteamVR_Action_Single Squeeze
-        {
-            get
-            {
-                return SteamVR_Actions.default_Squeeze;
-            }
-        }
-        
         public virtual SteamVR_Action_Boolean HeadsetOnHead
         {
             get
@@ -102,6 +78,102 @@ namespace Valve.VR
             get
             {
                 return SteamVR_Actions.default_SnapTurnRight;
+            }
+        }
+        
+        public virtual SteamVR_Action_Boolean UI_Radial
+        {
+            get
+            {
+                return SteamVR_Actions.default_UI_Radial;
+            }
+        }
+        
+        public virtual SteamVR_Action_Boolean Self_Radial
+        {
+            get
+            {
+                return SteamVR_Actions.default_Self_Radial;
+            }
+        }
+        
+        public virtual SteamVR_Action_Boolean Pee
+        {
+            get
+            {
+                return SteamVR_Actions.default_Pee;
+            }
+        }
+        
+        public virtual SteamVR_Action_Boolean Masturbate
+        {
+            get
+            {
+                return SteamVR_Actions.default_Masturbate;
+            }
+        }
+        
+        public virtual SteamVR_Action_Boolean InteractUI
+        {
+            get
+            {
+                return SteamVR_Actions.default_InteractUI;
+            }
+        }
+        
+        public virtual SteamVR_Action_Boolean Inventory
+        {
+            get
+            {
+                return SteamVR_Actions.default_Inventory;
+            }
+        }
+        
+        public virtual SteamVR_Action_Boolean Memories
+        {
+            get
+            {
+                return SteamVR_Actions.default_Memories;
+            }
+        }
+        
+        public virtual SteamVR_Action_Boolean Opportunities
+        {
+            get
+            {
+                return SteamVR_Actions.default_Opportunities;
+            }
+        }
+        
+        public virtual SteamVR_Action_Boolean Flash
+        {
+            get
+            {
+                return SteamVR_Actions.default_Flash;
+            }
+        }
+        
+        public virtual SteamVR_Action_Boolean GameMenu
+        {
+            get
+            {
+                return SteamVR_Actions.default_GameMenu;
+            }
+        }
+        
+        public virtual SteamVR_Action_Boolean Combat
+        {
+            get
+            {
+                return SteamVR_Actions.default_Combat;
+            }
+        }
+        
+        public virtual SteamVR_Action_Boolean Crouch
+        {
+            get
+            {
+                return SteamVR_Actions.default_Crouch;
             }
         }
         

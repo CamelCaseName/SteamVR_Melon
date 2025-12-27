@@ -51,13 +51,13 @@ namespace Valve.VR.InteractionSystem
 
         public SteamVR_Behaviour_Pose trackedObject;
 
-        public SteamVR_Action_Boolean grabPinchAction = SteamVR_Input.GetAction<SteamVR_Action_Boolean>("GrabPinch");
+        public SteamVR_Action_Boolean grabPinchAction = SteamVR_Actions.default_Grab;
 
-        public SteamVR_Action_Boolean grabGripAction = SteamVR_Input.GetAction<SteamVR_Action_Boolean>("GrabGrip");
+        public SteamVR_Action_Boolean grabGripAction = SteamVR_Actions.default_Grab;
 
-        public SteamVR_Action_Vibration hapticAction = SteamVR_Input.GetAction<SteamVR_Action_Vibration>("Haptic");
+        public SteamVR_Action_Vibration hapticAction = SteamVR_Actions.default_Haptic;
 
-        public SteamVR_Action_Boolean uiInteractAction = SteamVR_Input.GetAction<SteamVR_Action_Boolean>("InteractUI");
+        public SteamVR_Action_Boolean uiInteractAction = SteamVR_Actions.default_InteractUI;
 
         public bool useHoverSphere = true;
         public Transform hoverSphereTransform;

@@ -42,7 +42,6 @@ namespace Valve.VR.InteractionSystem
 
                 var BoxGO = new GameObject(name + "Collider");
                 BoxGO.transform.parent = transform;
-                BoxGO.transform.localPosition = new(0, 0, -0.05f);
                 BoxGO.layer = LayerMask.NameToLayer("UI");
 
                 //todo scrollviews still off
