@@ -10,9 +10,9 @@ using UnityEngine;
 namespace Valve.VR
 {
     [MelonLoader.RegisterTypeInIl2Cpp()]
-    public class SteamVR_IK : MonoBehaviour
+    public class SteamVRIK : MonoBehaviour
     {
-        public SteamVR_IK(IntPtr value) : base(value) { }
+        public SteamVRIK(IntPtr value) : base(value) { }
 
         public Transform target;
         public Transform start, joint, end;

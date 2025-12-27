@@ -26,18 +26,18 @@ using UnityEngine;
 namespace Valve.VR
 {
     [MelonLoader.RegisterTypeInIl2Cpp()]
-    public class SteamVR_Fade : MonoBehaviour
+    public class SteamVRFade : MonoBehaviour
     {
-        public SteamVR_Fade(IntPtr value) : base(value) { }
+        public SteamVRFade(IntPtr value) : base(value) { }
 
-        private Color currentColor = new Color(0, 0, 0, 0); // default starting color: black and fully transparent
-        private Color targetColor = new Color(0, 0, 0, 0);  // default target color: black and fully transparent
-        private Color deltaColor = new Color(0, 0, 0, 0);   // the delta-color is basically the "speed / second" at which the current color should change
-        private bool fadeOverlay = false;
+        private Color currentColor = new(0, 0, 0, 0); // default starting color: black and fully transparent
+        private Color targetColor = new(0, 0, 0, 0);  // default target color: black and fully transparent
+        private Color deltaColor = new(0, 0, 0, 0);   // the delta-color is basically the "speed / second" at which the current color should change
+        private readonly bool fadeOverlay = false;
 
         static public void Start(Color newColor, float duration, bool fadeOverlay = false)
         {
-            SteamVR_Events.Fade.Send(newColor, duration, fadeOverlay);
+            SteamVREvents.Fade.Send(newColor, duration, fadeOverlay);
         }
 
         static public void View(Color newColor, float duration)
@@ -81,13 +81,13 @@ namespace Valve.VR
                 fadeMaterialColorID = Shader.PropertyToID("fadeColor");
             }
 
-            SteamVR_Events.Fade.Listen(OnStartFade);
-            SteamVR_Events.FadeReady.Send();
+            SteamVREvents.Fade.Listen(OnStartFade);
+            SteamVREvents.FadeReady.Send();
         }
 
         void OnDisable()
         {
-            SteamVR_Events.Fade.Remove(OnStartFade);
+            SteamVREvents.Fade.Remove(OnStartFade);
         }
 
         void OnPostRender()
@@ -107,7 +107,7 @@ namespace Valve.VR
 
                 if (fadeOverlay)
                 {
-                    var overlay = SteamVR_Overlay.instance;
+                    var overlay = SteamVROverlay.instance;
                     if (overlay != null)
                     {
                         overlay.alpha = 1.0f - currentColor.a;

@@ -10,82 +10,80 @@ namespace Valve.VR
     /// <summary>
     /// An analog action with a value generally from 0 to 1. Also provides a delta since the last update.
     /// </summary>
-    public class SteamVR_Action_Single : SteamVR_Action_In<SteamVR_Action_Single_Source_Map, SteamVR_Action_Single_Source>, ISteamVR_Action_Single
+    public class SteamVRActionSingle : SteamVRActionIn<SteamVRActionSingleSourceMap, SteamVRActionSingleSource>, ISteamVRActionSingle
     {
-        public delegate void AxisHandler(SteamVR_Action_Single fromAction, SteamVR_Input_Sources fromSource, float newAxis, float newDelta);
-        public delegate void ActiveChangeHandler(SteamVR_Action_Single fromAction, SteamVR_Input_Sources fromSource, bool active);
-        public delegate void ChangeHandler(SteamVR_Action_Single fromAction, SteamVR_Input_Sources fromSource, float newAxis, float newDelta);
-        public delegate void UpdateHandler(SteamVR_Action_Single fromAction, SteamVR_Input_Sources fromSource, float newAxis, float newDelta);
+        public delegate void AxisHandler(SteamVRActionSingle fromAction, SteamVRInputSources fromSource, float newAxis, float newDelta);
+        public delegate void ActiveChangeHandler(SteamVRActionSingle fromAction, SteamVRInputSources fromSource, bool active);
+        public delegate void ChangeHandler(SteamVRActionSingle fromAction, SteamVRInputSources fromSource, float newAxis, float newDelta);
+        public delegate void UpdateHandler(SteamVRActionSingle fromAction, SteamVRInputSources fromSource, float newAxis, float newDelta);
 
         /// <summary><strong>[Shortcut to: SteamVR_Input_Sources.Any]</strong> This event fires whenever the axis changes by more than the specified changeTolerance</summary>
         [Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp]
         public event ChangeHandler onChange
-        { add { sourceMap[SteamVR_Input_Sources.Any].onChange += value; } remove { sourceMap[SteamVR_Input_Sources.Any].onChange -= value; } }
+        { add { sourceMap[SteamVRInputSources.Any].onChange += value; } remove { sourceMap[SteamVRInputSources.Any].onChange -= value; } }
 
         /// <summary><strong>[Shortcut to: SteamVR_Input_Sources.Any]</strong> This event fires whenever the action is updated</summary>
         [Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp]
         public event UpdateHandler onUpdate
-        { add { sourceMap[SteamVR_Input_Sources.Any].onUpdate += value; } remove { sourceMap[SteamVR_Input_Sources.Any].onUpdate -= value; } }
+        { add { sourceMap[SteamVRInputSources.Any].onUpdate += value; } remove { sourceMap[SteamVRInputSources.Any].onUpdate -= value; } }
 
         /// <summary><strong>[Shortcut to: SteamVR_Input_Sources.Any]</strong> This event will fire whenever the float value of the action is non-zero</summary>
         [Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp]
         public event AxisHandler onAxis
-        { add { sourceMap[SteamVR_Input_Sources.Any].onAxis += value; } remove { sourceMap[SteamVR_Input_Sources.Any].onAxis -= value; } }
+        { add { sourceMap[SteamVRInputSources.Any].onAxis += value; } remove { sourceMap[SteamVRInputSources.Any].onAxis -= value; } }
 
         /// <summary><strong>[Shortcut to: SteamVR_Input_Sources.Any]</strong> This event fires when the active state (ActionSet active and binding active) changes</summary>
         [Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp]
         public event ActiveChangeHandler onActiveChange
-        { add { sourceMap[SteamVR_Input_Sources.Any].onActiveChange += value; } remove { sourceMap[SteamVR_Input_Sources.Any].onActiveChange -= value; } }
+        { add { sourceMap[SteamVRInputSources.Any].onActiveChange += value; } remove { sourceMap[SteamVRInputSources.Any].onActiveChange -= value; } }
 
         /// <summary><strong>[Shortcut to: SteamVR_Input_Sources.Any]</strong> This event fires when the active state of the binding changes</summary>
         [Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp]
         public event ActiveChangeHandler onActiveBindingChange
-        { add { sourceMap[SteamVR_Input_Sources.Any].onActiveBindingChange += value; } remove { sourceMap[SteamVR_Input_Sources.Any].onActiveBindingChange -= value; } }
-
+        { add { sourceMap[SteamVRInputSources.Any].onActiveBindingChange += value; } remove { sourceMap[SteamVRInputSources.Any].onActiveBindingChange -= value; } }
 
         /// <summary><strong>[Shortcut to: SteamVR_Input_Sources.Any]</strong> The current float value of the action.
         /// Note: Will only return non-zero if the action is also active.</summary>
-        public float axis { get { return sourceMap[SteamVR_Input_Sources.Any].axis; } }
+        public float axis { get { return sourceMap[SteamVRInputSources.Any].axis; } }
 
         /// <summary><strong>[Shortcut to: SteamVR_Input_Sources.Any]</strong> The float value of the action from the previous update.
         /// Note: Will only return non-zero if the action is also active.</summary>
-        public float lastAxis { get { return sourceMap[SteamVR_Input_Sources.Any].lastAxis; } }
+        public float lastAxis { get { return sourceMap[SteamVRInputSources.Any].lastAxis; } }
 
         /// <summary><strong>[Shortcut to: SteamVR_Input_Sources.Any]</strong> The float value difference between this update and the previous update.
         /// Note: Will only return non-zero if the action is also active.</summary>
-        public float delta { get { return sourceMap[SteamVR_Input_Sources.Any].delta; } }
+        public float delta { get { return sourceMap[SteamVRInputSources.Any].delta; } }
 
         /// <summary><strong>[Shortcut to: SteamVR_Input_Sources.Any]</strong> The float value difference between the previous update and update before that.
         /// Note: Will only return non-zero if the action is also active.</summary>
-        public float lastDelta { get { return sourceMap[SteamVR_Input_Sources.Any].lastDelta; } }
+        public float lastDelta { get { return sourceMap[SteamVRInputSources.Any].lastDelta; } }
 
-
-        public SteamVR_Action_Single() { }
+        public SteamVRActionSingle() { }
 
         /// <summary>The current float value of the action</summary>
         /// <param name="inputSource">The device you would like to get data from. Any if the action is not device specific.</param>
-        public float GetAxis(SteamVR_Input_Sources inputSource)
+        public float GetAxis(SteamVRInputSources inputSource)
         {
             return sourceMap[inputSource].axis;
         }
 
         /// <summary>The float value difference between this update and the previous update.</summary>
         /// <param name="inputSource">The device you would like to get data from. Any if the action is not device specific.</param>
-        public float GetAxisDelta(SteamVR_Input_Sources inputSource)
+        public float GetAxisDelta(SteamVRInputSources inputSource)
         {
             return sourceMap[inputSource].delta;
         }
 
         /// <summary>The float value of the action from the previous update.</summary>
         /// <param name="inputSource">The device you would like to get data from. Any if the action is not device specific.</param>
-        public float GetLastAxis(SteamVR_Input_Sources inputSource)
+        public float GetLastAxis(SteamVRInputSources inputSource)
         {
             return sourceMap[inputSource].lastAxis;
         }
 
         /// <summary>The float value difference between the previous update and update before that. </summary>
         /// <param name="inputSource">The device you would like to get data from. Any if the action is not device specific.</param>
-        public float GetLastAxisDelta(SteamVR_Input_Sources inputSource)
+        public float GetLastAxisDelta(SteamVRInputSources inputSource)
         {
             return sourceMap[inputSource].lastDelta;
         }
@@ -94,7 +92,7 @@ namespace Valve.VR
         /// This happens when the action is bound or unbound, or when the ActionSet changes state.</summary>
         /// <param name="functionToCall">A local function that receives the boolean action who's active state changes and the corresponding input source</param>
         /// <param name="inputSource">The device you would like to get data from. Any if the action is not device specific.</param>
-        public void AddOnActiveChangeListener(ActiveChangeHandler functionToCall, SteamVR_Input_Sources inputSource)
+        public void AddOnActiveChangeListener(ActiveChangeHandler functionToCall, SteamVRInputSources inputSource)
         {
             sourceMap[inputSource].onActiveChange += functionToCall;
         }
@@ -103,7 +101,7 @@ namespace Valve.VR
         /// This happens when the action is bound or unbound, or when the ActionSet changes state.</summary>
         /// <param name="functionToStopCalling">The local function that you've setup to receive update events</param>
         /// <param name="inputSource">The device you would like to get data from. Any if the action is not device specific.</param>
-        public void RemoveOnActiveChangeListener(ActiveChangeHandler functionToStopCalling, SteamVR_Input_Sources inputSource)
+        public void RemoveOnActiveChangeListener(ActiveChangeHandler functionToStopCalling, SteamVRInputSources inputSource)
         {
             sourceMap[inputSource].onActiveChange -= functionToStopCalling;
         }
@@ -111,7 +109,7 @@ namespace Valve.VR
         /// <summary>Executes a function when the active state of this action (with the specified inputSource) changes. This happens when the action is bound or unbound</summary>
         /// <param name="functionToCall">A local function that receives the boolean action who's active state changes and the corresponding input source</param>
         /// <param name="inputSource">The device you would like to get data from. Any if the action is not device specific.</param>
-        public void AddOnActiveBindingChangeListener(ActiveChangeHandler functionToCall, SteamVR_Input_Sources inputSource)
+        public void AddOnActiveBindingChangeListener(ActiveChangeHandler functionToCall, SteamVRInputSources inputSource)
         {
             sourceMap[inputSource].onActiveBindingChange += functionToCall;
         }
@@ -119,7 +117,7 @@ namespace Valve.VR
         /// <summary>Stops executing the function setup by the corresponding AddListener</summary>
         /// <param name="functionToStopCalling">The local function that you've setup to receive update events</param>
         /// <param name="inputSource">The device you would like to get data from. Any if the action is not device specific.</param>
-        public void RemoveOnActiveBindingChangeListener(ActiveChangeHandler functionToStopCalling, SteamVR_Input_Sources inputSource)
+        public void RemoveOnActiveBindingChangeListener(ActiveChangeHandler functionToStopCalling, SteamVRInputSources inputSource)
         {
             sourceMap[inputSource].onActiveBindingChange -= functionToStopCalling;
         }
@@ -127,7 +125,7 @@ namespace Valve.VR
         /// <summary>Executes a function when the axis changes by more than the specified changeTolerance</summary>
         /// <param name="functionToCall">A local function that receives the boolean action who's state has changed, the corresponding input source, and the new value</param>
         /// <param name="inputSource">The device you would like to get data from. Any if the action is not device specific.</param>
-        public void AddOnChangeListener(ChangeHandler functionToCall, SteamVR_Input_Sources inputSource)
+        public void AddOnChangeListener(ChangeHandler functionToCall, SteamVRInputSources inputSource)
         {
             sourceMap[inputSource].onChange += functionToCall;
         }
@@ -135,7 +133,7 @@ namespace Valve.VR
         /// <summary>Stops executing the function setup by the corresponding AddListener</summary>
         /// <param name="functionToStopCalling">The local function that you've setup to receive on change events</param>
         /// <param name="inputSource">The device you would like to get data from. Any if the action is not device specific.</param>
-        public void RemoveOnChangeListener(ChangeHandler functionToStopCalling, SteamVR_Input_Sources inputSource)
+        public void RemoveOnChangeListener(ChangeHandler functionToStopCalling, SteamVRInputSources inputSource)
         {
             sourceMap[inputSource].onChange -= functionToStopCalling;
         }
@@ -143,7 +141,7 @@ namespace Valve.VR
         /// <summary>Executes a function when the state of this action (with the specified inputSource) is updated.</summary>
         /// <param name="functionToCall">A local function that receives the boolean action who's state has changed, the corresponding input source, and the new value</param>
         /// <param name="inputSource">The device you would like to get data from. Any if the action is not device specific.</param>
-        public void AddOnUpdateListener(UpdateHandler functionToCall, SteamVR_Input_Sources inputSource)
+        public void AddOnUpdateListener(UpdateHandler functionToCall, SteamVRInputSources inputSource)
         {
             sourceMap[inputSource].onUpdate += functionToCall;
         }
@@ -151,7 +149,7 @@ namespace Valve.VR
         /// <summary>Stops executing the function setup by the corresponding AddListener</summary>
         /// <param name="functionToStopCalling">The local function that you've setup to receive update events</param>
         /// <param name="inputSource">The device you would like to get data from. Any if the action is not device specific.</param>
-        public void RemoveOnUpdateListener(UpdateHandler functionToStopCalling, SteamVR_Input_Sources inputSource)
+        public void RemoveOnUpdateListener(UpdateHandler functionToStopCalling, SteamVRInputSources inputSource)
         {
             sourceMap[inputSource].onUpdate -= functionToStopCalling;
         }
@@ -159,7 +157,7 @@ namespace Valve.VR
         /// <summary>Executes a function when the float value of the action is non-zero.</summary>
         /// <param name="functionToCall">A local function that receives the boolean action who's state has changed, the corresponding input source, and the new value</param>
         /// <param name="inputSource">The device you would like to get data from. Any if the action is not device specific.</param>
-        public void AddOnAxisListener(AxisHandler functionToCall, SteamVR_Input_Sources inputSource)
+        public void AddOnAxisListener(AxisHandler functionToCall, SteamVRInputSources inputSource)
         {
             sourceMap[inputSource].onAxis += functionToCall;
         }
@@ -167,22 +165,22 @@ namespace Valve.VR
         /// <summary>Stops executing the function setup by the corresponding AddListener</summary>
         /// <param name="functionToStopCalling">The local function that you've setup to receive update events</param>
         /// <param name="inputSource">The device you would like to get data from. Any if the action is not device specific.</param>
-        public void RemoveOnAxisListener(AxisHandler functionToStopCalling, SteamVR_Input_Sources inputSource)
+        public void RemoveOnAxisListener(AxisHandler functionToStopCalling, SteamVRInputSources inputSource)
         {
             sourceMap[inputSource].onAxis -= functionToStopCalling;
         }
 
-        public void RemoveAllListeners(SteamVR_Input_Sources inputSource)
+        public void RemoveAllListeners(SteamVRInputSources inputSource)
         {
             sourceMap[inputSource].RemoveAllListeners();
         }
     }
 
-    public class SteamVR_Action_Single_Source_Map : SteamVR_Action_In_Source_Map<SteamVR_Action_Single_Source>
+    public class SteamVRActionSingleSourceMap : SteamVRActionInSourceMap<SteamVRActionSingleSource>
     {
     }
 
-    public class SteamVR_Action_Single_Source : SteamVR_Action_In_Source, ISteamVR_Action_Single
+    public class SteamVRActionSingleSource : SteamVRActionInSource, ISteamVRActionSingle
     {
         protected static uint actionData_size = 0;
 
@@ -191,23 +189,23 @@ namespace Valve.VR
 
         /// <summary>Event fires when the value of the action is non-zero</summary>
         [Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp]
-        public event SteamVR_Action_Single.AxisHandler onAxis;
+        public event SteamVRActionSingle.AxisHandler onAxis;
 
         /// <summary>Event fires when the active state (ActionSet active and binding active) changes</summary>
         [Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp]
-        public event SteamVR_Action_Single.ActiveChangeHandler onActiveChange;
+        public event SteamVRActionSingle.ActiveChangeHandler onActiveChange;
 
         /// <summary>Event fires when the active state of the binding changes</summary>
         [Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp]
-        public event SteamVR_Action_Single.ActiveChangeHandler onActiveBindingChange;
+        public event SteamVRActionSingle.ActiveChangeHandler onActiveBindingChange;
 
         /// <summary>This event fires whenever the axis changes by more than the specified changeTolerance</summary>
         [Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp]
-        public event SteamVR_Action_Single.ChangeHandler onChange;
+        public event SteamVRActionSingle.ChangeHandler onChange;
 
         /// <summary>Event fires when the action is updated</summary>
         [Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp]
-        public event SteamVR_Action_Single.UpdateHandler onUpdate;
+        public event SteamVRActionSingle.UpdateHandler onUpdate;
 
         /// <summary>The current float value of the action.
         /// Note: Will only return non-zero if the action is also active.</summary>
@@ -225,10 +223,8 @@ namespace Valve.VR
         /// Note: Will only return non-zero if the action is also active.</summary>
         public float lastDelta { get { if (active) { return lastActionData.deltaX; } else { return 0; } } }
 
-
         /// <summary>If the float value of this action has changed more than the changeTolerance since the last update</summary>
         public override bool changed { get; protected set; }
-
 
         /// <summary>If the float value of this action has changed more than the changeTolerance between the previous update and the update before that</summary>
         public override bool lastChanged { get; protected set; }
@@ -256,27 +252,24 @@ namespace Valve.VR
         /// <summary>Returns true if the action is bound</summary>
         public override bool activeBinding { get { return actionData.bActive; } }
 
-
         /// <summary>Returns true if the action was bound and the ActionSet was active during the previous update</summary>
         public override bool lastActive { get; protected set; }
 
         /// <summary>Returns true if the action was bound during the previous update</summary>
         public override bool lastActiveBinding { get { return lastActionData.bActive; } }
 
+        protected InputAnalogActionDataT actionData = new();
+        protected InputAnalogActionDataT lastActionData = new();
 
-        protected InputAnalogActionData_t actionData = new InputAnalogActionData_t();
-        protected InputAnalogActionData_t lastActionData = new InputAnalogActionData_t();
-
-        protected SteamVR_Action_Single singleAction;
-
+        protected SteamVRActionSingle singleAction;
 
         /// <summary>
         /// <strong>[Should not be called by user code]</strong> Sets up the internals of the action source before SteamVR has been initialized.
         /// </summary>
-        public override void Preinitialize(SteamVR_Action wrappingAction, SteamVR_Input_Sources forInputSource)
+        public override void Preinitialize(SteamVRAction wrappingAction, SteamVRInputSources forInputSource)
         {
             base.Preinitialize(wrappingAction, forInputSource);
-            singleAction = (SteamVR_Action_Single)wrappingAction;
+            singleAction = (SteamVRActionSingle)wrappingAction;
         }
 
         /// <summary>
@@ -289,7 +282,7 @@ namespace Valve.VR
 
             if (actionData_size == 0)
             {
-                actionData_size = (uint)Marshal.SizeOf(typeof(InputAnalogActionData_t));
+                actionData_size = (uint)Marshal.SizeOf(typeof(InputAnalogActionDataT));
             }
         }
 
@@ -307,7 +300,7 @@ namespace Valve.VR
                 {
                     foreach (Delegate existingDelegate in delegates)
                     {
-                        onAxis -= (SteamVR_Action_Single.AxisHandler)existingDelegate;
+                        onAxis -= (SteamVRActionSingle.AxisHandler)existingDelegate;
                     }
                 }
             }
@@ -319,7 +312,7 @@ namespace Valve.VR
                 {
                     foreach (Delegate existingDelegate in delegates)
                     {
-                        onUpdate -= (SteamVR_Action_Single.UpdateHandler)existingDelegate;
+                        onUpdate -= (SteamVRActionSingle.UpdateHandler)existingDelegate;
                     }
                 }
             }
@@ -331,7 +324,7 @@ namespace Valve.VR
                 {
                     foreach (Delegate existingDelegate in delegates)
                     {
-                        onChange -= (SteamVR_Action_Single.ChangeHandler)existingDelegate;
+                        onChange -= (SteamVRActionSingle.ChangeHandler)existingDelegate;
                     }
                 }
             }
@@ -343,7 +336,7 @@ namespace Valve.VR
                 {
                     foreach (Delegate existingDelegate in delegates)
                     {
-                        onActiveChange -= (SteamVR_Action_Single.ActiveChangeHandler)existingDelegate;
+                        onActiveChange -= (SteamVRActionSingle.ActiveChangeHandler)existingDelegate;
                     }
                 }
             }
@@ -355,7 +348,7 @@ namespace Valve.VR
                 {
                     foreach (Delegate existingDelegate in delegates)
                     {
-                        onActiveBindingChange -= (SteamVR_Action_Single.ActiveChangeHandler)existingDelegate;
+                        onActiveBindingChange -= (SteamVRActionSingle.ActiveChangeHandler)existingDelegate;
                     }
                 }
             }
@@ -369,7 +362,7 @@ namespace Valve.VR
             lastActionData = actionData;
             lastActive = active;
 
-            EVRInputError err = OpenVR.Input.GetAnalogActionData(handle, ref actionData, actionData_size, SteamVR_Input_Source.GetHandle(inputSource));
+            EVRInputError err = OpenVR.Input.GetAnalogActionData(handle, ref actionData, actionData_size, SteamVRInputSource.GetHandle(inputSource));
             if (err != EVRInputError.None)
             {
                 MelonLoader.MelonLogger.Error("[HPVR] GetAnalogActionData error (" + fullPath + "): " + err.ToString() + " handle: " + handle.ToString());
@@ -397,7 +390,6 @@ namespace Valve.VR
                 onUpdate?.Invoke(singleAction, inputSource, axis, delta);
             }
 
-
             if (onActiveBindingChange != null && lastActiveBinding != activeBinding)
             {
                 onActiveBindingChange.Invoke(singleAction, inputSource, activeBinding);
@@ -410,7 +402,7 @@ namespace Valve.VR
         }
     }
 
-    public interface ISteamVR_Action_Single : ISteamVR_Action_In_Source
+    public interface ISteamVRActionSingle : ISteamVRActionInSource
     {
         /// <summary>The current float value of the action.
         /// Note: Will only return non-zero if the action is also active.</summary>
@@ -419,7 +411,6 @@ namespace Valve.VR
         /// <summary>The float value of the action from the previous update.
         /// Note: Will only return non-zero if the action is also active.</summary>
         float lastAxis { get; }
-
 
         /// <summary>The float value difference between this update and the previous update.
         /// Note: Will only return non-zero if the action is also active.</summary>

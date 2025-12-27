@@ -23,7 +23,6 @@ namespace Valve.VR.InteractionSystem
 
         private AudioSource audioSource;
 
-
         //-------------------------------------------------
         void Awake()
         {
@@ -38,7 +37,6 @@ namespace Valve.VR.InteractionSystem
             }
         }
 
-
         //-------------------------------------------------
         void Update()
         {
@@ -47,7 +45,6 @@ namespace Valve.VR.InteractionSystem
                 Apply();
             }
         }
-
 
         //-------------------------------------------------
         private void Apply()

@@ -12,47 +12,47 @@ namespace Valve.VR
     /// SteamVR keeps a log of past poses so you can retrieve old poses with GetPoseAtTimeOffset or GetVelocitiesAtTimeOffset.
     /// You can also pass in times in the future to these methods for SteamVR's best prediction of where the pose will be at that time.
     /// </summary>
-    public class SteamVR_Action_Pose : SteamVR_Action_Pose_Base<SteamVR_Action_Pose_Source_Map<SteamVR_Action_Pose_Source>, SteamVR_Action_Pose_Source>
+    public class SteamVRActionPose : SteamVRActionPoseBase<SteamVRActionPoseSourceMap<SteamVRActionPoseSource>, SteamVRActionPoseSource>
     {
-        public delegate void ActiveChangeHandler(SteamVR_Action_Pose fromAction, SteamVR_Input_Sources fromSource, bool active);
-        public delegate void ChangeHandler(SteamVR_Action_Pose fromAction, SteamVR_Input_Sources fromSource);
-        public delegate void UpdateHandler(SteamVR_Action_Pose fromAction, SteamVR_Input_Sources fromSource);
-        public delegate void TrackingChangeHandler(SteamVR_Action_Pose fromAction, SteamVR_Input_Sources fromSource, ETrackingResult trackingState);
-        public delegate void ValidPoseChangeHandler(SteamVR_Action_Pose fromAction, SteamVR_Input_Sources fromSource, bool validPose);
-        public delegate void DeviceConnectedChangeHandler(SteamVR_Action_Pose fromAction, SteamVR_Input_Sources fromSource, bool deviceConnected);
+        public delegate void ActiveChangeHandler(SteamVRActionPose fromAction, SteamVRInputSources fromSource, bool active);
+        public delegate void ChangeHandler(SteamVRActionPose fromAction, SteamVRInputSources fromSource);
+        public delegate void UpdateHandler(SteamVRActionPose fromAction, SteamVRInputSources fromSource);
+        public delegate void TrackingChangeHandler(SteamVRActionPose fromAction, SteamVRInputSources fromSource, ETrackingResult trackingState);
+        public delegate void ValidPoseChangeHandler(SteamVRActionPose fromAction, SteamVRInputSources fromSource, bool validPose);
+        public delegate void DeviceConnectedChangeHandler(SteamVRActionPose fromAction, SteamVRInputSources fromSource, bool deviceConnected);
 
         /// <summary><strong>[Shortcut to: SteamVR_Input_Sources.Any]</strong> Event fires when the active state (ActionSet active and binding active) changes</summary>
         public event ActiveChangeHandler onActiveChange
-        { add { sourceMap[SteamVR_Input_Sources.Any].onActiveChange += value; } remove { sourceMap[SteamVR_Input_Sources.Any].onActiveChange -= value; } }
+        { add { sourceMap[SteamVRInputSources.Any].onActiveChange += value; } remove { sourceMap[SteamVRInputSources.Any].onActiveChange -= value; } }
 
         /// <summary><strong>[Shortcut to: SteamVR_Input_Sources.Any]</strong> Event fires when the active state of the binding changes</summary>
         public event ActiveChangeHandler onActiveBindingChange
-        { add { sourceMap[SteamVR_Input_Sources.Any].onActiveBindingChange += value; } remove { sourceMap[SteamVR_Input_Sources.Any].onActiveBindingChange -= value; } }
+        { add { sourceMap[SteamVRInputSources.Any].onActiveBindingChange += value; } remove { sourceMap[SteamVRInputSources.Any].onActiveBindingChange -= value; } }
 
         /// <summary><strong>[Shortcut to: SteamVR_Input_Sources.Any]</strong> Event fires when the orientation of the pose changes more than the changeTolerance</summary>
         public event ChangeHandler onChange
-        { add { sourceMap[SteamVR_Input_Sources.Any].onChange += value; } remove { sourceMap[SteamVR_Input_Sources.Any].onChange -= value; } }
+        { add { sourceMap[SteamVRInputSources.Any].onChange += value; } remove { sourceMap[SteamVRInputSources.Any].onChange -= value; } }
 
         /// <summary><strong>[Shortcut to: SteamVR_Input_Sources.Any]</strong> Event fires when the action is updated</summary>
         public event UpdateHandler onUpdate
-        { add { sourceMap[SteamVR_Input_Sources.Any].onUpdate += value; } remove { sourceMap[SteamVR_Input_Sources.Any].onUpdate -= value; } }
+        { add { sourceMap[SteamVRInputSources.Any].onUpdate += value; } remove { sourceMap[SteamVRInputSources.Any].onUpdate -= value; } }
 
         /// <summary><strong>[Shortcut to: SteamVR_Input_Sources.Any]</strong> Event fires when the state of the tracking has changed</summary>
         public event TrackingChangeHandler onTrackingChanged
-        { add { sourceMap[SteamVR_Input_Sources.Any].onTrackingChanged += value; } remove { sourceMap[SteamVR_Input_Sources.Any].onTrackingChanged -= value; } }
+        { add { sourceMap[SteamVRInputSources.Any].onTrackingChanged += value; } remove { sourceMap[SteamVRInputSources.Any].onTrackingChanged -= value; } }
 
         /// <summary><strong>[Shortcut to: SteamVR_Input_Sources.Any]</strong> Event fires when the validity of the pose has changed</summary>
         public event ValidPoseChangeHandler onValidPoseChanged
-        { add { sourceMap[SteamVR_Input_Sources.Any].onValidPoseChanged += value; } remove { sourceMap[SteamVR_Input_Sources.Any].onValidPoseChanged -= value; } }
+        { add { sourceMap[SteamVRInputSources.Any].onValidPoseChanged += value; } remove { sourceMap[SteamVRInputSources.Any].onValidPoseChanged -= value; } }
 
         /// <summary><strong>[Shortcut to: SteamVR_Input_Sources.Any]</strong> Event fires when the device bound to this pose is connected or disconnected</summary>
         public event DeviceConnectedChangeHandler onDeviceConnectedChanged
-        { add { sourceMap[SteamVR_Input_Sources.Any].onDeviceConnectedChanged += value; } remove { sourceMap[SteamVR_Input_Sources.Any].onDeviceConnectedChanged -= value; } }
+        { add { sourceMap[SteamVRInputSources.Any].onDeviceConnectedChanged += value; } remove { sourceMap[SteamVRInputSources.Any].onDeviceConnectedChanged -= value; } }
 
         /// <summary>Fires an event when a device is connected or disconnected.</summary>
         /// <param name="inputSource">The device you would like to add an event to. Any if the action is not device specific.</param>
         /// <param name="functionToCall">The method you would like to be called when a device is connected. Should take a SteamVR_Action_Pose as a param</param>
-        public void AddOnDeviceConnectedChanged(SteamVR_Input_Sources inputSource, DeviceConnectedChangeHandler functionToCall)
+        public void AddOnDeviceConnectedChanged(SteamVRInputSources inputSource, DeviceConnectedChangeHandler functionToCall)
         {
             sourceMap[inputSource].onDeviceConnectedChanged += functionToCall;
         }
@@ -60,16 +60,15 @@ namespace Valve.VR
         /// <summary>Stops executing the function setup by the corresponding AddListener</summary>
         /// <param name="inputSource">The device you would like to remove an event from. Any if the action is not device specific.</param>
         /// <param name="functionToStopCalling">The method you would like to stop calling when a device is connected. Should take a SteamVR_Action_Pose as a param</param>
-        public void RemoveOnDeviceConnectedChanged(SteamVR_Input_Sources inputSource, DeviceConnectedChangeHandler functionToStopCalling)
+        public void RemoveOnDeviceConnectedChanged(SteamVRInputSources inputSource, DeviceConnectedChangeHandler functionToStopCalling)
         {
             sourceMap[inputSource].onDeviceConnectedChanged -= functionToStopCalling;
         }
 
-
         /// <summary>Fires an event when the tracking of the device has changed</summary>
         /// <param name="inputSource">The device you would like to add an event to. Any if the action is not device specific.</param>
         /// <param name="functionToCall">The method you would like to be called when tracking has changed. Should take a SteamVR_Action_Pose as a param</param>
-        public void AddOnTrackingChanged(SteamVR_Input_Sources inputSource, TrackingChangeHandler functionToCall)
+        public void AddOnTrackingChanged(SteamVRInputSources inputSource, TrackingChangeHandler functionToCall)
         {
             sourceMap[inputSource].onTrackingChanged += functionToCall;
         }
@@ -77,16 +76,15 @@ namespace Valve.VR
         /// <summary>Stops executing the function setup by the corresponding AddListener</summary>
         /// <param name="inputSource">The device you would like to remove an event from. Any if the action is not device specific.</param>
         /// <param name="functionToStopCalling">The method you would like to stop calling when tracking has changed. Should take a SteamVR_Action_Pose as a param</param>
-        public void RemoveOnTrackingChanged(SteamVR_Input_Sources inputSource, TrackingChangeHandler functionToStopCalling)
+        public void RemoveOnTrackingChanged(SteamVRInputSources inputSource, TrackingChangeHandler functionToStopCalling)
         {
             sourceMap[inputSource].onTrackingChanged -= functionToStopCalling;
         }
 
-
         /// <summary>Fires an event when the device now has a valid pose or no longer has a valid pose</summary>
         /// <param name="inputSource">The device you would like to add an event to. Any if the action is not device specific.</param>
         /// <param name="functionToCall">The method you would like to be called when the pose has become valid or invalid. Should take a SteamVR_Action_Pose as a param</param>
-        public void AddOnValidPoseChanged(SteamVR_Input_Sources inputSource, ValidPoseChangeHandler functionToCall)
+        public void AddOnValidPoseChanged(SteamVRInputSources inputSource, ValidPoseChangeHandler functionToCall)
         {
             sourceMap[inputSource].onValidPoseChanged += functionToCall;
         }
@@ -94,15 +92,14 @@ namespace Valve.VR
         /// <summary>Stops executing the function setup by the corresponding AddListener</summary>
         /// <param name="inputSource">The device you would like to remove an event from. Any if the action is not device specific.</param>
         /// <param name="functionToStopCalling">The method you would like to stop calling when the pose has become valid or invalid. Should take a SteamVR_Action_Pose as a param</param>
-        public void RemoveOnValidPoseChanged(SteamVR_Input_Sources inputSource, ValidPoseChangeHandler functionToStopCalling)
+        public void RemoveOnValidPoseChanged(SteamVRInputSources inputSource, ValidPoseChangeHandler functionToStopCalling)
         {
             sourceMap[inputSource].onValidPoseChanged -= functionToStopCalling;
         }
 
-
         /// <summary>Executes a function when this action's bound state changes</summary>
         /// <param name="inputSource">The device you would like to get data from. Any if the action is not device specific.</param>
-        public void AddOnActiveChangeListener(SteamVR_Input_Sources inputSource, ActiveChangeHandler functionToCall)
+        public void AddOnActiveChangeListener(SteamVRInputSources inputSource, ActiveChangeHandler functionToCall)
         {
             sourceMap[inputSource].onActiveChange += functionToCall;
         }
@@ -110,7 +107,7 @@ namespace Valve.VR
         /// <summary>Stops executing the function setup by the corresponding AddListener</summary>
         /// <param name="functionToStopCalling">The local function that you've setup to receive update events</param>
         /// <param name="inputSource">The device you would like to get data from. Any if the action is not device specific.</param>
-        public void RemoveOnActiveChangeListener(SteamVR_Input_Sources inputSource, ActiveChangeHandler functionToStopCalling)
+        public void RemoveOnActiveChangeListener(SteamVRInputSources inputSource, ActiveChangeHandler functionToStopCalling)
         {
             sourceMap[inputSource].onActiveChange -= functionToStopCalling;
         }
@@ -118,7 +115,7 @@ namespace Valve.VR
         /// <summary>Executes a function when the state of this action (with the specified inputSource) changes</summary>
         /// <param name="functionToCall">A local function that receives the boolean action who's state has changed, the corresponding input source, and the new value</param>
         /// <param name="inputSource">The device you would like to get data from. Any if the action is not device specific.</param>
-        public void AddOnChangeListener(SteamVR_Input_Sources inputSource, ChangeHandler functionToCall)
+        public void AddOnChangeListener(SteamVRInputSources inputSource, ChangeHandler functionToCall)
         {
             sourceMap[inputSource].onChange += functionToCall;
         }
@@ -126,7 +123,7 @@ namespace Valve.VR
         /// <summary>Stops executing the function setup by the corresponding AddListener</summary>
         /// <param name="functionToStopCalling">The local function that you've setup to receive on change events</param>
         /// <param name="inputSource">The device you would like to get data from. Any if the action is not device specific.</param>
-        public void RemoveOnChangeListener(SteamVR_Input_Sources inputSource, ChangeHandler functionToStopCalling)
+        public void RemoveOnChangeListener(SteamVRInputSources inputSource, ChangeHandler functionToStopCalling)
         {
             sourceMap[inputSource].onChange -= functionToStopCalling;
         }
@@ -134,7 +131,7 @@ namespace Valve.VR
         /// <summary>Executes a function when the state of this action (with the specified inputSource) is updated.</summary>
         /// <param name="functionToCall">A local function that receives the boolean action who's state has changed, the corresponding input source, and the new value</param>
         /// <param name="inputSource">The device you would like to get data from. Any if the action is not device specific.</param>
-        public void AddOnUpdateListener(SteamVR_Input_Sources inputSource, UpdateHandler functionToCall)
+        public void AddOnUpdateListener(SteamVRInputSources inputSource, UpdateHandler functionToCall)
         {
             sourceMap[inputSource].onUpdate += functionToCall;
         }
@@ -142,7 +139,7 @@ namespace Valve.VR
         /// <summary>Stops executing the function setup by the corresponding AddListener</summary>
         /// <param name="functionToStopCalling">The local function that you've setup to receive update events</param>
         /// <param name="inputSource">The device you would like to get data from. Any if the action is not device specific.</param>
-        public void RemoveOnUpdateListener(SteamVR_Input_Sources inputSource, UpdateHandler functionToStopCalling)
+        public void RemoveOnUpdateListener(SteamVRInputSources inputSource, UpdateHandler functionToStopCalling)
         {
             sourceMap[inputSource].onUpdate -= functionToStopCalling;
         }
@@ -150,9 +147,9 @@ namespace Valve.VR
         /// <summary>
         /// Removes all listeners, useful for dispose pattern
         /// </summary>
-        public void RemoveAllListeners(SteamVR_Input_Sources input_Sources)
+        public void RemoveAllListeners(SteamVRInputSources inputSources)
         {
-            sourceMap[input_Sources].RemoveAllListeners();
+            sourceMap[inputSources].RemoveAllListeners();
         }
 
         /// <summary>
@@ -169,70 +166,69 @@ namespace Valve.VR
     /// <summary>
     /// The base pose action (pose and skeleton inherit from this)
     /// </summary>
-    public abstract class SteamVR_Action_Pose_Base<SourceMap, SourceElement> : SteamVR_Action_In<SourceMap, SourceElement>, ISteamVR_Action_Pose
-        where SourceMap : SteamVR_Action_Pose_Source_Map<SourceElement>, new()
-        where SourceElement : SteamVR_Action_Pose_Source, new()
+    public abstract class SteamVRActionPoseBase<SourceMap, SourceElement> : SteamVRActionIn<SourceMap, SourceElement>, ISteamVRActionPose
+        where SourceMap : SteamVRActionPoseSourceMap<SourceElement>, new()
+        where SourceElement : SteamVRActionPoseSource, new()
     {
         /// <summary>
         /// Sets all pose (and skeleton) actions to use the specified universe origin.
         /// </summary>
         protected static void SetUniverseOrigin(ETrackingUniverseOrigin newOrigin)
         {
-            for (int actionIndex = 0; actionIndex < SteamVR_Input.actionsPose.Length; actionIndex++)
+            for (int actionIndex = 0; actionIndex < SteamVRInput.actionsPose.Length; actionIndex++)
             {
-                SteamVR_Input.actionsPose[actionIndex].sourceMap.SetTrackingUniverseOrigin(newOrigin);
+                SteamVRInput.actionsPose[actionIndex].sourceMap.SetTrackingUniverseOrigin(newOrigin);
             }
 
-            for (int actionIndex = 0; actionIndex < SteamVR_Input.actionsSkeleton.Length; actionIndex++)
+            for (int actionIndex = 0; actionIndex < SteamVRInput.actionsSkeleton.Length; actionIndex++)
             {
-                SteamVR_Input.actionsSkeleton[actionIndex].sourceMap.SetTrackingUniverseOrigin(newOrigin);
+                SteamVRInput.actionsSkeleton[actionIndex].sourceMap.SetTrackingUniverseOrigin(newOrigin);
             }
         }
 
         /// <summary><strong>[Shortcut to: SteamVR_Input_Sources.Any]</strong> The local position of this action relative to the universe origin</summary>
-        public Vector3 localPosition { get { return sourceMap[SteamVR_Input_Sources.Any].localPosition; } }
+        public Vector3 localPosition { get { return sourceMap[SteamVRInputSources.Any].localPosition; } }
 
         /// <summary><strong>[Shortcut to: SteamVR_Input_Sources.Any]</strong> The local rotation of this action relative to the universe origin</summary>
-        public Quaternion localRotation { get { return sourceMap[SteamVR_Input_Sources.Any].localRotation; } }
+        public Quaternion localRotation { get { return sourceMap[SteamVRInputSources.Any].localRotation; } }
 
         /// <summary><strong>[Shortcut to: SteamVR_Input_Sources.Any]</strong> The state of the tracking system that is used to create pose data (position, rotation, etc)</summary>
-        public ETrackingResult trackingState { get { return sourceMap[SteamVR_Input_Sources.Any].trackingState; } }
+        public ETrackingResult trackingState { get { return sourceMap[SteamVRInputSources.Any].trackingState; } }
 
         /// <summary><strong>[Shortcut to: SteamVR_Input_Sources.Any]</strong> The local velocity of this pose relative to the universe origin</summary>
-        public Vector3 velocity { get { return sourceMap[SteamVR_Input_Sources.Any].velocity; } }
+        public Vector3 velocity { get { return sourceMap[SteamVRInputSources.Any].velocity; } }
 
         /// <summary><strong>[Shortcut to: SteamVR_Input_Sources.Any]</strong> The local angular velocity of this pose relative to the universe origin</summary>
-        public Vector3 angularVelocity { get { return sourceMap[SteamVR_Input_Sources.Any].angularVelocity; } }
+        public Vector3 angularVelocity { get { return sourceMap[SteamVRInputSources.Any].angularVelocity; } }
 
         /// <summary><strong>[Shortcut to: SteamVR_Input_Sources.Any]</strong> True if the pose retrieved for this action and input source is valid (good data from the tracking source)</summary>
-        public bool poseIsValid { get { return sourceMap[SteamVR_Input_Sources.Any].poseIsValid; } }
+        public bool poseIsValid { get { return sourceMap[SteamVRInputSources.Any].poseIsValid; } }
 
         /// <summary><strong>[Shortcut to: SteamVR_Input_Sources.Any]</strong> True if the device bound to this action and input source is connected</summary>
-        public bool deviceIsConnected { get { return sourceMap[SteamVR_Input_Sources.Any].deviceIsConnected; } }
+        public bool deviceIsConnected { get { return sourceMap[SteamVRInputSources.Any].deviceIsConnected; } }
 
         /// <summary><strong>[Shortcut to: SteamVR_Input_Sources.Any]</strong> The local position for this pose during the previous update</summary>
-        public Vector3 lastLocalPosition { get { return sourceMap[SteamVR_Input_Sources.Any].lastLocalPosition; } }
+        public Vector3 lastLocalPosition { get { return sourceMap[SteamVRInputSources.Any].lastLocalPosition; } }
 
         /// <summary><strong>[Shortcut to: SteamVR_Input_Sources.Any]</strong> The local rotation for this pose during the previous update</summary>
-        public Quaternion lastLocalRotation { get { return sourceMap[SteamVR_Input_Sources.Any].lastLocalRotation; } }
+        public Quaternion lastLocalRotation { get { return sourceMap[SteamVRInputSources.Any].lastLocalRotation; } }
 
         /// <summary><strong>[Shortcut to: SteamVR_Input_Sources.Any]</strong> The tracking state for this pose during the previous update</summary>
-        public ETrackingResult lastTrackingState { get { return sourceMap[SteamVR_Input_Sources.Any].lastTrackingState; } }
+        public ETrackingResult lastTrackingState { get { return sourceMap[SteamVRInputSources.Any].lastTrackingState; } }
 
         /// <summary><strong>[Shortcut to: SteamVR_Input_Sources.Any]</strong> The velocity for this pose during the previous update</summary>
-        public Vector3 lastVelocity { get { return sourceMap[SteamVR_Input_Sources.Any].lastVelocity; } }
+        public Vector3 lastVelocity { get { return sourceMap[SteamVRInputSources.Any].lastVelocity; } }
 
         /// <summary><strong>[Shortcut to: SteamVR_Input_Sources.Any]</strong> The angular velocity for this pose during the previous update</summary>
-        public Vector3 lastAngularVelocity { get { return sourceMap[SteamVR_Input_Sources.Any].lastAngularVelocity; } }
+        public Vector3 lastAngularVelocity { get { return sourceMap[SteamVRInputSources.Any].lastAngularVelocity; } }
 
         /// <summary><strong>[Shortcut to: SteamVR_Input_Sources.Any]</strong> True if the pose was valid during the previous update</summary>
-        public bool lastPoseIsValid { get { return sourceMap[SteamVR_Input_Sources.Any].lastPoseIsValid; } }
+        public bool lastPoseIsValid { get { return sourceMap[SteamVRInputSources.Any].lastPoseIsValid; } }
 
         /// <summary><strong>[Shortcut to: SteamVR_Input_Sources.Any]</strong> True if the device bound to this action was connected during the previous update</summary>
-        public bool lastDeviceIsConnected { get { return sourceMap[SteamVR_Input_Sources.Any].lastDeviceIsConnected; } }
+        public bool lastDeviceIsConnected { get { return sourceMap[SteamVRInputSources.Any].lastDeviceIsConnected; } }
 
-
-        public SteamVR_Action_Pose_Base() { }
+        public SteamVRActionPoseBase() { }
 
         /// <summary>
         /// <strong>[Should not be called by user code]</strong>
@@ -249,7 +245,7 @@ namespace Valve.VR
         /// <param name="inputSource">The device you would like to get data from. Any if the action is not device specific.</param>
         /// <param name="secondsFromNow">The time offset in the future (estimated) or in the past (previously recorded) you want to get data from</param>
         /// <returns>true if the call succeeded</returns>
-        public bool GetVelocitiesAtTimeOffset(SteamVR_Input_Sources inputSource, float secondsFromNow, out Vector3 velocity, out Vector3 angularVelocity)
+        public bool GetVelocitiesAtTimeOffset(SteamVRInputSources inputSource, float secondsFromNow, out Vector3 velocity, out Vector3 angularVelocity)
         {
             return sourceMap[inputSource].GetVelocitiesAtTimeOffset(secondsFromNow, out velocity, out angularVelocity);
         }
@@ -260,7 +256,7 @@ namespace Valve.VR
         /// <param name="inputSource">The device you would like to get data from. Any if the action is not device specific.</param>
         /// <param name="secondsFromNow">The time offset in the future (estimated) or in the past (previously recorded) you want to get data from</param>
         /// <returns>true if the call succeeded</returns>
-        public bool GetPoseAtTimeOffset(SteamVR_Input_Sources inputSource, float secondsFromNow, out Vector3 localPosition, out Quaternion localRotation, out Vector3 velocity, out Vector3 angularVelocity)
+        public bool GetPoseAtTimeOffset(SteamVRInputSources inputSource, float secondsFromNow, out Vector3 localPosition, out Quaternion localRotation, out Vector3 velocity, out Vector3 angularVelocity)
         {
             return sourceMap[inputSource].GetPoseAtTimeOffset(secondsFromNow, out localPosition, out localRotation, out velocity, out angularVelocity);
         }
@@ -270,107 +266,105 @@ namespace Valve.VR
         /// </summary>
         /// <param name="inputSource">The device you would like to get data from. Any if the action is not device specific.</param>
         /// <param name="transformToUpdate">The transform of the object to be updated</param>
-        public virtual void UpdateTransform(SteamVR_Input_Sources inputSource, Transform transformToUpdate)
+        public virtual void UpdateTransform(SteamVRInputSources inputSource, Transform transformToUpdate)
         {
             sourceMap[inputSource].UpdateTransform(transformToUpdate);
         }
 
         /// <summary>The local position of this action relative to the universe origin</summary>
         /// <param name="inputSource">The device you would like to get data from. Any if the action is not device specific.</param>
-        public Vector3 GetLocalPosition(SteamVR_Input_Sources inputSource)
+        public Vector3 GetLocalPosition(SteamVRInputSources inputSource)
         {
             return sourceMap[inputSource].localPosition;
         }
 
         /// <summary>The local rotation of this action relative to the universe origin</summary>
         /// <param name="inputSource">The device you would like to get data from. Any if the action is not device specific.</param>
-        public Quaternion GetLocalRotation(SteamVR_Input_Sources inputSource)
+        public Quaternion GetLocalRotation(SteamVRInputSources inputSource)
         {
             return sourceMap[inputSource].localRotation;
         }
 
         /// <summary>The local velocity of this pose relative to the universe origin</summary>
         /// <param name="inputSource">The device you would like to get data from. Any if the action is not device specific.</param>
-        public Vector3 GetVelocity(SteamVR_Input_Sources inputSource)
+        public Vector3 GetVelocity(SteamVRInputSources inputSource)
         {
             return sourceMap[inputSource].velocity;
         }
 
         /// <summary>The local angular velocity of this pose relative to the universe origin</summary>
         /// <param name="inputSource">The device you would like to get data from. Any if the action is not device specific.</param>
-        public Vector3 GetAngularVelocity(SteamVR_Input_Sources inputSource)
+        public Vector3 GetAngularVelocity(SteamVRInputSources inputSource)
         {
             return sourceMap[inputSource].angularVelocity;
         }
 
         /// <summary>True if the device bound to this action and input source is connected</summary>
         /// <param name="inputSource">The device you would like to get data from. Any if the action is not device specific.</param>
-        public bool GetDeviceIsConnected(SteamVR_Input_Sources inputSource)
+        public bool GetDeviceIsConnected(SteamVRInputSources inputSource)
         {
             return sourceMap[inputSource].deviceIsConnected;
         }
 
         /// <summary>True if the pose retrieved for this action and input source is valid (good data from the tracking source)</summary>
         /// <param name="inputSource">The device you would like to get data from. Any if the action is not device specific.</param>
-        public bool GetPoseIsValid(SteamVR_Input_Sources inputSource)
+        public bool GetPoseIsValid(SteamVRInputSources inputSource)
         {
             return sourceMap[inputSource].poseIsValid;
         }
 
         /// <summary>The state of the tracking system that is used to create pose data (position, rotation, etc)</summary>
         /// <param name="inputSource">The device you would like to get data from. Any if the action is not device specific.</param>
-        public ETrackingResult GetTrackingResult(SteamVR_Input_Sources inputSource)
+        public ETrackingResult GetTrackingResult(SteamVRInputSources inputSource)
         {
             return sourceMap[inputSource].trackingState;
         }
 
-
-
         /// <summary>The local position for this pose during the previous update</summary>
         /// <param name="inputSource">The device you would like to get data from. Any if the action is not device specific.</param>
-        public Vector3 GetLastLocalPosition(SteamVR_Input_Sources inputSource)
+        public Vector3 GetLastLocalPosition(SteamVRInputSources inputSource)
         {
             return sourceMap[inputSource].lastLocalPosition;
         }
 
         /// <summary>The local rotation for this pose during the previous update</summary>
         /// <param name="inputSource">The device you would like to get data from. Any if the action is not device specific.</param>
-        public Quaternion GetLastLocalRotation(SteamVR_Input_Sources inputSource)
+        public Quaternion GetLastLocalRotation(SteamVRInputSources inputSource)
         {
             return sourceMap[inputSource].lastLocalRotation;
         }
 
         /// <summary>The velocity for this pose during the previous update</summary>
         /// <param name="inputSource">The device you would like to get data from. Any if the action is not device specific.</param>
-        public Vector3 GetLastVelocity(SteamVR_Input_Sources inputSource)
+        public Vector3 GetLastVelocity(SteamVRInputSources inputSource)
         {
             return sourceMap[inputSource].lastVelocity;
         }
 
         /// <summary>The angular velocity for this pose during the previous update</summary>
         /// <param name="inputSource">The device you would like to get data from. Any if the action is not device specific.</param>
-        public Vector3 GetLastAngularVelocity(SteamVR_Input_Sources inputSource)
+        public Vector3 GetLastAngularVelocity(SteamVRInputSources inputSource)
         {
             return sourceMap[inputSource].lastAngularVelocity;
         }
 
         /// <summary>True if the device bound to this action was connected during the previous update</summary>
         /// <param name="inputSource">The device you would like to get data from. Any if the action is not device specific.</param>
-        public bool GetLastDeviceIsConnected(SteamVR_Input_Sources inputSource)
+        public bool GetLastDeviceIsConnected(SteamVRInputSources inputSource)
         {
             return sourceMap[inputSource].lastDeviceIsConnected;
         }
 
         /// <summary>True if the pose was valid during the previous update</summary>
         /// <param name="inputSource">The device you would like to get data from. Any if the action is not device specific.</param>
-        public bool GetLastPoseIsValid(SteamVR_Input_Sources inputSource)
+        public bool GetLastPoseIsValid(SteamVRInputSources inputSource)
         {
             return sourceMap[inputSource].lastPoseIsValid;
         }
 
         /// <summary>The tracking state for this pose during the previous update</summary>
         /// <param name="inputSource">The device you would like to get data from. Any if the action is not device specific.</param>
-        public ETrackingResult GetLastTrackingResult(SteamVR_Input_Sources inputSource)
+        public ETrackingResult GetLastTrackingResult(SteamVRInputSources inputSource)
         {
             return sourceMap[inputSource].lastTrackingState;
         }
@@ -379,8 +373,8 @@ namespace Valve.VR
     /// <summary>
     /// Boolean actions are either true or false. There is an onStateUp and onStateDown event for the rising and falling edge.
     /// </summary>
-    public class SteamVR_Action_Pose_Source_Map<Source> : SteamVR_Action_In_Source_Map<Source>
-        where Source : SteamVR_Action_Pose_Source, new()
+    public class SteamVRActionPoseSourceMap<Source> : SteamVRActionInSourceMap<Source>
+        where Source : SteamVRActionPoseSource, new()
     {
         /// <summary>
         /// Sets all pose (and skeleton) actions to use the specified universe origin without going through the sourcemap indexer
@@ -405,7 +399,7 @@ namespace Valve.VR
         }
     }
 
-    public class SteamVR_Action_Pose_Source : SteamVR_Action_In_Source, ISteamVR_Action_Pose
+    public class SteamVRActionPoseSource : SteamVRActionInSource, ISteamVRActionPose
     {
         public ETrackingUniverseOrigin universeOrigin = ETrackingUniverseOrigin.TrackingUniverseRawAndUncalibrated;
 
@@ -415,27 +409,25 @@ namespace Valve.VR
         public float changeTolerance = Mathf.Epsilon;
 
         /// <summary>Event fires when the active state (ActionSet active and binding active) changes</summary>
-        public event SteamVR_Action_Pose.ActiveChangeHandler onActiveChange;
+        public event SteamVRActionPose.ActiveChangeHandler onActiveChange;
 
         /// <summary>Event fires when the active state of the binding changes</summary>
-        public event SteamVR_Action_Pose.ActiveChangeHandler onActiveBindingChange;
+        public event SteamVRActionPose.ActiveChangeHandler onActiveBindingChange;
 
         /// <summary>Event fires when the orientation of the pose changes more than the changeTolerance</summary>
-        public event SteamVR_Action_Pose.ChangeHandler onChange;
+        public event SteamVRActionPose.ChangeHandler onChange;
 
         /// <summary>Event fires when the action is updated</summary>
-        public event SteamVR_Action_Pose.UpdateHandler onUpdate;
+        public event SteamVRActionPose.UpdateHandler onUpdate;
 
         /// <summary>Event fires when the state of the tracking system that is used to create pose data (position, rotation, etc) changes</summary>
-        public event SteamVR_Action_Pose.TrackingChangeHandler onTrackingChanged;
+        public event SteamVRActionPose.TrackingChangeHandler onTrackingChanged;
 
         /// <summary>Event fires when the state of the pose data retrieved for this action changes validity (good/bad data from the tracking source)</summary>
-        public event SteamVR_Action_Pose.ValidPoseChangeHandler onValidPoseChanged;
+        public event SteamVRActionPose.ValidPoseChangeHandler onValidPoseChanged;
 
         /// <summary>Event fires when the device bound to this action is connected or disconnected</summary>
-        public event SteamVR_Action_Pose.DeviceConnectedChangeHandler onDeviceConnectedChanged;
-
-
+        public event SteamVRActionPose.DeviceConnectedChangeHandler onDeviceConnectedChanged;
 
         /// <summary>True when the orientation of the pose has changhed more than changeTolerance in the last update. Note: Will only return true if the action is also active.</summary>
         public override bool changed { get; protected set; }
@@ -466,7 +458,6 @@ namespace Valve.VR
         /// <summary>True if the action is bound</summary>
         public override bool activeBinding { get { return poseActionData.bActive; } }
 
-
         /// <summary>If the action was active (ActionSet active and binding active) during the last update</summary>
         public override bool lastActive { get; protected set; }
 
@@ -490,7 +481,6 @@ namespace Valve.VR
 
         /// <summary>True if the device bound to this action was connected during the previous update</summary>
         public bool lastDeviceIsConnected { get { return lastPoseActionData.pose.bDeviceIsConnected; } }
-
 
         /// <summary>The local position of this action relative to the universe origin</summary>
         public Vector3 localPosition { get; protected set; }
@@ -516,23 +506,21 @@ namespace Valve.VR
         /// <summary>The angular velocity for this pose during the previous update</summary>
         public Vector3 lastAngularVelocity { get; protected set; }
 
+        protected InputPoseActionDataT poseActionData = new();
 
-        protected InputPoseActionData_t poseActionData = new InputPoseActionData_t();
+        protected InputPoseActionDataT lastPoseActionData = new();
 
-        protected InputPoseActionData_t lastPoseActionData = new InputPoseActionData_t();
+        protected InputPoseActionDataT tempPoseActionData = new();
 
-        protected InputPoseActionData_t tempPoseActionData = new InputPoseActionData_t();
-
-
-        protected SteamVR_Action_Pose poseAction;
+        protected SteamVRActionPose poseAction;
 
         /// <summary>
         /// <strong>[Should not be called by user code]</strong> Sets up the internals of the action source before SteamVR has been initialized.
         /// </summary>
-        public override void Preinitialize(SteamVR_Action wrappingAction, SteamVR_Input_Sources forInputSource)
+        public override void Preinitialize(SteamVRAction wrappingAction, SteamVRInputSources forInputSource)
         {
             base.Preinitialize(wrappingAction, forInputSource);
-            poseAction = wrappingAction as SteamVR_Action_Pose;
+            poseAction = wrappingAction as SteamVRActionPose;
         }
 
         /// <summary>
@@ -545,7 +533,7 @@ namespace Valve.VR
 
             if (poseActionData_size == 0)
             {
-                poseActionData_size = (uint)Marshal.SizeOf(typeof(InputPoseActionData_t));
+                poseActionData_size = (uint)Marshal.SizeOf(typeof(InputPoseActionDataT));
             }
         }
 
@@ -564,7 +552,7 @@ namespace Valve.VR
                 {
                     foreach (Delegate existingDelegate in delegates)
                     {
-                        onActiveChange -= (SteamVR_Action_Pose.ActiveChangeHandler)existingDelegate;
+                        onActiveChange -= (SteamVRActionPose.ActiveChangeHandler)existingDelegate;
                     }
                 }
             }
@@ -576,7 +564,7 @@ namespace Valve.VR
                 {
                     foreach (Delegate existingDelegate in delegates)
                     {
-                        onActiveBindingChange -= (SteamVR_Action_Pose.ActiveChangeHandler)existingDelegate;
+                        onActiveBindingChange -= (SteamVRActionPose.ActiveChangeHandler)existingDelegate;
                     }
                 }
             }
@@ -588,7 +576,7 @@ namespace Valve.VR
                 {
                     foreach (Delegate existingDelegate in delegates)
                     {
-                        onChange -= (SteamVR_Action_Pose.ChangeHandler)existingDelegate;
+                        onChange -= (SteamVRActionPose.ChangeHandler)existingDelegate;
                     }
                 }
             }
@@ -600,7 +588,7 @@ namespace Valve.VR
                 {
                     foreach (Delegate existingDelegate in delegates)
                     {
-                        onUpdate -= (SteamVR_Action_Pose.UpdateHandler)existingDelegate;
+                        onUpdate -= (SteamVRActionPose.UpdateHandler)existingDelegate;
                     }
                 }
             }
@@ -612,7 +600,7 @@ namespace Valve.VR
                 {
                     foreach (Delegate existingDelegate in delegates)
                     {
-                        onTrackingChanged -= (SteamVR_Action_Pose.TrackingChangeHandler)existingDelegate;
+                        onTrackingChanged -= (SteamVRActionPose.TrackingChangeHandler)existingDelegate;
                     }
                 }
             }
@@ -624,7 +612,7 @@ namespace Valve.VR
                 {
                     foreach (Delegate existingDelegate in delegates)
                     {
-                        onValidPoseChanged -= (SteamVR_Action_Pose.ValidPoseChangeHandler)existingDelegate;
+                        onValidPoseChanged -= (SteamVRActionPose.ValidPoseChangeHandler)existingDelegate;
                     }
                 }
             }
@@ -636,7 +624,7 @@ namespace Valve.VR
                 {
                     foreach (Delegate existingDelegate in delegates)
                     {
-                        onDeviceConnectedChanged -= (SteamVR_Action_Pose.DeviceConnectedChangeHandler)existingDelegate;
+                        onDeviceConnectedChanged -= (SteamVRActionPose.DeviceConnectedChangeHandler)existingDelegate;
                     }
                 }
             }
@@ -672,7 +660,7 @@ namespace Valve.VR
             }
             else
             {
-                err = OpenVR.Input.GetPoseActionDataRelativeToNow(handle, universeOrigin, framesAhead * (1 / SteamVR.instance.hmd_DisplayFrequency), ref poseActionData, poseActionData_size, inputSourceHandle);
+                err = OpenVR.Input.GetPoseActionDataRelativeToNow(handle, universeOrigin, framesAhead * (1 / SteamVR.instance.hmdDisplayFrequency), ref poseActionData, poseActionData_size, inputSourceHandle);
             }
 
             if (err != EVRInputError.None)
@@ -822,31 +810,35 @@ namespace Valve.VR
             onUpdate?.Invoke(poseAction, inputSource);
         }
 
-        protected Vector3 GetUnityCoordinateVelocity(HmdVector3_t vector)
+        protected Vector3 GetUnityCoordinateVelocity(HmdVector3T vector)
         {
             return GetUnityCoordinateVelocity(vector.v0, vector.v1, vector.v2);
         }
 
-        protected Vector3 GetUnityCoordinateAngularVelocity(HmdVector3_t vector)
+        protected Vector3 GetUnityCoordinateAngularVelocity(HmdVector3T vector)
         {
             return GetUnityCoordinateAngularVelocity(vector.v0, vector.v1, vector.v2);
         }
 
         protected Vector3 GetUnityCoordinateVelocity(float x, float y, float z)
         {
-            Vector3 vector = new Vector3();
-            vector.x = x;
-            vector.y = y;
-            vector.z = -z;
+            Vector3 vector = new()
+            {
+                x = x,
+                y = y,
+                z = -z
+            };
             return vector;
         }
 
         protected Vector3 GetUnityCoordinateAngularVelocity(float x, float y, float z)
         {
-            Vector3 vector = new Vector3();
-            vector.x = -x;
-            vector.y = -y;
-            vector.z = z;
+            Vector3 vector = new()
+            {
+                x = -x,
+                y = -y,
+                z = z
+            };
             return vector;
         }
     }
@@ -854,7 +846,7 @@ namespace Valve.VR
     /// <summary>
     /// Boolean actions are either true or false. There is an onStateUp and onStateDown event for the rising and falling edge.
     /// </summary>
-    public interface ISteamVR_Action_Pose : ISteamVR_Action_In_Source
+    public interface ISteamVRActionPose : ISteamVRActionInSource
     {
         /// <summary>The local position of this action relative to the universe origin</summary>
         Vector3 localPosition { get; }
@@ -876,7 +868,6 @@ namespace Valve.VR
 
         /// <summary>True if the device bound to this action and input source is connected</summary>
         bool deviceIsConnected { get; }
-
 
         /// <summary>The local position for this pose during the previous update</summary>
         Vector3 lastLocalPosition { get; }

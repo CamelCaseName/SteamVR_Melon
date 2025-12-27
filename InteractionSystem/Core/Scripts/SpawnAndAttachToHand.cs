@@ -17,7 +17,6 @@ namespace Valve.VR.InteractionSystem
         public Hand hand;
         public GameObject prefab;
 
-
         //-------------------------------------------------
         public void SpawnAndAttach(Hand passedInhand)
         {

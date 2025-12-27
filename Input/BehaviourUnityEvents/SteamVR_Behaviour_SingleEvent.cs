@@ -5,5 +5,5 @@ using System;
 namespace Valve.VR
 {
     [Serializable]
-    public class SteamVR_Behaviour_SingleEvent : SteamVR_Events.Event<SteamVR_Behaviour_Single, SteamVR_Input_Sources, float, float> { }
+    public class SteamVRBehaviourSingleEvent : SteamVREvents.Event<SteamVRBehaviourSingle, SteamVRInputSources, float, float> { }
 }

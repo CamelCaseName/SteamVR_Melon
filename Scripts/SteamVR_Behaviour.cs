@@ -8,14 +8,14 @@ using UnityEngine.XR;
 namespace Valve.VR
 {
     [MelonLoader.RegisterTypeInIl2Cpp()]
-    public class SteamVR_Behaviour : MonoBehaviour
+    public class SteamVRBehaviour : MonoBehaviour
     {
-        public SteamVR_Behaviour(IntPtr value) : base(value) { }
+        public SteamVRBehaviour(IntPtr value) : base(value) { }
         private const string openVRDeviceName = "OpenVR";
         public static bool forcingInitialization = false;
 
-        private static SteamVR_Behaviour _instance;
-        public static SteamVR_Behaviour instance
+        private static SteamVRBehaviour _instance;
+        public static SteamVRBehaviour instance
         {
             get
             {
@@ -32,7 +32,7 @@ namespace Valve.VR
 
         public bool doNotDestroy = true;
 
-        public SteamVR_Render steamvr_render;
+        public SteamVRRender steamvr_render;
 
         internal static bool isPlaying = false;
 
@@ -49,13 +49,13 @@ namespace Valve.VR
                     forcingInitialization = true;
                 }
 
-                SteamVR_Render renderInstance = GameObject.FindObjectOfType<SteamVR_Render>();
+                SteamVRRender renderInstance = GameObject.FindObjectOfType<SteamVRRender>();
                 if (renderInstance != null)
                 {
                     steamVRObject = renderInstance.gameObject;
                 }
 
-                SteamVR_Behaviour behaviourInstance = GameObject.FindObjectOfType<SteamVR_Behaviour>();
+                SteamVRBehaviour behaviourInstance = GameObject.FindObjectOfType<SteamVRBehaviour>();
                 if (behaviourInstance != null)
                 {
                     steamVRObject = behaviourInstance.gameObject;
@@ -63,16 +63,16 @@ namespace Valve.VR
 
                 if (steamVRObject == null)
                 {
-                    GameObject objectInstance = new GameObject("[HPVR]");
-                    _instance = objectInstance.AddComponent<SteamVR_Behaviour>();
-                    _instance.steamvr_render = objectInstance.AddComponent<SteamVR_Render>();
+                    GameObject objectInstance = new("[HPVR]");
+                    _instance = objectInstance.AddComponent<SteamVRBehaviour>();
+                    _instance.steamvr_render = objectInstance.AddComponent<SteamVRRender>();
                 }
                 else
                 {
-                    behaviourInstance = steamVRObject.GetComponent<SteamVR_Behaviour>();
+                    behaviourInstance = steamVRObject.GetComponent<SteamVRBehaviour>();
                     if (behaviourInstance == null)
                     {
-                        behaviourInstance = steamVRObject.AddComponent<SteamVR_Behaviour>();
+                        behaviourInstance = steamVRObject.AddComponent<SteamVRBehaviour>();
                     }
 
                     if (renderInstance != null)
@@ -81,10 +81,10 @@ namespace Valve.VR
                     }
                     else
                     {
-                        behaviourInstance.steamvr_render = steamVRObject.GetComponent<SteamVR_Render>();
+                        behaviourInstance.steamvr_render = steamVRObject.GetComponent<SteamVRRender>();
                         if (behaviourInstance.steamvr_render == null)
                         {
-                            behaviourInstance.steamvr_render = steamVRObject.AddComponent<SteamVR_Render>();
+                            behaviourInstance.steamvr_render = steamVRObject.AddComponent<SteamVRRender>();
                         }
                     }
 
@@ -173,12 +173,12 @@ namespace Valve.VR
         protected void OnEnable()
         {
             UnityHooks.OnBeforeRender += OnBeforeRender;
-            SteamVR_Events.System(EVREventType.VREvent_Quit).Listen(OnQuit);
+            SteamVREvents.System(EVREventType.VREventQuit).Listen(OnQuit);
         }
         protected void OnDisable()
         {
             UnityHooks.OnBeforeRender -= OnBeforeRender;
-            SteamVR_Events.System(EVREventType.VREvent_Quit).Remove(OnQuit);
+            SteamVREvents.System(EVREventType.VREventQuit).Remove(OnQuit);
         }
         protected void OnBeforeRender()
         {
@@ -195,7 +195,7 @@ namespace Valve.VR
                 {
                     lastFrameCount = Time.frameCount;
 
-                    SteamVR_Input.OnPreCull();
+                    SteamVRInput.OnPreCull();
                 }
             }
         }
@@ -204,7 +204,7 @@ namespace Valve.VR
         {
             if (OpenVR.Input != null)
             {
-                SteamVR_Input.FixedUpdate();
+                SteamVRInput.FixedUpdate();
             }
         }
 
@@ -212,7 +212,7 @@ namespace Valve.VR
         {
             if (OpenVR.Input != null)
             {
-                SteamVR_Input.LateUpdate();
+                SteamVRInput.LateUpdate();
             }
         }
 
@@ -220,11 +220,11 @@ namespace Valve.VR
         {
             if (OpenVR.Input != null)
             {
-                SteamVR_Input.Update();
+                SteamVRInput.Update();
             }
         }
 
-        protected void OnQuit(VREvent_t vrEvent)
+        protected void OnQuit(VREventT vrEvent)
         {
 #if UNITY_EDITOR
             UnityEditor.EditorApplication.isPlaying = false;

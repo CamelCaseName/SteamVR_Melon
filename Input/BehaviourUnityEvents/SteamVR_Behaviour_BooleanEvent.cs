@@ -4,5 +4,5 @@ using System;
 namespace Valve.VR
 {
     [Serializable]
-    public class SteamVR_Behaviour_BooleanEvent : SteamVR_Events.Event<SteamVR_Behaviour_Boolean, SteamVR_Input_Sources, bool> { }
+    public class SteamVRBehaviourBooleanEvent : SteamVREvents.Event<SteamVRBehaviourBoolean, SteamVRInputSources, bool> { }
 }

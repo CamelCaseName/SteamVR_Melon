@@ -32,7 +32,6 @@ namespace Valve.VR.InteractionSystem
 
         protected Interactable interactable;
 
-
         protected virtual void Awake()
         {
             mappingChangeSamples = new float[numMappingChangeSamples];
@@ -88,7 +87,6 @@ namespace Valve.VR.InteractionSystem
             CalculateMappingChangeRate();
         }
 
-
         protected void CalculateMappingChangeRate()
         {
             //Compute the mapping change rate
@@ -128,7 +126,6 @@ namespace Valve.VR.InteractionSystem
 
             return Vector3.Dot(displacement, direction) / length;
         }
-
 
         protected virtual void Update()
         {

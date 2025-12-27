@@ -12,10 +12,9 @@ namespace Valve.VR.InteractionSystem.Sample
 
         public bool affectMaterial = true;
 
-        public SteamVR_Action_Single gripSqueeze = SteamVR_Input.GetAction<SteamVR_Action_Single>("Squeeze");
+        public SteamVRActionSingle gripSqueeze = SteamVRInput.GetAction<SteamVRActionSingle>("Squeeze");
 
-        public SteamVR_Action_Single pinchSqueeze = SteamVR_Input.GetAction<SteamVR_Action_Single>("Squeeze");
-
+        public SteamVRActionSingle pinchSqueeze = SteamVRInput.GetAction<SteamVRActionSingle>("Squeeze");
 
         private Rigidbody rigidbody;
 

@@ -27,7 +27,6 @@ namespace Valve.VR.InteractionSystem
             }
         }
 
-
         //-------------------------------------------------
         void OnTriggerEnter(Collider collider)
         {

@@ -43,12 +43,12 @@ namespace Valve.VR.InteractionSystem.Sample
                 Hand hand = Player.instance.hands[handIndex];
                 if (hand != null)
                 {
-                    if (hand.handType == SteamVR_Input_Sources.RightHand)
+                    if (hand.handType == SteamVRInputSources.RightHand)
                     {
                         hand.SetRenderModel(prefabs.rightPrefab);
                     }
 
-                    if (hand.handType == SteamVR_Input_Sources.LeftHand)
+                    if (hand.handType == SteamVRInputSources.LeftHand)
                     {
                         hand.SetRenderModel(prefabs.leftPrefab);
                     }

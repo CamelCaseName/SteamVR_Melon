@@ -1,6 +1,7 @@
 ﻿//======= Copyright (c) Valve Corporation, All rights reserved. ===============
 
 using Newtonsoft.Json;
+using SteamVR_Melon.Scripts;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -9,7 +10,7 @@ using UnityEngine;
 
 namespace Valve.VR
 {
-    public partial class SteamVR_Input
+    public partial class SteamVRInput
     {
         public const string defaultInputGameObjectName = "[SteamVR Input]";
         private const string localizationKeyName = "localization";
@@ -24,7 +25,7 @@ namespace Valve.VR
         public static bool preInitialized = false;
 
         /// <summary>The serialized version of the actions file we're currently using (only used in editor)</summary>
-        public static SteamVR_Input_ActionFile actionFile;
+        public static SteamVRInputActionFile actionFile;
 
         /// <summary>The hash of the current action file on disk</summary>
         public static string actionFileHash;
@@ -51,57 +52,56 @@ namespace Valve.VR
             }
         }
 
-
         #region array accessors
         /// <summary>An array of all action sets</summary>
-        public static SteamVR_ActionSet[] actionSets;
+        public static SteamVRActionSet[] actionSets;
 
         /// <summary>An array of all actions (in all action sets)</summary>
-        public static SteamVR_Action[] actions;
+        public static SteamVRAction[] actions;
 
         /// <summary>An array of all input actions</summary>
-        public static ISteamVR_Action_In[] actionsIn;
+        public static ISteamVRActionIn[] actionsIn;
 
         /// <summary>An array of all output actions (haptic)</summary>
-        public static ISteamVR_Action_Out[] actionsOut;
+        public static ISteamVRActionOut[] actionsOut;
 
         /// <summary>An array of all the boolean actions</summary>
-        public static SteamVR_Action_Boolean[] actionsBoolean;
+        public static SteamVRActionBoolean[] actionsBoolean;
 
         /// <summary>An array of all the single actions</summary>
-        public static SteamVR_Action_Single[] actionsSingle;
+        public static SteamVRActionSingle[] actionsSingle;
 
         /// <summary>An array of all the vector2 actions</summary>
-        public static SteamVR_Action_Vector2[] actionsVector2;
+        public static SteamVRActionVector2[] actionsVector2;
 
         /// <summary>An array of all the vector3 actions</summary>
-        public static SteamVR_Action_Vector3[] actionsVector3;
+        public static SteamVRActionVector3[] actionsVector3;
 
         /// <summary>An array of all the pose actions</summary>
-        public static SteamVR_Action_Pose[] actionsPose;
+        public static SteamVRActionPose[] actionsPose;
 
         /// <summary>An array of all the skeleton actions</summary>
-        public static SteamVR_Action_Skeleton[] actionsSkeleton;
+        public static SteamVRActionSkeleton[] actionsSkeleton;
 
         /// <summary>An array of all the vibration (haptic) actions</summary>
-        public static SteamVR_Action_Vibration[] actionsVibration;
+        public static SteamVRActionVibration[] actionsVibration;
 
         /// <summary>An array of all the input actions that are not pose or skeleton actions (boolean, single, vector2, vector3)</summary>
-        public static ISteamVR_Action_In[] actionsNonPoseNonSkeletonIn;
+        public static ISteamVRActionIn[] actionsNonPoseNonSkeletonIn;
 
-        protected static Dictionary<string, SteamVR_ActionSet> actionSetsByPath = new Dictionary<string, SteamVR_ActionSet>();
-        protected static Dictionary<string, SteamVR_ActionSet> actionSetsByPathLowered = new Dictionary<string, SteamVR_ActionSet>();
-        protected static Dictionary<string, SteamVR_Action> actionsByPath = new Dictionary<string, SteamVR_Action>();
-        protected static Dictionary<string, SteamVR_Action> actionsByPathLowered = new Dictionary<string, SteamVR_Action>();
+        protected static Dictionary<string, SteamVRActionSet> actionSetsByPath = new();
+        protected static Dictionary<string, SteamVRActionSet> actionSetsByPathLowered = new();
+        protected static Dictionary<string, SteamVRAction> actionsByPath = new();
+        protected static Dictionary<string, SteamVRAction> actionsByPathLowered = new();
 
-        protected static Dictionary<string, SteamVR_ActionSet> actionSetsByPathCache = new Dictionary<string, SteamVR_ActionSet>();
-        protected static Dictionary<string, SteamVR_Action> actionsByPathCache = new Dictionary<string, SteamVR_Action>();
+        protected static Dictionary<string, SteamVRActionSet> actionSetsByPathCache = new();
+        protected static Dictionary<string, SteamVRAction> actionsByPathCache = new();
 
-        protected static Dictionary<string, SteamVR_Action> actionsByNameCache = new Dictionary<string, SteamVR_Action>();
-        protected static Dictionary<string, SteamVR_ActionSet> actionSetsByNameCache = new Dictionary<string, SteamVR_ActionSet>();
+        protected static Dictionary<string, SteamVRAction> actionsByNameCache = new();
+        protected static Dictionary<string, SteamVRActionSet> actionSetsByNameCache = new();
         #endregion
 
-        static SteamVR_Input()
+        static SteamVRInput()
         {
 #if !UNITY_EDITOR
             //If you want a single frame of performance increase on application start and have already generated your actions uncomment the following two lines
@@ -144,22 +144,22 @@ namespace Valve.VR
 
             startupFrame = Time.frameCount;
 
-            SteamVR_ActionSet_Manager.Initialize();
-            SteamVR_Input_Source.Initialize();
+            SteamVRActionSetManager.Initialize();
+            SteamVRInputSource.Initialize();
 
             for (int actionIndex = 0; actionIndex < actions.Length; actionIndex++)
             {
-                SteamVR_Action action = actions[actionIndex];
+                SteamVRAction action = actions[actionIndex];
                 action.Initialize(true);
             }
 
             for (int actionSetIndex = 0; actionSetIndex < actionSets.Length; actionSetIndex++)
             {
-                SteamVR_ActionSet set = actionSets[actionSetIndex];
+                SteamVRActionSet set = actionSets[actionSetIndex];
                 set.Initialize(true);
             }
 
-            if (SteamVR_Settings.instance.activateFirstActionSetOnStart)
+            if (SteamVRSettings.instance.activateFirstActionSetOnStart)
             {
                 if (actionSets.Length > 0)
                 {
@@ -171,7 +171,7 @@ namespace Valve.VR
                 }
             }
 
-            SteamVR_Action_Pose.SetTrackingUniverseOrigin(SteamVR_Settings.instance.trackingSpace);
+            SteamVRActionPose.SetTrackingUniverseOrigin(SteamVRSettings.instance.trackingSpace);
 
             initialized = true;
             initializing = false;
@@ -182,7 +182,7 @@ namespace Valve.VR
         {
             for (int actionSetIndex = 0; actionSetIndex < actionSets.Length; actionSetIndex++)
             {
-                SteamVR_ActionSet actionSet = actionSets[actionSetIndex];
+                SteamVRActionSet actionSet = actionSets[actionSetIndex];
                 actionSet.FinishPreInitialize();
             }
         }
@@ -195,7 +195,7 @@ namespace Valve.VR
 
             for (int actionSetIndex = 0; actionSetIndex < actionSets.Length; actionSetIndex++)
             {
-                SteamVR_ActionSet actionSet = actionSets[actionSetIndex];
+                SteamVRActionSet actionSet = actionSets[actionSetIndex];
                 actionSetsByPath.Add(actionSet.fullPath, actionSet);
                 actionSetsByPathLowered.Add(actionSet.fullPath.ToLower(), actionSet);
             }
@@ -209,7 +209,7 @@ namespace Valve.VR
 
             for (int actionIndex = 0; actionIndex < actions.Length; actionIndex++)
             {
-                SteamVR_Action action = actions[actionIndex];
+                SteamVRAction action = actions[actionIndex];
                 actionsByPath.Add(action.fullPath, action);
                 actionsByPathLowered.Add(action.fullPath.ToLower(), action);
             }
@@ -223,11 +223,11 @@ namespace Valve.VR
                 return;
             }
 
-            if (SteamVR.settings.IsInputUpdateMode(SteamVR_UpdateModes.OnUpdate))
+            if (SteamVR.settings.IsInputUpdateMode(SteamVRUpdateModes.OnUpdate))
             {
                 UpdateNonVisualActions();
             }
-            if (SteamVR.settings.IsPoseUpdateMode(SteamVR_UpdateModes.OnUpdate))
+            if (SteamVR.settings.IsPoseUpdateMode(SteamVRUpdateModes.OnUpdate))
             {
                 UpdateVisualActions();
             }
@@ -244,12 +244,12 @@ namespace Valve.VR
                 return;
             }
 
-            if (SteamVR.settings.IsInputUpdateMode(SteamVR_UpdateModes.OnLateUpdate))
+            if (SteamVR.settings.IsInputUpdateMode(SteamVRUpdateModes.OnLateUpdate))
             {
                 UpdateNonVisualActions();
             }
 
-            if (SteamVR.settings.IsPoseUpdateMode(SteamVR_UpdateModes.OnLateUpdate))
+            if (SteamVR.settings.IsPoseUpdateMode(SteamVRUpdateModes.OnLateUpdate))
             {
                 //update poses and skeleton
                 UpdateVisualActions();
@@ -269,12 +269,12 @@ namespace Valve.VR
                 return;
             }
 
-            if (SteamVR.settings.IsInputUpdateMode(SteamVR_UpdateModes.OnFixedUpdate))
+            if (SteamVR.settings.IsInputUpdateMode(SteamVRUpdateModes.OnFixedUpdate))
             {
                 UpdateNonVisualActions();
             }
 
-            if (SteamVR.settings.IsPoseUpdateMode(SteamVR_UpdateModes.OnFixedUpdate))
+            if (SteamVR.settings.IsPoseUpdateMode(SteamVRUpdateModes.OnFixedUpdate))
             {
                 UpdateVisualActions();
             }
@@ -288,11 +288,11 @@ namespace Valve.VR
                 return;
             }
 
-            if (SteamVR.settings.IsInputUpdateMode(SteamVR_UpdateModes.OnPreCull))
+            if (SteamVR.settings.IsInputUpdateMode(SteamVRUpdateModes.OnPreCull))
             {
                 UpdateNonVisualActions();
             }
-            if (SteamVR.settings.IsPoseUpdateMode(SteamVR_UpdateModes.OnPreCull))
+            if (SteamVR.settings.IsPoseUpdateMode(SteamVRUpdateModes.OnPreCull))
             {
                 UpdateVisualActions();
             }
@@ -309,7 +309,7 @@ namespace Valve.VR
                 return;
             }
 
-            SteamVR_ActionSet_Manager.UpdateActionStates();
+            SteamVRActionSetManager.UpdateActionStates();
 
             UpdatePoseActions(skipStateAndEventUpdates);
 
@@ -329,7 +329,7 @@ namespace Valve.VR
 
             for (int actionIndex = 0; actionIndex < actionsPose.Length; actionIndex++)
             {
-                SteamVR_Action_Pose action = actionsPose[actionIndex];
+                SteamVRActionPose action = actionsPose[actionIndex];
                 action.UpdateValues(skipSendingEvents);
             }
 
@@ -338,7 +338,6 @@ namespace Valve.VR
                 onPosesUpdated(false);
             }
         }
-
 
         /// <summary>
         /// Updates the states of all the skeleton actions
@@ -353,7 +352,7 @@ namespace Valve.VR
 
             for (int actionIndex = 0; actionIndex < actionsSkeleton.Length; actionIndex++)
             {
-                SteamVR_Action_Skeleton action = actionsSkeleton[actionIndex];
+                SteamVRActionSkeleton action = actionsSkeleton[actionIndex];
 
                 action.UpdateValue(skipSendingEvents);
             }
@@ -363,7 +362,6 @@ namespace Valve.VR
                 onSkeletonsUpdated(skipSendingEvents);
             }
         }
-
 
         /// <summary>
         /// Updates the states of all the non visual actions (boolean, single, vector2, vector3)
@@ -375,11 +373,11 @@ namespace Valve.VR
                 return;
             }
 
-            SteamVR_ActionSet_Manager.UpdateActionStates();
+            SteamVRActionSetManager.UpdateActionStates();
 
             for (int actionIndex = 0; actionIndex < actionsNonPoseNonSkeletonIn.Length; actionIndex++)
             {
-                ISteamVR_Action_In action = actionsNonPoseNonSkeletonIn[actionIndex];
+                ISteamVRActionIn action = actionsNonPoseNonSkeletonIn[actionIndex];
 
                 action.UpdateValues();
             }
@@ -391,23 +389,23 @@ namespace Valve.VR
         }
 
         private static uint sizeVRActiveActionSet_t = 0;
-        protected static void ShowBindingHintsForSets(VRActiveActionSet_t[] sets, ulong highlightAction = 0)
+        protected static void ShowBindingHintsForSets(VRActiveActionSetT[] sets, ulong highlightAction = 0)
         {
             if (sizeVRActiveActionSet_t == 0)
             {
-                sizeVRActiveActionSet_t = (uint)System.Runtime.InteropServices.Marshal.SizeOf(typeof(VRActiveActionSet_t));
+                sizeVRActiveActionSet_t = (uint)System.Runtime.InteropServices.Marshal.SizeOf(typeof(VRActiveActionSetT));
             }
 
             OpenVR.Input.ShowBindingsForActionSet(sets, sizeVRActiveActionSet_t, highlightAction);
         }
 
-        private static VRActiveActionSet_t[] setCache = new VRActiveActionSet_t[1];
+        private static readonly VRActiveActionSetT[] setCache = new VRActiveActionSetT[1];
 
         /// <summary>
         /// Shows all the bindings for the actions in the action's set.
         /// </summary>
         /// <param name="originToHighlight">Highlights the binding of the passed in action (must be in an active set)</param>
-        public static bool ShowBindingHints(ISteamVR_Action_In originToHighlight)
+        public static bool ShowBindingHints(ISteamVRActionIn originToHighlight)
         {
             if (originToHighlight != null)
             {
@@ -422,7 +420,7 @@ namespace Valve.VR
         /// <summary>
         /// Shows all the bindings for the actions in the action set.
         /// </summary>
-        public static bool ShowBindingHints(ISteamVR_ActionSet setToShow)
+        public static bool ShowBindingHints(ISteamVRActionSet setToShow)
         {
             if (setToShow != null)
             {
@@ -442,10 +440,10 @@ namespace Valve.VR
         {
             if (sizeVRActiveActionSet_t == 0)
             {
-                sizeVRActiveActionSet_t = (uint)System.Runtime.InteropServices.Marshal.SizeOf(typeof(VRActiveActionSet_t));
+                sizeVRActiveActionSet_t = (uint)System.Runtime.InteropServices.Marshal.SizeOf(typeof(VRActiveActionSetT));
             }
 
-            OpenVR.Input.ShowBindingsForActionSet(SteamVR_ActionSet_Manager.rawActiveActionSetArray, sizeVRActiveActionSet_t, highlightAction);
+            OpenVR.Input.ShowBindingsForActionSet(SteamVRActionSetManager.rawActiveActionSetArray, sizeVRActiveActionSet_t, highlightAction);
         }
 
         #region String accessor helpers
@@ -457,9 +455,9 @@ namespace Valve.VR
         /// <typeparam name="T">The type of action you're expecting to get back</typeparam>
         /// <param name="path">The full path to the action you want (Action paths are in the format /actions/[actionSet]/[direction]/[actionName])</param>
         /// <param name="caseSensitive">case sensitive searches are faster</param>
-        public static T GetActionDataFromPath<T>(string path, bool caseSensitive = false) where T : SteamVR_Action_Source_Map
+        public static T GetActionDataFromPath<T>(string path, bool caseSensitive = false) where T : SteamVRActionSourceMap
         {
-            SteamVR_Action action = GetBaseActionFromPath(path, caseSensitive);
+            SteamVRAction action = GetBaseActionFromPath(path, caseSensitive);
             if (action != null)
             {
                 T actionData = (T)action.GetSourceMap();
@@ -474,9 +472,9 @@ namespace Valve.VR
         /// </summary>
         /// <param name="path">The full path to the action you want (Action set paths are in the format /actions/[actionSet])</param>
         /// <param name="caseSensitive">case sensitive searches are faster</param>
-        public static SteamVR_ActionSet_Data GetActionSetDataFromPath(string path, bool caseSensitive = false)
+        public static SteamVRActionSetData GetActionSetDataFromPath(string path, bool caseSensitive = false)
         {
-            SteamVR_ActionSet actionSet = GetActionSetFromPath(path, caseSensitive);
+            SteamVRActionSet actionSet = GetActionSetFromPath(path, caseSensitive);
             if (actionSet != null)
             {
                 return actionSet.GetActionSetData();
@@ -491,9 +489,9 @@ namespace Valve.VR
         /// <typeparam name="T">The type of action you're expecting to get back</typeparam>
         /// <param name="path">The full path to the action you want (Action paths are in the format /actions/[actionSet]/[direction]/[actionName])</param>
         /// <param name="caseSensitive">case sensitive searches are faster</param>
-        public static T GetActionFromPath<T>(string path, bool caseSensitive = false, bool returnNulls = false) where T : SteamVR_Action, new()
+        public static T GetActionFromPath<T>(string path, bool caseSensitive = false, bool returnNulls = false) where T : SteamVRAction, new()
         {
-            SteamVR_Action foundAction = GetBaseActionFromPath(path, caseSensitive);
+            SteamVRAction foundAction = GetBaseActionFromPath(path, caseSensitive);
             if (foundAction != null)
             {
                 return foundAction.GetCopy<T>();
@@ -508,7 +506,7 @@ namespace Valve.VR
         }
 
         // non-copy version
-        public static SteamVR_Action GetBaseActionFromPath(string path, bool caseSensitive = false)
+        public static SteamVRAction GetBaseActionFromPath(string path, bool caseSensitive = false)
         {
             if (string.IsNullOrEmpty(path))
             {
@@ -553,19 +551,19 @@ namespace Valve.VR
 
         public static bool HasActionPath(string path, bool caseSensitive = false)
         {
-            SteamVR_Action action = GetBaseActionFromPath(path, caseSensitive);
+            SteamVRAction action = GetBaseActionFromPath(path, caseSensitive);
             return action != null;
         }
 
         public static bool HasAction(string actionName, bool caseSensitive = false)
         {
-            SteamVR_Action action = GetBaseAction(null, actionName, caseSensitive);
+            SteamVRAction action = GetBaseAction(null, actionName, caseSensitive);
             return action != null;
         }
 
         public static bool HasAction(string actionSetName, string actionName, bool caseSensitive = false)
         {
-            SteamVR_Action action = GetBaseAction(actionSetName, actionName, caseSensitive);
+            SteamVRAction action = GetBaseAction(actionSetName, actionName, caseSensitive);
             return action != null;
         }
 
@@ -574,9 +572,9 @@ namespace Valve.VR
         /// </summary>
         /// <param name="path">The full path to the action you want (Action paths are in the format /actions/[actionSet]/[direction]/[actionName])</param>
         /// <param name="caseSensitive">case sensitive searches are faster</param>
-        public static SteamVR_Action_Boolean GetBooleanActionFromPath(string path, bool caseSensitive = false)
+        public static SteamVRActionBoolean GetBooleanActionFromPath(string path, bool caseSensitive = false)
         {
-            return GetActionFromPath<SteamVR_Action_Boolean>(path, caseSensitive);
+            return GetActionFromPath<SteamVRActionBoolean>(path, caseSensitive);
         }
 
         /// <summary>
@@ -584,9 +582,9 @@ namespace Valve.VR
         /// </summary>
         /// <param name="path">The full path to the action you want (Action paths are in the format /actions/[actionSet]/[direction]/[actionName])</param>
         /// <param name="caseSensitive">case sensitive searches are faster</param>
-        public static SteamVR_Action_Single GetSingleActionFromPath(string path, bool caseSensitive = false)
+        public static SteamVRActionSingle GetSingleActionFromPath(string path, bool caseSensitive = false)
         {
-            return GetActionFromPath<SteamVR_Action_Single>(path, caseSensitive);
+            return GetActionFromPath<SteamVRActionSingle>(path, caseSensitive);
         }
 
         /// <summary>
@@ -594,9 +592,9 @@ namespace Valve.VR
         /// </summary>
         /// <param name="path">The full path to the action you want (Action paths are in the format /actions/[actionSet]/[direction]/[actionName])</param>
         /// <param name="caseSensitive">case sensitive searches are faster</param>
-        public static SteamVR_Action_Vector2 GetVector2ActionFromPath(string path, bool caseSensitive = false)
+        public static SteamVRActionVector2 GetVector2ActionFromPath(string path, bool caseSensitive = false)
         {
-            return GetActionFromPath<SteamVR_Action_Vector2>(path, caseSensitive);
+            return GetActionFromPath<SteamVRActionVector2>(path, caseSensitive);
         }
 
         /// <summary>
@@ -604,9 +602,9 @@ namespace Valve.VR
         /// </summary>
         /// <param name="path">The full path to the action you want (Action paths are in the format /actions/[actionSet]/[direction]/[actionName])</param>
         /// <param name="caseSensitive">case sensitive searches are faster</param>
-        public static SteamVR_Action_Vector3 GetVector3ActionFromPath(string path, bool caseSensitive = false)
+        public static SteamVRActionVector3 GetVector3ActionFromPath(string path, bool caseSensitive = false)
         {
-            return GetActionFromPath<SteamVR_Action_Vector3>(path, caseSensitive);
+            return GetActionFromPath<SteamVRActionVector3>(path, caseSensitive);
         }
 
         /// <summary>
@@ -614,9 +612,9 @@ namespace Valve.VR
         /// </summary>
         /// <param name="path">The full path to the action you want (Action paths are in the format /actions/[actionSet]/[direction]/[actionName])</param>
         /// <param name="caseSensitive">case sensitive searches are faster</param>
-        public static SteamVR_Action_Vibration GetVibrationActionFromPath(string path, bool caseSensitive = false)
+        public static SteamVRActionVibration GetVibrationActionFromPath(string path, bool caseSensitive = false)
         {
-            return GetActionFromPath<SteamVR_Action_Vibration>(path, caseSensitive);
+            return GetActionFromPath<SteamVRActionVibration>(path, caseSensitive);
         }
 
         /// <summary>
@@ -624,9 +622,9 @@ namespace Valve.VR
         /// </summary>
         /// <param name="path">The full path to the action you want (Action paths are in the format /actions/[actionSet]/[direction]/[actionName])</param>
         /// <param name="caseSensitive">case sensitive searches are faster</param>
-        public static SteamVR_Action_Pose GetPoseActionFromPath(string path, bool caseSensitive = false)
+        public static SteamVRActionPose GetPoseActionFromPath(string path, bool caseSensitive = false)
         {
-            return GetActionFromPath<SteamVR_Action_Pose>(path, caseSensitive);
+            return GetActionFromPath<SteamVRActionPose>(path, caseSensitive);
         }
 
         /// <summary>
@@ -634,9 +632,9 @@ namespace Valve.VR
         /// </summary>
         /// <param name="path">The full path to the action you want (Action paths are in the format /actions/[actionSet]/[direction]/[actionName])</param>
         /// <param name="caseSensitive">case sensitive searches are faster</param>
-        public static SteamVR_Action_Skeleton GetSkeletonActionFromPath(string path, bool caseSensitive = false)
+        public static SteamVRActionSkeleton GetSkeletonActionFromPath(string path, bool caseSensitive = false)
         {
-            return GetActionFromPath<SteamVR_Action_Skeleton>(path, caseSensitive);
+            return GetActionFromPath<SteamVRActionSkeleton>(path, caseSensitive);
         }
 
         /// <summary>
@@ -646,9 +644,9 @@ namespace Valve.VR
         /// <param name="path">The full path to the action you want (Action paths are in the format /actions/[actionSet]/[direction]/[actionName])</param>
         /// <param name="caseSensitive">case sensitive searches are faster</param>
         /// <param name="returnNulls">returns null if the action does not exist</param>
-        public static T GetAction<T>(string actionSetName, string actionName, bool caseSensitive = false, bool returnNulls = false) where T : SteamVR_Action, new()
+        public static T GetAction<T>(string actionSetName, string actionName, bool caseSensitive = false, bool returnNulls = false) where T : SteamVRAction, new()
         {
-            SteamVR_Action action = GetBaseAction(actionSetName, actionName, caseSensitive);
+            SteamVRAction action = GetBaseAction(actionSetName, actionName, caseSensitive);
             if (action != null)
             {
                 return (T)action.GetCopy<T>();
@@ -662,7 +660,7 @@ namespace Valve.VR
             return CreateFakeAction<T>(actionSetName, actionName, caseSensitive);
         }
 
-        public static SteamVR_Action GetBaseAction(string actionSetName, string actionName, bool caseSensitive = false)
+        public static SteamVRAction GetBaseAction(string actionSetName, string actionName, bool caseSensitive = false)
         {
             if (actions == null)
             {
@@ -691,7 +689,7 @@ namespace Valve.VR
             }
             else
             {
-                SteamVR_ActionSet actionSet = GetActionSet(actionSetName, caseSensitive, true);
+                SteamVRActionSet actionSet = GetActionSet(actionSetName, caseSensitive, true);
 
                 if (actionSet != null)
                 {
@@ -718,21 +716,21 @@ namespace Valve.VR
             return null;
         }
 
-        private static T CreateFakeAction<T>(string actionSetName, string actionName, bool caseSensitive) where T : SteamVR_Action, new()
+        private static T CreateFakeAction<T>(string actionSetName, string actionName, bool caseSensitive) where T : SteamVRAction, new()
         {
-            if (typeof(T) == typeof(SteamVR_Action_Vibration))
+            if (typeof(T) == typeof(SteamVRActionVibration))
             {
-                return SteamVR_Action.CreateUninitialized<T>(actionSetName, SteamVR_ActionDirections.Out, actionName, caseSensitive);
+                return SteamVRAction.CreateUninitialized<T>(actionSetName, SteamVRActionDirections.Out, actionName, caseSensitive);
             }
             else
             {
-                return SteamVR_Action.CreateUninitialized<T>(actionSetName, SteamVR_ActionDirections.In, actionName, caseSensitive);
+                return SteamVRAction.CreateUninitialized<T>(actionSetName, SteamVRActionDirections.In, actionName, caseSensitive);
             }
         }
 
-        private static T CreateFakeAction<T>(string actionPath, bool caseSensitive) where T : SteamVR_Action, new()
+        private static T CreateFakeAction<T>(string actionPath, bool caseSensitive) where T : SteamVRAction, new()
         {
-            return SteamVR_Action.CreateUninitialized<T>(actionPath, caseSensitive);
+            return SteamVRAction.CreateUninitialized<T>(actionPath, caseSensitive);
         }
 
         /// <summary>
@@ -741,7 +739,7 @@ namespace Valve.VR
         /// <typeparam name="T">The type of action you're expecting to get back</typeparam>
         /// <param name="path">The full path to the action you want (Action paths are in the format /actions/[actionSet]/[direction]/[actionName])</param>
         /// <param name="caseSensitive">case sensitive searches are faster</param>
-        public static T GetAction<T>(string actionName, bool caseSensitive = false) where T : SteamVR_Action, new()
+        public static T GetAction<T>(string actionName, bool caseSensitive = false) where T : SteamVRAction, new()
         {
             return GetAction<T>(null, actionName, caseSensitive);
         }
@@ -752,9 +750,9 @@ namespace Valve.VR
         /// <typeparam name="T">The type of action you're expecting to get back</typeparam>
         /// <param name="path">The full path to the action you want (Action paths are in the format /actions/[actionSet]/[direction]/[actionName])</param>
         /// <param name="caseSensitive">case sensitive searches are faster</param>
-        public static SteamVR_Action_Boolean GetBooleanAction(string actionSetName, string actionName, bool caseSensitive = false)
+        public static SteamVRActionBoolean GetBooleanAction(string actionSetName, string actionName, bool caseSensitive = false)
         {
-            return GetAction<SteamVR_Action_Boolean>(actionSetName, actionName, caseSensitive);
+            return GetAction<SteamVRActionBoolean>(actionSetName, actionName, caseSensitive);
         }
 
         /// <summary>
@@ -763,9 +761,9 @@ namespace Valve.VR
         /// <typeparam name="T">The type of action you're expecting to get back</typeparam>
         /// <param name="path">The full path to the action you want (Action paths are in the format /actions/[actionSet]/[direction]/[actionName])</param>
         /// <param name="caseSensitive">case sensitive searches are faster</param>
-        public static SteamVR_Action_Boolean GetBooleanAction(string actionName, bool caseSensitive = false)
+        public static SteamVRActionBoolean GetBooleanAction(string actionName, bool caseSensitive = false)
         {
-            return GetAction<SteamVR_Action_Boolean>(null, actionName, caseSensitive);
+            return GetAction<SteamVRActionBoolean>(null, actionName, caseSensitive);
         }
 
         /// <summary>
@@ -774,9 +772,9 @@ namespace Valve.VR
         /// <typeparam name="T">The type of action you're expecting to get back</typeparam>
         /// <param name="path">The full path to the action you want (Action paths are in the format /actions/[actionSet]/[direction]/[actionName])</param>
         /// <param name="caseSensitive">case sensitive searches are faster</param>
-        public static SteamVR_Action_Single GetSingleAction(string actionSetName, string actionName, bool caseSensitive = false)
+        public static SteamVRActionSingle GetSingleAction(string actionSetName, string actionName, bool caseSensitive = false)
         {
-            return GetAction<SteamVR_Action_Single>(actionSetName, actionName, caseSensitive);
+            return GetAction<SteamVRActionSingle>(actionSetName, actionName, caseSensitive);
         }
 
         /// <summary>
@@ -785,9 +783,9 @@ namespace Valve.VR
         /// <typeparam name="T">The type of action you're expecting to get back</typeparam>
         /// <param name="path">The full path to the action you want (Action paths are in the format /actions/[actionSet]/[direction]/[actionName])</param>
         /// <param name="caseSensitive">case sensitive searches are faster</param>
-        public static SteamVR_Action_Single GetSingleAction(string actionName, bool caseSensitive = false)
+        public static SteamVRActionSingle GetSingleAction(string actionName, bool caseSensitive = false)
         {
-            return GetAction<SteamVR_Action_Single>(null, actionName, caseSensitive);
+            return GetAction<SteamVRActionSingle>(null, actionName, caseSensitive);
         }
 
         /// <summary>
@@ -796,9 +794,9 @@ namespace Valve.VR
         /// <typeparam name="T">The type of action you're expecting to get back</typeparam>
         /// <param name="path">The full path to the action you want (Action paths are in the format /actions/[actionSet]/[direction]/[actionName])</param>
         /// <param name="caseSensitive">case sensitive searches are faster</param>
-        public static SteamVR_Action_Vector2 GetVector2Action(string actionSetName, string actionName, bool caseSensitive = false)
+        public static SteamVRActionVector2 GetVector2Action(string actionSetName, string actionName, bool caseSensitive = false)
         {
-            return GetAction<SteamVR_Action_Vector2>(actionSetName, actionName, caseSensitive);
+            return GetAction<SteamVRActionVector2>(actionSetName, actionName, caseSensitive);
         }
 
         /// <summary>
@@ -807,9 +805,9 @@ namespace Valve.VR
         /// <typeparam name="T">The type of action you're expecting to get back</typeparam>
         /// <param name="path">The full path to the action you want (Action paths are in the format /actions/[actionSet]/[direction]/[actionName])</param>
         /// <param name="caseSensitive">case sensitive searches are faster</param>
-        public static SteamVR_Action_Vector2 GetVector2Action(string actionName, bool caseSensitive = false)
+        public static SteamVRActionVector2 GetVector2Action(string actionName, bool caseSensitive = false)
         {
-            return GetAction<SteamVR_Action_Vector2>(null, actionName, caseSensitive);
+            return GetAction<SteamVRActionVector2>(null, actionName, caseSensitive);
         }
 
         /// <summary>
@@ -818,9 +816,9 @@ namespace Valve.VR
         /// <typeparam name="T">The type of action you're expecting to get back</typeparam>
         /// <param name="path">The full path to the action you want (Action paths are in the format /actions/[actionSet]/[direction]/[actionName])</param>
         /// <param name="caseSensitive">case sensitive searches are faster</param>
-        public static SteamVR_Action_Vector3 GetVector3Action(string actionSetName, string actionName, bool caseSensitive = false)
+        public static SteamVRActionVector3 GetVector3Action(string actionSetName, string actionName, bool caseSensitive = false)
         {
-            return GetAction<SteamVR_Action_Vector3>(actionSetName, actionName, caseSensitive);
+            return GetAction<SteamVRActionVector3>(actionSetName, actionName, caseSensitive);
         }
 
         /// <summary>
@@ -829,9 +827,9 @@ namespace Valve.VR
         /// <typeparam name="T">The type of action you're expecting to get back</typeparam>
         /// <param name="path">The full path to the action you want (Action paths are in the format /actions/[actionSet]/[direction]/[actionName])</param>
         /// <param name="caseSensitive">case sensitive searches are faster</param>
-        public static SteamVR_Action_Vector3 GetVector3Action(string actionName, bool caseSensitive = false)
+        public static SteamVRActionVector3 GetVector3Action(string actionName, bool caseSensitive = false)
         {
-            return GetAction<SteamVR_Action_Vector3>(null, actionName, caseSensitive);
+            return GetAction<SteamVRActionVector3>(null, actionName, caseSensitive);
         }
 
         /// <summary>
@@ -840,9 +838,9 @@ namespace Valve.VR
         /// <typeparam name="T">The type of action you're expecting to get back</typeparam>
         /// <param name="path">The full path to the action you want (Action paths are in the format /actions/[actionSet]/[direction]/[actionName])</param>
         /// <param name="caseSensitive">case sensitive searches are faster</param>
-        public static SteamVR_Action_Pose GetPoseAction(string actionSetName, string actionName, bool caseSensitive = false)
+        public static SteamVRActionPose GetPoseAction(string actionSetName, string actionName, bool caseSensitive = false)
         {
-            return GetAction<SteamVR_Action_Pose>(actionSetName, actionName, caseSensitive);
+            return GetAction<SteamVRActionPose>(actionSetName, actionName, caseSensitive);
         }
 
         /// <summary>
@@ -851,9 +849,9 @@ namespace Valve.VR
         /// <typeparam name="T">The type of action you're expecting to get back</typeparam>
         /// <param name="path">The full path to the action you want (Action paths are in the format /actions/[actionSet]/[direction]/[actionName])</param>
         /// <param name="caseSensitive">case sensitive searches are faster</param>
-        public static SteamVR_Action_Pose GetPoseAction(string actionName, bool caseSensitive = false)
+        public static SteamVRActionPose GetPoseAction(string actionName, bool caseSensitive = false)
         {
-            return GetAction<SteamVR_Action_Pose>(null, actionName, caseSensitive);
+            return GetAction<SteamVRActionPose>(null, actionName, caseSensitive);
         }
 
         /// <summary>
@@ -862,9 +860,9 @@ namespace Valve.VR
         /// <typeparam name="T">The type of action you're expecting to get back</typeparam>
         /// <param name="path">The full path to the action you want (Action paths are in the format /actions/[actionSet]/[direction]/[actionName])</param>
         /// <param name="caseSensitive">case sensitive searches are faster</param>
-        public static SteamVR_Action_Skeleton GetSkeletonAction(string actionSetName, string actionName, bool caseSensitive = false)
+        public static SteamVRActionSkeleton GetSkeletonAction(string actionSetName, string actionName, bool caseSensitive = false)
         {
-            return GetAction<SteamVR_Action_Skeleton>(actionSetName, actionName, caseSensitive);
+            return GetAction<SteamVRActionSkeleton>(actionSetName, actionName, caseSensitive);
         }
 
         /// <summary>
@@ -873,9 +871,9 @@ namespace Valve.VR
         /// <typeparam name="T">The type of action you're expecting to get back</typeparam>
         /// <param name="path">The full path to the action you want (Action paths are in the format /actions/[actionSet]/[direction]/[actionName])</param>
         /// <param name="caseSensitive">case sensitive searches are faster</param>
-        public static SteamVR_Action_Skeleton GetSkeletonAction(string actionName, bool caseSensitive = false)
+        public static SteamVRActionSkeleton GetSkeletonAction(string actionName, bool caseSensitive = false)
         {
-            return GetAction<SteamVR_Action_Skeleton>(null, actionName, caseSensitive);
+            return GetAction<SteamVRActionSkeleton>(null, actionName, caseSensitive);
         }
 
         /// <summary>
@@ -884,9 +882,9 @@ namespace Valve.VR
         /// <typeparam name="T">The type of action you're expecting to get back</typeparam>
         /// <param name="path">The full path to the action you want (Action paths are in the format /actions/[actionSet]/[direction]/[actionName])</param>
         /// <param name="caseSensitive">case sensitive searches are faster</param>
-        public static SteamVR_Action_Vibration GetVibrationAction(string actionSetName, string actionName, bool caseSensitive = false)
+        public static SteamVRActionVibration GetVibrationAction(string actionSetName, string actionName, bool caseSensitive = false)
         {
-            return GetAction<SteamVR_Action_Vibration>(actionSetName, actionName, caseSensitive);
+            return GetAction<SteamVRActionVibration>(actionSetName, actionName, caseSensitive);
         }
 
         /// <summary>
@@ -895,9 +893,9 @@ namespace Valve.VR
         /// <typeparam name="T">The type of action you're expecting to get back</typeparam>
         /// <param name="path">The full path to the action you want (Action paths are in the format /actions/[actionSet]/[direction]/[actionName])</param>
         /// <param name="caseSensitive">case sensitive searches are faster</param>
-        public static SteamVR_Action_Vibration GetVibrationAction(string actionName, bool caseSensitive = false)
+        public static SteamVRActionVibration GetVibrationAction(string actionName, bool caseSensitive = false)
         {
-            return GetAction<SteamVR_Action_Vibration>(null, actionName, caseSensitive);
+            return GetAction<SteamVRActionVibration>(null, actionName, caseSensitive);
         }
 
         /// <summary>
@@ -907,7 +905,7 @@ namespace Valve.VR
         /// <param name="actionSetName">The name to the action set you want</param>
         /// <param name="caseSensitive">case sensitive searches are faster</param>
         /// <param name="returnNulls">returns a null if the set does not exist</param>
-        public static T GetActionSet<T>(string actionSetName, bool caseSensitive = false, bool returnNulls = false) where T : SteamVR_ActionSet, new()
+        public static T GetActionSet<T>(string actionSetName, bool caseSensitive = false, bool returnNulls = false) where T : SteamVRActionSet, new()
         {
             if (actionSets == null)
             {
@@ -916,7 +914,7 @@ namespace Valve.VR
                     return null;
                 }
 
-                return SteamVR_ActionSet.CreateFromName<T>(actionSetName);
+                return SteamVRActionSet.CreateFromName<T>(actionSetName);
             }
 
             for (int actionSetIndex = 0; actionSetIndex < actionSets.Length; actionSetIndex++)
@@ -942,7 +940,7 @@ namespace Valve.VR
                 return null;
             }
 
-            return SteamVR_ActionSet.CreateFromName<T>(actionSetName);
+            return SteamVRActionSet.CreateFromName<T>(actionSetName);
         }
 
         /// <summary>
@@ -951,14 +949,14 @@ namespace Valve.VR
         /// <typeparam name="T">The type of action set you're expecting to get back</typeparam>
         /// <param name="actionSetName">The name to the action set you want</param>
         /// <param name="caseSensitive">case sensitive searches are faster</param>
-        public static SteamVR_ActionSet GetActionSet(string actionSetName, bool caseSensitive = false, bool returnsNulls = false)
+        public static SteamVRActionSet GetActionSet(string actionSetName, bool caseSensitive = false, bool returnsNulls = false)
         {
-            return GetActionSet<SteamVR_ActionSet>(actionSetName, caseSensitive, returnsNulls);
+            return GetActionSet<SteamVRActionSet>(actionSetName, caseSensitive, returnsNulls);
         }
 
         protected static bool HasActionSet(string name, bool caseSensitive = false)
         {
-            SteamVR_ActionSet actionSet = GetActionSet(name, caseSensitive, true);
+            SteamVRActionSet actionSet = GetActionSet(name, caseSensitive, true);
             return actionSet != null;
         }
 
@@ -968,7 +966,7 @@ namespace Valve.VR
         /// <typeparam name="T">The type of action set you're expecting to get back</typeparam>
         /// <param name="path">The full path to the action set you want (Action paths are in the format /actions/[actionSet])</param>
         /// <param name="caseSensitive">case sensitive searches are faster</param>
-        public static T GetActionSetFromPath<T>(string path, bool caseSensitive = false, bool returnsNulls = false) where T : SteamVR_ActionSet, new()
+        public static T GetActionSetFromPath<T>(string path, bool caseSensitive = false, bool returnsNulls = false) where T : SteamVRActionSet, new()
         {
             if (actionSets == null || actionSets[0] == null || string.IsNullOrEmpty(path))
             {
@@ -977,7 +975,7 @@ namespace Valve.VR
                     return null;
                 }
 
-                return SteamVR_ActionSet.Create<T>(path);
+                return SteamVRActionSet.Create<T>(path);
             }
 
             if (caseSensitive)
@@ -991,7 +989,7 @@ namespace Valve.VR
             {
                 if (actionSetsByPathCache.ContainsKey(path))
                 {
-                    SteamVR_ActionSet set = actionSetsByPathCache[path];
+                    SteamVRActionSet set = actionSetsByPathCache[path];
                     if (set == null)
                     {
                         return null;
@@ -1026,7 +1024,7 @@ namespace Valve.VR
                 return null;
             }
 
-            return SteamVR_ActionSet.Create<T>(path);
+            return SteamVRActionSet.Create<T>(path);
         }
 
         /// <summary>
@@ -1034,9 +1032,9 @@ namespace Valve.VR
         /// </summary>
         /// <param name="path">The full path to the action set you want (Action paths are in the format /actions/[actionSet])</param>
         /// <param name="caseSensitive">case sensitive searches are faster</param>
-        public static SteamVR_ActionSet GetActionSetFromPath(string path, bool caseSensitive = false)
+        public static SteamVRActionSet GetActionSetFromPath(string path, bool caseSensitive = false)
         {
-            return GetActionSetFromPath<SteamVR_ActionSet>(path, caseSensitive);
+            return GetActionSetFromPath<SteamVRActionSet>(path, caseSensitive);
         }
         #endregion
 
@@ -1048,9 +1046,9 @@ namespace Valve.VR
         /// <param name="action">The name of the action to get the state of</param>
         /// <param name="inputSource">The input source to get the action state from</param>
         /// <param name="caseSensitive">Whether or not the action set and action name searches should be case sensitive (case sensitive searches are faster)</param>
-        public static bool GetState(string actionSet, string action, SteamVR_Input_Sources inputSource, bool caseSensitive = false)
+        public static bool GetState(string actionSet, string action, SteamVRInputSources inputSource, bool caseSensitive = false)
         {
-            SteamVR_Action_Boolean booleanAction = GetAction<SteamVR_Action_Boolean>(actionSet, action, caseSensitive);
+            SteamVRActionBoolean booleanAction = GetAction<SteamVRActionBoolean>(actionSet, action, caseSensitive);
             if (booleanAction != null)
             {
                 return booleanAction.GetState(inputSource);
@@ -1065,7 +1063,7 @@ namespace Valve.VR
         /// <param name="action">The name of the action to get the state of</param>
         /// <param name="inputSource">The input source to get the action state from</param>
         /// <param name="caseSensitive">Whether or not the action set and action name searches should be case sensitive (case sensitive searches are faster)</param>
-        public static bool GetState(string action, SteamVR_Input_Sources inputSource, bool caseSensitive = false)
+        public static bool GetState(string action, SteamVRInputSources inputSource, bool caseSensitive = false)
         {
             return GetState(null, action, inputSource, caseSensitive);
         }
@@ -1078,9 +1076,9 @@ namespace Valve.VR
         /// <param name="inputSource">The input source to get the action state from</param>
         /// <param name="caseSensitive">Whether or not the action set and action name searches should be case sensitive (case sensitive searches are faster)</param>
         /// <returns>True when the action was false last update and is now true. Returns false again afterwards.</returns>
-        public static bool GetStateDown(string actionSet, string action, SteamVR_Input_Sources inputSource, bool caseSensitive = false)
+        public static bool GetStateDown(string actionSet, string action, SteamVRInputSources inputSource, bool caseSensitive = false)
         {
-            SteamVR_Action_Boolean booleanAction = GetAction<SteamVR_Action_Boolean>(actionSet, action, caseSensitive);
+            SteamVRActionBoolean booleanAction = GetAction<SteamVRActionBoolean>(actionSet, action, caseSensitive);
             if (booleanAction != null)
             {
                 return booleanAction.GetStateDown(inputSource);
@@ -1096,7 +1094,7 @@ namespace Valve.VR
         /// <param name="inputSource">The input source to get the action state from</param>
         /// <param name="caseSensitive">Whether or not the action set and action name searches should be case sensitive (case sensitive searches are faster)</param>
         /// <returns>True when the action was false last update and is now true. Returns false again afterwards.</returns>
-        public static bool GetStateDown(string action, SteamVR_Input_Sources inputSource, bool caseSensitive = false)
+        public static bool GetStateDown(string action, SteamVRInputSources inputSource, bool caseSensitive = false)
         {
             return GetStateDown(null, action, inputSource, caseSensitive);
         }
@@ -1109,9 +1107,9 @@ namespace Valve.VR
         /// <param name="inputSource">The input source to get the action state from</param>
         /// <param name="caseSensitive">Whether or not the action set and action name searches should be case sensitive (case sensitive searches are faster)</param>
         /// <returns>True when the action was true last update and is now false. Returns false again afterwards.</returns>
-        public static bool GetStateUp(string actionSet, string action, SteamVR_Input_Sources inputSource, bool caseSensitive = false)
+        public static bool GetStateUp(string actionSet, string action, SteamVRInputSources inputSource, bool caseSensitive = false)
         {
-            SteamVR_Action_Boolean booleanAction = GetAction<SteamVR_Action_Boolean>(actionSet, action, caseSensitive);
+            SteamVRActionBoolean booleanAction = GetAction<SteamVRActionBoolean>(actionSet, action, caseSensitive);
             if (booleanAction != null)
             {
                 return booleanAction.GetStateUp(inputSource);
@@ -1120,7 +1118,6 @@ namespace Valve.VR
             return false;
         }
 
-
         /// <summary>
         /// Get the state up of an action by the action name and input source. Optionally case sensitive (for faster results)
         /// </summary>
@@ -1128,7 +1125,7 @@ namespace Valve.VR
         /// <param name="inputSource">The input source to get the action state from</param>
         /// <param name="caseSensitive">Whether or not the action set and action name searches should be case sensitive (case sensitive searches are faster)</param>
         /// <returns>True when the action was true last update and is now false. Returns false again afterwards.</returns>
-        public static bool GetStateUp(string action, SteamVR_Input_Sources inputSource, bool caseSensitive = false)
+        public static bool GetStateUp(string action, SteamVRInputSources inputSource, bool caseSensitive = false)
         {
             return GetStateUp(null, action, inputSource, caseSensitive);
         }
@@ -1142,9 +1139,9 @@ namespace Valve.VR
         /// <param name="action">The name of the action to get the state of</param>
         /// <param name="inputSource">The input source to get the action state from</param>
         /// <param name="caseSensitive">Whether or not the action set and action name searches should be case sensitive (case sensitive searches are faster)</param>
-        public static float GetFloat(string actionSet, string action, SteamVR_Input_Sources inputSource, bool caseSensitive = false)
+        public static float GetFloat(string actionSet, string action, SteamVRInputSources inputSource, bool caseSensitive = false)
         {
-            SteamVR_Action_Single singleAction = GetAction<SteamVR_Action_Single>(actionSet, action, caseSensitive);
+            SteamVRActionSingle singleAction = GetAction<SteamVRActionSingle>(actionSet, action, caseSensitive);
             if (singleAction != null)
             {
                 return singleAction.GetAxis(inputSource);
@@ -1159,7 +1156,7 @@ namespace Valve.VR
         /// <param name="action">The name of the action to get the state of</param>
         /// <param name="inputSource">The input source to get the action state from</param>
         /// <param name="caseSensitive">Whether or not the action set and action name searches should be case sensitive (case sensitive searches are faster)</param>
-        public static float GetFloat(string action, SteamVR_Input_Sources inputSource, bool caseSensitive = false)
+        public static float GetFloat(string action, SteamVRInputSources inputSource, bool caseSensitive = false)
         {
             return GetFloat(null, action, inputSource, caseSensitive);
         }
@@ -1171,9 +1168,9 @@ namespace Valve.VR
         /// <param name="action">The name of the action to get the state of</param>
         /// <param name="inputSource">The input source to get the action state from</param>
         /// <param name="caseSensitive">Whether or not the action set and action name searches should be case sensitive (case sensitive searches are faster)</param>
-        public static float GetSingle(string actionSet, string action, SteamVR_Input_Sources inputSource, bool caseSensitive = false)
+        public static float GetSingle(string actionSet, string action, SteamVRInputSources inputSource, bool caseSensitive = false)
         {
-            SteamVR_Action_Single singleAction = GetAction<SteamVR_Action_Single>(actionSet, action, caseSensitive);
+            SteamVRActionSingle singleAction = GetAction<SteamVRActionSingle>(actionSet, action, caseSensitive);
             if (singleAction != null)
             {
                 return singleAction.GetAxis(inputSource);
@@ -1188,7 +1185,7 @@ namespace Valve.VR
         /// <param name="action">The name of the action to get the state of</param>
         /// <param name="inputSource">The input source to get the action state from</param>
         /// <param name="caseSensitive">Whether or not the action set and action name searches should be case sensitive (case sensitive searches are faster)</param>
-        public static float GetSingle(string action, SteamVR_Input_Sources inputSource, bool caseSensitive = false)
+        public static float GetSingle(string action, SteamVRInputSources inputSource, bool caseSensitive = false)
         {
             return GetFloat(null, action, inputSource, caseSensitive);
         }
@@ -1200,9 +1197,9 @@ namespace Valve.VR
         /// <param name="action">The name of the action to get the state of</param>
         /// <param name="inputSource">The input source to get the action state from</param>
         /// <param name="caseSensitive">Whether or not the action set and action name searches should be case sensitive (case sensitive searches are faster)</param>
-        public static Vector2 GetVector2(string actionSet, string action, SteamVR_Input_Sources inputSource, bool caseSensitive = false)
+        public static Vector2 GetVector2(string actionSet, string action, SteamVRInputSources inputSource, bool caseSensitive = false)
         {
-            SteamVR_Action_Vector2 vectorAction = GetAction<SteamVR_Action_Vector2>(actionSet, action, caseSensitive);
+            SteamVRActionVector2 vectorAction = GetAction<SteamVRActionVector2>(actionSet, action, caseSensitive);
             if (vectorAction != null)
             {
                 return vectorAction.GetAxis(inputSource);
@@ -1217,7 +1214,7 @@ namespace Valve.VR
         /// <param name="action">The name of the action to get the state of</param>
         /// <param name="inputSource">The input source to get the action state from</param>
         /// <param name="caseSensitive">Whether or not the action set and action name searches should be case sensitive (case sensitive searches are faster)</param>
-        public static Vector2 GetVector2(string action, SteamVR_Input_Sources inputSource, bool caseSensitive = false)
+        public static Vector2 GetVector2(string action, SteamVRInputSources inputSource, bool caseSensitive = false)
         {
             return GetVector2(null, action, inputSource, caseSensitive);
         }
@@ -1229,9 +1226,9 @@ namespace Valve.VR
         /// <param name="action">The name of the action to get the state of</param>
         /// <param name="inputSource">The input source to get the action state from</param>
         /// <param name="caseSensitive">Whether or not the action set and action name searches should be case sensitive (case sensitive searches are faster)</param>
-        public static Vector3 GetVector3(string actionSet, string action, SteamVR_Input_Sources inputSource, bool caseSensitive = false)
+        public static Vector3 GetVector3(string actionSet, string action, SteamVRInputSources inputSource, bool caseSensitive = false)
         {
-            SteamVR_Action_Vector3 vectorAction = GetAction<SteamVR_Action_Vector3>(actionSet, action, caseSensitive);
+            SteamVRActionVector3 vectorAction = GetAction<SteamVRActionVector3>(actionSet, action, caseSensitive);
             if (vectorAction != null)
             {
                 return vectorAction.GetAxis(inputSource);
@@ -1246,7 +1243,7 @@ namespace Valve.VR
         /// <param name="action">The name of the action to get the state of</param>
         /// <param name="inputSource">The input source to get the action state from</param>
         /// <param name="caseSensitive">Whether or not the action set and action name searches should be case sensitive (case sensitive searches are faster)</param>
-        public static Vector3 GetVector3(string action, SteamVR_Input_Sources inputSource, bool caseSensitive = false)
+        public static Vector3 GetVector3(string action, SteamVRInputSources inputSource, bool caseSensitive = false)
         {
             return GetVector3(null, action, inputSource, caseSensitive);
         }
@@ -1257,7 +1254,7 @@ namespace Valve.VR
         /// <summary>
         /// Returns all of the action sets. If we're in the editor, doesn't rely on the actionSets field being filled.
         /// </summary>
-        public static SteamVR_ActionSet[] GetActionSets()
+        public static SteamVRActionSet[] GetActionSets()
         {
             return actionSets;
         }
@@ -1266,47 +1263,47 @@ namespace Valve.VR
         /// Returns all of the actions of the specified type. If we're in the editor, doesn't rely on the arrays being filled.
         /// </summary>
         /// <typeparam name="T">The type of actions you want to get</typeparam>
-        public static T[] GetActions<T>() where T : SteamVR_Action
+        public static T[] GetActions<T>() where T : SteamVRAction
         {
             Type type = typeof(T);
 
-            if (type == typeof(SteamVR_Action))
+            if (type == typeof(SteamVRAction))
             {
                 return actions as T[];
             }
-            else if (type == typeof(ISteamVR_Action_In))
+            else if (type == typeof(ISteamVRActionIn))
             {
                 return actionsIn as T[];
             }
-            else if (type == typeof(ISteamVR_Action_Out))
+            else if (type == typeof(ISteamVRActionOut))
             {
                 return actionsOut as T[];
             }
-            else if (type == typeof(SteamVR_Action_Boolean))
+            else if (type == typeof(SteamVRActionBoolean))
             {
                 return actionsBoolean as T[];
             }
-            else if (type == typeof(SteamVR_Action_Single))
+            else if (type == typeof(SteamVRActionSingle))
             {
                 return actionsSingle as T[];
             }
-            else if (type == typeof(SteamVR_Action_Vector2))
+            else if (type == typeof(SteamVRActionVector2))
             {
                 return actionsVector2 as T[];
             }
-            else if (type == typeof(SteamVR_Action_Vector3))
+            else if (type == typeof(SteamVRActionVector3))
             {
                 return actionsVector3 as T[];
             }
-            else if (type == typeof(SteamVR_Action_Pose))
+            else if (type == typeof(SteamVRActionPose))
             {
                 return actionsPose as T[];
             }
-            else if (type == typeof(SteamVR_Action_Skeleton))
+            else if (type == typeof(SteamVRActionSkeleton))
             {
                 return actionsSkeleton as T[];
             }
-            else if (type == typeof(SteamVR_Action_Vibration))
+            else if (type == typeof(SteamVRActionVibration))
             {
                 return actionsVibration as T[];
             }
@@ -1320,7 +1317,7 @@ namespace Valve.VR
 
         internal static bool ShouldMakeCopy()
         {
-            bool shouldMakeCopy = SteamVR_Behaviour.isPlaying == false;
+            bool shouldMakeCopy = SteamVRBehaviour.isPlaying == false;
 
             return shouldMakeCopy;
         }
@@ -1346,7 +1343,7 @@ namespace Valve.VR
                 localizedPartsMask |= (int)localizedParts[partIndex];
             }
 
-            StringBuilder stringBuilder = new StringBuilder(500);
+            StringBuilder stringBuilder = new(500);
             OpenVR.Input.GetOriginLocalizedName(originHandle, stringBuilder, 500, localizedPartsMask);
 
             return stringBuilder.ToString();
@@ -1411,7 +1408,6 @@ namespace Valve.VR
             return false;
         }
 
-
         /// <summary>Tell SteamVR that we're using the actions file at the path defined in SteamVR_Settings.</summary>
         public static void IdentifyActionsFile(bool showLogs = true)
         {
@@ -1432,9 +1428,9 @@ namespace Valve.VR
                 else
                 {
                     int numActions = 0;
-                    if (SteamVR_Input.actions != null)
+                    if (SteamVRInput.actions != null)
                     {
-                        numActions = SteamVR_Input.actions.Length;
+                        numActions = SteamVRInput.actions.Length;
 
                         if (showLogs)
                         {
@@ -1477,11 +1473,11 @@ namespace Valve.VR
                 return true;
             }
 
-            string newHashFromFile = SteamVR_Utils.GetBadMD5Hash(jsonText);
+            string newHashFromFile = SteamVRUtils.GetBadMD5Hash(jsonText);
 
-            string newJSON = JsonConvert.SerializeObject(SteamVR_Input.actionFile, Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
+            string newJSON = JsonConvert.SerializeObject(SteamVRInput.actionFile, Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
 
-            string newHashFromMemory = SteamVR_Utils.GetBadMD5Hash(newJSON);
+            string newHashFromMemory = SteamVRUtils.GetBadMD5Hash(newJSON);
 
             return newHashFromFile != newHashFromMemory;
         }
@@ -1496,13 +1492,13 @@ namespace Valve.VR
                 return false;
             }
 
-            actionFile = new SteamVR_Input_ActionFile();
+            actionFile = new SteamVRInputActionFile();
 
             if (completelyEmpty == false)
             {
-                actionFile.action_sets.Add(SteamVR_Input_ActionFile_ActionSet.CreateNew());
-                actionFile.actions.Add(SteamVR_Input_ActionFile_Action.CreateNew(actionFile.action_sets[0].shortName,
-                    SteamVR_ActionDirections.In, SteamVR_Input_ActionFile_ActionTypes.boolean));
+                actionFile.action_sets.Add(SteamVRInputActionFileActionSet.CreateNew());
+                actionFile.actions.Add(SteamVRInputActionFileAction.CreateNew(actionFile.action_sets[0].shortName,
+                    SteamVRActionDirections.In, SteamVRInputActionFileActionTypes.boolean));
             }
 
             string newJSON = JsonConvert.SerializeObject(actionFile, Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
@@ -1546,7 +1542,7 @@ namespace Valve.VR
 
             if (fileInitialized == true || (fileInitialized == true && force == false))
             {
-                string newHash = SteamVR_Utils.GetBadMD5Hash(jsonText);
+                string newHash = SteamVRUtils.GetBadMD5Hash(jsonText);
 
                 if (newHash == actionFileHash)
                 {
@@ -1556,7 +1552,7 @@ namespace Valve.VR
                 actionFileHash = newHash;
             }
 
-            actionFile = SteamVR_Input_ActionFile.Open(GetActionsFilePath());
+            actionFile = SteamVRInputActionFile.Open(GetActionsFilePath());
             fileInitialized = true;
             return true;
         }
@@ -1581,16 +1577,15 @@ namespace Valve.VR
         public static string GetActionsFilePath(bool fullPath = true)
         {
             string streamingAssets_SteamVR = GetActionsFileFolder(fullPath);
-            string path = Path.Combine(streamingAssets_SteamVR, SteamVR_Settings.instance.actionsFilePath);
+            string path = Path.Combine(streamingAssets_SteamVR, SteamVRSettings.instance.actionsFilePath);
 
-            return SteamVR_Utils.SanitizePath(path);
+            return SteamVRUtils.SanitizePath(path);
         }
 
         public static string GetActionsFileName()
         {
-            return SteamVR_Settings.instance.actionsFilePath;
+            return SteamVRSettings.instance.actionsFilePath;
         }
-
 
         /// <summary>
         /// Deletes the action manifest file and all the default bindings it had listed in the default bindings section
@@ -1608,16 +1603,20 @@ namespace Valve.VR
             string[] filesToDelete = actionFile.GetFilesToCopy();
             foreach (string bindingFilePath in filesToDelete)
             {
-                FileInfo bindingFileInfo = new FileInfo(bindingFilePath);
-                bindingFileInfo.IsReadOnly = false;
+                FileInfo bindingFileInfo = new(bindingFilePath)
+                {
+                    IsReadOnly = false
+                };
                 File.Delete(bindingFilePath);
             }
 
             string actionsFilePath = GetActionsFilePath();
             if (File.Exists(actionsFilePath))
             {
-                FileInfo actionFileInfo = new FileInfo(actionsFilePath);
-                actionFileInfo.IsReadOnly = false;
+                FileInfo actionFileInfo = new(actionsFilePath)
+                {
+                    IsReadOnly = false
+                };
                 File.Delete(actionsFilePath);
 
                 actionFile = null;
@@ -1634,9 +1633,9 @@ namespace Valve.VR
         /// </summary>
         /// <param name="actionSetToEdit">Optional. The action set to highlight (will default to the first set)</param>
         /// <param name="deviceBindingToEdit">Optional. The device's binding to open (will default to right hand)</param>
-        public static void OpenBindingUI(SteamVR_ActionSet actionSetToEdit = null, SteamVR_Input_Sources deviceBindingToEdit = SteamVR_Input_Sources.Any)
+        public static void OpenBindingUI(SteamVRActionSet actionSetToEdit = null, SteamVRInputSources deviceBindingToEdit = SteamVRInputSources.Any)
         {
-            ulong deviceHandle = SteamVR_Input_Source.GetHandle(deviceBindingToEdit);
+            ulong deviceHandle = SteamVRInputSource.GetHandle(deviceBindingToEdit);
             ulong actionSetHandle = 0;
 
             if (actionSetToEdit != null)

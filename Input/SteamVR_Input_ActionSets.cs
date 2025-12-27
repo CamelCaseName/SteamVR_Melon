@@ -29,8 +29,8 @@ namespace Valve.VR
         
         private static void StartPreInitActionSets()
         {
-            SteamVR_Actions.p__default = ((SteamVR_Input_ActionSet_default)(SteamVR_ActionSet.Create<SteamVR_Input_ActionSet_default>("/actions/default")));
-            Valve.VR.SteamVR_Input.actionSets = new Valve.VR.SteamVR_ActionSet[] {
+            SteamVR_Actions.p__default = ((SteamVR_Input_ActionSet_default)(SteamVRActionSet.Create<SteamVR_Input_ActionSet_default>("/actions/default")));
+            Valve.VR.SteamVRInput.actionSets = new Valve.VR.SteamVRActionSet[] {
                     SteamVR_Actions._default};
         }
     }

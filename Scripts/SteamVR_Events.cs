@@ -22,7 +22,7 @@ using UnityEngine;
 
 namespace Valve.VR
 {
-    public static class SteamVR_Events
+    public static class SteamVREvents
     {
 
         public abstract class Action
@@ -34,9 +34,9 @@ namespace Valve.VR
         [Serializable]
         public class ActionNoArgs : Action
         {
-            public ActionNoArgs(Event _event, System.Action action)
+            public ActionNoArgs(Event Event, System.Action action)
             {
-                this._event = _event;
+                this._event = Event;
                 this.action = action;
             }
 
@@ -52,16 +52,16 @@ namespace Valve.VR
                 }
             }
 
-            Event _event;
-            System.Action action;
+            readonly Event _event;
+            readonly System.Action action;
         }
 
         [Serializable]
         public class Action<T> : Action
         {
-            public Action(Event<T> _event, System.Action<T> action)
+            public Action(Event<T> Event, System.Action<T> action)
             {
-                this._event = _event;
+                this._event = Event;
                 this.action = action;
             }
 
@@ -77,16 +77,16 @@ namespace Valve.VR
                 }
             }
 
-            Event<T> _event;
-            System.Action<T> action;
+            readonly Event<T> _event;
+            readonly System.Action<T> action;
         }
 
         [Serializable]
         public class Action<T0, T1> : Action
         {
-            public Action(Event<T0, T1> _event, System.Action<T0, T1> action)
+            public Action(Event<T0, T1> Event, System.Action<T0, T1> action)
             {
-                this._event = _event;
+                this._event = Event;
                 this.action = action;
             }
 
@@ -102,16 +102,16 @@ namespace Valve.VR
                 }
             }
 
-            Event<T0, T1> _event;
-            System.Action<T0, T1> action;
+            readonly Event<T0, T1> _event;
+            readonly System.Action<T0, T1> action;
         }
 
         [Serializable]
         public class Action<T0, T1, T2> : Action
         {
-            public Action(Event<T0, T1, T2> _event, System.Action<T0, T1, T2> action)
+            public Action(Event<T0, T1, T2> Event, System.Action<T0, T1, T2> action)
             {
-                this._event = _event;
+                this._event = Event;
                 this.action = action;
             }
 
@@ -127,8 +127,8 @@ namespace Valve.VR
                 }
             }
 
-            Event<T0, T1, T2> _event;
-            System.Action<T0, T1, T2> action;
+            readonly Event<T0, T1, T2> _event;
+            readonly System.Action<T0, T1, T2> action;
         }
 
         public class Event
@@ -176,7 +176,6 @@ namespace Valve.VR
                 }
             }
         }
-
 
         public class Event<T0, T1>
         {
@@ -258,69 +257,69 @@ namespace Valve.VR
             }
         }
 
-        public static Event<bool> Calibrating = new Event<bool>();
+        public static Event<bool> Calibrating = new();
         public static Action CalibratingAction(System.Action<bool> action) { return new Action<bool>(Calibrating, action); }
 
-        public static Event<int, bool> DeviceConnected = new Event<int, bool>();
+        public static Event<int, bool> DeviceConnected = new();
         public static Action DeviceConnectedAction(System.Action<int, bool> action) { return new Action<int, bool>(DeviceConnected, action); }
 
-        public static Event<Color, float, bool> Fade = new Event<Color, float, bool>();
+        public static Event<Color, float, bool> Fade = new();
         public static Action FadeAction(System.Action<Color, float, bool> action) { return new Action<Color, float, bool>(Fade, action); }
 
-        public static Event FadeReady = new Event();
+        public static Event FadeReady = new();
         public static Action FadeReadyAction(System.Action action) { return new ActionNoArgs(FadeReady, action); }
 
-        public static Event<bool> HideRenderModels = new Event<bool>();
+        public static Event<bool> HideRenderModels = new();
         public static Action HideRenderModelsAction(System.Action<bool> action) { return new Action<bool>(HideRenderModels, action); }
 
-        public static Event<bool> Initializing = new Event<bool>();
+        public static Event<bool> Initializing = new();
         public static Action InitializingAction(System.Action<bool> action) { return new Action<bool>(Initializing, action); }
 
-        public static Event<bool> InputFocus = new Event<bool>();
+        public static Event<bool> InputFocus = new();
         public static Action InputFocusAction(System.Action<bool> action) { return new Action<bool>(InputFocus, action); }
 
-        public static Event<bool> Loading = new Event<bool>();
+        public static Event<bool> Loading = new();
         public static Action LoadingAction(System.Action<bool> action) { return new Action<bool>(Loading, action); }
 
-        public static Event<float> LoadingFadeIn = new Event<float>();
+        public static Event<float> LoadingFadeIn = new();
         public static Action LoadingFadeInAction(System.Action<float> action) { return new Action<float>(LoadingFadeIn, action); }
 
-        public static Event<float> LoadingFadeOut = new Event<float>();
+        public static Event<float> LoadingFadeOut = new();
         public static Action LoadingFadeOutAction(System.Action<float> action) { return new Action<float>(LoadingFadeOut, action); }
 
-        public static Event<TrackedDevicePose_t[]> NewPoses = new Event<TrackedDevicePose_t[]>();
-        public static Action NewPosesAction(System.Action<TrackedDevicePose_t[]> action)
+        public static Event<TrackedDevicePoseT[]> NewPoses = new();
+        public static Action NewPosesAction(System.Action<TrackedDevicePoseT[]> action)
         {
-            return new Action<TrackedDevicePose_t[]>(NewPoses, action);
+            return new Action<TrackedDevicePoseT[]>(NewPoses, action);
         }
 
-        public static Event NewPosesApplied = new Event();
+        public static Event NewPosesApplied = new();
         public static Action NewPosesAppliedAction(System.Action action) { return new ActionNoArgs(NewPosesApplied, action); }
 
-        public static Event<bool> Initialized = new Event<bool>();
+        public static Event<bool> Initialized = new();
         public static Action InitializedAction(System.Action<bool> action) { return new Action<bool>(Initialized, action); }
 
-        public static Event<bool> OutOfRange = new Event<bool>();
+        public static Event<bool> OutOfRange = new();
         public static Action OutOfRangeAction(System.Action<bool> action) { return new Action<bool>(OutOfRange, action); }
 
-        public static Event<SteamVR_RenderModel, bool> RenderModelLoaded = new Event<SteamVR_RenderModel, bool>();
-        public static Action RenderModelLoadedAction(System.Action<SteamVR_RenderModel, bool> action) { return new Action<SteamVR_RenderModel, bool>(RenderModelLoaded, action); }
+        public static Event<SteamVRRenderModel, bool> RenderModelLoaded = new();
+        public static Action RenderModelLoadedAction(System.Action<SteamVRRenderModel, bool> action) { return new Action<SteamVRRenderModel, bool>(RenderModelLoaded, action); }
 
-        static System.Collections.Generic.Dictionary<EVREventType, Event<VREvent_t>> systemEvents = new System.Collections.Generic.Dictionary<EVREventType, Event<VREvent_t>>();
-        public static Event<VREvent_t> System(EVREventType eventType)
+        static readonly System.Collections.Generic.Dictionary<EVREventType, Event<VREventT>> systemEvents = new();
+        public static Event<VREventT> System(EVREventType eventType)
         {
-            Event<VREvent_t> e;
+            Event<VREventT> e;
             if (!systemEvents.TryGetValue(eventType, out e))
             {
-                e = new Event<VREvent_t>();
+                e = new Event<VREventT>();
                 systemEvents.Add(eventType, e);
             }
             return e;
         }
 
-        public static Action SystemAction(EVREventType eventType, System.Action<VREvent_t> action)
+        public static Action SystemAction(EVREventType eventType, System.Action<VREventT> action)
         {
-            return new Action<VREvent_t>(System(eventType), action);
+            return new Action<VREventT>(System(eventType), action);
         }
     }
 }

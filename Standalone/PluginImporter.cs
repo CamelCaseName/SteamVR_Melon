@@ -9,18 +9,18 @@ namespace SteamVR_Melon.Standalone
     public class OpenVRMagic
     {
 
-        public const string openvr_api = "openvr_api";
+        public const string openvrApi = "openvr_api";
         public const string XRSDKOpenVR = "XRSDKOpenVR";
 
-        public const int k_nRenderEventID_WaitGetPoses = 201510020;
+        public const int kNRenderEventIDWaitGetPoses = 201510020;
 
-        public const int k_nRenderEventID_SubmitL = 201510021;
+        public const int kNRenderEventIDSubmitL = 201510021;
 
-        public const int k_nRenderEventID_SubmitR = 201510022;
+        public const int kNRenderEventIDSubmitR = 201510022;
 
-        public const int k_nRenderEventID_Flush = 201510023;
+        public const int kNRenderEventIDFlush = 201510023;
 
-        public const int k_nRenderEventID_PostPresentHandoff = 201510024;
+        public const int kNRenderEventIDPostPresentHandoff = 201510024;
     }
 
     /// <summary>

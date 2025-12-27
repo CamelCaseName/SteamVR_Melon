@@ -16,7 +16,7 @@ namespace Valve.VR.InteractionSystem
         public HoverButton(IntPtr value) : base(value) { }
         public Transform movingPart;
 
-        public Vector3 localMoveDistance = new Vector3(0, -0.1f, 0);
+        public Vector3 localMoveDistance = new(0, -0.1f, 0);
 
         public float engageAtPercent = 0.95f;
 

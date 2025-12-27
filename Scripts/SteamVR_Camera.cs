@@ -15,9 +15,9 @@ using UnityEngine;
 namespace Valve.VR
 {
     [RegisterTypeInIl2Cpp()]
-    public class SteamVR_Camera : MonoBehaviour
+    public class SteamVRCamera : MonoBehaviour
     {
-        public SteamVR_Camera(IntPtr value) : base(value) { }
+        public SteamVRCamera(IntPtr value) : base(value) { }
         private Transform _head;
         public Transform head { get { return _head; } }
         public Transform offset { get { return _head; } } // legacy
@@ -30,7 +30,7 @@ namespace Valve.VR
         private Transform _ears;
         public Transform ears { get { return _ears; } }
 
-        public static SteamVR_Camera instance = null;
+        public static SteamVRCamera instance = null;
 
         public Ray GetRay()
         {
@@ -57,7 +57,7 @@ namespace Valve.VR
 
         public static Resolution GetSceneResolution()
         {
-            Resolution r = new Resolution();
+            Resolution r = new();
             if (SteamVR.instance is not null)
             {
                 int w = (int)(SteamVR.instance.sceneWidth * sceneResolutionScale * sceneResolutionScaleMultiplier);
@@ -89,9 +89,11 @@ namespace Valve.VR
         public static Resolution GetUnscaledSceneResolution()
         {
             var vr = SteamVR.instance;
-            Resolution r = new Resolution();
-            r.width = (int)vr.sceneWidth;
-            r.height = (int)vr.sceneHeight;
+            Resolution r = new()
+            {
+                width = (int)vr.sceneWidth,
+                height = (int)vr.sceneHeight
+            };
             r.width += r.width % 2;
             r.height += r.height % 2;
             return r;
@@ -110,7 +112,6 @@ namespace Valve.VR
             w += w % 2;
             h += h % 2;
 
-
             int aa = QualitySettings.antiAliasing == 0 ? 1 : QualitySettings.antiAliasing;
             var format = hdr ? RenderTextureFormat.ARGBHalf : RenderTextureFormat.ARGB32;
             bool recreatedTex = false;
@@ -127,9 +128,11 @@ namespace Valve.VR
 
             if (_sceneTexture == null)
             {
-                _sceneTexture = new RenderTexture(w, h, 0, format, 0);
-                _sceneTexture.depth = 32;
-                _sceneTexture.antiAliasing = aa;
+                _sceneTexture = new RenderTexture(w, h, 0, format, 0)
+                {
+                    depth = 32,
+                    antiAliasing = aa
+                };
 
                 if (recreatedTex)
                 {
@@ -145,7 +148,7 @@ namespace Valve.VR
 
         void OnDisable()
         {
-            SteamVR_Render.Remove(this);
+            SteamVRRender.Remove(this);
         }
 
         void OnEnable()
@@ -156,7 +159,7 @@ namespace Valve.VR
             {
                 if (head != null)
                 {
-                    head.GetComponent<SteamVR_TrackedObject>().enabled = false;
+                    head.GetComponent<SteamVRTrackedObject>().enabled = false;
                 }
 
                 enabled = false;
@@ -189,7 +192,7 @@ namespace Valve.VR
 
             if (ears == null)
             {
-                var e = transform.GetComponentInChildren<SteamVR_Ears>();
+                var e = transform.GetComponentInChildren<SteamVREars>();
                 if (e != null)
                 {
                     _ears = e.transform;
@@ -198,10 +201,10 @@ namespace Valve.VR
 
             if (ears != null)
             {
-                ears.GetComponent<SteamVR_Ears>().vrcam = this;
+                ears.GetComponent<SteamVREars>().vrcam = this;
             }
 
-            SteamVR_Render.Add(this);
+            SteamVRRender.Add(this);
         }
 
         #endregion
@@ -236,7 +239,7 @@ namespace Valve.VR
                 // But first make sure there aren't any other SteamVR_Cameras on this object.
                 for (int i = 0; i < components.Length; i++)
                 {
-                    var c = components[i] as SteamVR_Camera;
+                    var c = components[i] as SteamVRCamera;
                     if (c != null && c != this)
                     {
                         DestroyImmediate(c);
@@ -260,7 +263,7 @@ namespace Valve.VR
 
                     var go = gameObject;
                     DestroyImmediate(this);
-                    go.AddComponent<SteamVR_Camera>().ForceLast();
+                    go.AddComponent<SteamVRCamera>().ForceLast();
                 }
             }
         }
@@ -292,7 +295,7 @@ namespace Valve.VR
 
             if (_head == null)
             {
-                _head = new GameObject(name + headSuffix, Il2CppType.Of<SteamVR_TrackedObject>()).transform;
+                _head = new GameObject(name + headSuffix, Il2CppType.Of<SteamVRTrackedObject>()).transform;
                 head.parent = _origin;
                 head.position = transform.position;
                 head.rotation = transform.rotation;
@@ -317,7 +320,7 @@ namespace Valve.VR
                 if (audioListener != null)
                 {
                     DestroyImmediate(audioListener);
-                    _ears = new GameObject(name + earsSuffix, Il2CppType.Of<SteamVR_Ears>(), Il2CppType.Of<AudioListener>()).transform;
+                    _ears = new GameObject(name + earsSuffix, Il2CppType.Of<SteamVREars>(), Il2CppType.Of<AudioListener>()).transform;
                     ears.parent = _head;
                     ears.localPosition = Vector3.zero;
                     ears.localRotation = Quaternion.identity;
@@ -394,7 +397,7 @@ namespace Valve.VR
         public static void DumpRenderTexture(RenderTexture rt, string pngOutPath)
         {
             var oldRT = RenderTexture.active;
-            Texture2D tex = new Texture2D(1920, 1080, TextureFormat.RGB24, false);
+            Texture2D tex = new(1920, 1080, TextureFormat.RGB24, false);
             RenderTexture.active = rt;
             tex.ReadPixels(new Rect(0, 0, rt.width, rt.height), 0, 0);
             tex.Apply();

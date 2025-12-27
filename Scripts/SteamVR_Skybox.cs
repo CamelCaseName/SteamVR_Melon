@@ -10,10 +10,10 @@ using UnityEngine;
 namespace Valve.VR
 {
     [MelonLoader.RegisterTypeInIl2Cpp()]
-    public class SteamVR_Skybox : MonoBehaviour
+    public class SteamVRSkybox : MonoBehaviour
     {
 
-        public SteamVR_Skybox(IntPtr value) : base(value) { }
+        public SteamVRSkybox(IntPtr value) : base(value) { }
 
         // Note: Unity's Left and Right Skybox shader variables are switched.
         public Texture front, back, left, right, top, bottom;
@@ -83,7 +83,7 @@ namespace Valve.VR
             if (compositor != null)
             {
                 var handles = new Texture[] { front, back, left, right, top, bottom };
-                var textures = new Texture_t[6];
+                var textures = new TextureT[6];
                 for (int i = 0; i < 6; i++)
                 {
                     textures[i].handle = (handles[i] != null) ? handles[i].GetNativeTexturePtr() : IntPtr.Zero;

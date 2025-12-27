@@ -11,9 +11,9 @@ namespace Valve.VR
     /// <summary>
     /// Action sets are logical groupings of actions. Multiple sets can be active at one time.
     /// </summary>
-    public static class SteamVR_ActionSet_Manager
+    public static class SteamVRActionSetManager
     {
-        public static VRActiveActionSet_t[] rawActiveActionSetArray
+        public static VRActiveActionSetT[] rawActiveActionSetArray
         {
             get
             {
@@ -37,12 +37,12 @@ namespace Valve.VR
         [NonSerialized]
         private static int currentArraySize;
         [NonSerialized]
-        private static Dictionary<int, VRActiveActionSet_t[]> poolActiveActionSetArrays;
+        private static Dictionary<int, VRActiveActionSetT[]> poolActiveActionSetArrays;
 
         public static void Initialize()
         {
-            activeActionSetSize = (uint)(Marshal.SizeOf(typeof(VRActiveActionSet_t)));
-            poolActiveActionSetArrays = new Dictionary<int, VRActiveActionSet_t[]>();
+            activeActionSetSize = (uint)(Marshal.SizeOf(typeof(VRActiveActionSetT)));
+            poolActiveActionSetArrays = new Dictionary<int, VRActiveActionSetT[]>();
         }
 
         /// <summary>
@@ -50,11 +50,11 @@ namespace Valve.VR
         /// </summary>
         public static void DisableAllActionSets()
         {
-            for (int actionSetIndex = 0; actionSetIndex < SteamVR_Input.actionSets.Length; actionSetIndex++)
+            for (int actionSetIndex = 0; actionSetIndex < SteamVRInput.actionSets.Length; actionSetIndex++)
             {
-                SteamVR_Input.actionSets[actionSetIndex].Deactivate(SteamVR_Input_Sources.Any);
-                SteamVR_Input.actionSets[actionSetIndex].Deactivate(SteamVR_Input_Sources.LeftHand);
-                SteamVR_Input.actionSets[actionSetIndex].Deactivate(SteamVR_Input_Sources.RightHand);
+                SteamVRInput.actionSets[actionSetIndex].Deactivate(SteamVRInputSources.Any);
+                SteamVRInput.actionSets[actionSetIndex].Deactivate(SteamVRInputSources.LeftHand);
+                SteamVRInput.actionSets[actionSetIndex].Deactivate(SteamVRInputSources.RightHand);
             }
         }
 
@@ -98,14 +98,14 @@ namespace Valve.VR
         {
             int size = 0;
 
-            SteamVR_Input_Sources[] sources = SteamVR_Input_Source.GetAllSources();
-            for (int actionSetIndex = 0; actionSetIndex < SteamVR_Input.actionSets.Length; actionSetIndex++)
+            SteamVRInputSources[] sources = SteamVRInputSource.GetAllSources();
+            for (int actionSetIndex = 0; actionSetIndex < SteamVRInput.actionSets.Length; actionSetIndex++)
             {
-                SteamVR_ActionSet set = SteamVR_Input.actionSets[actionSetIndex];
+                SteamVRActionSet set = SteamVRInput.actionSets[actionSetIndex];
 
                 for (int sourceIndex = 0; sourceIndex < sources.Length; sourceIndex++)
                 {
-                    SteamVR_Input_Sources source = sources[sourceIndex];
+                    SteamVRInputSources source = sources[sourceIndex];
 
                     if (set.ReadRawSetActive(source))
                     {
@@ -122,25 +122,25 @@ namespace Valve.VR
             int newArraySize = GetNewArraySize();
             if (poolActiveActionSetArrays.ContainsKey(newArraySize) == false)
             {
-                poolActiveActionSetArrays[newArraySize] = new VRActiveActionSet_t[newArraySize];
+                poolActiveActionSetArrays[newArraySize] = new VRActiveActionSetT[newArraySize];
             }
 
             int arrayIndex = 0;
-            SteamVR_Input_Sources[] sources = SteamVR_Input_Source.GetAllSources();
+            SteamVRInputSources[] sources = SteamVRInputSource.GetAllSources();
 
-            for (int actionSetIndex = 0; actionSetIndex < SteamVR_Input.actionSets.Length; actionSetIndex++)
+            for (int actionSetIndex = 0; actionSetIndex < SteamVRInput.actionSets.Length; actionSetIndex++)
             {
-                SteamVR_ActionSet set = SteamVR_Input.actionSets[actionSetIndex];
+                SteamVRActionSet set = SteamVRInput.actionSets[actionSetIndex];
 
                 for (int sourceIndex = 0; sourceIndex < sources.Length; sourceIndex++)
                 {
-                    SteamVR_Input_Sources source = sources[sourceIndex];
+                    SteamVRInputSources source = sources[sourceIndex];
 
                     if (set.ReadRawSetActive(source))
                     {
                         poolActiveActionSetArrays[newArraySize][arrayIndex].ulActionSet = set.handle;
                         poolActiveActionSetArrays[newArraySize][arrayIndex].nPriority = set.ReadRawSetPriority(source);
-                        poolActiveActionSetArrays[newArraySize][arrayIndex].ulRestrictedToDevice = SteamVR_Input_Source.GetHandle(source);
+                        poolActiveActionSetArrays[newArraySize][arrayIndex].ulRestrictedToDevice = SteamVRInputSource.GetHandle(source);
 
                         arrayIndex++;
                     }
@@ -156,11 +156,11 @@ namespace Valve.VR
             }
         }
 
-        public static SteamVR_ActionSet GetSetFromHandle(ulong handle)
+        public static SteamVRActionSet GetSetFromHandle(ulong handle)
         {
-            for (int actionSetIndex = 0; actionSetIndex < SteamVR_Input.actionSets.Length; actionSetIndex++)
+            for (int actionSetIndex = 0; actionSetIndex < SteamVRInput.actionSets.Length; actionSetIndex++)
             {
-                SteamVR_ActionSet set = SteamVR_Input.actionSets[actionSetIndex];
+                SteamVRActionSet set = SteamVRInput.actionSets[actionSetIndex];
                 if (set.handle == handle)
                 {
                     return set;
@@ -174,14 +174,14 @@ namespace Valve.VR
         public static bool updateDebugTextInBuilds = false;
         private static void UpdateDebugText()
         {
-            StringBuilder stringBuilder = new StringBuilder();
+            StringBuilder stringBuilder = new();
 
             for (int activeIndex = 0; activeIndex < rawActiveActionSetArray.Length; activeIndex++)
             {
-                VRActiveActionSet_t set = rawActiveActionSetArray[activeIndex];
+                VRActiveActionSetT set = rawActiveActionSetArray[activeIndex];
                 stringBuilder.Append(set.nPriority);
                 stringBuilder.Append("\t");
-                stringBuilder.Append(SteamVR_Input_Source.GetSource(set.ulRestrictedToDevice));
+                stringBuilder.Append(SteamVRInputSource.GetSource(set.ulRestrictedToDevice));
                 stringBuilder.Append("\t");
                 stringBuilder.Append(GetSetFromHandle(set.ulActionSet).GetShortName());
                 stringBuilder.Append("\n");

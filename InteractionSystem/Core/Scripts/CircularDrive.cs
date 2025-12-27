@@ -19,7 +19,7 @@ namespace Valve.VR.InteractionSystem
     public class CircularDrive : MonoBehaviour
     {
         public CircularDrive(IntPtr value) : base(value) { }
-        public enum Axis_t
+        public enum AxisT
         {
             XAxis,
             YAxis,
@@ -27,7 +27,7 @@ namespace Valve.VR.InteractionSystem
         };
 
         ///<summary>The axis around which the circular drive will rotate in local space</summary>
-        public Axis_t axisOfRotation = Axis_t.XAxis;
+        public AxisT axisOfRotation = AxisT.XAxis;
 
         ///<summary>Child GameObject which has the Collider component to initiate interaction, only needs to be set if there is more than one Collider child</summary>
         public Collider childCollider = null;
@@ -38,10 +38,9 @@ namespace Valve.VR.InteractionSystem
         ///<summary>If true, the drive will stay manipulating as long as the button is held down, if false, it will stop if the controller moves out of the collider</summary>
         public bool hoverLock = false;
 
-
         ///<summary>If true, the rotation will be limited to [minAngle, maxAngle], if false, the rotation is unlimited</summary>
         public bool limited = false;
-        public Vector2 frozenDistanceMinMaxThreshold = new Vector2(0.1f, 0.2f);
+        public Vector2 frozenDistanceMinMaxThreshold = new(0.1f, 0.2f);
         public UnityEvent onFrozenDistanceThreshold;
 
         ///<summary>If limited is true, the specifies the lower limit, otherwise value is unused</summary>
@@ -79,13 +78,13 @@ namespace Valve.VR.InteractionSystem
 
         private Quaternion start;
 
-        private Vector3 worldPlaneNormal = new Vector3(1.0f, 0.0f, 0.0f);
-        private Vector3 localPlaneNormal = new Vector3(1.0f, 0.0f, 0.0f);
+        private Vector3 worldPlaneNormal = new(1.0f, 0.0f, 0.0f);
+        private Vector3 localPlaneNormal = new(1.0f, 0.0f, 0.0f);
 
         private Vector3 lastHandProjected;
 
-        private Color red = new Color(1.0f, 0.0f, 0.0f);
-        private Color green = new Color(0.0f, 1.0f, 0.0f);
+        private Color red = new(1.0f, 0.0f, 0.0f);
+        private Color green = new(0.0f, 1.0f, 0.0f);
 
         private GameObject[] dbgHandObjects;
         private GameObject[] dbgProjObjects;
@@ -96,12 +95,12 @@ namespace Valve.VR.InteractionSystem
         private bool driving = false;
 
         // If the drive is limited as is at min/max, angles greater than this are ignored
-        private float minMaxAngularThreshold = 1.0f;
+        private readonly float minMaxAngularThreshold = 1.0f;
 
         private bool frozen = false;
         private float frozenAngle = 0.0f;
-        private Vector3 frozenHandWorldPos = new Vector3(0.0f, 0.0f, 0.0f);
-        private Vector2 frozenSqDistanceMinMaxThreshold = new Vector2(0.0f, 0.0f);
+        private Vector3 frozenHandWorldPos = new(0.0f, 0.0f, 0.0f);
+        private Vector2 frozenSqDistanceMinMaxThreshold = new(0.0f, 0.0f);
 
         private Hand handHoverLocked = null;
 
@@ -116,7 +115,6 @@ namespace Valve.VR.InteractionSystem
             frozenSqDistanceMinMaxThreshold.x = frozenDistanceMinMaxThreshold.x * frozenDistanceMinMaxThreshold.x;
             frozenSqDistanceMinMaxThreshold.y = frozenDistanceMinMaxThreshold.y * frozenDistanceMinMaxThreshold.y;
         }
-
 
         //-------------------------------------------------
         private void UnFreeze()
@@ -183,7 +181,6 @@ namespace Valve.VR.InteractionSystem
             UpdateAll();
         }
 
-
         //-------------------------------------------------
         void OnDisable()
         {
@@ -194,7 +191,6 @@ namespace Valve.VR.InteractionSystem
                 handHoverLocked = null;
             }
         }
-
 
         //-------------------------------------------------
         [HideFromIl2Cpp]
@@ -218,13 +214,11 @@ namespace Valve.VR.InteractionSystem
             }
         }
 
-
         //-------------------------------------------------
         private void OnHandHoverBegin(Hand hand)
         {
             hand.ShowGrabHint();
         }
-
 
         //-------------------------------------------------
         [HideFromIl2Cpp]
@@ -289,12 +283,11 @@ namespace Valve.VR.InteractionSystem
             }
         }
 
-
         //-------------------------------------------------
         private Vector3 ComputeToTransformProjected(Transform xForm)
         {
             Vector3 toTransform = (xForm.position - transform.position).normalized;
-            Vector3 toTransformProjected = new Vector3(0.0f, 0.0f, 0.0f);
+            Vector3 toTransformProjected = new(0.0f, 0.0f, 0.0f);
 
             // Need a non-zero distance from the hand to the center of the CircularDrive
             if (toTransform.sqrMagnitude > 0.0f)
@@ -314,7 +307,6 @@ namespace Valve.VR.InteractionSystem
 
             return toTransformProjected;
         }
-
 
         //-------------------------------------------------
         private void DrawDebugPath(Transform xForm, Vector3 toTransformProjected)
@@ -389,7 +381,6 @@ namespace Valve.VR.InteractionSystem
             dbgObjectIndex = (dbgObjectIndex + 1) % dbgObjectCount;
         }
 
-
         //-------------------------------------------------
         // Updates the LinearMapping value from the angle
         //-------------------------------------------------
@@ -410,7 +401,6 @@ namespace Valve.VR.InteractionSystem
             UpdateDebugText();
         }
 
-
         //-------------------------------------------------
         // Updates the LinearMapping value from the angle
         //-------------------------------------------------
@@ -421,7 +411,6 @@ namespace Valve.VR.InteractionSystem
                 transform.localRotation = start * Quaternion.AngleAxis(outAngle, localPlaneNormal);
             }
         }
-
 
         //-------------------------------------------------
         // Updates the Debug TextMesh with the linear mapping value and the angle
@@ -434,7 +423,6 @@ namespace Valve.VR.InteractionSystem
             }
         }
 
-
         //-------------------------------------------------
         // Updates the Debug TextMesh with the linear mapping value and the angle
         //-------------------------------------------------
@@ -444,7 +432,6 @@ namespace Valve.VR.InteractionSystem
             UpdateGameObject();
             UpdateDebugText();
         }
-
 
         //-------------------------------------------------
         // Computes the angle to rotate the game object based on the change in the transform

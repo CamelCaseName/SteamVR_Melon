@@ -11,8 +11,8 @@ namespace Valve.VR.InteractionSystem.Sample
         public FloppyHand(IntPtr value) : base(value) { }
         protected float fingerFlexAngle = 140;
 
-        public SteamVR_Action_Single squeezyAction = SteamVR_Input.GetAction<SteamVR_Action_Single>("Squeeze");
-        public SteamVR_Input_Sources inputSource;
+        public SteamVRActionSingle squeezyAction = SteamVRInput.GetAction<SteamVRActionSingle>("Squeeze");
+        public SteamVRInputSources inputSource;
 
         [Serializable]
         public class Finger
@@ -25,8 +25,8 @@ namespace Valve.VR.InteractionSystem.Sample
 
             public SkinnedMeshRenderer renderer;
 
-            public SteamVR_Action_Single squeezyAction;
-            public SteamVR_Input_Sources inputSource;
+            public SteamVRActionSingle squeezyAction;
+            public SteamVRInputSources inputSource;
 
             public Transform[] bones;
             public Transform referenceBone;
@@ -37,8 +37,6 @@ namespace Valve.VR.InteractionSystem.Sample
                 X, Y, Z
             }
             public eulerAxis referenceAxis;
-
-
 
             public float flexAngle;
 
@@ -51,9 +49,9 @@ namespace Valve.VR.InteractionSystem.Sample
 
             float squeezySmooth;
 
-            private int inertiaSteps = 10;
-            private float k = 400;
-            private float damping = 8;
+            private readonly int inertiaSteps = 10;
+            private readonly float k = 400;
+            private readonly float damping = 8;
             private Quaternion[] startRot;
 
             public void ApplyForce(Vector3 worldForce)
@@ -64,7 +62,6 @@ namespace Valve.VR.InteractionSystem.Sample
                 }
 
             }
-
 
             public void Init()
             {
@@ -214,7 +211,7 @@ namespace Valve.VR.InteractionSystem.Sample
 
             private Vector3 PowVector(Vector3 vector, float power)
             {
-                Vector3 sign = new Vector3(Mathf.Sign(vector.x), Mathf.Sign(vector.y), Mathf.Sign(vector.z));
+                Vector3 sign = new(Mathf.Sign(vector.x), Mathf.Sign(vector.y), Mathf.Sign(vector.z));
                 vector.x = Mathf.Pow(Mathf.Abs(vector.x), power) * sign.x;
                 vector.y = Mathf.Pow(Mathf.Abs(vector.y), power) * sign.y;
                 vector.z = Mathf.Pow(Mathf.Abs(vector.z), power) * sign.z;

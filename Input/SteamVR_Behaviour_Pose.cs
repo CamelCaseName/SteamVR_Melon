@@ -11,13 +11,13 @@ namespace Valve.VR
     /// Advanced velocity estimation is handled through a buffer of the last 30 updates.
     /// </summary>
     [MelonLoader.RegisterTypeInIl2Cpp()]
-    public class SteamVR_Behaviour_Pose : MonoBehaviour
+    public class SteamVRBehaviourPose : MonoBehaviour
     {
-        public SteamVR_Behaviour_Pose(IntPtr value) : base(value) { }
-        public SteamVR_Action_Pose poseAction = SteamVR_Input.GetAction<SteamVR_Action_Pose>("Pose");
+        public SteamVRBehaviourPose(IntPtr value) : base(value) { }
+        public SteamVRActionPose poseAction = SteamVRInput.GetAction<SteamVRActionPose>("Pose");
 
         /// <summary>The device this action should apply to. Any if the action is not device specific.</summary>
-        public SteamVR_Input_Sources inputSource;
+        public SteamVRInputSources inputSource;
 
         /// <summary>If not set, relative to parent</summary>
         public Transform origin;
@@ -30,19 +30,19 @@ namespace Valve.VR
         public bool isActive { get { return poseAction[inputSource].active; } }
 
         /// <summary>This Unity event will fire whenever the position or rotation of this transform is updated.</summary>
-        public SteamVR_Behaviour_PoseEvent onTransformUpdated;
+        public SteamVRBehaviourPoseEvent onTransformUpdated;
 
         /// <summary>This Unity event will fire whenever the position or rotation of this transform is changed.</summary>
-        public SteamVR_Behaviour_PoseEvent onTransformChanged;
+        public SteamVRBehaviourPoseEvent onTransformChanged;
 
         /// <summary>This Unity event will fire whenever the device is connected or disconnected</summary>
-        public SteamVR_Behaviour_Pose_ConnectedChangedEvent onConnectedChanged;
+        public SteamVRBehaviourPoseConnectedChangedEvent onConnectedChanged;
 
         /// <summary>This Unity event will fire whenever the device's tracking state changes</summary>
-        public SteamVR_Behaviour_Pose_TrackingChangedEvent onTrackingChanged;
+        public SteamVRBehaviourPoseTrackingChangedEvent onTrackingChanged;
 
         /// <summary>This Unity event will fire whenever the device's deviceIndex changes</summary>
-        public SteamVR_Behaviour_Pose_DeviceIndexChangedEvent onDeviceIndexChanged;
+        public SteamVRBehaviourPoseDeviceIndexChangedEvent onDeviceIndexChanged;
 
         /// <summary>This C# event will fire whenever the position or rotation of this transform is updated.</summary>
         public UpdateHandler onTransformUpdatedEvent;
@@ -63,13 +63,13 @@ namespace Valve.VR
         public bool broadcastDeviceChanges = true;
 
         [HideFromIl2Cpp]
-        public event InputSourceHandler OnInputSource = new((SteamVR_Input_Sources s) => { });
+        public event InputSourceHandler OnInputSource = new((SteamVRInputSources s) => { });
         [HideFromIl2Cpp]
         public event DeviceIndexHandler OnDeviceIndex = new((int i) => { });
 
         protected int deviceIndex = -1;
 
-        protected SteamVR_HistoryBuffer historyBuffer = new SteamVR_HistoryBuffer(30);
+        protected SteamVRHistoryBuffer historyBuffer = new(30);
 
         public virtual void Init()
         {
@@ -120,7 +120,7 @@ namespace Valve.VR
         }
 
         [HideFromIl2Cpp]
-        private void SteamVR_Behaviour_Pose_OnUpdate(SteamVR_Action_Pose fromAction, SteamVR_Input_Sources fromSource)
+        private void SteamVR_Behaviour_Pose_OnUpdate(SteamVRActionPose fromAction, SteamVRInputSources fromSource)
         {
             UpdateHistoryBuffer();
 
@@ -153,14 +153,14 @@ namespace Valve.VR
         }
 
         [HideFromIl2Cpp]
-        private void SteamVR_Behaviour_Pose_OnChange(SteamVR_Action_Pose fromAction, SteamVR_Input_Sources fromSource)
+        private void SteamVR_Behaviour_Pose_OnChange(SteamVRActionPose fromAction, SteamVRInputSources fromSource)
         {
             onTransformChanged?.Send(this, fromSource);
             onTransformChangedEvent?.Invoke(this, fromSource);
         }
 
         [HideFromIl2Cpp]
-        protected virtual void OnDeviceConnectedChanged(SteamVR_Action_Pose changedAction, SteamVR_Input_Sources changedSource, bool connected)
+        protected virtual void OnDeviceConnectedChanged(SteamVRActionPose changedAction, SteamVRInputSources changedSource, bool connected)
         {
             CheckDeviceIndex();
 
@@ -169,7 +169,7 @@ namespace Valve.VR
         }
 
         [HideFromIl2Cpp]
-        protected virtual void OnTrackingChanged(SteamVR_Action_Pose changedAction, SteamVR_Input_Sources changedSource, ETrackingResult trackingChanged)
+        protected virtual void OnTrackingChanged(SteamVRActionPose changedAction, SteamVRInputSources changedSource, ETrackingResult trackingChanged)
         {
             onTrackingChanged?.Send(this, inputSource, trackingChanged);
             onTrackingChangedEvent?.Invoke(this, inputSource, trackingChanged);
@@ -269,14 +269,14 @@ namespace Valve.VR
             return null;
         }
 
-        public delegate void ActiveChangeHandler(SteamVR_Behaviour_Pose fromAction, SteamVR_Input_Sources fromSource, bool active);
-        public delegate void ChangeHandler(SteamVR_Behaviour_Pose fromAction, SteamVR_Input_Sources fromSource);
-        public delegate void UpdateHandler(SteamVR_Behaviour_Pose fromAction, SteamVR_Input_Sources fromSource);
-        public delegate void InputSourceHandler(SteamVR_Input_Sources s);
+        public delegate void ActiveChangeHandler(SteamVRBehaviourPose fromAction, SteamVRInputSources fromSource, bool active);
+        public delegate void ChangeHandler(SteamVRBehaviourPose fromAction, SteamVRInputSources fromSource);
+        public delegate void UpdateHandler(SteamVRBehaviourPose fromAction, SteamVRInputSources fromSource);
+        public delegate void InputSourceHandler(SteamVRInputSources s);
         public delegate void DeviceIndexHandler(int i);
-        public delegate void TrackingChangeHandler(SteamVR_Behaviour_Pose fromAction, SteamVR_Input_Sources fromSource, ETrackingResult trackingState);
-        public delegate void ValidPoseChangeHandler(SteamVR_Behaviour_Pose fromAction, SteamVR_Input_Sources fromSource, bool validPose);
-        public delegate void DeviceConnectedChangeHandler(SteamVR_Behaviour_Pose fromAction, SteamVR_Input_Sources fromSource, bool deviceConnected);
-        public delegate void DeviceIndexChangedHandler(SteamVR_Behaviour_Pose fromAction, SteamVR_Input_Sources fromSource, int newDeviceIndex);
+        public delegate void TrackingChangeHandler(SteamVRBehaviourPose fromAction, SteamVRInputSources fromSource, ETrackingResult trackingState);
+        public delegate void ValidPoseChangeHandler(SteamVRBehaviourPose fromAction, SteamVRInputSources fromSource, bool validPose);
+        public delegate void DeviceConnectedChangeHandler(SteamVRBehaviourPose fromAction, SteamVRInputSources fromSource, bool deviceConnected);
+        public delegate void DeviceIndexChangedHandler(SteamVRBehaviourPose fromAction, SteamVRInputSources fromSource, int newDeviceIndex);
     }
 }

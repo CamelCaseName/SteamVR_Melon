@@ -28,14 +28,13 @@ namespace Valve.VR.InteractionSystem
 
         public AttachMode attachMode = AttachMode.FixedJoint;
 
-
         public Hand.AttachmentFlags attachmentFlags = 0;
 
-        private List<Hand> holdingHands = new List<Hand>();
-        private List<Rigidbody> holdingBodies = new List<Rigidbody>();
-        private List<Vector3> holdingPoints = new List<Vector3>();
+        private readonly List<Hand> holdingHands = new();
+        private readonly List<Rigidbody> holdingBodies = new();
+        private readonly List<Vector3> holdingPoints = new();
 
-        private List<Rigidbody> rigidBodies = new List<Rigidbody>();
+        private readonly List<Rigidbody> rigidBodies = new();
 
         //-------------------------------------------------
         void Awake()
@@ -43,7 +42,6 @@ namespace Valve.VR.InteractionSystem
             rigidBodies.Clear();
             rigidBodies.AddRange(GetComponentsInChildren<Rigidbody>());
         }
-
 
         //-------------------------------------------------
         void Update()
@@ -56,7 +54,6 @@ namespace Valve.VR.InteractionSystem
                 }
             }
         }
-
 
         //-------------------------------------------------
         [Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp]
@@ -71,7 +68,6 @@ namespace Valve.VR.InteractionSystem
             }
         }
 
-
         //-------------------------------------------------
         [Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp]
         private void OnHandHoverEnd(Hand hand)
@@ -85,7 +81,6 @@ namespace Valve.VR.InteractionSystem
             }
         }
 
-
         //-------------------------------------------------
         [Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp]
         private void HandHoverUpdate(Hand hand)
@@ -97,7 +92,6 @@ namespace Valve.VR.InteractionSystem
                 PhysicsAttach(hand, startingGrabType);
             }
         }
-
 
         //-------------------------------------------------
         [Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp]
@@ -152,7 +146,6 @@ namespace Valve.VR.InteractionSystem
             holdingPoints.Add(holdingPoint);
         }
 
-
         //-------------------------------------------------
         [Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp]
         private bool PhysicsDetach(Hand hand)
@@ -182,7 +175,6 @@ namespace Valve.VR.InteractionSystem
 
             return false;
         }
-
 
         //-------------------------------------------------
         void FixedUpdate()

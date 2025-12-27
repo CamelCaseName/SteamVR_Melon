@@ -13,14 +13,13 @@ namespace Valve.VR.InteractionSystem
     {
         //-------------------------------------------------
         [Serializable]
-        public class UnityEventSingleFloat : SteamVR_Events.Event<float>
+        public class UnityEventSingleFloat : SteamVREvents.Event<float>
         {
         }
 
-
         //-------------------------------------------------
         [Serializable]
-        public class UnityEventHand : SteamVR_Events.Event<Hand>
+        public class UnityEventHand : SteamVREvents.Event<Hand>
         {
         }
     }

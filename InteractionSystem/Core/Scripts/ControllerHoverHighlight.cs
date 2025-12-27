@@ -21,7 +21,7 @@ namespace Valve.VR.InteractionSystem
 
         protected RenderModel renderModel;
 
-        protected SteamVR_Events.Action renderModelLoadedAction;
+        protected SteamVREvents.Action renderModelLoadedAction;
 
         protected void Awake()
         {

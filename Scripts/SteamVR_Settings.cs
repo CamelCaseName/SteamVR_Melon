@@ -4,10 +4,10 @@ using UnityEngine;
 
 namespace Valve.VR
 {
-    public class SteamVR_Settings
+    public class SteamVRSettings
     {
-        private static SteamVR_Settings _instance;
-        public static SteamVR_Settings instance
+        private static SteamVRSettings _instance;
+        public static SteamVRSettings instance
         {
             get
             {
@@ -28,9 +28,9 @@ namespace Valve.VR
             set
             {
                 trackingSpaceOrigin = value;
-                if (SteamVR_Behaviour.isPlaying)
+                if (SteamVRBehaviour.isPlaying)
                 {
-                    SteamVR_Action_Pose.SetTrackingUniverseOrigin(trackingSpaceOrigin);
+                    SteamVRActionPose.SetTrackingUniverseOrigin(trackingSpaceOrigin);
                 }
             }
         }
@@ -41,8 +41,8 @@ namespace Valve.VR
 
         public string steamVRInputPath = "SteamVR_Input";
 
-        public SteamVR_UpdateModes inputUpdateMode = SteamVR_UpdateModes.OnUpdate;
-        public SteamVR_UpdateModes poseUpdateMode = SteamVR_UpdateModes.OnPreCull;
+        public SteamVRUpdateModes inputUpdateMode = SteamVRUpdateModes.OnUpdate;
+        public SteamVRUpdateModes poseUpdateMode = SteamVRUpdateModes.OnPreCull;
 
         public bool activateFirstActionSetOnStart = true;
 
@@ -51,9 +51,9 @@ namespace Valve.VR
 
         public bool legacyMixedRealityCamera = true;
 
-        public SteamVR_Action_Pose mixedRealityCameraPose = SteamVR_Input.GetPoseAction("ExternalCamera");
+        public SteamVRActionPose mixedRealityCameraPose = SteamVRInput.GetPoseAction("ExternalCamera");
 
-        public SteamVR_Input_Sources mixedRealityCameraInputSource = SteamVR_Input_Sources.Camera;
+        public SteamVRInputSources mixedRealityCameraInputSource = SteamVRInputSources.Camera;
 
         public bool mixedRealityActionSetAutoEnable = true;
 
@@ -61,16 +61,14 @@ namespace Valve.VR
 
         public GameObject previewHandRight;
 
-
         private const string previewLeftDefaultAssetName = "vr_glove_left_model_slim";
         private const string previewRightDefaultAssetName = "vr_glove_right_model_slim";
 
-
-        public bool IsInputUpdateMode(SteamVR_UpdateModes tocheck)
+        public bool IsInputUpdateMode(SteamVRUpdateModes tocheck)
         {
             return (inputUpdateMode & tocheck) == tocheck;
         }
-        public bool IsPoseUpdateMode(SteamVR_UpdateModes tocheck)
+        public bool IsPoseUpdateMode(SteamVRUpdateModes tocheck)
         {
             return (poseUpdateMode & tocheck) == tocheck;
         }
@@ -88,7 +86,7 @@ namespace Valve.VR
 
                 if (_instance == null)
                 {
-                    _instance = new SteamVR_Settings();
+                    _instance = new SteamVRSettings();
                 }
 
                 SetDefaultsIfNeeded();

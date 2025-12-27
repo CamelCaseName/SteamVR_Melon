@@ -29,8 +29,7 @@ namespace Valve.VR.InteractionSystem
         private Vector3 initialScale;
         private Interactable interactable;
 
-
-        public SteamVR_Input_Sources attachedHandType
+        public SteamVRInputSources attachedHandType
         {
             get
             {
@@ -40,7 +39,7 @@ namespace Valve.VR.InteractionSystem
                 }
                 else
                 {
-                    return SteamVR_Input_Sources.Any;
+                    return SteamVRInputSources.Any;
                 }
             }
         }
@@ -56,7 +55,7 @@ namespace Valve.VR.InteractionSystem
             if (interactable.attachedToHand)
             {
                 Vector3 flipScale = initialScale;
-                if ((attachedHandType == SteamVR_Input_Sources.RightHand && defaultHand == WhichHand.Right) || (attachedHandType == SteamVR_Input_Sources.LeftHand && defaultHand == WhichHand.Left))
+                if ((attachedHandType == SteamVRInputSources.RightHand && defaultHand == WhichHand.Right) || (attachedHandType == SteamVRInputSources.LeftHand && defaultHand == WhichHand.Left))
                 {
                     flipScale.x *= 1;
                     for (int transformIndex = 0; transformIndex < antiFlip.Length; transformIndex++)

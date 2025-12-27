@@ -35,13 +35,11 @@ namespace Valve.VR.InteractionSystem
             return low2 + (num - low1) * (high2 - low2) / (high1 - low1);
         }
 
-
         //-------------------------------------------------
         public static float RemapNumberClamped(float num, float low1, float high1, float low2, float high2)
         {
             return Mathf.Clamp(RemapNumber(num, low1, high1, low2, high2), Mathf.Min(low2, high2), Mathf.Max(low2, high2));
         }
-
 
         //-------------------------------------------------
         public static float Approach(float target, float value, float speed)
@@ -64,7 +62,6 @@ namespace Valve.VR.InteractionSystem
             return value;
         }
 
-
         //-------------------------------------------------
         public static Vector3 BezierInterpolate3(Vector3 p0, Vector3 c0, Vector3 p1, float t)
         {
@@ -73,7 +70,6 @@ namespace Valve.VR.InteractionSystem
 
             return Vector3.Lerp(p0c0, c0p1, t);
         }
-
 
         //-------------------------------------------------
         public static Vector3 BezierInterpolate4(Vector3 p0, Vector3 c0, Vector3 c1, Vector3 p1, float t)
@@ -99,7 +95,6 @@ namespace Valve.VR.InteractionSystem
             return Vector3.Lerp(x, y, t);
         }
 
-
         //-------------------------------------------------
         public static Vector3 Vector3FromString(string szString)
         {
@@ -109,11 +104,10 @@ namespace Valve.VR.InteractionSystem
             float y = float.Parse(szParseString[1]);
             float z = float.Parse(szParseString[2]);
 
-            Vector3 vReturn = new Vector3(x, y, z);
+            Vector3 vReturn = new(x, y, z);
 
             return vReturn;
         }
-
 
         //-------------------------------------------------
         public static Vector2 Vector2FromString(string szString)
@@ -128,7 +122,6 @@ namespace Valve.VR.InteractionSystem
             return vReturn;
         }
 
-
         //-------------------------------------------------
         public static float Normalize(float value, float min, float max)
         {
@@ -137,20 +130,17 @@ namespace Valve.VR.InteractionSystem
             return normalizedValue;
         }
 
-
         //-------------------------------------------------
         public static Vector3 Vector2AsVector3(Vector2 v)
         {
             return new Vector3(v.x, 0.0f, v.y);
         }
 
-
         //-------------------------------------------------
         public static Vector2 Vector3AsVector2(Vector3 v)
         {
             return new Vector2(v.x, v.z);
         }
-
 
         //-------------------------------------------------
         public static float AngleOf(Vector2 v)
@@ -167,7 +157,6 @@ namespace Valve.VR.InteractionSystem
             }
         }
 
-
         //-------------------------------------------------
         public static float YawOf(Vector3 v)
         {
@@ -183,7 +172,6 @@ namespace Valve.VR.InteractionSystem
             }
         }
 
-
         //-------------------------------------------------
         public static void Swap<T>(ref T lhs, ref T rhs)
         {
@@ -191,7 +179,6 @@ namespace Valve.VR.InteractionSystem
             lhs = rhs;
             rhs = temp;
         }
-
 
         //-------------------------------------------------
         public static void Shuffle<T>(T[] array)
@@ -202,7 +189,6 @@ namespace Valve.VR.InteractionSystem
                 Swap(ref array[i], ref array[r]);
             }
         }
-
 
         //-------------------------------------------------
         public static void Shuffle<T>(List<T> list)
@@ -215,7 +201,6 @@ namespace Valve.VR.InteractionSystem
                 list[r] = temp;
             }
         }
-
 
         //-------------------------------------------------
         public static int RandomWithLookback(int min, int max, List<int> history, int historyCount)
@@ -240,7 +225,6 @@ namespace Valve.VR.InteractionSystem
             return index;
         }
 
-
         //-------------------------------------------------
         public static Transform FindChild(Transform parent, string name)
         {
@@ -261,7 +245,6 @@ namespace Valve.VR.InteractionSystem
             return null;
         }
 
-
         //-------------------------------------------------
         public static bool IsNullOrEmpty<T>(T[] array)
         {
@@ -278,7 +261,6 @@ namespace Valve.VR.InteractionSystem
             return false;
         }
 
-
         //-------------------------------------------------
         public static bool IsValidIndex<T>(T[] array, int i)
         {
@@ -290,7 +272,6 @@ namespace Valve.VR.InteractionSystem
             return (i >= 0) && (i < array.Length);
         }
 
-
         //-------------------------------------------------
         public static bool IsValidIndex<T>(List<T> list, int i)
         {
@@ -301,7 +282,6 @@ namespace Valve.VR.InteractionSystem
 
             return (i >= 0) && (i < list.Count);
         }
-
 
         //-------------------------------------------------
         public static int FindOrAdd<T>(List<T> list, T item)
@@ -317,7 +297,6 @@ namespace Valve.VR.InteractionSystem
             return index;
         }
 
-
         //-------------------------------------------------
         public static List<T> FindAndRemove<T>(List<T> list, Predicate<T> match)
         {
@@ -325,7 +304,6 @@ namespace Valve.VR.InteractionSystem
             list.RemoveAll(match);
             return retVal;
         }
-
 
         //-------------------------------------------------
         public static T FindOrAddComponent<T>(GameObject gameObject) where T : Component
@@ -339,14 +317,12 @@ namespace Valve.VR.InteractionSystem
             return gameObject.AddComponent<T>();
         }
 
-
         //-------------------------------------------------
         public static void FastRemove<T>(List<T> list, int index)
         {
             list[index] = list[list.Count - 1];
             list.RemoveAt(list.Count - 1);
         }
-
 
         //-------------------------------------------------
         public static void ReplaceGameObject<T, U>(T replace, U replaceWith)
@@ -356,7 +332,6 @@ namespace Valve.VR.InteractionSystem
             replace.gameObject.SetActive(false);
             replaceWith.gameObject.SetActive(true);
         }
-
 
         //-------------------------------------------------
         public static void SwitchLayerRecursively(Transform transform, int fromLayer, int toLayer)
@@ -372,7 +347,6 @@ namespace Valve.VR.InteractionSystem
                 SwitchLayerRecursively(transform.GetChild(i), fromLayer, toLayer);
             }
         }
-
 
         //-------------------------------------------------
         public static void DrawCross(Vector3 origin, Color crossColor, float size)
@@ -393,7 +367,6 @@ namespace Valve.VR.InteractionSystem
             Debug.DrawLine(line3Start, line3End, crossColor);
         }
 
-
         //-------------------------------------------------
         public static void ResetTransform(Transform t, bool resetScale = true)
         {
@@ -404,7 +377,6 @@ namespace Valve.VR.InteractionSystem
                 t.localScale = new Vector3(1f, 1f, 1f);
             }
         }
-
 
         //-------------------------------------------------
         public static Vector3 ClosestPointOnLine(Vector3 vA, Vector3 vB, Vector3 vPoint)
@@ -432,14 +404,12 @@ namespace Valve.VR.InteractionSystem
             return vClosestPoint;
         }
 
-
         //-------------------------------------------------
-        public static void AfterTimer(GameObject go, float _time, Action callback, bool trigger_if_destroyed_early = false)
+        public static void AfterTimer(GameObject go, float Time, Action callback, bool triggerIfDestroyedEarly = false)
         {
-            AfterTimer_Component afterTimer_component = go.AddComponent<AfterTimer_Component>();
-            afterTimer_component.Init(_time, callback, trigger_if_destroyed_early);
+            AfterTimerComponent afterTimer_component = go.AddComponent<AfterTimerComponent>();
+            afterTimer_component.Init(Time, callback, triggerIfDestroyedEarly);
         }
-
 
         //-------------------------------------------------
         public static void SendPhysicsMessage(Collider collider, string message, SendMessageOptions sendMessageOptions)
@@ -453,7 +423,6 @@ namespace Valve.VR.InteractionSystem
             collider.SendMessage(message, sendMessageOptions);
         }
 
-
         //-------------------------------------------------
         public static void SendPhysicsMessage(Collider collider, string message, Il2CppSystem.Object arg, SendMessageOptions sendMessageOptions)
         {
@@ -465,7 +434,6 @@ namespace Valve.VR.InteractionSystem
 
             collider.SendMessage(message, arg, sendMessageOptions);
         }
-
 
         //-------------------------------------------------
         public static void IgnoreCollisions(GameObject goA, GameObject goB)
@@ -490,7 +458,6 @@ namespace Valve.VR.InteractionSystem
             }
         }
 
-
         //-------------------------------------------------
         public static IEnumerator WrapCoroutine(IEnumerator coroutine, Action onCoroutineFinished)
         {
@@ -501,7 +468,6 @@ namespace Valve.VR.InteractionSystem
 
             onCoroutineFinished();
         }
-
 
         //-------------------------------------------------
         public static Color ColorWithAlpha(this Color color, float alpha)
@@ -532,7 +498,6 @@ namespace Valve.VR.InteractionSystem
             return Math.Round((decimal)value, decimalPlaces);
         }
 
-
         //-------------------------------------------------
         public static T Median<T>(this IEnumerable<T> source)
         {
@@ -550,7 +515,6 @@ namespace Valve.VR.InteractionSystem
             return source.OrderBy(x => x).ElementAt(count / 2);
         }
 
-
         //-------------------------------------------------
         public static void ForEach<T>(this IEnumerable<T> source, Action<T> action)
         {
@@ -564,7 +528,6 @@ namespace Valve.VR.InteractionSystem
                 action(value);
             }
         }
-
 
         //-------------------------------------------------
         // In some cases Unity/C# don't correctly interpret the newline control character (\n).
@@ -592,7 +555,6 @@ namespace Valve.VR.InteractionSystem
             return text;
         }
 
-
         //-------------------------------------------------
 #if ( UNITY_5_4 )
         public static float PathLength( NavMeshPath path )
@@ -618,7 +580,6 @@ namespace Valve.VR.InteractionSystem
             return lengthSoFar;
         }
 
-
         //-------------------------------------------------
         public static bool HasCommandLineArgument(string argumentName)
         {
@@ -633,7 +594,6 @@ namespace Valve.VR.InteractionSystem
 
             return false;
         }
-
 
         //-------------------------------------------------
         public static int GetCommandLineArgValue(string argumentName, int nDefaultValue)
@@ -655,7 +615,6 @@ namespace Valve.VR.InteractionSystem
             return nDefaultValue;
         }
 
-
         //-------------------------------------------------
         public static float GetCommandLineArgValue(string argumentName, float flDefaultValue)
         {
@@ -676,13 +635,11 @@ namespace Valve.VR.InteractionSystem
             return flDefaultValue;
         }
 
-
         //-------------------------------------------------
         public static void SetActive(GameObject gameObject, bool active)
         {
             gameObject?.SetActive(active);
         }
-
 
         //-------------------------------------------------
         // The version of Path.Combine() included with Unity can only combine two paths.
@@ -708,15 +665,14 @@ namespace Valve.VR.InteractionSystem
         }
     }
 
-
     //-------------------------------------------------------------------------
     //Component used by the static AfterTimer function
     //-------------------------------------------------------------------------
     [MelonLoader.RegisterTypeInIl2Cpp()]
     [Serializable]
-    public class AfterTimer_Component : MonoBehaviour
+    public class AfterTimerComponent : MonoBehaviour
     {
-        public AfterTimer_Component(IntPtr handle) : base(handle) { }
+        public AfterTimerComponent(IntPtr handle) : base(handle) { }
         private Action callback;
         private float triggerTime;
         private bool timerActive = false;
@@ -724,15 +680,14 @@ namespace Valve.VR.InteractionSystem
 
         //-------------------------------------------------
         [Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp]
-        public void Init(float _time, Action _callback, bool earlydestroy)
+        public void Init(float Time, Action Callback, bool earlydestroy)
         {
-            triggerTime = _time;
-            callback = _callback;
+            triggerTime = Time;
+            callback = Callback;
             triggerOnEarlyDestroy = earlydestroy;
             timerActive = true;
             MelonLoader.MelonCoroutines.Start(Wait());
         }
-
 
         //-------------------------------------------------
         [Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp]
@@ -743,7 +698,6 @@ namespace Valve.VR.InteractionSystem
             callback.Invoke();
             Destroy(this);
         }
-
 
         //-------------------------------------------------
         void OnDestroy()

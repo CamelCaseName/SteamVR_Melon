@@ -6,5 +6,5 @@ using UnityEngine;
 namespace Valve.VR
 {
     [Serializable]
-    public class SteamVR_Behaviour_Vector3Event : SteamVR_Events.Event<SteamVR_Behaviour_Vector3, SteamVR_Input_Sources, Vector3, Vector3> { }
+    public class SteamVRBehaviourVector3Event : SteamVREvents.Event<SteamVRBehaviourVector3, SteamVRInputSources, Vector3, Vector3> { }
 }

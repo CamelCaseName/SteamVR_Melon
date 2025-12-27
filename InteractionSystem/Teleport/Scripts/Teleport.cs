@@ -15,7 +15,7 @@ namespace Valve.VR.InteractionSystem
     public class Teleport : MonoBehaviour
     {
         public Teleport(IntPtr value) : base(value) { }
-        public SteamVR_Action_Boolean teleportAction = SteamVR_Input.GetAction<SteamVR_Action_Boolean>("Teleport");
+        public SteamVRActionBoolean teleportAction = SteamVRInput.GetAction<SteamVRActionBoolean>("Teleport");
 
         public LayerMask traceLayerMask;
         public LayerMask floorFixupTraceLayerMask;
@@ -92,8 +92,8 @@ namespace Valve.VR.InteractionSystem
 
         private float invalidReticleMinScale = 0.2f;
         private float invalidReticleMaxScale = 1.0f;
-        private float invalidReticleMinScaleDistance = 0.4f;
-        private float invalidReticleMaxScaleDistance = 2.0f;
+        private readonly float invalidReticleMinScaleDistance = 0.4f;
+        private readonly float invalidReticleMaxScaleDistance = 2.0f;
         private Vector3 invalidReticleScale = Vector3.one;
         private Quaternion invalidReticleTargetRotation = Quaternion.identity;
 
@@ -112,18 +112,18 @@ namespace Valve.VR.InteractionSystem
         private Vector3 startingFeetOffset = Vector3.zero;
         private bool movedFeetFarEnough = false;
 
-        SteamVR_Events.Action chaperoneInfoInitializedAction;
+        SteamVREvents.Action chaperoneInfoInitializedAction;
 
         // Events
 
-        public static SteamVR_Events.Event<float> ChangeScene = new SteamVR_Events.Event<float>();
-        public static SteamVR_Events.Action<float> ChangeSceneAction(Action<float> action) { return new SteamVR_Events.Action<float>(ChangeScene, action); }
+        public static SteamVREvents.Event<float> ChangeScene = new();
+        public static SteamVREvents.Action<float> ChangeSceneAction(Action<float> action) { return new SteamVREvents.Action<float>(ChangeScene, action); }
 
-        public static SteamVR_Events.Event<TeleportMarkerBase> Player = new SteamVR_Events.Event<TeleportMarkerBase>();
-        public static SteamVR_Events.Action<TeleportMarkerBase> PlayerAction(Action<TeleportMarkerBase> action) { return new SteamVR_Events.Action<TeleportMarkerBase>(Player, action); }
+        public static SteamVREvents.Event<TeleportMarkerBase> Player = new();
+        public static SteamVREvents.Action<TeleportMarkerBase> PlayerAction(Action<TeleportMarkerBase> action) { return new SteamVREvents.Action<TeleportMarkerBase>(Player, action); }
 
-        public static SteamVR_Events.Event<TeleportMarkerBase> PlayerPre = new SteamVR_Events.Event<TeleportMarkerBase>();
-        public static SteamVR_Events.Action<TeleportMarkerBase> PlayerPreAction(Action<TeleportMarkerBase> action) { return new SteamVR_Events.Action<TeleportMarkerBase>(PlayerPre, action); }
+        public static SteamVREvents.Event<TeleportMarkerBase> PlayerPre = new();
+        public static SteamVREvents.Action<TeleportMarkerBase> PlayerPreAction(Action<TeleportMarkerBase> action) { return new SteamVREvents.Action<TeleportMarkerBase>(PlayerPre, action); }
 
         //-------------------------------------------------
         private static Teleport _instance;
@@ -139,7 +139,6 @@ namespace Valve.VR.InteractionSystem
                 return _instance;
             }
         }
-
 
         //-------------------------------------------------
         void Awake()
@@ -171,7 +170,6 @@ namespace Valve.VR.InteractionSystem
             invalidReticleMaxScale *= invalidReticleStartingScale;
         }
 
-
         //-------------------------------------------------
         void Start()
         {
@@ -193,7 +191,6 @@ namespace Valve.VR.InteractionSystem
             Invoke("ShowTeleportHint", 5.0f);
         }
 
-
         //-------------------------------------------------
         void OnEnable()
         {
@@ -201,14 +198,12 @@ namespace Valve.VR.InteractionSystem
             OnChaperoneInfoInitialized(); // In case it's already initialized
         }
 
-
         //-------------------------------------------------
         void OnDisable()
         {
             chaperoneInfoInitializedAction.enabled = false;
             HidePointer();
         }
-
 
         //-------------------------------------------------
         private void CheckForSpawnPoint()
@@ -225,7 +220,6 @@ namespace Valve.VR.InteractionSystem
             }
         }
 
-
         //-------------------------------------------------
         public void HideTeleportPointer()
         {
@@ -234,7 +228,6 @@ namespace Valve.VR.InteractionSystem
                 HidePointer();
             }
         }
-
 
         //-------------------------------------------------
         void Update()
@@ -310,7 +303,6 @@ namespace Valve.VR.InteractionSystem
                 }
             }
         }
-
 
         //-------------------------------------------------
         private void UpdatePointer()
@@ -487,7 +479,6 @@ namespace Valve.VR.InteractionSystem
             pointerLineRenderer.SetPosition(1, pointerEnd);
         }
 
-
         //-------------------------------------------------
         void FixedUpdate()
         {
@@ -541,7 +532,6 @@ namespace Valve.VR.InteractionSystem
                 }
             }
         }
-
 
         //-------------------------------------------------
         private void OnChaperoneInfoInitialized()
@@ -615,7 +605,6 @@ namespace Valve.VR.InteractionSystem
             }
         }
 
-
         //-------------------------------------------------
         private void HidePointer()
         {
@@ -671,7 +660,6 @@ namespace Valve.VR.InteractionSystem
             pointerHand = null;
         }
 
-
         //-------------------------------------------------
         private void ShowPointer(Hand newPointerHand, Hand oldPointerHand)
         {
@@ -708,7 +696,6 @@ namespace Valve.VR.InteractionSystem
                 loopingAudioSource.Play();
                 loopingAudioSource.volume = 0.0f;
             }
-
 
             if (oldPointerHand)
             {
@@ -759,7 +746,6 @@ namespace Valve.VR.InteractionSystem
             }
         }
 
-
         //-------------------------------------------------
         private void UpdateTeleportColors()
         {
@@ -781,14 +767,12 @@ namespace Valve.VR.InteractionSystem
             }
         }
 
-
         //-------------------------------------------------
         private void PlayAudioClip(AudioSource source, AudioClip clip)
         {
             source.clip = clip;
             source.Play();
         }
-
 
         //-------------------------------------------------
         private void PlayPointerHaptic(bool validLocation)
@@ -806,7 +790,6 @@ namespace Valve.VR.InteractionSystem
             }
         }
 
-
         //-------------------------------------------------
         private void TryTeleportPlayer()
         {
@@ -823,7 +806,6 @@ namespace Valve.VR.InteractionSystem
             }
         }
 
-
         //-------------------------------------------------
         private void InitiateTeleportFade()
         {
@@ -838,8 +820,8 @@ namespace Valve.VR.InteractionSystem
                 Teleport.ChangeScene.Send(currentFadeTime);
             }
 
-            SteamVR_Fade.Start(Color.clear, 0);
-            SteamVR_Fade.Start(Color.black, currentFadeTime);
+            SteamVRFade.Start(Color.clear, 0);
+            SteamVRFade.Start(Color.black, currentFadeTime);
 
             headAudioSource.transform.SetParent(player.hmdTransform);
             headAudioSource.transform.localPosition = Vector3.zero;
@@ -848,7 +830,6 @@ namespace Valve.VR.InteractionSystem
             Invoke("TeleportPlayer", currentFadeTime);
         }
 
-
         //-------------------------------------------------
         private void TeleportPlayer()
         {
@@ -856,7 +837,7 @@ namespace Valve.VR.InteractionSystem
 
             Teleport.PlayerPre.Send(pointedAtTeleportMarker);
 
-            SteamVR_Fade.Start(Color.clear, currentFadeTime);
+            SteamVRFade.Start(Color.clear, currentFadeTime);
 
             TeleportPoint teleportPoint = teleportingToMarker as TeleportPoint;
             Vector3 teleportPosition = pointedAtPosition;
@@ -910,7 +891,6 @@ namespace Valve.VR.InteractionSystem
             Teleport.Player.Send(pointedAtTeleportMarker);
         }
 
-
         //-------------------------------------------------
         private void HighlightSelected(TeleportMarkerBase hitTeleportMarker)
         {
@@ -946,7 +926,6 @@ namespace Valve.VR.InteractionSystem
             }
         }
 
-
         //-------------------------------------------------
         public void ShowTeleportHint()
         {
@@ -954,7 +933,6 @@ namespace Valve.VR.InteractionSystem
             hintCoroutine = TeleportHintCoroutine();
             MelonLoader.MelonCoroutines.Start(hintCoroutine);
         }
-
 
         //-------------------------------------------------
         public void CancelTeleportHint()
@@ -970,7 +948,6 @@ namespace Valve.VR.InteractionSystem
 
             CancelInvoke("ShowTeleportHint");
         }
-
 
         //-------------------------------------------------
         [Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp]
@@ -1028,7 +1005,6 @@ namespace Valve.VR.InteractionSystem
             }
         }
 
-
         //-------------------------------------------------
         public bool IsEligibleForTeleport(Hand hand)
         {
@@ -1073,7 +1049,6 @@ namespace Valve.VR.InteractionSystem
             return true;
         }
 
-
         //-------------------------------------------------
         private bool ShouldOverrideHoverLock()
         {
@@ -1084,7 +1059,6 @@ namespace Valve.VR.InteractionSystem
 
             return false;
         }
-
 
         //-------------------------------------------------
         private bool WasTeleportButtonReleased(Hand hand)
@@ -1124,7 +1098,6 @@ namespace Valve.VR.InteractionSystem
             return false;
         }
 
-
         //-------------------------------------------------
         private bool WasTeleportButtonPressed(Hand hand)
         {
@@ -1144,7 +1117,6 @@ namespace Valve.VR.InteractionSystem
 
             return false;
         }
-
 
         //-------------------------------------------------
         private Transform GetPointerStartTransform(Hand hand)

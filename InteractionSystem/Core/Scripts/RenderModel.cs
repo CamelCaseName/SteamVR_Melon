@@ -13,7 +13,7 @@ namespace Valve.VR.InteractionSystem
         protected GameObject handInstance;
         protected Renderer[] handRenderers;
         public bool displayHandByDefault = true;
-        protected SteamVR_Behaviour_Skeleton handSkeleton;
+        protected SteamVRBehaviourSkeleton handSkeleton;
         protected Animator handAnimator;
 
         protected string animatorParameterStateName = "AnimationState";
@@ -22,25 +22,25 @@ namespace Valve.VR.InteractionSystem
         public GameObject controllerPrefab;
         protected GameObject controllerInstance;
         protected Renderer[] controllerRenderers;
-        protected SteamVR_RenderModel controllerRenderModel;
+        protected SteamVRRenderModel controllerRenderModel;
         public bool displayControllerByDefault = true;
         protected Material delayedSetMaterial;
 
         [Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp]
         public event Action onControllerLoaded;
 
-        protected SteamVR_Events.Action renderModelLoadedAction;
+        protected SteamVREvents.Action renderModelLoadedAction;
 
-        protected SteamVR_Input_Sources inputSource;
+        protected SteamVRInputSources inputSource;
 
         public void Initialize()
         {
-            renderModelLoadedAction = SteamVR_Events.RenderModelLoadedAction(OnRenderModelLoaded);
+            renderModelLoadedAction = SteamVREvents.RenderModelLoadedAction(OnRenderModelLoaded);
             onControllerLoaded = new(() => { });
             InitializeHand();
 
             InitializeController();
-            var t = transform.GetComponent<SteamVR_Behaviour_Pose>();
+            var t = transform.GetComponent<SteamVRBehaviourPose>();
             if (t is not null)
             {
                 t.OnInputSource += SetInputSource;
@@ -56,7 +56,7 @@ namespace Valve.VR.InteractionSystem
                 handInstance.transform.localPosition = Vector3.zero;
                 handInstance.transform.localRotation = Quaternion.identity;
                 handInstance.transform.localScale = handPrefab.transform.localScale;
-                handSkeleton = handInstance.GetComponent<SteamVR_Behaviour_Skeleton>();
+                handSkeleton = handInstance.GetComponent<SteamVRBehaviourSkeleton>();
                 handSkeleton.origin = Player.instance.trackingOriginTransform;
                 handSkeleton.updatePose = false;
                 handSkeleton.skeletonAction.onActiveChange += OnSkeletonActiveChange;
@@ -87,7 +87,7 @@ namespace Valve.VR.InteractionSystem
                 controllerInstance.transform.localPosition = Vector3.zero;
                 controllerInstance.transform.localRotation = Quaternion.identity;
                 controllerInstance.transform.localScale = controllerPrefab.transform.localScale;
-                controllerRenderModel = controllerInstance.GetComponent<SteamVR_RenderModel>();
+                controllerRenderModel = controllerInstance.GetComponent<SteamVRRenderModel>();
             }
         }
 
@@ -109,7 +109,7 @@ namespace Valve.VR.InteractionSystem
         }
 
         [Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp]
-        protected virtual void OnSkeletonActiveChange(SteamVR_Action_Skeleton changedAction, bool newState)
+        protected virtual void OnSkeletonActiveChange(SteamVRActionSkeleton changedAction, bool newState)
         {
             if (newState)
             {
@@ -136,12 +136,12 @@ namespace Valve.VR.InteractionSystem
             DestroyHand();
         }
 
-        public SteamVR_Behaviour_Skeleton GetSkeleton()
+        public SteamVRBehaviourSkeleton GetSkeleton()
         {
             return handSkeleton;
         }
 
-        public virtual void SetInputSource(SteamVR_Input_Sources newInputSource)
+        public virtual void SetInputSource(SteamVRInputSources newInputSource)
         {
             inputSource = newInputSource;
             controllerRenderModel?.SetInputSource(inputSource);
@@ -198,7 +198,7 @@ namespace Valve.VR.InteractionSystem
             return Quaternion.identity;
         }
 
-        private void OnRenderModelLoaded(SteamVR_RenderModel loadedRenderModel, bool success)
+        private void OnRenderModelLoaded(SteamVRRenderModel loadedRenderModel, bool success)
         {
             if (controllerRenderModel == loadedRenderModel)
             {
@@ -380,7 +380,6 @@ namespace Valve.VR.InteractionSystem
             return Quaternion.identity;
         }
 
-
         public void SetSkeletonRangeOfMotion(EVRSkeletalMotionRange newRangeOfMotion, float blendOverSeconds = 0.1f)
         {
             handSkeleton?.SetRangeOfMotion(newRangeOfMotion, blendOverSeconds);
@@ -462,7 +461,6 @@ namespace Valve.VR.InteractionSystem
 
             return handAnimatorStateId != -1 && handAnimator != null && handAnimator.isInitialized;
         }
-
 
     }
 }

@@ -1,9 +1,8 @@
 ﻿//======= Copyright (c) Valve Corporation, All rights reserved. ===============
 
-
 namespace Valve.VR
 {
-    public class SteamVR_Input_Generator_Names
+    public class SteamVRInputGeneratorNames
     {
         public const string fullActionsClassName = "Valve.VR.SteamVR_Actions";
         public const string actionsClassName = "SteamVR_Actions";

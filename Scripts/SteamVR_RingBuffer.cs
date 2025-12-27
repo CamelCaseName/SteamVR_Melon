@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Valve.VR
 {
-    public class SteamVR_RingBuffer<T>
+    public class SteamVRRingBuffer<T>
     {
         public static bool UseDateTimeForTicks = false;
 
@@ -12,7 +12,7 @@ namespace Valve.VR
         protected int currentIndex;
         protected T lastElement;
 
-        public SteamVR_RingBuffer(int size)
+        public SteamVRRingBuffer(int size)
         {
             buffer = new T[size];
             currentIndex = 0;
@@ -90,15 +90,15 @@ namespace Valve.VR
         }
     }
 
-    public class SteamVR_HistoryBuffer : SteamVR_RingBuffer<SteamVR_HistoryStep>
+    public class SteamVRHistoryBuffer : SteamVRRingBuffer<SteamVRHistoryStep>
     {
-        public SteamVR_HistoryBuffer(int size) : base(size) { }
+        public SteamVRHistoryBuffer(int size) : base(size) { }
 
         public void Update(Vector3 position, Quaternion rotation, Vector3 velocity, Vector3 angularVelocity)
         {
             if (buffer[currentIndex] == null)
             {
-                buffer[currentIndex] = new SteamVR_HistoryStep();
+                buffer[currentIndex] = new SteamVRHistoryStep();
             }
 
             buffer[currentIndex].position = position;
@@ -144,8 +144,8 @@ namespace Valve.VR
                 fromIndex += buffer.Length;
             }
 
-            SteamVR_HistoryStep toStep = buffer[toIndex];
-            SteamVR_HistoryStep fromStep = buffer[fromIndex];
+            SteamVRHistoryStep toStep = buffer[toIndex];
+            SteamVRHistoryStep fromStep = buffer[fromIndex];
 
             if (IsValid(toStep) && IsValid(fromStep))
             {
@@ -155,7 +155,7 @@ namespace Valve.VR
             return 0;
         }
 
-        public bool IsValid(SteamVR_HistoryStep step)
+        public bool IsValid(SteamVRHistoryStep step)
         {
             return step != null && step.timeInTicks != -1;
         }
@@ -177,7 +177,7 @@ namespace Valve.VR
                     currentFrame = buffer.Length - 1;
                 }
 
-                SteamVR_HistoryStep currentStep = buffer[currentFrame];
+                SteamVRHistoryStep currentStep = buffer[currentFrame];
 
                 if (IsValid(currentStep) == false)
                 {
@@ -238,7 +238,7 @@ namespace Valve.VR
                     currentFrame = buffer.Length - 1;
                 }
 
-                SteamVR_HistoryStep currentStep = buffer[currentFrame];
+                SteamVRHistoryStep currentStep = buffer[currentFrame];
 
                 if (IsValid(currentStep) == false)
                 {
@@ -256,7 +256,7 @@ namespace Valve.VR
         }
     }
 
-    public class SteamVR_HistoryStep
+    public class SteamVRHistoryStep
     {
         public Vector3 position;
         public Quaternion rotation;

@@ -38,7 +38,7 @@ namespace Valve.VR.InteractionSystem
         public Transform audioListener;
 
         /// <summary>This action lets you know when the player has placed the headset on their head</summary>
-        public SteamVR_Action_Boolean headsetOnHead = SteamVR_Input.GetBooleanAction("HeadsetOnHead");
+        public SteamVRActionBoolean headsetOnHead = SteamVRInput.GetBooleanAction("HeadsetOnHead");
 
         public bool allowToggleTo2D = true;
 
@@ -115,7 +115,7 @@ namespace Valve.VR.InteractionSystem
                         continue;
                     }
 
-                    if (hands[j].handType != SteamVR_Input_Sources.LeftHand)
+                    if (hands[j].handType != SteamVRInputSources.LeftHand)
                     {
                         continue;
                     }
@@ -139,7 +139,7 @@ namespace Valve.VR.InteractionSystem
                         continue;
                     }
 
-                    if (hands[j].handType != SteamVR_Input_Sources.RightHand)
+                    if (hands[j].handType != SteamVRInputSources.RightHand)
                     {
                         continue;
                     }
@@ -287,11 +287,11 @@ namespace Valve.VR.InteractionSystem
 
             if (headsetOnHead != null)
             {
-                if (headsetOnHead.GetStateDown(SteamVR_Input_Sources.Head))
+                if (headsetOnHead.GetStateDown(SteamVRInputSources.Head))
                 {
                     MelonLoader.MelonLogger.Msg("[HPVR] Headset placed on head");
                 }
-                else if (headsetOnHead.GetStateUp(SteamVR_Input_Sources.Head))
+                else if (headsetOnHead.GetStateUp(SteamVRInputSources.Head))
                 {
                     MelonLoader.MelonLogger.Msg("[HPVR] Headset removed");
                 }
@@ -332,11 +332,11 @@ namespace Valve.VR.InteractionSystem
             {
                 Hand hand = GetHand(i);
 
-                if (hand.handType == SteamVR_Input_Sources.LeftHand)
+                if (hand.handType == SteamVRInputSources.LeftHand)
                 {
                     Gizmos.DrawIcon(hand.transform.position, "vr_interaction_system_left_hand.png");
                 }
-                else if (hand.handType == SteamVR_Input_Sources.RightHand)
+                else if (hand.handType == SteamVRInputSources.RightHand)
                 {
                     Gizmos.DrawIcon(hand.transform.position, "vr_interaction_system_right_hand.png");
                 }

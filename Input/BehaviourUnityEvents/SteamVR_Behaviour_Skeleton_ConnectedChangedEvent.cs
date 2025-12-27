@@ -5,5 +5,5 @@ using System;
 namespace Valve.VR
 {
     [Serializable]
-    public class SteamVR_Behaviour_Skeleton_ConnectedChangedEvent : SteamVR_Events.Event<SteamVR_Behaviour_Skeleton, SteamVR_Input_Sources, bool> { }
+    public class SteamVRBehaviourSkeletonConnectedChangedEvent : SteamVREvents.Event<SteamVRBehaviourSkeleton, SteamVRInputSources, bool> { }
 }

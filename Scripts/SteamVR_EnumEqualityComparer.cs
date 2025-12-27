@@ -26,25 +26,25 @@ namespace Valve.VR
             }
         }
 
-        public bool Equals(TEnum firstEnum, TEnum secondEnum)
+        public readonly bool Equals(TEnum firstEnum, TEnum secondEnum)
         {
             return BoxAvoidance.ToInt(firstEnum) == BoxAvoidance.ToInt(secondEnum);
         }
 
-        public int GetHashCode(TEnum firstEnum)
+        public readonly int GetHashCode(TEnum firstEnum)
         {
             return BoxAvoidance.ToInt(firstEnum);
         }
     }
 
-    public struct SteamVR_Input_Sources_Comparer : IEqualityComparer<SteamVR_Input_Sources>
+    public struct SteamVRInputSourcesComparer : IEqualityComparer<SteamVRInputSources>
     {
-        public bool Equals(SteamVR_Input_Sources x, SteamVR_Input_Sources y)
+        public readonly bool Equals(SteamVRInputSources x, SteamVRInputSources y)
         {
             return x == y;
         }
 
-        public int GetHashCode(SteamVR_Input_Sources obj)
+        public readonly int GetHashCode(SteamVRInputSources obj)
         {
             return (int)obj;
         }

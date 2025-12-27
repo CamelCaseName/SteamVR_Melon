@@ -1,9 +1,8 @@
 ﻿//======= Copyright (c) Valve Corporation, All rights reserved. ===============
 
-
 namespace Valve.VR
 {
-    public enum SteamVR_UpdateModes
+    public enum SteamVRUpdateModes
     {
         Nothing = (1 << 0),
         OnUpdate = (1 << 1),

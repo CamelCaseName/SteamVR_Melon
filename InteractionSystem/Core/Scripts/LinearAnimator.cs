@@ -20,7 +20,6 @@ namespace Valve.VR.InteractionSystem
         private float currentLinearMapping = float.NaN;
         private int framesUnchanged = 0;
 
-
         //-------------------------------------------------
         void Awake()
         {
@@ -36,7 +35,6 @@ namespace Valve.VR.InteractionSystem
                 linearMapping = GetComponent<LinearMapping>();
             }
         }
-
 
         //-------------------------------------------------
         void Update()

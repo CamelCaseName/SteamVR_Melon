@@ -1,6 +1,7 @@
 ﻿//======= Copyright (c) Valve Corporation, All rights reserved. ===============
 
 using Il2CppInterop.Runtime.Attributes;
+using SteamVR_Melon.Scripts;
 using System;
 using System.Collections;
 using UnityEngine;
@@ -8,16 +9,16 @@ using UnityEngine;
 namespace Valve.VR
 {
     [MelonLoader.RegisterTypeInIl2Cpp()]
-    public class SteamVR_Behaviour_Skeleton : MonoBehaviour
+    public class SteamVRBehaviourSkeleton : MonoBehaviour
     {
-        public SteamVR_Behaviour_Skeleton(IntPtr value) : base(value) { }
+        public SteamVRBehaviourSkeleton(IntPtr value) : base(value) { }
         /// <summary>If not set, will try to auto assign this based on 'Skeleton' + inputSource</summary>
         /// <summary>The action this component will use to update the model. Must be a Skeleton type action.</summary>
-        public SteamVR_Action_Skeleton skeletonAction;
+        public SteamVRActionSkeleton skeletonAction;
 
         /// <summary>The device this action should apply to. Any if the action is not device specific.</summary>
         /// <summary>The device this action should apply to. Any if the action is not device specific.</summary>
-        public SteamVR_Input_Sources inputSource;
+        public SteamVRInputSources inputSource;
 
         /// <summary>The range of motion you'd like the hand to move in. With controller is the best estimate of the fingers wrapped around a controller. Without is from a flat hand to a fist.</summary>
         /// <summary>The range of motion you'd like the hand to move in. With controller is the best estimate of the fingers wrapped around a controller. Without is from a flat hand to a fist.</summary>
@@ -48,20 +49,19 @@ namespace Valve.VR
         public float skeletonBlend = 1f;
 
         /// <summary>This Unity event will fire whenever the position or rotation of the bones are updated.</summary>
-        public SteamVR_Behaviour_SkeletonEvent onBoneTransformsUpdated;
+        public SteamVRBehaviourSkeletonEvent onBoneTransformsUpdated;
 
         /// <summary>This Unity event will fire whenever the position or rotation of this transform is updated.</summary>
-        public SteamVR_Behaviour_SkeletonEvent onTransformUpdated;
+        public SteamVRBehaviourSkeletonEvent onTransformUpdated;
 
         /// <summary>This Unity event will fire whenever the position or rotation of this transform is changed.</summary>
-        public SteamVR_Behaviour_SkeletonEvent onTransformChanged;
+        public SteamVRBehaviourSkeletonEvent onTransformChanged;
 
         /// <summary>This Unity event will fire whenever the device is connected or disconnected</summary>
-        public SteamVR_Behaviour_Skeleton_ConnectedChangedEvent onConnectedChanged;
+        public SteamVRBehaviourSkeletonConnectedChangedEvent onConnectedChanged;
 
         /// <summary>This Unity event will fire whenever the device's tracking state changes</summary>
-        public SteamVR_Behaviour_Skeleton_TrackingChangedEvent onTrackingChanged;
-
+        public SteamVRBehaviourSkeletonTrackingChangedEvent onTrackingChanged;
 
         /// <summary>This C# event will fire whenever the position or rotation of this transform is updated.</summary>
         public UpdateHandler onBoneTransformsUpdatedEvent;
@@ -84,27 +84,24 @@ namespace Valve.VR
 
         /// <summary>The fallback SkeletonPoser to drive hand animation when no skeleton data is available</summary>
         /// <summary>The fallback SkeletonPoser to drive hand animation when no skeleton data is available</summary>
-        public SteamVR_Skeleton_Poser fallbackPoser;
+        public SteamVRSkeletonPoser fallbackPoser;
 
         /// <summary>The fallback action to drive finger curl values when no skeleton data is available</summary>
         /// <summary>The fallback SkeletonPoser to drive hand animation when no skeleton data is available</summary>
-        public SteamVR_Action_Single fallbackCurlAction;
+        public SteamVRActionSingle fallbackCurlAction;
 
         /// <summary>
         /// Is the skeleton action bound?
         /// </summary>
         public bool skeletonAvailable { get { return skeletonAction.activeBinding; } }
 
-
         /// <summary>The current skeletonPoser we're getting pose data from</summary>
-        protected SteamVR_Skeleton_Poser blendPoser;
+        protected SteamVRSkeletonPoser blendPoser;
         /// <summary>The current pose snapshot</summary>
-        protected SteamVR_Skeleton_PoseSnapshot blendSnapshot = null;
-
+        protected SteamVRSkeletonPoseSnapshot blendSnapshot = null;
 
         /// <summary>Returns whether this action is bound and the action set is active</summary>
         public bool isActive { get { return skeletonAction.GetActive(); } }
-
 
         /// <summary>An array of five 0-1 values representing how curled a finger is. 0 being straight, 1 being fully curled. 0 being thumb, 4 being pinky</summary>
         public Il2CppInterop.Runtime.InteropTypes.Arrays.Il2CppStructArray<float> fingerCurls
@@ -135,7 +132,7 @@ namespace Valve.VR
             {
                 if (skeletonAvailable)
                 {
-                    return skeletonAction.GetFingerCurl(SteamVR_Skeleton_FingerIndexEnum.thumb);
+                    return skeletonAction.GetFingerCurl(SteamVRSkeletonFingerIndexEnum.thumb);
                 }
                 else
                 {
@@ -151,7 +148,7 @@ namespace Valve.VR
             {
                 if (skeletonAvailable)
                 {
-                    return skeletonAction.GetFingerCurl(SteamVR_Skeleton_FingerIndexEnum.index);
+                    return skeletonAction.GetFingerCurl(SteamVRSkeletonFingerIndexEnum.index);
                 }
                 else
                 {
@@ -167,7 +164,7 @@ namespace Valve.VR
             {
                 if (skeletonAvailable)
                 {
-                    return skeletonAction.GetFingerCurl(SteamVR_Skeleton_FingerIndexEnum.middle);
+                    return skeletonAction.GetFingerCurl(SteamVRSkeletonFingerIndexEnum.middle);
                 }
                 else
                 {
@@ -183,7 +180,7 @@ namespace Valve.VR
             {
                 if (skeletonAvailable)
                 {
-                    return skeletonAction.GetFingerCurl(SteamVR_Skeleton_FingerIndexEnum.ring);
+                    return skeletonAction.GetFingerCurl(SteamVRSkeletonFingerIndexEnum.ring);
                 }
                 else
                 {
@@ -199,7 +196,7 @@ namespace Valve.VR
             {
                 if (skeletonAvailable)
                 {
-                    return skeletonAction.GetFingerCurl(SteamVR_Skeleton_FingerIndexEnum.pinky);
+                    return skeletonAction.GetFingerCurl(SteamVRSkeletonFingerIndexEnum.pinky);
                 }
                 else
                 {
@@ -210,38 +207,38 @@ namespace Valve.VR
 
         private bool initialized = false;
 
-        public Transform root { get { return bones[SteamVR_Skeleton_JointIndexes.root]; } }
-        public Transform wrist { get { return bones[SteamVR_Skeleton_JointIndexes.wrist]; } }
-        public Transform indexMetacarpal { get { return bones[SteamVR_Skeleton_JointIndexes.indexMetacarpal]; } }
-        public Transform indexProximal { get { return bones[SteamVR_Skeleton_JointIndexes.indexProximal]; } }
-        public Transform indexMiddle { get { return bones[SteamVR_Skeleton_JointIndexes.indexMiddle]; } }
-        public Transform indexDistal { get { return bones[SteamVR_Skeleton_JointIndexes.indexDistal]; } }
-        public Transform indexTip { get { return bones[SteamVR_Skeleton_JointIndexes.indexTip]; } }
-        public Transform middleMetacarpal { get { return bones[SteamVR_Skeleton_JointIndexes.middleMetacarpal]; } }
-        public Transform middleProximal { get { return bones[SteamVR_Skeleton_JointIndexes.middleProximal]; } }
-        public Transform middleMiddle { get { return bones[SteamVR_Skeleton_JointIndexes.middleMiddle]; } }
-        public Transform middleDistal { get { return bones[SteamVR_Skeleton_JointIndexes.middleDistal]; } }
-        public Transform middleTip { get { return bones[SteamVR_Skeleton_JointIndexes.middleTip]; } }
-        public Transform pinkyMetacarpal { get { return bones[SteamVR_Skeleton_JointIndexes.pinkyMetacarpal]; } }
-        public Transform pinkyProximal { get { return bones[SteamVR_Skeleton_JointIndexes.pinkyProximal]; } }
-        public Transform pinkyMiddle { get { return bones[SteamVR_Skeleton_JointIndexes.pinkyMiddle]; } }
-        public Transform pinkyDistal { get { return bones[SteamVR_Skeleton_JointIndexes.pinkyDistal]; } }
-        public Transform pinkyTip { get { return bones[SteamVR_Skeleton_JointIndexes.pinkyTip]; } }
-        public Transform ringMetacarpal { get { return bones[SteamVR_Skeleton_JointIndexes.ringMetacarpal]; } }
-        public Transform ringProximal { get { return bones[SteamVR_Skeleton_JointIndexes.ringProximal]; } }
-        public Transform ringMiddle { get { return bones[SteamVR_Skeleton_JointIndexes.ringMiddle]; } }
-        public Transform ringDistal { get { return bones[SteamVR_Skeleton_JointIndexes.ringDistal]; } }
-        public Transform ringTip { get { return bones[SteamVR_Skeleton_JointIndexes.ringTip]; } }
-        public Transform thumbMetacarpal { get { return bones[SteamVR_Skeleton_JointIndexes.thumbMetacarpal]; } } //doesn't exist - mapped to proximal
-        public Transform thumbProximal { get { return bones[SteamVR_Skeleton_JointIndexes.thumbProximal]; } }
-        public Transform thumbMiddle { get { return bones[SteamVR_Skeleton_JointIndexes.thumbMiddle]; } }
-        public Transform thumbDistal { get { return bones[SteamVR_Skeleton_JointIndexes.thumbDistal]; } }
-        public Transform thumbTip { get { return bones[SteamVR_Skeleton_JointIndexes.thumbTip]; } }
-        public Transform thumbAux { get { return bones[SteamVR_Skeleton_JointIndexes.thumbAux]; } }
-        public Transform indexAux { get { return bones[SteamVR_Skeleton_JointIndexes.indexAux]; } }
-        public Transform middleAux { get { return bones[SteamVR_Skeleton_JointIndexes.middleAux]; } }
-        public Transform ringAux { get { return bones[SteamVR_Skeleton_JointIndexes.ringAux]; } }
-        public Transform pinkyAux { get { return bones[SteamVR_Skeleton_JointIndexes.pinkyAux]; } }
+        public Transform root { get { return bones[SteamVRSkeletonJointIndexes.root]; } }
+        public Transform wrist { get { return bones[SteamVRSkeletonJointIndexes.wrist]; } }
+        public Transform indexMetacarpal { get { return bones[SteamVRSkeletonJointIndexes.indexMetacarpal]; } }
+        public Transform indexProximal { get { return bones[SteamVRSkeletonJointIndexes.indexProximal]; } }
+        public Transform indexMiddle { get { return bones[SteamVRSkeletonJointIndexes.indexMiddle]; } }
+        public Transform indexDistal { get { return bones[SteamVRSkeletonJointIndexes.indexDistal]; } }
+        public Transform indexTip { get { return bones[SteamVRSkeletonJointIndexes.indexTip]; } }
+        public Transform middleMetacarpal { get { return bones[SteamVRSkeletonJointIndexes.middleMetacarpal]; } }
+        public Transform middleProximal { get { return bones[SteamVRSkeletonJointIndexes.middleProximal]; } }
+        public Transform middleMiddle { get { return bones[SteamVRSkeletonJointIndexes.middleMiddle]; } }
+        public Transform middleDistal { get { return bones[SteamVRSkeletonJointIndexes.middleDistal]; } }
+        public Transform middleTip { get { return bones[SteamVRSkeletonJointIndexes.middleTip]; } }
+        public Transform pinkyMetacarpal { get { return bones[SteamVRSkeletonJointIndexes.pinkyMetacarpal]; } }
+        public Transform pinkyProximal { get { return bones[SteamVRSkeletonJointIndexes.pinkyProximal]; } }
+        public Transform pinkyMiddle { get { return bones[SteamVRSkeletonJointIndexes.pinkyMiddle]; } }
+        public Transform pinkyDistal { get { return bones[SteamVRSkeletonJointIndexes.pinkyDistal]; } }
+        public Transform pinkyTip { get { return bones[SteamVRSkeletonJointIndexes.pinkyTip]; } }
+        public Transform ringMetacarpal { get { return bones[SteamVRSkeletonJointIndexes.ringMetacarpal]; } }
+        public Transform ringProximal { get { return bones[SteamVRSkeletonJointIndexes.ringProximal]; } }
+        public Transform ringMiddle { get { return bones[SteamVRSkeletonJointIndexes.ringMiddle]; } }
+        public Transform ringDistal { get { return bones[SteamVRSkeletonJointIndexes.ringDistal]; } }
+        public Transform ringTip { get { return bones[SteamVRSkeletonJointIndexes.ringTip]; } }
+        public Transform thumbMetacarpal { get { return bones[SteamVRSkeletonJointIndexes.thumbMetacarpal]; } } //doesn't exist - mapped to proximal
+        public Transform thumbProximal { get { return bones[SteamVRSkeletonJointIndexes.thumbProximal]; } }
+        public Transform thumbMiddle { get { return bones[SteamVRSkeletonJointIndexes.thumbMiddle]; } }
+        public Transform thumbDistal { get { return bones[SteamVRSkeletonJointIndexes.thumbDistal]; } }
+        public Transform thumbTip { get { return bones[SteamVRSkeletonJointIndexes.thumbTip]; } }
+        public Transform thumbAux { get { return bones[SteamVRSkeletonJointIndexes.thumbAux]; } }
+        public Transform indexAux { get { return bones[SteamVRSkeletonJointIndexes.indexAux]; } }
+        public Transform middleAux { get { return bones[SteamVRSkeletonJointIndexes.middleAux]; } }
+        public Transform ringAux { get { return bones[SteamVRSkeletonJointIndexes.ringAux]; } }
+        public Transform pinkyAux { get { return bones[SteamVRSkeletonJointIndexes.pinkyAux]; } }
 
         /// <summary>An array of all the finger proximal joint transforms</summary>
         public Il2CppInterop.Runtime.InteropTypes.Arrays.Il2CppReferenceArray<Transform> proximals { get; protected set; }
@@ -283,7 +280,7 @@ namespace Valve.VR
                 }
                 else
                 {
-                    return EVRSkeletalTrackingLevel.VRSkeletalTracking_Estimated;
+                    return EVRSkeletalTrackingLevel.VRSkeletalTrackingEstimated;
                 }
             }
         }
@@ -312,7 +309,7 @@ namespace Valve.VR
         }
         */
         [HideFromIl2Cpp]
-        public SteamVR_ActionSet actionSet
+        public SteamVRActionSet actionSet
         {
             [HideFromIl2Cpp]
             get
@@ -321,7 +318,7 @@ namespace Valve.VR
             }
         }
 
-        public SteamVR_ActionDirections direction
+        public SteamVRActionDirections direction
         {
             get
             {
@@ -349,7 +346,7 @@ namespace Valve.VR
         {
             if (skeletonAction == null)
             {
-                skeletonAction = SteamVR_Input.GetAction<SteamVR_Action_Skeleton>("Skeleton" + inputSource.ToString());
+                skeletonAction = SteamVRInput.GetAction<SteamVRActionSkeleton>("Skeleton" + inputSource.ToString());
             }
         }
 
@@ -363,7 +360,7 @@ namespace Valve.VR
             if (initialized)
             {
                 CheckSkeletonAction();
-                SteamVR_Input.onSkeletonsUpdated += SteamVR_Input_OnSkeletonsUpdated;
+                SteamVRInput.onSkeletonsUpdated += SteamVRInputOnSkeletonsUpdated;
 
                 if (skeletonAction != null)
                 {
@@ -375,7 +372,7 @@ namespace Valve.VR
 
         protected virtual void OnDisable()
         {
-            SteamVR_Input.onSkeletonsUpdated -= SteamVR_Input_OnSkeletonsUpdated;
+            SteamVRInput.onSkeletonsUpdated -= SteamVRInputOnSkeletonsUpdated;
 
             if (skeletonAction != null)
             {
@@ -385,20 +382,20 @@ namespace Valve.VR
         }
 
         [HideFromIl2Cpp]
-        private void OnDeviceConnectedChanged(SteamVR_Action_Skeleton fromAction, bool deviceConnected)
+        private void OnDeviceConnectedChanged(SteamVRActionSkeleton fromAction, bool deviceConnected)
         {
             onConnectedChanged?.Send(this, inputSource, deviceConnected);
             onConnectedChangedEvent?.Invoke(this, inputSource, deviceConnected);
         }
 
         [HideFromIl2Cpp]
-        private void OnTrackingChanged(SteamVR_Action_Skeleton fromAction, ETrackingResult trackingState)
+        private void OnTrackingChanged(SteamVRActionSkeleton fromAction, ETrackingResult trackingState)
         {
             onTrackingChanged?.Send(this, inputSource, trackingState);
             onTrackingChangedEvent?.Invoke(this, inputSource, trackingState);
         }
 
-        protected virtual void SteamVR_Input_OnSkeletonsUpdated(bool skipSendingEvents)
+        protected virtual void SteamVRInputOnSkeletonsUpdated(bool skipSendingEvents)
         {
             UpdateSkeleton();
         }
@@ -500,7 +497,7 @@ namespace Valve.VR
         /// </summary>
         /// <param name="overTime">How long you want the blend to take (in seconds)</param>
         [HideFromIl2Cpp]
-        public void BlendToPoser(SteamVR_Skeleton_Poser poser, float overTime = 0.1f)
+        public void BlendToPoser(SteamVRSkeletonPoser poser, float overTime = 0.1f)
         {
             if (poser == null)
             {
@@ -540,7 +537,6 @@ namespace Valve.VR
 
             MelonLoader.MelonCoroutines.Start(blendRoutine);
         }
-
 
         [HideFromIl2Cpp]
         protected IEnumerator DoBlendRoutine(float blendToAmount, float overTime)
@@ -660,7 +656,7 @@ namespace Valve.VR
                             continue;
                         }
 
-                        if (SteamVR_Utils.IsValid(newBoneRotations[boneIndex]) == false || SteamVR_Utils.IsValid(oldBoneRotations[boneIndex]) == false)
+                        if (SteamVRUtils.IsValid(newBoneRotations[boneIndex]) == false || SteamVRUtils.IsValid(oldBoneRotations[boneIndex]) == false)
                         {
                             continue;
                         }
@@ -714,7 +710,7 @@ namespace Valve.VR
             {
                 if (blendPoser != null)
                 {
-                    SteamVR_Skeleton_Pose_Hand mainPose = blendPoser.skeletonMainPose.GetHand(inputSource);
+                    SteamVRSkeletonPoseHand mainPose = blendPoser.skeletonMainPose.GetHand(inputSource);
                     for (int boneIndex = 0; boneIndex < bones.Length; boneIndex++)
                     {
                         if (bones[boneIndex] == null)
@@ -722,8 +718,8 @@ namespace Valve.VR
                             continue;
                         }
 
-                        if ((boneIndex == SteamVR_Skeleton_JointIndexes.wrist && mainPose.ignoreWristPoseData) ||
-                            (boneIndex == SteamVR_Skeleton_JointIndexes.root && mainPose.ignoreRootPoseData))
+                        if ((boneIndex == SteamVRSkeletonJointIndexes.wrist && mainPose.ignoreWristPoseData) ||
+                            (boneIndex == SteamVRSkeletonJointIndexes.root && mainPose.ignoreRootPoseData))
                         {
                             SetBonePosition(boneIndex, bonePositions[boneIndex]);
                             SetBoneRotation(boneIndex, boneRotations[boneIndex]);
@@ -774,10 +770,10 @@ namespace Valve.VR
 
                     if (blendPoser != null)
                     {
-                        SteamVR_Skeleton_Pose_Hand mainPose = blendPoser.skeletonMainPose.GetHand(inputSource);
+                        SteamVRSkeletonPoseHand mainPose = blendPoser.skeletonMainPose.GetHand(inputSource);
 
-                        if ((boneIndex == SteamVR_Skeleton_JointIndexes.wrist && mainPose.ignoreWristPoseData) ||
-                            (boneIndex == SteamVR_Skeleton_JointIndexes.root && mainPose.ignoreRootPoseData))
+                        if ((boneIndex == SteamVRSkeletonJointIndexes.wrist && mainPose.ignoreWristPoseData) ||
+                            (boneIndex == SteamVRSkeletonJointIndexes.root && mainPose.ignoreRootPoseData))
                         {
                             SetBonePosition(boneIndex, bonePositions[boneIndex]);
                             SetBoneRotation(boneIndex, boneRotations[boneIndex]);
@@ -806,7 +802,6 @@ namespace Valve.VR
                     }
                 }
             }
-
 
             onBoneTransformsUpdated?.Send(this, inputSource);
             onBoneTransformsUpdatedEvent?.Invoke(this, inputSource);
@@ -838,7 +833,6 @@ namespace Valve.VR
 
             return bones[joint];
         }
-
 
         /// <summary>
         /// Gets the position of the transform for a bone by the joint index. Joint indexes specified in: SteamVR_Skeleton_JointIndexes
@@ -938,11 +932,11 @@ namespace Valve.VR
 
         public static Vector3 MirrorPosition(int boneIndex, Vector3 rawPosition)
         {
-            if (boneIndex == SteamVR_Skeleton_JointIndexes.wrist || IsMetacarpal(boneIndex))
+            if (boneIndex == SteamVRSkeletonJointIndexes.wrist || IsMetacarpal(boneIndex))
             {
                 rawPosition.Scale(new Vector3(-1, 1, 1));
             }
-            else if (boneIndex != SteamVR_Skeleton_JointIndexes.root)
+            else if (boneIndex != SteamVRSkeletonJointIndexes.root)
             {
                 rawPosition = rawPosition * -1;
             }
@@ -952,7 +946,7 @@ namespace Valve.VR
 
         public static Quaternion MirrorRotation(int boneIndex, Quaternion rawRotation)
         {
-            if (boneIndex == SteamVR_Skeleton_JointIndexes.wrist)
+            if (boneIndex == SteamVRSkeletonJointIndexes.wrist)
             {
                 rawRotation.y = rawRotation.y * -1;
                 rawRotation.z = rawRotation.z * -1;
@@ -1038,7 +1032,7 @@ namespace Valve.VR
 
                 skeletonAction.actionSet.Activate();
 
-                SteamVR_ActionSet_Manager.UpdateActionStates(true);
+                SteamVRActionSetManager.UpdateActionStates(true);
 
                 skeletonAction.UpdateValueWithoutEvents();
             }
@@ -1049,7 +1043,7 @@ namespace Valve.VR
                 return;
             }
 
-            SteamVR_Utils.RigidTransform[] transforms = skeletonAction.GetReferenceTransforms(EVRSkeletalTransformSpace.Parent, referencePose);
+            SteamVRUtils.RigidTransform[] transforms = skeletonAction.GetReferenceTransforms(EVRSkeletalTransformSpace.Parent, referencePose);
 
             if (transforms == null || transforms.Length == 0)
             {
@@ -1081,11 +1075,11 @@ namespace Valve.VR
 
         protected static bool IsMetacarpal(int boneIndex)
         {
-            return (boneIndex == SteamVR_Skeleton_JointIndexes.indexMetacarpal ||
-                boneIndex == SteamVR_Skeleton_JointIndexes.middleMetacarpal ||
-                boneIndex == SteamVR_Skeleton_JointIndexes.ringMetacarpal ||
-                boneIndex == SteamVR_Skeleton_JointIndexes.pinkyMetacarpal ||
-                boneIndex == SteamVR_Skeleton_JointIndexes.thumbMetacarpal);
+            return (boneIndex == SteamVRSkeletonJointIndexes.indexMetacarpal ||
+                boneIndex == SteamVRSkeletonJointIndexes.middleMetacarpal ||
+                boneIndex == SteamVRSkeletonJointIndexes.ringMetacarpal ||
+                boneIndex == SteamVRSkeletonJointIndexes.pinkyMetacarpal ||
+                boneIndex == SteamVRSkeletonJointIndexes.thumbMetacarpal);
         }
 
         public enum MirrorType
@@ -1095,11 +1089,11 @@ namespace Valve.VR
             RightToLeft
         }
 
-        public delegate void ActiveChangeHandler(SteamVR_Behaviour_Skeleton fromAction, SteamVR_Input_Sources inputSource, bool active);
-        public delegate void ChangeHandler(SteamVR_Behaviour_Skeleton fromAction, SteamVR_Input_Sources inputSource);
-        public delegate void UpdateHandler(SteamVR_Behaviour_Skeleton fromAction, SteamVR_Input_Sources inputSource);
-        public delegate void TrackingChangeHandler(SteamVR_Behaviour_Skeleton fromAction, SteamVR_Input_Sources inputSource, ETrackingResult trackingState);
-        public delegate void ValidPoseChangeHandler(SteamVR_Behaviour_Skeleton fromAction, SteamVR_Input_Sources inputSource, bool validPose);
-        public delegate void DeviceConnectedChangeHandler(SteamVR_Behaviour_Skeleton fromAction, SteamVR_Input_Sources inputSource, bool deviceConnected);
+        public delegate void ActiveChangeHandler(SteamVRBehaviourSkeleton fromAction, SteamVRInputSources inputSource, bool active);
+        public delegate void ChangeHandler(SteamVRBehaviourSkeleton fromAction, SteamVRInputSources inputSource);
+        public delegate void UpdateHandler(SteamVRBehaviourSkeleton fromAction, SteamVRInputSources inputSource);
+        public delegate void TrackingChangeHandler(SteamVRBehaviourSkeleton fromAction, SteamVRInputSources inputSource, ETrackingResult trackingState);
+        public delegate void ValidPoseChangeHandler(SteamVRBehaviourSkeleton fromAction, SteamVRInputSources inputSource, bool validPose);
+        public delegate void DeviceConnectedChangeHandler(SteamVRBehaviourSkeleton fromAction, SteamVRInputSources inputSource, bool deviceConnected);
     }
 }

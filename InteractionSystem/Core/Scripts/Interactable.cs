@@ -4,7 +4,6 @@
 //
 //=============================================================================
 
-using MelonLoader;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -17,7 +16,7 @@ namespace Valve.VR.InteractionSystem
     {
         public Interactable(IntPtr value) : base(value) { }
         /// <summary>Activates an action set on attach and deactivates on detach</summary>
-        public SteamVR_ActionSet activateActionSetOnAttach;
+        public SteamVRActionSet activateActionSetOnAttach;
 
         /// <summary>Hide the whole hand on attachment and show on detach</summary>
         public bool hideHandOnAttach = true;
@@ -66,7 +65,7 @@ namespace Valve.VR.InteractionSystem
 
         // /// <summary>The skeleton pose to apply when grabbing. Can only set this or handFollowTransform.</summary>
 
-        public SteamVR_Skeleton_Poser skeletonPoser;
+        public SteamVRSkeletonPoser skeletonPoser;
 
         /// <summary>Should the rendered hand lock on to and follow the object</summary>
         public bool handFollowTransform = true;
@@ -109,7 +108,7 @@ namespace Valve.VR.InteractionSystem
 
         protected virtual void Awake()
         {
-            skeletonPoser = GetComponent<SteamVR_Skeleton_Poser>();
+            skeletonPoser = GetComponent<SteamVRSkeletonPoser>();
         }
 
         protected virtual void Start()
@@ -167,7 +166,7 @@ namespace Valve.VR.InteractionSystem
                     continue;
                 }
 
-                GameObject newSkinnedHolder = new GameObject("SkinnedHolder");
+                GameObject newSkinnedHolder = new("SkinnedHolder");
                 newSkinnedHolder.transform.parent = highlightHolder.transform;
                 SkinnedMeshRenderer newSkinned = newSkinnedHolder.AddComponent<SkinnedMeshRenderer>();
                 Material[] materials = new Material[existingSkinned.sharedMaterials.Length];
@@ -199,7 +198,7 @@ namespace Valve.VR.InteractionSystem
                     continue;
                 }
 
-                GameObject newFilterHolder = new GameObject("FilterHolder");
+                GameObject newFilterHolder = new("FilterHolder");
                 newFilterHolder.transform.parent = highlightHolder.transform;
                 MeshFilter newFilter = newFilterHolder.AddComponent<MeshFilter>();
                 newFilter.sharedMesh = existingFilter.sharedMesh;
@@ -271,7 +270,7 @@ namespace Valve.VR.InteractionSystem
         /// <summary>
         /// Called when a Hand starts hovering over this object
         /// </summary>
-        public virtual void OnHandHoverBegin_Internal(Hand hand, Vector2 position, bool PoseIsvalid)
+        public virtual void OnHandHoverBeginInternal(Hand hand, Vector2 position, bool PoseIsvalid)
         {
             wasHovering = isHovering;
             isHovering = true;
@@ -289,7 +288,7 @@ namespace Valve.VR.InteractionSystem
         /// <summary>
         /// Called when a Hand stops hovering over this object
         /// </summary>
-        public virtual void OnHandHoverEnd_Internal(Hand hand)
+        public virtual void OnHandHoverEndInternal(Hand hand)
         {
             wasHovering = isHovering;
             WasSetByHand = false;
@@ -308,7 +307,7 @@ namespace Valve.VR.InteractionSystem
             OnHandHoverEnd(hand);
         }
 
-        public void HandHoverUpdate_Internal(Hand hand, Vector2 position, bool posIsValid)
+        public void HandHoverUpdateInternal(Hand hand, Vector2 position, bool posIsValid)
         {
             //we correctly get till here. the event works for UI, but not in game??
             //MelonLogger.Msg("hover update called on " + name + " by " + hand.name + ", running for: " + HandHoverUpdate.GetInvocationList().Length);
@@ -331,7 +330,7 @@ namespace Valve.VR.InteractionSystem
         protected float blendToPoseTime = 0.1f;
         protected float releasePoseBlendTime = 0.2f;
 
-        public virtual void OnAttachedToHand_Internal(Hand hand)
+        public virtual void OnAttachedToHandInternal(Hand hand)
         {
             activateActionSetOnAttach?.Activate(hand.handType);
 
@@ -345,7 +344,7 @@ namespace Valve.VR.InteractionSystem
             attachedToHand = hand;
         }
 
-        public virtual void OnDetachedFromHand_Internal(Hand hand)
+        public virtual void OnDetachedFromHandInternal(Hand hand)
         {
             if (activateActionSetOnAttach != null)
             {

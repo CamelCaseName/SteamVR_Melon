@@ -10,27 +10,27 @@ namespace Valve.VR
     /// Simplifies the use of the Vector2 action. Provides an onChange event that fires whenever the vector2 changes.
     /// </summary>
     [MelonLoader.RegisterTypeInIl2Cpp()]
-    public class SteamVR_Behaviour_Vector2 : MonoBehaviour
+    public class SteamVRBehaviourVector2 : MonoBehaviour
     {
-        public SteamVR_Behaviour_Vector2(IntPtr value) : base(value) { }
+        public SteamVRBehaviourVector2(IntPtr value) : base(value) { }
         /// <summary>The vector2 action to get data from</summary>
-        public SteamVR_Action_Vector2 vector2Action;
+        public SteamVRActionVector2 vector2Action;
 
         /// <summary>The device this action applies to. Any if the action is not device specific.</summary>
         /// <summary>The device this action should apply to. Any if the action is not device specific.</summary>
-        public SteamVR_Input_Sources inputSource;
+        public SteamVRInputSources inputSource;
 
         /// <summary>Unity event that fires whenever the action's value has changed since the last update.</summary>
         /// <summary>Fires whenever the action's value has changed since the last update.</summary>
-        public SteamVR_Behaviour_Vector2Event onChange;
+        public SteamVRBehaviourVector2Event onChange;
 
         /// <summary>Unity event that fires whenever the action's value has been updated</summary>
         /// <summary>Fires whenever the action's value has been updated.</summary>
-        public SteamVR_Behaviour_Vector2Event onUpdate;
+        public SteamVRBehaviourVector2Event onUpdate;
 
         /// <summary>Unity event that fires whenever the action's value has been updated and is non-zero</summary>
         /// <summary>Fires whenever the action's value has been updated and is non-zero.</summary>
-        public SteamVR_Behaviour_Vector2Event onAxis;
+        public SteamVRBehaviourVector2Event onAxis;
 
         /// <summary>C# event that fires whenever the action's value has changed since the last update.</summary>
         public ChangeHandler onChangeEvent;
@@ -78,21 +78,21 @@ namespace Valve.VR
         }
 
         [Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp]
-        private void SteamVR_Behaviour_Vector2_OnUpdate(SteamVR_Action_Vector2 fromAction, SteamVR_Input_Sources fromSource, Vector2 newAxis, Vector2 newDelta)
+        private void SteamVR_Behaviour_Vector2_OnUpdate(SteamVRActionVector2 fromAction, SteamVRInputSources fromSource, Vector2 newAxis, Vector2 newDelta)
         {
             onUpdate?.Send(this, fromSource, newAxis, newDelta);
             onUpdateEvent?.Invoke(this, fromSource, newAxis, newDelta);
         }
 
         [Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp]
-        private void SteamVR_Behaviour_Vector2_OnChange(SteamVR_Action_Vector2 fromAction, SteamVR_Input_Sources fromSource, Vector2 newAxis, Vector2 newDelta)
+        private void SteamVR_Behaviour_Vector2_OnChange(SteamVRActionVector2 fromAction, SteamVRInputSources fromSource, Vector2 newAxis, Vector2 newDelta)
         {
             onChange?.Send(this, fromSource, newAxis, newDelta);
             onChangeEvent?.Invoke(this, fromSource, newAxis, newDelta);
         }
 
         [Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp]
-        private void SteamVR_Behaviour_Vector2_OnAxis(SteamVR_Action_Vector2 fromAction, SteamVR_Input_Sources fromSource, Vector2 newAxis, Vector2 newDelta)
+        private void SteamVR_Behaviour_Vector2_OnAxis(SteamVRActionVector2 fromAction, SteamVRInputSources fromSource, Vector2 newAxis, Vector2 newDelta)
         {
             onAxis?.Send(this, fromSource, newAxis, newDelta);
             onAxisEvent?.Invoke(this, fromSource, newAxis, newDelta);
@@ -120,8 +120,8 @@ namespace Valve.VR
             return null;
         }
 
-        public delegate void AxisHandler(SteamVR_Behaviour_Vector2 fromAction, SteamVR_Input_Sources fromSource, Vector2 newAxis, Vector2 newDelta);
-        public delegate void ChangeHandler(SteamVR_Behaviour_Vector2 fromAction, SteamVR_Input_Sources fromSource, Vector2 newAxis, Vector2 newDelta);
-        public delegate void UpdateHandler(SteamVR_Behaviour_Vector2 fromAction, SteamVR_Input_Sources fromSource, Vector2 newAxis, Vector2 newDelta);
+        public delegate void AxisHandler(SteamVRBehaviourVector2 fromAction, SteamVRInputSources fromSource, Vector2 newAxis, Vector2 newDelta);
+        public delegate void ChangeHandler(SteamVRBehaviourVector2 fromAction, SteamVRInputSources fromSource, Vector2 newAxis, Vector2 newDelta);
+        public delegate void UpdateHandler(SteamVRBehaviourVector2 fromAction, SteamVRInputSources fromSource, Vector2 newAxis, Vector2 newDelta);
     }
 }

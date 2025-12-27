@@ -4,6 +4,7 @@
 //
 //=============================================================================
 
+using SteamVR_Melon.Scripts;
 using System;
 using UnityEngine;
 using UnityEngine.Rendering;
@@ -11,12 +12,12 @@ using UnityEngine.Rendering;
 namespace Valve.VR
 {
     [MelonLoader.RegisterTypeInIl2Cpp()]
-    public class SteamVR_ExternalCamera : MonoBehaviour
+    public class SteamVRExternalCamera : MonoBehaviour
     {
-        public SteamVR_ExternalCamera(IntPtr value) : base(value) { }
+        public SteamVRExternalCamera(IntPtr value) : base(value) { }
 
-        private SteamVR_Action_Pose cameraPose = null;
-        private SteamVR_Input_Sources cameraInputSource = SteamVR_Input_Sources.Camera;
+        private SteamVRActionPose cameraPose = null;
+        private SteamVRInputSources cameraInputSource = SteamVRInputSources.Camera;
 
         [Serializable]
         public struct Config
@@ -42,7 +43,7 @@ namespace Valve.VR
         {
             try
             {
-                var mCam = new HmdMatrix34_t();
+                var mCam = new HmdMatrix34T();
                 var readCamMatrix = false;
 
                 object c = config; // box
@@ -92,7 +93,7 @@ namespace Valve.VR
                 // Convert calibrated camera matrix settings.
                 if (readCamMatrix)
                 {
-                    var t = new SteamVR_Utils.RigidTransform(mCam);
+                    var t = new SteamVRUtils.RigidTransform(mCam);
                     config.x = t.pos.x;
                     config.y = t.pos.y;
                     config.z = t.pos.z;
@@ -111,8 +112,10 @@ namespace Valve.VR
             if (watcher == null)
             {
                 var fi = new System.IO.FileInfo(configPath);
-                watcher = new System.IO.FileSystemWatcher(fi.DirectoryName, fi.Name);
-                watcher.NotifyFilter = System.IO.NotifyFilters.LastWrite;
+                watcher = new System.IO.FileSystemWatcher(fi.DirectoryName, fi.Name)
+                {
+                    NotifyFilter = System.IO.NotifyFilters.LastWrite
+                };
                 watcher.Changed += new System.IO.FileSystemEventHandler(OnChanged);
                 watcher.EnableRaisingEvents = true;
             }
@@ -124,21 +127,21 @@ namespace Valve.VR
 #endif
 
         [Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp]
-        public void SetupPose(SteamVR_Action_Pose newCameraPose, SteamVR_Input_Sources newCameraSource)
+        public void SetupPose(SteamVRActionPose newCameraPose, SteamVRInputSources newCameraSource)
         {
             cameraPose = newCameraPose;
             cameraInputSource = newCameraSource;
 
             AutoEnableActionSet();
 
-            SteamVR_Behaviour_Pose poseBehaviour = gameObject.AddComponent<SteamVR_Behaviour_Pose>();
+            SteamVRBehaviourPose poseBehaviour = gameObject.AddComponent<SteamVRBehaviourPose>();
             poseBehaviour.poseAction = newCameraPose;
             poseBehaviour.inputSource = newCameraSource;
         }
 
         public void SetupDeviceIndex(int deviceIndex)
         {
-            SteamVR_TrackedObject trackedObject = gameObject.AddComponent<SteamVR_TrackedObject>();
+            SteamVRTrackedObject trackedObject = gameObject.AddComponent<SteamVRTrackedObject>();
             trackedObject.SetDeviceIndex(deviceIndex);
         }
 
@@ -153,12 +156,12 @@ namespace Valve.VR
         GameObject clipQuad;
         Material clipMaterial;
 
-        protected SteamVR_ActionSet activatedActionSet;
-        protected SteamVR_Input_Sources activatedInputSource;
-        public void AttachToCamera(SteamVR_Camera steamVR_Camera)
+        protected SteamVRActionSet activatedActionSet;
+        protected SteamVRInputSources activatedInputSource;
+        public void AttachToCamera(SteamVRCamera steamVRCamera)
         {
             Camera vrcam;
-            if (steamVR_Camera == null)
+            if (steamVRCamera == null)
             {
                 vrcam = Camera.main;
 
@@ -171,17 +174,15 @@ namespace Valve.VR
             }
             else
             {
-                vrcam = steamVR_Camera.camera;
+                vrcam = steamVRCamera.camera;
 
-                if (target == steamVR_Camera.head)
+                if (target == steamVRCamera.head)
                 {
                     return;
                 }
 
-                target = steamVR_Camera.head;
+                target = steamVRCamera.head;
             }
-
-
 
             var root = transform.parent;
             var origin = target.parent;
@@ -196,8 +197,8 @@ namespace Valve.VR
             vrcam.enabled = true;
             go.name = "camera";
 
-            DestroyImmediate(go.GetComponent<SteamVR_Camera>());
-            DestroyImmediate(go.GetComponent<SteamVR_Fade>());
+            DestroyImmediate(go.GetComponent<SteamVRCamera>());
+            DestroyImmediate(go.GetComponent<SteamVRFade>());
 
             cam = go.GetComponent<Camera>();
             cam.stereoTargetEye = StereoTargetEyeMask.None;
@@ -266,8 +267,10 @@ namespace Valve.VR
 
             if (cam.targetTexture == null || cam.targetTexture.width != w || cam.targetTexture.height != h)
             {
-                var tex = new RenderTexture(w, h, 24, RenderTextureFormat.ARGB32);
-                tex.antiAliasing = QualitySettings.antiAliasing == 0 ? 1 : QualitySettings.antiAliasing;
+                var tex = new RenderTexture(w, h, 24, RenderTextureFormat.ARGB32)
+                {
+                    antiAliasing = QualitySettings.antiAliasing == 0 ? 1 : QualitySettings.antiAliasing
+                };
                 cam.targetTexture = tex;
             }
 
@@ -381,7 +384,7 @@ namespace Valve.VR
                         continue;
                     }
 
-                    if (cam.GetComponent<SteamVR_Camera>() != null)
+                    if (cam.GetComponent<SteamVRCamera>() != null)
                     {
                         continue;
                     }
@@ -392,8 +395,8 @@ namespace Valve.VR
 
             if (config.sceneResolutionScale > 0.0f)
             {
-                sceneResolutionScale = SteamVR_Camera.sceneResolutionScale;
-                SteamVR_Camera.sceneResolutionScale = config.sceneResolutionScale;
+                sceneResolutionScale = SteamVRCamera.sceneResolutionScale;
+                SteamVRCamera.sceneResolutionScale = config.sceneResolutionScale;
             }
 
             AutoEnableActionSet();
@@ -426,7 +429,6 @@ namespace Valve.VR
                 }
             }
 
-
             // Restore game view cameras.
             if (cameras != null)
             {
@@ -445,7 +447,7 @@ namespace Valve.VR
 
             if (config.sceneResolutionScale > 0.0f)
             {
-                SteamVR_Camera.sceneResolutionScale = sceneResolutionScale;
+                SteamVRCamera.sceneResolutionScale = sceneResolutionScale;
             }
         }
     }

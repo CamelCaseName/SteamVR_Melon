@@ -1,7 +1,5 @@
 ﻿// Copyright (c) Valve Corporation, All rights reserved. ======================================================================================================
 
-
-
 using Il2CppInterop.Runtime.Attributes;
 using System.Collections;
 using UnityEngine;
@@ -23,22 +21,21 @@ namespace Valve.VR.InteractionSystem
         public GameObject rotateRightFX;
         public GameObject rotateLeftFX;
 
-        public SteamVR_Action_Boolean snapLeftAction = SteamVR_Input.GetBooleanAction("SnapTurnLeft");
-        public SteamVR_Action_Boolean snapRightAction = SteamVR_Input.GetBooleanAction("SnapTurnRight");
+        public SteamVRActionBoolean snapLeftAction = SteamVRInput.GetBooleanAction("SnapTurnLeft");
+        public SteamVRActionBoolean snapRightAction = SteamVRInput.GetBooleanAction("SnapTurnRight");
 
         public bool fadeScreen = true;
         public float fadeTime = 0.1f;
         public Color screenFadeColor = Color.black;
 
         public float distanceFromFace = 1.3f;
-        public Vector3 additionalOffset = new Vector3(0, -0.3f, 0);
+        public Vector3 additionalOffset = new(0, -0.3f, 0);
 
         public static float teleportLastActiveTime;
 
         private bool canRotate = true;
 
         public float canTurnEverySeconds = 0.4f;
-
 
         private void Start()
         {
@@ -51,7 +48,6 @@ namespace Valve.VR.InteractionSystem
 
             rotateRightFX?.SetActive(false);
         }
-
 
         [HideFromIl2Cpp]
         private void Update()
@@ -78,12 +74,11 @@ namespace Valve.VR.InteractionSystem
                     && player.leftHand.currentAttachedTeleportManager != null
                     && player.leftHand.currentAttachedTeleportManager.teleportAllowed);
 
+                bool leftHandTurnLeft = snapLeftAction.GetStateDown(SteamVRInputSources.LeftHand) && leftHandValid;
+                bool rightHandTurnLeft = snapLeftAction.GetStateDown(SteamVRInputSources.RightHand) && rightHandValid;
 
-                bool leftHandTurnLeft = snapLeftAction.GetStateDown(SteamVR_Input_Sources.LeftHand) && leftHandValid;
-                bool rightHandTurnLeft = snapLeftAction.GetStateDown(SteamVR_Input_Sources.RightHand) && rightHandValid;
-
-                bool leftHandTurnRight = snapRightAction.GetStateDown(SteamVR_Input_Sources.LeftHand) && leftHandValid;
-                bool rightHandTurnRight = snapRightAction.GetStateDown(SteamVR_Input_Sources.RightHand) && rightHandValid;
+                bool leftHandTurnRight = snapRightAction.GetStateDown(SteamVRInputSources.LeftHand) && leftHandValid;
+                bool rightHandTurnRight = snapRightAction.GetStateDown(SteamVRInputSources.RightHand) && rightHandValid;
 
                 if (leftHandTurnLeft || rightHandTurnLeft)
                 {
@@ -95,7 +90,6 @@ namespace Valve.VR.InteractionSystem
                 }
             }
         }
-
 
         private IEnumerator rotateCoroutine;
         [HideFromIl2Cpp]
@@ -124,11 +118,11 @@ namespace Valve.VR.InteractionSystem
 
             if (fadeScreen)
             {
-                SteamVR_Fade.Start(Color.clear, 0);
+                SteamVRFade.Start(Color.clear, 0);
 
                 Color tColor = screenFadeColor;
                 tColor = tColor.linear * 0.6f;
-                SteamVR_Fade.Start(tColor, fadeTime);
+                SteamVRFade.Start(tColor, fadeTime);
             }
 
             yield return new WaitForSeconds(fadeTime);
@@ -148,7 +142,7 @@ namespace Valve.VR.InteractionSystem
 
             if (fadeScreen)
             {
-                SteamVR_Fade.Start(Color.clear, fadeTime);
+                SteamVRFade.Start(Color.clear, fadeTime);
             }
 
             float startTime = Time.time;

@@ -6,9 +6,9 @@ using Valve.VR;
 namespace Standalone
 {
     [MelonLoader.RegisterTypeInIl2Cpp()]
-    public class SteamVR_GameView : MonoBehaviour
+    public class SteamVRGameView : MonoBehaviour
     {
-        public SteamVR_GameView(IntPtr value) : base(value) { }
+        public SteamVRGameView(IntPtr value) : base(value) { }
         static Camera cam;
 
         private void OnEnable()
@@ -30,10 +30,10 @@ namespace Standalone
                 SteamVR instance = SteamVR.instance;
                 if (instance != null && instance.textureType == ETextureType.DirectX)
                 {
-                    Texture2D texture2D = new Texture2D(2, 2);
+                    Texture2D texture2D = new(2, 2);
                     IntPtr zero = IntPtr.Zero;
 
-                    if (instance.compositor.GetMirrorTextureD3D11(EVREye.Eye_Left, texture2D.GetNativeTexturePtr(), ref zero) == EVRCompositorError.None)
+                    if (instance.compositor.GetMirrorTextureD3D11(EVREye.EyeLeft, texture2D.GetNativeTexturePtr(), ref zero) == EVRCompositorError.None)
                     {
                         uint width = 0u;
                         uint height = 0u;
@@ -56,14 +56,14 @@ namespace Standalone
             float x2 = scale;
             float y = num;
             float y2 = -num;
-            Material blitMaterial = SteamVR_Camera.blitMaterial;
+            Material blitMaterial = SteamVRCamera.blitMaterial;
             if (mirrorTexture != null)
             {
                 blitMaterial.mainTexture = mirrorTexture;
             }
             else
             {
-                blitMaterial.mainTexture = SteamVR_Camera.GetSceneTexture(cam.allowHDR);
+                blitMaterial.mainTexture = SteamVRCamera.GetSceneTexture(cam.allowHDR);
             }
             blitMaterial.SetPass(0);
             GL.PushMatrix();
@@ -80,7 +80,7 @@ namespace Standalone
             GL.Vertex3(x, y2, 0f);
             GL.End();
             GL.PopMatrix();
-            SteamVR_Overlay instance2 = SteamVR_Overlay.instance;
+            SteamVROverlay instance2 = SteamVROverlay.instance;
             if (instance2 && instance2.texture && overlayMaterial && drawOverlay)
             {
                 Texture texture = instance2.texture;

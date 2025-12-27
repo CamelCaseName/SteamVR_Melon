@@ -27,7 +27,6 @@ namespace Valve.VR.InteractionSystem
         ///<summary>Start a wave file playing on awake, but after a delay.</summary>
         public bool playOnAwakeWithDelay;
 
-
         public bool useRandomVolume = true;
         ///<summary>Minimum volume that will be used whenUnityEngine.Randomly set.</summary>
 
@@ -45,7 +44,6 @@ namespace Valve.VR.InteractionSystem
 
         public float pitchMax = 1.0f;
 
-
         ///<summary>Use Retrigger Time to repeat the sound within a time range</summary>
         public bool useRetriggerTime = false;
         ///<summary>Inital time before the first repetion starts</summary>
@@ -62,7 +60,6 @@ namespace Valve.VR.InteractionSystem
 
         ///<summary>Time to offset playback of sound</summary>
         public float delayOffsetTime = 0.0f;
-
 
         private AudioSource audioSource;
         private AudioClip clip;
@@ -109,7 +106,6 @@ namespace Valve.VR.InteractionSystem
             }
         }
 
-
         //-------------------------------------------------
         // Play aUnityEngine.Random clip from those available
         //-------------------------------------------------
@@ -127,7 +123,6 @@ namespace Valve.VR.InteractionSystem
             }
         }
 
-
         //-------------------------------------------------
         public void PlayWithDelay(float delayTime)
         {
@@ -140,7 +135,6 @@ namespace Valve.VR.InteractionSystem
                 Invoke("PlayOneShotSound", delayTime);
             }
         }
-
 
         //-------------------------------------------------
         // PlayUnityEngine.Random wave clip on audiosource as a one shot
@@ -167,7 +161,6 @@ namespace Valve.VR.InteractionSystem
             return this.clip;
         }
 
-
         //-------------------------------------------------
         public AudioClip PlayLooping()
         {
@@ -192,20 +185,17 @@ namespace Valve.VR.InteractionSystem
             return this.clip;
         }
 
-
         //-------------------------------------------------
         public void Disable()
         {
             gameObject.SetActive(false);
         }
 
-
         //-------------------------------------------------
         public void Stop()
         {
             audioSource.Stop();
         }
-
 
         //-------------------------------------------------
         private void SetAudioSource()

@@ -5,15 +5,16 @@
 //=============================================================================
 
 using MelonLoader;
+using SteamVR_Melon.Scripts;
 using System;
 using UnityEngine;
 
 namespace Valve.VR
 {
     [RegisterTypeInIl2Cpp()]
-    public class SteamVR_UpdatePoses : MonoBehaviour
+    public class SteamVRUpdatePoses : MonoBehaviour
     {
-        public SteamVR_UpdatePoses(IntPtr value) : base(value) { }
+        public SteamVRUpdatePoses(IntPtr value) : base(value) { }
 
         void Awake()
         {
@@ -34,10 +35,10 @@ namespace Valve.VR
             var compositor = OpenVR.Compositor;
             if (compositor != null)
             {
-                var render = SteamVR_Render.instance;
+                var render = SteamVRRender.instance;
                 compositor.GetLastPoses(render.poses, render.gamePoses);
-                SteamVR_Utils.Event.Send("new_poses", render.poses);
-                SteamVR_Utils.Event.Send("new_poses_applied");
+                SteamVRUtils.Event.Send("new_poses", render.poses);
+                SteamVRUtils.Event.Send("new_poses_applied");
             }
         }
     }

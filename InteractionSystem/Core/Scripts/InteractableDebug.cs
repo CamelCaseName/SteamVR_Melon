@@ -51,7 +51,6 @@ namespace Valve.VR.InteractionSystem
             CreateMarker(Color.green);
         }
 
-
         protected virtual void HandAttachedUpdate(Hand hand)
         {
             Color grabbedColor;
@@ -83,7 +82,6 @@ namespace Valve.VR.InteractionSystem
             lastColor = grabbedColor;
         }
 
-
         private void OnDetachedFromHand(Hand hand)
         {
             if (isThrowable)
@@ -104,7 +102,7 @@ namespace Valve.VR.InteractionSystem
                 float startTime = -simulateReleasesForXSecondsAroundRelease;
                 float endTime = simulateReleasesForXSecondsAroundRelease;
 
-                List<InteractableDebug> list = new List<InteractableDebug>();
+                List<InteractableDebug> list = new();
                 list.Add(this);
 
                 for (float offset = startTime; offset <= endTime; offset += simulateReleasesEveryXSeconds)

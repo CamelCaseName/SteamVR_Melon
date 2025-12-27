@@ -26,20 +26,17 @@ namespace Valve.VR.InteractionSystem
             onHandHoverBegin.Invoke();
         }
 
-
         //-------------------------------------------------
         private void OnHandHoverEnd()
         {
             onHandHoverEnd.Invoke();
         }
 
-
         //-------------------------------------------------
         private void OnAttachedToHand(Hand hand)
         {
             onAttachedToHand.Invoke();
         }
-
 
         //-------------------------------------------------
         private void OnDetachedFromHand(Hand hand)

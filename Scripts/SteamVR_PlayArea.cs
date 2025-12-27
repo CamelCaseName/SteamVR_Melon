@@ -13,9 +13,9 @@ using UnityEngine.Rendering;
 namespace Valve.VR
 {
     [RegisterTypeInIl2Cpp()]
-    public class SteamVR_PlayArea : MonoBehaviour
+    public class SteamVRPlayArea : MonoBehaviour
     {
-        public SteamVR_PlayArea(IntPtr value) : base(value) { }
+        public SteamVRPlayArea(IntPtr value) : base(value) { }
         public float borderThickness = 0.15f;
         public float wireframeHeight = 2.0f;
         public bool drawWireframeWhenSelectedOnly = false;
@@ -25,9 +25,9 @@ namespace Valve.VR
         public enum Size
         {
             Calibrated,
-            _400x300,
-            _300x225,
-            _200x150
+            @400x300,
+            @300x225,
+            @200x150
         }
 
         public Size size;
@@ -35,7 +35,7 @@ namespace Valve.VR
 
         public Vector3[] vertices;
 
-        public static bool GetBounds(Size size, ref HmdQuad_t pRect)
+        public static bool GetBounds(Size size, ref HmdQuadT pRect)
         {
             if (size == Size.Calibrated)
             {
@@ -96,13 +96,13 @@ namespace Valve.VR
 
         public void BuildMesh()
         {
-            var rect = new HmdQuad_t();
+            var rect = new HmdQuadT();
             if (!GetBounds(size, ref rect))
             {
                 return;
             }
 
-            var corners = new HmdVector3_t[] { rect.vCorners0, rect.vCorners1, rect.vCorners2, rect.vCorners3 };
+            var corners = new HmdVector3T[] { rect.vCorners0, rect.vCorners1, rect.vCorners2, rect.vCorners3 };
 
             vertices = new Vector3[corners.Length * 2];
             for (int i = 0; i < corners.Length; i++)
@@ -146,14 +146,14 @@ namespace Valve.VR
 
             var uv = new Vector2[]
             {
-            new Vector2(0.0f, 0.0f),
-            new Vector2(1.0f, 0.0f),
-            new Vector2(0.0f, 0.0f),
-            new Vector2(1.0f, 0.0f),
-            new Vector2(0.0f, 1.0f),
-            new Vector2(1.0f, 1.0f),
-            new Vector2(0.0f, 1.0f),
-            new Vector2(1.0f, 1.0f)
+            new(0.0f, 0.0f),
+            new(1.0f, 0.0f),
+            new(0.0f, 0.0f),
+            new(1.0f, 0.0f),
+            new(0.0f, 1.0f),
+            new(1.0f, 1.0f),
+            new(0.0f, 1.0f),
+            new(1.0f, 1.0f)
             };
 
             var colors = new Color[]
@@ -162,10 +162,10 @@ namespace Valve.VR
             color,
             color,
             color,
-            new Color(color.r, color.g, color.b, 0.0f),
-            new Color(color.r, color.g, color.b, 0.0f),
-            new Color(color.r, color.g, color.b, 0.0f),
-            new Color(color.r, color.g, color.b, 0.0f)
+            new(color.r, color.g, color.b, 0.0f),
+            new(color.r, color.g, color.b, 0.0f),
+            new(color.r, color.g, color.b, 0.0f),
+            new(color.r, color.g, color.b, 0.0f)
             };
 
             var mesh = new Mesh();

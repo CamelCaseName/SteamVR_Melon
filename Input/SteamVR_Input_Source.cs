@@ -6,19 +6,19 @@ using System.ComponentModel;
 
 namespace Valve.VR
 {
-    public static class SteamVR_Input_Source
+    public static class SteamVRInputSource
     {
-        public static int numSources = System.Enum.GetValues(typeof(SteamVR_Input_Sources)).Length;
+        public static int numSources = System.Enum.GetValues(typeof(SteamVRInputSources)).Length;
 
         private static ulong[] inputSourceHandlesBySource;
-        private static Dictionary<ulong, SteamVR_Input_Sources> inputSourceSourcesByHandle = new Dictionary<ulong, SteamVR_Input_Sources>();
+        private static Dictionary<ulong, SteamVRInputSources> inputSourceSourcesByHandle = new();
 
-        private static Type enumType = typeof(SteamVR_Input_Sources);
-        private static Type descriptionType = typeof(DescriptionAttribute);
+        private static readonly Type enumType = typeof(SteamVRInputSources);
+        private static readonly Type descriptionType = typeof(DescriptionAttribute);
 
-        private static SteamVR_Input_Sources[] allSources;
+        private static SteamVRInputSources[] allSources;
 
-        public static ulong GetHandle(SteamVR_Input_Sources inputSource)
+        public static ulong GetHandle(SteamVRInputSources inputSource)
         {
             int index = (int)inputSource;
             if (index < inputSourceHandlesBySource.Length)
@@ -28,21 +28,21 @@ namespace Valve.VR
 
             return 0;
         }
-        public static SteamVR_Input_Sources GetSource(ulong handle)
+        public static SteamVRInputSources GetSource(ulong handle)
         {
             if (inputSourceSourcesByHandle.ContainsKey(handle))
             {
                 return inputSourceSourcesByHandle[handle];
             }
 
-            return SteamVR_Input_Sources.Any;
+            return SteamVRInputSources.Any;
         }
 
-        public static SteamVR_Input_Sources[] GetAllSources()
+        public static SteamVRInputSources[] GetAllSources()
         {
             if (allSources == null)
             {
-                allSources = (SteamVR_Input_Sources[])System.Enum.GetValues(typeof(SteamVR_Input_Sources));
+                allSources = (SteamVRInputSources[])System.Enum.GetValues(typeof(SteamVRInputSources));
             }
 
             return allSources;
@@ -57,10 +57,10 @@ namespace Valve.VR
 
         public static void Initialize()
         {
-            List<SteamVR_Input_Sources> allSourcesList = new List<SteamVR_Input_Sources>();
+            List<SteamVRInputSources> allSourcesList = new();
             string[] enumNames = System.Enum.GetNames(enumType);
             inputSourceHandlesBySource = new ulong[enumNames.Length];
-            inputSourceSourcesByHandle = new Dictionary<ulong, SteamVR_Input_Sources>();
+            inputSourceSourcesByHandle = new Dictionary<ulong, SteamVRInputSources>();
 
             for (int enumIndex = 0; enumIndex < enumNames.Length; enumIndex++)
             {
@@ -74,18 +74,18 @@ namespace Valve.VR
                     MelonLoader.MelonLogger.Error("[HPVR] GetInputSourceHandle (" + path + ") error: " + err.ToString());
                 }
 
-                if (enumNames[enumIndex] == SteamVR_Input_Sources.Any.ToString())
+                if (enumNames[enumIndex] == SteamVRInputSources.Any.ToString())
                 {
                     inputSourceHandlesBySource[enumIndex] = 0;
-                    inputSourceSourcesByHandle.Add(0, (SteamVR_Input_Sources)enumIndex);
+                    inputSourceSourcesByHandle.Add(0, (SteamVRInputSources)enumIndex);
                 }
                 else
                 {
                     inputSourceHandlesBySource[enumIndex] = handle;
-                    inputSourceSourcesByHandle.Add(handle, (SteamVR_Input_Sources)enumIndex);
+                    inputSourceSourcesByHandle.Add(handle, (SteamVRInputSources)enumIndex);
                 }
 
-                allSourcesList.Add((SteamVR_Input_Sources)enumIndex);
+                allSourcesList.Add((SteamVRInputSources)enumIndex);
             }
 
             allSources = allSourcesList.ToArray();

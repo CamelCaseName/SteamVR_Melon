@@ -21,9 +21,8 @@ namespace Valve.VR.InteractionSystem
         /// <summary>Layers to consider when checking if an area is clear</summary>
         public LayerMask clearanceCheckMask;
 
-
         public Hand hand;
-        public SteamVR_Behaviour_Pose pose;
+        public SteamVRBehaviourPose pose;
 
         // distance at which hand will teleport back to controller
         const float handResetDistance = 0.6f;
@@ -66,8 +65,8 @@ namespace Valve.VR.InteractionSystem
         Quaternion targetRotation = Quaternion.identity;
 
         //bones
-        const int wristBone = SteamVR_Skeleton_JointIndexes.wrist;
-        const int rootBone = SteamVR_Skeleton_JointIndexes.root;
+        const int wristBone = SteamVRSkeletonJointIndexes.wrist;
+        const int rootBone = SteamVRSkeletonJointIndexes.root;
 
         private void FixedUpdate()
         {
@@ -94,14 +93,14 @@ namespace Valve.VR.InteractionSystem
         {
             if (hand.skeleton is null)
             { return; }
-            Vector3 offset = hand.skeleton.GetBonePosition(SteamVR_Skeleton_JointIndexes.middleProximal) - hand.skeleton.GetBonePosition(SteamVR_Skeleton_JointIndexes.root);
+            Vector3 offset = hand.skeleton.GetBonePosition(SteamVRSkeletonJointIndexes.middleProximal) - hand.skeleton.GetBonePosition(SteamVRSkeletonJointIndexes.root);
             if (hand.HasSkeleton())
             {
                 handCollider.SetCenterPoint(hand.skeleton.transform.position + offset);
             }
         }
 
-        Collider[] clearanceBuffer = new Collider[1];
+        readonly Collider[] clearanceBuffer = new Collider[1];
 
         private void UpdatePositions()
         {
@@ -151,7 +150,6 @@ namespace Valve.VR.InteractionSystem
 
             targetRotation = transform.rotation * wristToArmature.GetRotation();
 
-
             //bypass physics when game paused
             if (Time.timeScale == 0)
             {
@@ -161,21 +159,21 @@ namespace Valve.VR.InteractionSystem
 
         Transform wrist;
 
-        const int thumbBone = SteamVR_Skeleton_JointIndexes.thumbDistal;
-        const int indexBone = SteamVR_Skeleton_JointIndexes.indexDistal;
-        const int middleBone = SteamVR_Skeleton_JointIndexes.middleDistal;
-        const int ringBone = SteamVR_Skeleton_JointIndexes.ringDistal;
-        const int pinkyBone = SteamVR_Skeleton_JointIndexes.pinkyDistal;
+        const int thumbBone = SteamVRSkeletonJointIndexes.thumbDistal;
+        const int indexBone = SteamVRSkeletonJointIndexes.indexDistal;
+        const int middleBone = SteamVRSkeletonJointIndexes.middleDistal;
+        const int ringBone = SteamVRSkeletonJointIndexes.ringDistal;
+        const int pinkyBone = SteamVRSkeletonJointIndexes.pinkyDistal;
 
         void UpdateFingertips()
         {
-            wrist = hand.skeleton.GetBone(SteamVR_Skeleton_JointIndexes.wrist);
+            wrist = hand.skeleton.GetBone(SteamVRSkeletonJointIndexes.wrist);
 
             // set finger tip positions in wrist space
 
             for (int finger = 0; finger < 5; finger++)
             {
-                int tip = SteamVR_Skeleton_JointIndexes.GetBoneForFingerTip(finger);
+                int tip = SteamVRSkeletonJointIndexes.GetBoneForFingerTip(finger);
                 int bone = tip;
                 for (int i = 0; i < handCollider.fingerColliders[finger].Length; i++)
                 {
@@ -204,7 +202,7 @@ namespace Valve.VR.InteractionSystem
             */
         }
 
-        void UpdateHand(SteamVR_Behaviour_Pose pose, SteamVR_Input_Sources inputSource)
+        void UpdateHand(SteamVRBehaviourPose pose, SteamVRInputSources inputSource)
         {
             if (!initialized)
             {
@@ -238,9 +236,9 @@ namespace Valve.VR.InteractionSystem
 
         Vector3 ProcessPos(int boneIndex, Vector3 pos)
         {
-            if (hand.skeleton.mirroring != SteamVR_Behaviour_Skeleton.MirrorType.None)
+            if (hand.skeleton.mirroring != SteamVRBehaviourSkeleton.MirrorType.None)
             {
-                return SteamVR_Behaviour_Skeleton.MirrorPosition(boneIndex, pos);
+                return SteamVRBehaviourSkeleton.MirrorPosition(boneIndex, pos);
             }
 
             return pos;
@@ -248,14 +246,13 @@ namespace Valve.VR.InteractionSystem
 
         Quaternion ProcessRot(int boneIndex, Quaternion rot)
         {
-            if (hand.skeleton.mirroring != SteamVR_Behaviour_Skeleton.MirrorType.None)
+            if (hand.skeleton.mirroring != SteamVRBehaviourSkeleton.MirrorType.None)
             {
-                return SteamVR_Behaviour_Skeleton.MirrorRotation(boneIndex, rot);
+                return SteamVRBehaviourSkeleton.MirrorRotation(boneIndex, rot);
             }
 
             return rot;
         }
-
 
     }
 }

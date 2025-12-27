@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SteamVR_Melon.Scripts;
+using System;
 using UnityEngine;
 
 namespace Valve.VR.InteractionSystem
@@ -14,7 +15,6 @@ namespace Valve.VR.InteractionSystem
         public LayerMask collisionMask;
 
         Collider[] colliders;
-
 
         public FingerColliders fingerColliders;
 
@@ -92,29 +92,33 @@ namespace Valve.VR.InteractionSystem
 
             if (physicMaterial_lowfriction == null)
             {
-                physicMaterial_lowfriction = new PhysicMaterial();
-                physicMaterial_lowfriction.name = "hand_lowFriction";
-                physicMaterial_lowfriction.dynamicFriction = 0;
-                physicMaterial_lowfriction.staticFriction = 0;
-                physicMaterial_lowfriction.bounciness = 0;
-                physicMaterial_lowfriction.bounceCombine = PhysicMaterialCombine.Minimum;
-                physicMaterial_lowfriction.frictionCombine = PhysicMaterialCombine.Minimum;
+                physicMaterial_lowfriction = new PhysicMaterial
+                {
+                    name = "hand_lowFriction",
+                    dynamicFriction = 0,
+                    staticFriction = 0,
+                    bounciness = 0,
+                    bounceCombine = PhysicMaterialCombine.Minimum,
+                    frictionCombine = PhysicMaterialCombine.Minimum
+                };
             }
 
             if (physicMaterial_highfriction == null)
             {
-                physicMaterial_highfriction = new PhysicMaterial();
-                physicMaterial_highfriction.name = "hand_highFriction";
-                physicMaterial_highfriction.dynamicFriction = 1f;
-                physicMaterial_highfriction.staticFriction = 1f;
-                physicMaterial_highfriction.bounciness = 0;
-                physicMaterial_highfriction.bounceCombine = PhysicMaterialCombine.Minimum;
-                physicMaterial_highfriction.frictionCombine = PhysicMaterialCombine.Average;
+                physicMaterial_highfriction = new PhysicMaterial
+                {
+                    name = "hand_highFriction",
+                    dynamicFriction = 1f,
+                    staticFriction = 1f,
+                    bounciness = 0,
+                    bounceCombine = PhysicMaterialCombine.Minimum,
+                    frictionCombine = PhysicMaterialCombine.Average
+                };
             }
 
             SetPhysicMaterial(physicMaterial_lowfriction);
 
-            scale = SteamVR_Utils.GetLossyScale(hand.transform);
+            scale = SteamVRUtils.GetLossyScale(hand.transform);
         }
 
         void SetPhysicMaterial(PhysicMaterial mat)
@@ -220,8 +224,6 @@ namespace Valve.VR.InteractionSystem
             }
         }
 
-
-
         protected bool GetTargetVelocities(out Vector3 velocityTarget, out Vector3 angularTarget)
         {
             bool realNumbers = false;
@@ -242,7 +244,6 @@ namespace Valve.VR.InteractionSystem
             }
 
             Quaternion rotationDelta = targetRotation * Quaternion.Inverse(rigidbody.rotation);
-
 
             float angle;
             Vector3 axis;
@@ -267,7 +268,6 @@ namespace Valve.VR.InteractionSystem
             return realNumbers;
         }
 
-
         const float minCollisionEnergy = 0.1f;
         const float maxCollisionEnergy = 1.0f;
 
@@ -286,8 +286,6 @@ namespace Valve.VR.InteractionSystem
 
             // low friction if touching static object, high friction if touching dynamic
             SetPhysicMaterial(touchingDynamic ? physicMaterial_highfriction : physicMaterial_lowfriction);
-
-
 
             float energy = collision.relativeVelocity.magnitude;
 

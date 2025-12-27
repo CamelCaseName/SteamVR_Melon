@@ -5,6 +5,7 @@
 //=============================================================================
 
 using MelonLoader;
+using SteamVR_Melon.Scripts;
 using System;
 using System.Collections;
 using UnityEngine;
@@ -93,7 +94,7 @@ namespace Valve.VR.InteractionSystem
             // and if it isn't attached to another hand
             if (!attached && catchingSpeedThreshold != -1)
             {
-                float catchingThreshold = catchingSpeedThreshold * SteamVR_Utils.GetLossyScale(Player.instance.trackingOriginTransform);
+                float catchingThreshold = catchingSpeedThreshold * SteamVRUtils.GetLossyScale(Player.instance.trackingOriginTransform);
 
                 GrabTypes bestGrabType = hand.GetBestGrabbingType();
 

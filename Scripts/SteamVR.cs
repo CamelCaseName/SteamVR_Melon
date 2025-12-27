@@ -6,6 +6,7 @@
 
 using Assets.SteamVR_Melon.Standalone;
 using MelonLoader;
+using SteamVR_Melon.Scripts;
 using SteamVR_Melon.Standalone;
 using SteamVR_Melon.Util;
 using System.IO;
@@ -106,7 +107,7 @@ namespace Valve.VR
         {
             if (forceUnityVRMode)
             {
-                SteamVR_Behaviour.instance.InitializeSteamVR(true);
+                SteamVRBehaviour.instance.InitializeSteamVR(true);
                 return;
             }
             else
@@ -123,7 +124,7 @@ namespace Valve.VR
 
             if (_enabled)
             {
-                SteamVR_Behaviour.Initialize(forceUnityVRMode);
+                SteamVRBehaviour.Initialize(forceUnityVRMode);
             }
         }
 
@@ -132,12 +133,11 @@ namespace Valve.VR
             get { return XRDevice.GetNativePtr() != System.IntPtr.Zero; }
         }
 
-        public static SteamVR_Settings settings { get; private set; }
+        public static SteamVRSettings settings { get; private set; }
 
         private static void ReportGeneralErrors()
         {
             string errorLog = "[HPVR] Initialization failed. ";
-
 
             if (XRSettings.enabled == false)
             {
@@ -162,7 +162,6 @@ namespace Valve.VR
 
             errorLog += "To attempt to force OpenVR initialization call SteamVR.Initialize(true). ";
 
-
             MelonLogger.Warning(errorLog);
         }
 
@@ -174,13 +173,13 @@ namespace Valve.VR
             {
                 var error = EVRInitError.None;
 
-                PluginImporter.LoadPlugin(OpenVRMagic.openvr_api);
+                PluginImporter.LoadPlugin(OpenVRMagic.openvrApi);
                 UnityHooks.Init();
                 VRShaders.TryLoadShaders();
 
-                OpenVR.Init(ref error, EVRApplicationType.VRApplication_Scene, "");
+                OpenVR.Init(ref error, EVRApplicationType.VRApplicationScene, "");
 
-                if (error == EVRInitError.Init_HmdNotFound)
+                if (error == EVRInitError.InitHmdNotFound)
                 {
                     MelonLogger.Error("#####################################################################");
                     MelonLogger.Error("###                                                               ###");
@@ -188,7 +187,7 @@ namespace Valve.VR
                     MelonLogger.Error("###                                                               ###");
                     MelonLogger.Error("#####################################################################");
                     initializedState = InitializedStates.InitializeFailure;
-                    SteamVR_Events.Initialized.Send(false);
+                    SteamVREvents.Initialized.Send(false);
                     return null;
                 }
 
@@ -203,64 +202,64 @@ namespace Valve.VR
                     {
                         ReportGeneralErrors();
                         initializedState = InitializedStates.InitializeFailure;
-                        SteamVR_Events.Initialized.Send(false);
+                        SteamVREvents.Initialized.Send(false);
                         return null;
                     }
                 }
 
                 // Verify common interfaces are valid.
 
-                OpenVR.GetGenericInterface(OpenVR.IVRCompositor_Version, ref error);
+                OpenVR.GetGenericInterface(OpenVR.IVRCompositorVersion, ref error);
                 if (error != EVRInitError.None)
                 {
                     initializedState = InitializedStates.InitializeFailure;
                     ReportError(error);
                     ReportGeneralErrors();
-                    SteamVR_Events.Initialized.Send(false);
+                    SteamVREvents.Initialized.Send(false);
                     return null;
                 }
 
-                OpenVR.GetGenericInterface(OpenVR.IVROverlay_Version, ref error);
+                OpenVR.GetGenericInterface(OpenVR.IVROverlayVersion, ref error);
                 if (error != EVRInitError.None)
                 {
                     initializedState = InitializedStates.InitializeFailure;
                     ReportError(error);
-                    SteamVR_Events.Initialized.Send(false);
+                    SteamVREvents.Initialized.Send(false);
                     return null;
                 }
 
-                OpenVR.GetGenericInterface(OpenVR.IVRInput_Version, ref error);
+                OpenVR.GetGenericInterface(OpenVR.IVRInputVersion, ref error);
                 if (error != EVRInitError.None)
                 {
                     initializedState = InitializedStates.InitializeFailure;
                     ReportError(error);
-                    SteamVR_Events.Initialized.Send(false);
+                    SteamVREvents.Initialized.Send(false);
                     return null;
                 }
 
-                settings = SteamVR_Settings.instance;
+                settings = SteamVRSettings.instance;
                 if (Application.isEditor)
                 {
                     IdentifyEditorApplication();
                 }
 
-                SteamVR_Input.IdentifyActionsFile();
-                if (SteamVR_Settings.instance.inputUpdateMode != SteamVR_UpdateModes.Nothing || SteamVR_Settings.instance.poseUpdateMode != SteamVR_UpdateModes.Nothing)
+                SteamVRInput.IdentifyActionsFile();
+                if (SteamVRSettings.instance.inputUpdateMode != SteamVRUpdateModes.Nothing || SteamVRSettings.instance.poseUpdateMode != SteamVRUpdateModes.Nothing)
                 {
                     MelonLogger.Msg("activating steamvr input");
-                    SteamVR_Input.Initialize();
+                    SteamVRInput.Initialize();
                 }
             }
             catch (System.Exception e)
             {
                 MelonLogger.Error("[HPVR] " + e);
-                SteamVR_Events.Initialized.Send(false);
+                SteamVREvents.Initialized.Send(false);
                 return null;
             }
 
             _enabled = true;
             initializedState = InitializedStates.InitializeSuccess;
-            SteamVR_Events.Initialized.Send(true);
+            SteamVREvents.Initialized.Send(true);
             MelonLogger.Msg("returning SteamVR Object");
             return new SteamVR();
         }
@@ -271,13 +270,13 @@ namespace Valve.VR
             {
                 case EVRInitError.None:
                     break;
-                case EVRInitError.VendorSpecific_UnableToConnectToOculusRuntime:
+                case EVRInitError.VendorSpecificUnableToConnectToOculusRuntime:
                     MelonLoader.MelonLogger.Warning("[HPVR] Initialization Failed!  Make sure device is on, Oculus runtime is installed, and OVRService_*.exe is running.");
                     break;
-                case EVRInitError.Init_VRClientDLLNotFound:
+                case EVRInitError.InitVRClientDLLNotFound:
                     MelonLoader.MelonLogger.Warning("[HPVR] Drivers not found!  They can be installed via Steam under Library > Tools.  Visit http://steampowered.com to install Steam.");
                     break;
-                case EVRInitError.Driver_RuntimeOutOfDate:
+                case EVRInitError.DriverRuntimeOutOfDate:
                     MelonLoader.MelonLogger.Warning("[HPVR] Initialization Failed!  Make sure device's runtime is up to date.");
                     break;
                 default:
@@ -296,7 +295,7 @@ namespace Valve.VR
         static public bool calibrating { get; private set; }
         static public bool outOfRange { get; private set; }
 
-        static public bool[] connected = new bool[OpenVR.k_unMaxTrackedDeviceCount];
+        static public bool[] connected = new bool[OpenVR.kUnMaxTrackedDeviceCount];
 
         // render values
         public float sceneWidth { get; private set; }
@@ -304,40 +303,40 @@ namespace Valve.VR
         public float aspect { get; private set; }
         public float fieldOfView { get; private set; }
         public Vector2 tanHalfFov { get; private set; }
-        public VRTextureBounds_t[] textureBounds { get; private set; }
-        public SteamVR_Utils.RigidTransform[] eyes { get; private set; }
+        public VRTextureBoundsT[] textureBounds { get; private set; }
+        public SteamVRUtils.RigidTransform[] eyes { get; private set; }
         public ETextureType textureType;
 
         // hmd properties
-        public string hmd_TrackingSystemName { get { return GetStringProperty(ETrackedDeviceProperty.Prop_TrackingSystemName_String); } }
-        public string hmd_ModelNumber { get { return GetStringProperty(ETrackedDeviceProperty.Prop_ModelNumber_String); } }
-        public string hmd_SerialNumber { get { return GetStringProperty(ETrackedDeviceProperty.Prop_SerialNumber_String); } }
-        public string hmd_Type { get { return GetStringProperty(ETrackedDeviceProperty.Prop_ControllerType_String); } }
+        public string hmdTrackingSystemName { get { return GetStringProperty(ETrackedDeviceProperty.PropTrackingSystemNameString); } }
+        public string hmdModelNumber { get { return GetStringProperty(ETrackedDeviceProperty.PropModelNumberString); } }
+        public string hmdSerialNumber { get { return GetStringProperty(ETrackedDeviceProperty.PropSerialNumberString); } }
+        public string hmdType { get { return GetStringProperty(ETrackedDeviceProperty.PropControllerTypeString); } }
 
-        public float hmd_SecondsFromVsyncToPhotons { get { return GetFloatProperty(ETrackedDeviceProperty.Prop_SecondsFromVsyncToPhotons_Float); } }
-        public float hmd_DisplayFrequency { get { return GetFloatProperty(ETrackedDeviceProperty.Prop_DisplayFrequency_Float); } }
+        public float hmdSecondsFromVsyncToPhotons { get { return GetFloatProperty(ETrackedDeviceProperty.PropSecondsFromVsyncToPhotonsFloat); } }
+        public float hmdDisplayFrequency { get { return GetFloatProperty(ETrackedDeviceProperty.PropDisplayFrequencyFloat); } }
 
         public EDeviceActivityLevel GetHeadsetActivityLevel()
         {
-            return OpenVR.System.GetTrackedDeviceActivityLevel(OpenVR.k_unTrackedDeviceIndex_Hmd);
+            return OpenVR.System.GetTrackedDeviceActivityLevel(OpenVR.kUnTrackedDeviceIndexHmd);
         }
 
         public string GetTrackedDeviceString(uint deviceId)
         {
-            var error = ETrackedPropertyError.TrackedProp_Success;
-            var capacity = hmd.GetStringTrackedDeviceProperty(deviceId, ETrackedDeviceProperty.Prop_AttachedDeviceId_String, null, 0, ref error);
+            var error = ETrackedPropertyError.TrackedPropSuccess;
+            var capacity = hmd.GetStringTrackedDeviceProperty(deviceId, ETrackedDeviceProperty.PropAttachedDeviceIdString, null, 0, ref error);
             if (capacity > 1)
             {
                 var result = new System.Text.StringBuilder((int)capacity);
-                hmd.GetStringTrackedDeviceProperty(deviceId, ETrackedDeviceProperty.Prop_AttachedDeviceId_String, result, capacity, ref error);
+                hmd.GetStringTrackedDeviceProperty(deviceId, ETrackedDeviceProperty.PropAttachedDeviceIdString, result, capacity, ref error);
                 return result.ToString();
             }
             return null;
         }
 
-        public string GetStringProperty(ETrackedDeviceProperty prop, uint deviceId = OpenVR.k_unTrackedDeviceIndex_Hmd)
+        public string GetStringProperty(ETrackedDeviceProperty prop, uint deviceId = OpenVR.kUnTrackedDeviceIndexHmd)
         {
-            var error = ETrackedPropertyError.TrackedProp_Success;
+            var error = ETrackedPropertyError.TrackedPropSuccess;
             var capactiy = hmd.GetStringTrackedDeviceProperty(deviceId, prop, null, 0, ref error);
             if (capactiy > 1)
             {
@@ -345,15 +344,14 @@ namespace Valve.VR
                 hmd.GetStringTrackedDeviceProperty(deviceId, prop, result, capactiy, ref error);
                 return result.ToString();
             }
-            return (error != ETrackedPropertyError.TrackedProp_Success) ? error.ToString() : "<unknown>";
+            return (error != ETrackedPropertyError.TrackedPropSuccess) ? error.ToString() : "<unknown>";
         }
 
-        public float GetFloatProperty(ETrackedDeviceProperty prop, uint deviceId = OpenVR.k_unTrackedDeviceIndex_Hmd)
+        public float GetFloatProperty(ETrackedDeviceProperty prop, uint deviceId = OpenVR.kUnTrackedDeviceIndexHmd)
         {
-            var error = ETrackedPropertyError.TrackedProp_Success;
+            var error = ETrackedPropertyError.TrackedPropSuccess;
             return hmd.GetFloatTrackedDeviceProperty(deviceId, prop, ref error);
         }
-
 
         private static bool runningTemporarySession = false;
         public static bool InitializeTemporarySession(bool initInput = false)
@@ -363,13 +361,13 @@ namespace Valve.VR
                 //bool needsInit = (!active && !usingNativeSupport && !runningTemporarySession);
 
                 EVRInitError initError = EVRInitError.None;
-                OpenVR.GetGenericInterface(OpenVR.IVRCompositor_Version, ref initError);
+                OpenVR.GetGenericInterface(OpenVR.IVRCompositorVersion, ref initError);
                 bool needsInit = initError != EVRInitError.None;
 
                 if (needsInit)
                 {
                     EVRInitError error = EVRInitError.None;
-                    OpenVR.Init(ref error, EVRApplicationType.VRApplication_Overlay);
+                    OpenVR.Init(ref error, EVRApplicationType.VRApplicationOverlay);
 
                     if (error != EVRInitError.None)
                     {
@@ -379,14 +377,14 @@ namespace Valve.VR
 
                     IdentifyEditorApplication(false);
 
-                    SteamVR_Input.IdentifyActionsFile(false);
+                    SteamVRInput.IdentifyActionsFile(false);
 
                     runningTemporarySession = true;
                 }
 
                 if (initInput)
                 {
-                    SteamVR_Input.Initialize(true);
+                    SteamVRInput.Initialize(true);
                 }
 
                 return needsInit;
@@ -489,7 +487,6 @@ namespace Valve.VR
         }
 #endif
 
-
         public const string defaultUnityAppKeyTemplate = "application.generated.unity.{0}.exe";
         public const string defaultAppKeyTemplate = "application.generated.{0}";
 
@@ -524,18 +521,18 @@ namespace Valve.VR
 
             string fullPath = Path.Combine(currentPath, "unityProject.vrmanifest");
 
-            FileInfo fullManifestPath = new FileInfo(SteamVR_Input.GetActionsFilePath());
+            FileInfo fullManifestPath = new(SteamVRInput.GetActionsFilePath());
 
             if (File.Exists(fullPath))
             {
                 string jsonText = File.ReadAllText(fullPath);
-                SteamVR_Input_ManifestFile existingFile = Newtonsoft.Json.JsonConvert.DeserializeObject<SteamVR_Input_ManifestFile>(jsonText);
+                SteamVRInputManifestFile existingFile = Newtonsoft.Json.JsonConvert.DeserializeObject<SteamVRInputManifestFile>(jsonText);
 
                 if (existingFile != null && existingFile.applications != null && existingFile.applications.Count > 0 &&
-                    existingFile.applications[0].app_key != SteamVR_Settings.instance.editorAppKey)
+                    existingFile.applications[0].app_key != SteamVRSettings.instance.editorAppKey)
                 {
                     MelonLoader.MelonLogger.Msg("[HPVR] Deleting existing VRManifest because it has a different app key.");
-                    FileInfo existingInfo = new FileInfo(fullPath);
+                    FileInfo existingInfo = new(fullPath);
                     if (existingInfo.IsReadOnly)
                     {
                         existingInfo.IsReadOnly = false;
@@ -550,7 +547,7 @@ namespace Valve.VR
                     MelonLoader.MelonLogger.Msg("[HPVR] Deleting existing VRManifest because it has a different action manifest path:" +
                         "\nExisting:" + existingFile.applications[0].action_manifest_path +
                         "\nNew: " + fullManifestPath.FullName);
-                    FileInfo existingInfo = new FileInfo(fullPath);
+                    FileInfo existingInfo = new(fullPath);
                     if (existingInfo.IsReadOnly)
                     {
                         existingInfo.IsReadOnly = false;
@@ -562,17 +559,21 @@ namespace Valve.VR
 
             if (File.Exists(fullPath) == false)
             {
-                SteamVR_Input_ManifestFile manifestFile = new SteamVR_Input_ManifestFile();
-                manifestFile.source = "Unity";
-                SteamVR_Input_ManifestFile_Application manifestApplication = new SteamVR_Input_ManifestFile_Application();
-                manifestApplication.app_key = SteamVR_Settings.instance.editorAppKey;
-                manifestApplication.action_manifest_path = fullManifestPath.FullName;
-                manifestApplication.launch_type = "url";
-                //manifestApplication.binary_path_windows = SteamVR_Utils.ConvertToForwardSlashes(System.Diagnostics.Process.GetCurrentProcess().MainModule.FileName);
-                //manifestApplication.binary_path_linux = SteamVR_Utils.ConvertToForwardSlashes(System.Diagnostics.Process.GetCurrentProcess().MainModule.FileName);
-                //manifestApplication.binary_path_osx = SteamVR_Utils.ConvertToForwardSlashes(System.Diagnostics.Process.GetCurrentProcess().MainModule.FileName);
-                manifestApplication.url = "steam://launch/";
-                manifestApplication.strings.Add("en_us", new SteamVR_Input_ManifestFile_ApplicationString() { name = string.Format("{0} [Testing]", Application.productName) });
+                SteamVRInputManifestFile manifestFile = new()
+                {
+                    source = "Unity"
+                };
+                SteamVRInputManifestFileApplication manifestApplication = new()
+                {
+                    app_key = SteamVRSettings.instance.editorAppKey,
+                    action_manifest_path = fullManifestPath.FullName,
+                    launch_type = "url",
+                    //manifestApplication.binary_path_windows = SteamVR_Utils.ConvertToForwardSlashes(System.Diagnostics.Process.GetCurrentProcess().MainModule.FileName);
+                    //manifestApplication.binary_path_linux = SteamVR_Utils.ConvertToForwardSlashes(System.Diagnostics.Process.GetCurrentProcess().MainModule.FileName);
+                    //manifestApplication.binary_path_osx = SteamVR_Utils.ConvertToForwardSlashes(System.Diagnostics.Process.GetCurrentProcess().MainModule.FileName);
+                    url = "steam://launch/"
+                };
+                manifestApplication.strings.Add("en_us", new SteamVRInputManifestFileApplicationString() { name = string.Format("{0} [Testing]", Application.productName) });
 
                 /*
                 var bindings = new System.Collections.Generic.List<SteamVR_Input_ManifestFile_Application_Binding>();
@@ -603,7 +604,7 @@ namespace Valve.VR
                 }
                 */
 
-                manifestFile.applications = new System.Collections.Generic.List<SteamVR_Input_ManifestFile_Application>();
+                manifestFile.applications = new System.Collections.Generic.List<SteamVRInputManifestFileApplication>();
                 manifestFile.applications.Add(manifestApplication);
 
                 string json = Newtonsoft.Json.JsonConvert.SerializeObject(manifestFile, Newtonsoft.Json.Formatting.Indented,
@@ -619,7 +620,7 @@ namespace Valve.VR
         {
             //bool isInstalled = OpenVR.Applications.IsApplicationInstalled(SteamVR_Settings.instance.editorAppKey);
 
-            if (string.IsNullOrEmpty(SteamVR_Settings.instance.editorAppKey))
+            if (string.IsNullOrEmpty(SteamVRSettings.instance.editorAppKey))
             {
                 MelonLoader.MelonLogger.Error("[HPVR] Critical Error identifying application. EditorAppKey is null or empty. Input may not work.");
                 return;
@@ -641,7 +642,7 @@ namespace Valve.VR
             }
 
             int processId = System.Diagnostics.Process.GetCurrentProcess().Id;
-            EVRApplicationError applicationIdentifyErr = OpenVR.Applications.IdentifyApplication((uint)processId, SteamVR_Settings.instance.editorAppKey);
+            EVRApplicationError applicationIdentifyErr = OpenVR.Applications.IdentifyApplication((uint)processId, SteamVRSettings.instance.editorAppKey);
 
             if (applicationIdentifyErr != EVRApplicationError.None)
             {
@@ -651,7 +652,7 @@ namespace Valve.VR
             {
                 if (showLogs)
                 {
-                    MelonLoader.MelonLogger.Msg(string.Format("[HPVR] Successfully identified process as editor project to SteamVR ({0})", SteamVR_Settings.instance.editorAppKey));
+                    MelonLoader.MelonLogger.Msg(string.Format("[HPVR] Successfully identified process as editor project to SteamVR ({0})", SteamVRSettings.instance.editorAppKey));
                 }
             }
         }
@@ -679,45 +680,45 @@ namespace Valve.VR
         }
 
         [Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp]
-        private void OnNewPoses(TrackedDevicePose_t[] poses)
+        private void OnNewPoses(TrackedDevicePoseT[] poses)
         {
             // Update eye offsets to account for IPD changes.
-            eyes[0] = new SteamVR_Utils.RigidTransform(hmd.GetEyeToHeadTransform(EVREye.Eye_Left));
-            eyes[1] = new SteamVR_Utils.RigidTransform(hmd.GetEyeToHeadTransform(EVREye.Eye_Right));
+            eyes[0] = new SteamVRUtils.RigidTransform(hmd.GetEyeToHeadTransform(EVREye.EyeLeft));
+            eyes[1] = new SteamVRUtils.RigidTransform(hmd.GetEyeToHeadTransform(EVREye.EyeRight));
 
             for (int i = 0; i < poses.Length; i++)
             {
                 var connected = poses[i].bDeviceIsConnected;
                 if (connected != SteamVR.connected[i])
                 {
-                    SteamVR_Events.DeviceConnected.Send(i, connected);
+                    SteamVREvents.DeviceConnected.Send(i, connected);
                 }
             }
 
-            if (poses.Length > OpenVR.k_unTrackedDeviceIndex_Hmd)
+            if (poses.Length > OpenVR.kUnTrackedDeviceIndexHmd)
             {
-                var result = poses[(int)OpenVR.k_unTrackedDeviceIndex_Hmd].eTrackingResult;
+                var result = poses[(int)OpenVR.kUnTrackedDeviceIndexHmd].eTrackingResult;
 
                 var initializing = result == ETrackingResult.Uninitialized;
                 if (initializing != SteamVR.initializing)
                 {
-                    SteamVR_Events.Initializing.Send(initializing);
+                    SteamVREvents.Initializing.Send(initializing);
                 }
 
                 var calibrating =
-                    result == ETrackingResult.Calibrating_InProgress ||
-                    result == ETrackingResult.Calibrating_OutOfRange;
+                    result == ETrackingResult.CalibratingInProgress ||
+                    result == ETrackingResult.CalibratingOutOfRange;
                 if (calibrating != SteamVR.calibrating)
                 {
-                    SteamVR_Events.Calibrating.Send(calibrating);
+                    SteamVREvents.Calibrating.Send(calibrating);
                 }
 
                 var outOfRange =
-                    result == ETrackingResult.Running_OutOfRange ||
-                    result == ETrackingResult.Calibrating_OutOfRange;
+                    result == ETrackingResult.RunningOutOfRange ||
+                    result == ETrackingResult.CalibratingOutOfRange;
                 if (outOfRange != SteamVR.outOfRange)
                 {
-                    SteamVR_Events.OutOfRange.Send(outOfRange);
+                    SteamVREvents.OutOfRange.Send(outOfRange);
                 }
             }
         }
@@ -727,7 +728,7 @@ namespace Valve.VR
         private SteamVR()
         {
             hmd = OpenVR.System;
-            MelonLoader.MelonLogger.Msg($"Initialized. Connected to {hmd_TrackingSystemName} : {hmd_ModelNumber} : {hmd_SerialNumber} :: {hmd_Type}");
+            MelonLoader.MelonLogger.Msg($"Initialized. Connected to {hmdTrackingSystemName} : {hmdModelNumber} : {hmdSerialNumber} :: {hmdType}");
 
             compositor = OpenVR.Compositor;
             overlay = OpenVR.Overlay;
@@ -740,17 +741,17 @@ namespace Valve.VR
             MelonLogger.Msg($"hmd res: {sceneWidth}:{sceneHeight}");
 
             float l_left = 0.0f, l_right = 0.0f, l_top = 0.0f, l_bottom = 0.0f;
-            hmd.GetProjectionRaw(EVREye.Eye_Left, ref l_left, ref l_right, ref l_top, ref l_bottom);
+            hmd.GetProjectionRaw(EVREye.EyeLeft, ref l_left, ref l_right, ref l_top, ref l_bottom);
 
             float r_left = 0.0f, r_right = 0.0f, r_top = 0.0f, r_bottom = 0.0f;
-            hmd.GetProjectionRaw(EVREye.Eye_Right, ref r_left, ref r_right, ref r_top, ref r_bottom);
+            hmd.GetProjectionRaw(EVREye.EyeRight, ref r_left, ref r_right, ref r_top, ref r_bottom);
             MelonLogger.Msg($"hmd projection: {r_left}{r_right}{r_top}{r_bottom}");
 
             tanHalfFov = new Vector2(
                 Mathf.Max(-l_left, l_right, -r_left, r_right),
                 Mathf.Max(-l_top, l_bottom, -r_top, r_bottom));
 
-            textureBounds = new VRTextureBounds_t[2];
+            textureBounds = new VRTextureBoundsT[2];
 
             textureBounds[0].uMin = 0.5f + 0.5f * l_left / tanHalfFov.x;
             textureBounds[0].uMax = 0.5f + 0.5f * l_right / tanHalfFov.x;
@@ -769,9 +770,9 @@ namespace Valve.VR
             aspect = tanHalfFov.x / tanHalfFov.y;
             fieldOfView = 2.0f * Mathf.Atan(tanHalfFov.y) * Mathf.Rad2Deg;
 
-            eyes = new SteamVR_Utils.RigidTransform[] {
-            new SteamVR_Utils.RigidTransform(hmd.GetEyeToHeadTransform(EVREye.Eye_Left)),
-            new SteamVR_Utils.RigidTransform(hmd.GetEyeToHeadTransform(EVREye.Eye_Right)) };
+            eyes = new SteamVRUtils.RigidTransform[] {
+            new(hmd.GetEyeToHeadTransform(EVREye.EyeLeft)),
+            new(hmd.GetEyeToHeadTransform(EVREye.EyeRight)) };
 
             switch (SystemInfo.graphicsDeviceType)
             {
@@ -793,11 +794,11 @@ namespace Valve.VR
                     break;
             }
 
-            SteamVR_Events.Initializing.Listen(OnInitializing);
-            SteamVR_Events.Calibrating.Listen(OnCalibrating);
-            SteamVR_Events.OutOfRange.Listen(OnOutOfRange);
-            SteamVR_Events.DeviceConnected.Listen(OnDeviceConnected);
-            SteamVR_Events.NewPoses.Listen(OnNewPoses);
+            SteamVREvents.Initializing.Listen(OnInitializing);
+            SteamVREvents.Calibrating.Listen(OnCalibrating);
+            SteamVREvents.OutOfRange.Listen(OnOutOfRange);
+            SteamVREvents.DeviceConnected.Listen(OnDeviceConnected);
+            SteamVREvents.NewPoses.Listen(OnNewPoses);
         }
 
         ~SteamVR()
@@ -813,11 +814,11 @@ namespace Valve.VR
 
         private void Dispose(bool disposing)
         {
-            SteamVR_Events.Initializing.Remove(OnInitializing);
-            SteamVR_Events.Calibrating.Remove(OnCalibrating);
-            SteamVR_Events.OutOfRange.Remove(OnOutOfRange);
-            SteamVR_Events.DeviceConnected.Remove(OnDeviceConnected);
-            SteamVR_Events.NewPoses.Remove(OnNewPoses);
+            SteamVREvents.Initializing.Remove(OnInitializing);
+            SteamVREvents.Calibrating.Remove(OnCalibrating);
+            SteamVREvents.OutOfRange.Remove(OnOutOfRange);
+            SteamVREvents.DeviceConnected.Remove(OnDeviceConnected);
+            SteamVREvents.NewPoses.Remove(OnNewPoses);
 
             _instance = null;
         }

@@ -24,7 +24,6 @@ namespace Valve.VR.InteractionSystem
             gameObject.name = oldParent.gameObject.name + "." + gameObject.name;
         }
 
-
         //-------------------------------------------------
         void Update()
         {
@@ -33,7 +32,6 @@ namespace Valve.VR.InteractionSystem
                 GameObject.Destroy(gameObject);
             }
         }
-
 
         //-------------------------------------------------
         public Transform GetOldParent()

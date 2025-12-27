@@ -18,13 +18,11 @@ namespace Valve.VR.InteractionSystem
         private Hand hand;
         public GameObject itemPrefab;
 
-
         //-------------------------------------------------
         void Start()
         {
             hand = GetComponentInParent<Hand>();
         }
-
 
         //-------------------------------------------------
         void Update()

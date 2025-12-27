@@ -11,16 +11,16 @@ using UnityEngine.InputSystem;
 namespace Valve.VR
 {
     [MelonLoader.RegisterTypeInIl2Cpp()]
-    public class SteamVR_Menu : MonoBehaviour
+    public class SteamVRMenu : MonoBehaviour
     {
-        public SteamVR_Menu(System.IntPtr value) : base(value) { }
+        public SteamVRMenu(System.IntPtr value) : base(value) { }
         public Texture cursor, background, logo;
         public float logoHeight, menuOffset;
 
-        public Vector2 scaleLimits = new Vector2(0.1f, 5.0f);
+        public Vector2 scaleLimits = new(0.1f, 5.0f);
         public float scaleRate = 0.5f;
 
-        SteamVR_Overlay overlay;
+        SteamVROverlay overlay;
         Camera overlayCam;
         Vector4 uvOffset;
         float distance;
@@ -39,7 +39,7 @@ namespace Valve.VR
             scaleLimitY = string.Format("{0:N1}", scaleLimits.y);
             scaleRateText = string.Format("{0:N1}", scaleRate);
 
-            var overlay = SteamVR_Overlay.instance;
+            var overlay = SteamVROverlay.instance;
             if (overlay != null)
             {
                 uvOffset = overlay.uvOffset;
@@ -157,7 +157,7 @@ namespace Valve.VR
 
                 GUILayout.BeginHorizontal();
                 {
-                    var t = SteamVR_Camera.sceneResolutionScale;
+                    var t = SteamVRCamera.sceneResolutionScale;
                     int w = (int)(vr.sceneWidth * t);
                     int h = (int)(vr.sceneHeight * t);
                     int pct = (int)(100.0f * t);
@@ -165,13 +165,13 @@ namespace Valve.VR
                     var result = Mathf.RoundToInt(GUILayout.HorizontalSlider(pct, 50, 200));
                     if (result != pct)
                     {
-                        SteamVR_Camera.sceneResolutionScale = (float)result / 100.0f;
+                        SteamVRCamera.sceneResolutionScale = (float)result / 100.0f;
                     }
                 }
                 GUILayout.EndHorizontal();
             }
 
-            var tracker = SteamVR_Render.Top();
+            var tracker = SteamVRRender.Top();
             if (tracker != null)
             {
                 tracker.wireframe = GUILayout.Toggle(tracker.wireframe, "Wireframe");
@@ -237,7 +237,7 @@ namespace Valve.VR
 
         public void ShowMenu()
         {
-            var overlay = SteamVR_Overlay.instance;
+            var overlay = SteamVROverlay.instance;
             if (overlay == null)
             {
                 return;
@@ -272,7 +272,7 @@ namespace Valve.VR
                 }
             }
 
-            var tracker = SteamVR_Render.Top();
+            var tracker = SteamVRRender.Top();
             if (tracker != null)
             {
                 scale = tracker.origin.localScale.x;
@@ -327,7 +327,7 @@ namespace Valve.VR
         {
             this.scale = scale;
 
-            var tracker = SteamVR_Render.Top();
+            var tracker = SteamVRRender.Top();
             if (tracker != null)
             {
                 tracker.origin.localScale = new Vector3(scale, scale, scale);

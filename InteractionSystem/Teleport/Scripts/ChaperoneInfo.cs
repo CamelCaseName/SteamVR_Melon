@@ -21,8 +21,8 @@ namespace Valve.VR.InteractionSystem
         public float playAreaSizeZ { get; private set; }
         public bool roomscale { get; private set; }
 
-        public static SteamVR_Events.Event Initialized = new SteamVR_Events.Event();
-        public static SteamVR_Events.Action InitializedAction(Action action) { return new SteamVR_Events.ActionNoArgs(Initialized, action); }
+        public static SteamVREvents.Event Initialized = new();
+        public static SteamVREvents.Action InitializedAction(Action action) { return new SteamVREvents.ActionNoArgs(Initialized, action); }
 
         //-------------------------------------------------
         private static ChaperoneInfo _instance;
@@ -43,7 +43,6 @@ namespace Valve.VR.InteractionSystem
                 return _instance;
             }
         }
-
 
         //-------------------------------------------------
         [HideFromIl2Cpp]

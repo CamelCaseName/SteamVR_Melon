@@ -6,26 +6,26 @@
 
 namespace Valve.VR
 {
-    public class SteamVR_ExternalCamera_LegacyManager
+    public class SteamVRExternalCameraLegacyManager
     {
         public static bool hasCamera { get { return cameraIndex != -1; } }
 
         public static int cameraIndex = -1;
 
-        private static SteamVR_Events.Action newPosesAction = null;
+        private static SteamVREvents.Action newPosesAction = null;
 
         public static void SubscribeToNewPoses()
         {
             if (newPosesAction == null)
             {
-                newPosesAction = SteamVR_Events.NewPosesAction(OnNewPoses);
+                newPosesAction = SteamVREvents.NewPosesAction(OnNewPoses);
             }
 
             newPosesAction.enabled = true;
         }
 
         [Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp]
-        private static void OnNewPoses(TrackedDevicePose_t[] poses)
+        private static void OnNewPoses(TrackedDevicePoseT[] poses)
         {
             if (cameraIndex != -1)
             {

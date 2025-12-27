@@ -7,37 +7,35 @@ using System.Linq;
 namespace Valve.VR
 {
     [System.Serializable]
-    public class SteamVR_Input_BindingFile
+    public class SteamVRInputBindingFile
     {
         public string app_key;
-        public Dictionary<string, SteamVR_Input_BindingFile_ActionList> bindings = new Dictionary<string, SteamVR_Input_BindingFile_ActionList>();
+        public Dictionary<string, SteamVRInputBindingFileActionList> bindings = new();
         public string controller_type;
         public string description;
         public string name;
     }
 
     [System.Serializable]
-    public class SteamVR_Input_BindingFile_ActionList
+    public class SteamVRInputBindingFileActionList
     {
-        public List<SteamVR_Input_BindingFile_Chord> chords = new List<SteamVR_Input_BindingFile_Chord>();
-        public List<SteamVR_Input_BindingFile_Pose> poses = new List<SteamVR_Input_BindingFile_Pose>();
-        public List<SteamVR_Input_BindingFile_Haptic> haptics = new List<SteamVR_Input_BindingFile_Haptic>();
-        public List<SteamVR_Input_BindingFile_Source> sources = new List<SteamVR_Input_BindingFile_Source>();
-        public List<SteamVR_Input_BindingFile_Skeleton> skeleton = new List<SteamVR_Input_BindingFile_Skeleton>();
+        public List<SteamVRInputBindingFileChord> chords = new();
+        public List<SteamVRInputBindingFilePose> poses = new();
+        public List<SteamVRInputBindingFileHaptic> haptics = new();
+        public List<SteamVRInputBindingFileSource> sources = new();
+        public List<SteamVRInputBindingFileSkeleton> skeleton = new();
     }
 
     [System.Serializable]
-    public class SteamVR_Input_BindingFile_Chord
+    public class SteamVRInputBindingFileChord
     {
         public string output;
-        public List<List<string>> inputs = new List<List<string>>();
+        public List<List<string>> inputs = new();
 
         public override bool Equals(object obj)
         {
-            if (obj is SteamVR_Input_BindingFile_Chord)
+            if (obj is SteamVRInputBindingFileChord chord)
             {
-                SteamVR_Input_BindingFile_Chord chord = (SteamVR_Input_BindingFile_Chord)obj;
-
                 if (this.output == chord.output && this.inputs != null && chord.inputs != null)
                 {
                     if (this.inputs.Count == chord.inputs.Count)
@@ -72,16 +70,15 @@ namespace Valve.VR
     }
 
     [System.Serializable]
-    public class SteamVR_Input_BindingFile_Pose
+    public class SteamVRInputBindingFilePose
     {
         public string output;
         public string path;
 
         public override bool Equals(object obj)
         {
-            if (obj is SteamVR_Input_BindingFile_Pose)
+            if (obj is SteamVRInputBindingFilePose pose)
             {
-                SteamVR_Input_BindingFile_Pose pose = (SteamVR_Input_BindingFile_Pose)obj;
                 if (pose.output == this.output && pose.path == this.path)
                 {
                     return true;
@@ -100,16 +97,15 @@ namespace Valve.VR
     }
 
     [System.Serializable]
-    public class SteamVR_Input_BindingFile_Haptic
+    public class SteamVRInputBindingFileHaptic
     {
         public string output;
         public string path;
 
         public override bool Equals(object obj)
         {
-            if (obj is SteamVR_Input_BindingFile_Haptic)
+            if (obj is SteamVRInputBindingFileHaptic pose)
             {
-                SteamVR_Input_BindingFile_Haptic pose = (SteamVR_Input_BindingFile_Haptic)obj;
                 if (pose.output == this.output && pose.path == this.path)
                 {
                     return true;
@@ -128,16 +124,15 @@ namespace Valve.VR
     }
 
     [System.Serializable]
-    public class SteamVR_Input_BindingFile_Skeleton
+    public class SteamVRInputBindingFileSkeleton
     {
         public string output;
         public string path;
 
         public override bool Equals(object obj)
         {
-            if (obj is SteamVR_Input_BindingFile_Skeleton)
+            if (obj is SteamVRInputBindingFileSkeleton pose)
             {
-                SteamVR_Input_BindingFile_Skeleton pose = (SteamVR_Input_BindingFile_Skeleton)obj;
                 if (pose.output == this.output && pose.path == this.path)
                 {
                     return true;
@@ -156,12 +151,12 @@ namespace Valve.VR
     }
 
     [System.Serializable]
-    public class SteamVR_Input_BindingFile_Source
+    public class SteamVRInputBindingFileSource
     {
         public string path;
         public string mode;
-        public SteamVR_Input_BindingFile_Source_Input_StringDictionary parameters = new SteamVR_Input_BindingFile_Source_Input_StringDictionary();
-        public SteamVR_Input_BindingFile_Source_Input inputs = new SteamVR_Input_BindingFile_Source_Input();
+        public SteamVRInputBindingFileSourceInputStringDictionary parameters = new();
+        public SteamVRInputBindingFileSourceInput inputs = new();
 
         protected const string outputKeyName = "output";
 
@@ -183,9 +178,8 @@ namespace Valve.VR
 
         public override bool Equals(object obj)
         {
-            if (obj is SteamVR_Input_BindingFile_Source)
+            if (obj is SteamVRInputBindingFileSource pose)
             {
-                SteamVR_Input_BindingFile_Source pose = (SteamVR_Input_BindingFile_Source)obj;
                 if (pose.mode == this.mode && pose.path == this.path)
                 {
                     bool parametersEqual = false;
@@ -233,14 +227,12 @@ namespace Valve.VR
     }
 
     [System.Serializable]
-    public class SteamVR_Input_BindingFile_Source_Input : Dictionary<string, SteamVR_Input_BindingFile_Source_Input_StringDictionary>
+    public class SteamVRInputBindingFileSourceInput : Dictionary<string, SteamVRInputBindingFileSourceInputStringDictionary>
     {
         public override bool Equals(object obj)
         {
-            if (obj is SteamVR_Input_BindingFile_Source_Input)
+            if (obj is SteamVRInputBindingFileSourceInput sourceInput)
             {
-                SteamVR_Input_BindingFile_Source_Input sourceInput = (SteamVR_Input_BindingFile_Source_Input)obj;
-
                 if (this == sourceInput)
                 {
                     return true;
@@ -276,14 +268,12 @@ namespace Valve.VR
     }
 
     [System.Serializable]
-    public class SteamVR_Input_BindingFile_Source_Input_StringDictionary : Dictionary<string, string>
+    public class SteamVRInputBindingFileSourceInputStringDictionary : Dictionary<string, string>
     {
         public override bool Equals(object obj)
         {
-            if (obj is SteamVR_Input_BindingFile_Source_Input_StringDictionary)
+            if (obj is SteamVRInputBindingFileSourceInputStringDictionary stringDictionary)
             {
-                SteamVR_Input_BindingFile_Source_Input_StringDictionary stringDictionary = (SteamVR_Input_BindingFile_Source_Input_StringDictionary)obj;
-
                 if (this == stringDictionary)
                 {
                     return true;

@@ -14,10 +14,10 @@ namespace Valve.VR
     using UnityEngine;
     
     
-    public class SteamVR_Input_ActionSet_default : Valve.VR.SteamVR_ActionSet
+    public class SteamVR_Input_ActionSet_default : Valve.VR.SteamVRActionSet
     {
         
-        public virtual SteamVR_Action_Vector2 Move
+        public virtual SteamVRActionVector2 Move
         {
             get
             {
@@ -25,7 +25,7 @@ namespace Valve.VR
             }
         }
         
-        public virtual SteamVR_Action_Boolean Grab
+        public virtual SteamVRActionBoolean Grab
         {
             get
             {
@@ -33,7 +33,7 @@ namespace Valve.VR
             }
         }
         
-        public virtual SteamVR_Action_Pose Pose
+        public virtual SteamVRActionPose Pose
         {
             get
             {
@@ -41,7 +41,7 @@ namespace Valve.VR
             }
         }
         
-        public virtual SteamVR_Action_Skeleton SkeletonLeftHand
+        public virtual SteamVRActionSkeleton SkeletonLeftHand
         {
             get
             {
@@ -49,7 +49,7 @@ namespace Valve.VR
             }
         }
         
-        public virtual SteamVR_Action_Skeleton SkeletonRightHand
+        public virtual SteamVRActionSkeleton SkeletonRightHand
         {
             get
             {
@@ -57,7 +57,7 @@ namespace Valve.VR
             }
         }
         
-        public virtual SteamVR_Action_Boolean HeadsetOnHead
+        public virtual SteamVRActionBoolean HeadsetOnHead
         {
             get
             {
@@ -65,7 +65,7 @@ namespace Valve.VR
             }
         }
         
-        public virtual SteamVR_Action_Boolean SnapTurnLeft
+        public virtual SteamVRActionBoolean SnapTurnLeft
         {
             get
             {
@@ -73,7 +73,7 @@ namespace Valve.VR
             }
         }
         
-        public virtual SteamVR_Action_Boolean SnapTurnRight
+        public virtual SteamVRActionBoolean SnapTurnRight
         {
             get
             {
@@ -81,7 +81,7 @@ namespace Valve.VR
             }
         }
         
-        public virtual SteamVR_Action_Boolean UI_Radial
+        public virtual SteamVRActionBoolean UI_Radial
         {
             get
             {
@@ -89,7 +89,7 @@ namespace Valve.VR
             }
         }
         
-        public virtual SteamVR_Action_Boolean Self_Radial
+        public virtual SteamVRActionBoolean Self_Radial
         {
             get
             {
@@ -97,7 +97,7 @@ namespace Valve.VR
             }
         }
         
-        public virtual SteamVR_Action_Boolean Pee
+        public virtual SteamVRActionBoolean Pee
         {
             get
             {
@@ -105,7 +105,7 @@ namespace Valve.VR
             }
         }
         
-        public virtual SteamVR_Action_Boolean Masturbate
+        public virtual SteamVRActionBoolean Masturbate
         {
             get
             {
@@ -113,7 +113,7 @@ namespace Valve.VR
             }
         }
         
-        public virtual SteamVR_Action_Boolean InteractUI
+        public virtual SteamVRActionBoolean InteractUI
         {
             get
             {
@@ -121,7 +121,7 @@ namespace Valve.VR
             }
         }
         
-        public virtual SteamVR_Action_Boolean Inventory
+        public virtual SteamVRActionBoolean Inventory
         {
             get
             {
@@ -129,7 +129,7 @@ namespace Valve.VR
             }
         }
         
-        public virtual SteamVR_Action_Boolean Memories
+        public virtual SteamVRActionBoolean Memories
         {
             get
             {
@@ -137,7 +137,7 @@ namespace Valve.VR
             }
         }
         
-        public virtual SteamVR_Action_Boolean Opportunities
+        public virtual SteamVRActionBoolean Opportunities
         {
             get
             {
@@ -145,7 +145,7 @@ namespace Valve.VR
             }
         }
         
-        public virtual SteamVR_Action_Boolean Flash
+        public virtual SteamVRActionBoolean Flash
         {
             get
             {
@@ -153,7 +153,7 @@ namespace Valve.VR
             }
         }
         
-        public virtual SteamVR_Action_Boolean GameMenu
+        public virtual SteamVRActionBoolean GameMenu
         {
             get
             {
@@ -161,7 +161,7 @@ namespace Valve.VR
             }
         }
         
-        public virtual SteamVR_Action_Boolean Combat
+        public virtual SteamVRActionBoolean Combat
         {
             get
             {
@@ -169,7 +169,7 @@ namespace Valve.VR
             }
         }
         
-        public virtual SteamVR_Action_Boolean Crouch
+        public virtual SteamVRActionBoolean Crouch
         {
             get
             {
@@ -177,7 +177,7 @@ namespace Valve.VR
             }
         }
         
-        public virtual SteamVR_Action_Vibration Haptic
+        public virtual SteamVRActionVibration Haptic
         {
             get
             {

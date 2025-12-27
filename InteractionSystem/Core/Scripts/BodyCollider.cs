@@ -25,7 +25,6 @@ namespace Valve.VR.InteractionSystem
             capsuleCollider = GetComponent<CapsuleCollider>();
         }
 
-
         //-------------------------------------------------
         void FixedUpdate()
         {

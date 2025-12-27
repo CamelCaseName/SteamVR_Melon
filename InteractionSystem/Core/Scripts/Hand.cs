@@ -8,6 +8,7 @@ using Il2CppInterop.Runtime;
 using Il2CppInterop.Runtime.Attributes;
 using Il2CppInterop.Runtime.InteropTypes.Arrays;
 using MelonLoader;
+using SteamVR_Melon.Scripts;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -47,17 +48,17 @@ namespace Valve.VR.InteractionSystem
                                                               AttachmentFlags.SnapOnAttach;
 
         public Hand otherHand;
-        public SteamVR_Input_Sources handType;
+        public SteamVRInputSources handType;
 
-        public SteamVR_Behaviour_Pose trackedObject;
+        public SteamVRBehaviourPose trackedObject;
 
-        public SteamVR_Action_Boolean grabPinchAction = SteamVR_Actions.default_Grab;
+        public SteamVRActionBoolean grabPinchAction = SteamVR_Actions.default_Grab;
 
-        public SteamVR_Action_Boolean grabGripAction = SteamVR_Actions.default_Grab;
+        public SteamVRActionBoolean grabGripAction = SteamVR_Actions.default_Grab;
 
-        public SteamVR_Action_Vibration hapticAction = SteamVR_Actions.default_Haptic;
+        public SteamVRActionVibration hapticAction = SteamVR_Actions.default_Haptic;
 
-        public SteamVR_Action_Boolean uiInteractAction = SteamVR_Actions.default_InteractUI;
+        public SteamVRActionBoolean uiInteractAction = SteamVR_Actions.default_InteractUI;
 
         public bool useHoverSphere = true;
         public Transform hoverSphereTransform;
@@ -70,7 +71,7 @@ namespace Valve.VR.InteractionSystem
         public float controllerHoverRadius = 0.075f;
 
         public bool useFingerJointHover = true;
-        public SteamVR_Skeleton_JointIndexEnum fingerJointHover = SteamVR_Skeleton_JointIndexEnum.indexTip;
+        public SteamVRSkeletonJointIndexEnum fingerJointHover = SteamVRSkeletonJointIndexEnum.indexTip;
         public float fingerJointHoverRadius = 0.025f;
 
         /// <summary>A transform on the hand to center attached objects on</summary>
@@ -96,7 +97,7 @@ namespace Valve.VR.InteractionSystem
         [HideFromIl2Cpp]
         public event Action<int> OnHandInitialized = new(i => { });
         [HideFromIl2Cpp]
-        public event Action<SteamVR_Input_Sources> OnInputSource = new(i => { });
+        public event Action<SteamVRInputSources> OnInputSource = new(i => { });
         [HideFromIl2Cpp]
         public event Action<Interactable> OnParentHandHoverBegin = new(i => { });
         [HideFromIl2Cpp]
@@ -154,7 +155,7 @@ namespace Valve.VR.InteractionSystem
 
         private GameObject applicationLostFocusObject;
 
-        private SteamVR_Events.Action inputFocusAction;
+        private SteamVREvents.Action inputFocusAction;
         private static PhysicsScene handPhysicScene;
 
         public bool isActive
@@ -197,7 +198,7 @@ namespace Valve.VR.InteractionSystem
                             HandDebugLog("HoverEnd " + _hoveringInteractable.gameObject.name);
                         }
 
-                        _hoveringInteractable.OnHandHoverEnd_Internal(this);
+                        _hoveringInteractable.OnHandHoverEndInternal(this);
                         if (hoverLocked)
                         {
                             HoverUnlock(_hoveringInteractable);
@@ -222,7 +223,7 @@ namespace Valve.VR.InteractionSystem
                             HandDebugLog("HoverBegin " + _hoveringInteractable.gameObject.name);
                         }
 
-                        _hoveringInteractable.OnHandHoverBegin_Internal(this, Vector2.zero, false);
+                        _hoveringInteractable.OnHandHoverBeginInternal(this, Vector2.zero, false);
 
                         //Note: The _hoveringInteractable can change after sending the OnHandHoverBegin message so we need to check it again before broadcasting this message
                         if (_hoveringInteractable != null)
@@ -284,7 +285,7 @@ namespace Valve.VR.InteractionSystem
         }
 
         [HideFromIl2Cpp]
-        public SteamVR_Behaviour_Skeleton skeleton
+        public SteamVRBehaviourSkeleton skeleton
         {
             get
             {
@@ -394,10 +395,12 @@ namespace Valve.VR.InteractionSystem
         //-------------------------------------------------
         public void AttachObject(GameObject objectToAttach, GrabTypes grabbedWithType, AttachmentFlags flags = defaultAttachmentFlags, Transform attachmentOffset = null)
         {
-            AttachedObject attachedObject = new AttachedObject();
-            attachedObject.attachmentFlags = flags;
-            attachedObject.attachedOffsetTransform = attachmentOffset;
-            attachedObject.attachTime = Time.time;
+            AttachedObject attachedObject = new()
+            {
+                attachmentFlags = flags,
+                attachedOffsetTransform = attachmentOffset,
+                attachTime = Time.time
+            };
 
             if (flags == 0)
             {
@@ -522,7 +525,7 @@ namespace Valve.VR.InteractionSystem
             {
                 if (attachedObject.interactable != null && attachedObject.interactable.skeletonPoser != null && HasSkeleton())
                 {
-                    SteamVR_Skeleton_PoseSnapshot pose = attachedObject.interactable.skeletonPoser.GetBlendedPose(skeleton);
+                    SteamVRSkeletonPoseSnapshot pose = attachedObject.interactable.skeletonPoser.GetBlendedPose(skeleton);
 
                     //snap the object to the center of the attach point
                     objectToAttach.transform.position = this.transform.TransformPoint(pose.position);
@@ -621,7 +624,7 @@ namespace Valve.VR.InteractionSystem
                 HandDebugLog("AttachObject " + objectToAttach);
             }
 
-            objectToAttach.GetComponent<Interactable>()?.OnAttachedToHand_Internal(this);
+            objectToAttach.GetComponent<Interactable>()?.OnAttachedToHandInternal(this);
         }
 
         public bool ObjectIsAttached(GameObject go)
@@ -658,7 +661,6 @@ namespace Valve.VR.InteractionSystem
                 }
 
                 GameObject prevTopObject = currentAttachedObject;
-
 
                 if (attachedObjects[index].interactable != null)
                 {
@@ -735,7 +737,7 @@ namespace Valve.VR.InteractionSystem
                         attachedObjects[index].attachedObject.SetActive(true);
                     }
 
-                    attachedObjects[index].attachedObject.GetComponent<Interactable>()?.OnDetachedFromHand_Internal(this);
+                    attachedObjects[index].attachedObject.GetComponent<Interactable>()?.OnDetachedFromHandInternal(this);
                 }
 
                 attachedObjects.RemoveAt(index);
@@ -838,7 +840,7 @@ namespace Valve.VR.InteractionSystem
         //-------------------------------------------------
         public virtual void Initialize()
         {
-            inputFocusAction = SteamVR_Events.InputFocusAction(OnInputFocus);
+            inputFocusAction = SteamVREvents.InputFocusAction(OnInputFocus);
 
             if (hoverSphereTransform == null)
             {
@@ -856,7 +858,7 @@ namespace Valve.VR.InteractionSystem
 
             if (trackedObject == null)
             {
-                trackedObject = this.gameObject.GetComponent<SteamVR_Behaviour_Pose>();
+                trackedObject = this.gameObject.GetComponent<SteamVRBehaviourPose>();
 
                 if (trackedObject != null)
                 {
@@ -874,7 +876,7 @@ namespace Valve.VR.InteractionSystem
         }
 
         [HideFromIl2Cpp]
-        protected virtual void OnTransformUpdated(SteamVR_Behaviour_Pose updatedPose, SteamVR_Input_Sources updatedSource)
+        protected virtual void OnTransformUpdated(SteamVRBehaviourPose updatedPose, SteamVRInputSources updatedSource)
         {
             HandFollowUpdate();
         }
@@ -953,19 +955,19 @@ namespace Valve.VR.InteractionSystem
             if (useHoverSphere)
             {
                 //MelonLogger.Msg("checking hover sphere");
-                float scaledHoverRadius = hoverSphereRadius * Mathf.Abs(SteamVR_Utils.GetLossyScale(hoverSphereTransform));
+                float scaledHoverRadius = hoverSphereRadius * Mathf.Abs(SteamVRUtils.GetLossyScale(hoverSphereTransform));
                 CheckHoveringForTransform(hoverSphereTransform.position, scaledHoverRadius, ref closestDistance, ref closestInteractable, Color.green);
             }
 
             if (useControllerHoverComponent && mainRenderModel != null && mainRenderModel.IsControllerVisibile())
             {
-                float scaledHoverRadius = controllerHoverRadius * Mathf.Abs(SteamVR_Utils.GetLossyScale(this.transform));
+                float scaledHoverRadius = controllerHoverRadius * Mathf.Abs(SteamVRUtils.GetLossyScale(this.transform));
                 CheckHoveringForTransform(mainRenderModel.GetControllerPosition(controllerHoverComponent), scaledHoverRadius / 2f, ref closestDistance, ref closestInteractable, Color.blue);
             }
 
             if (useFingerJointHover && mainRenderModel != null && mainRenderModel.IsHandVisibile())
             {
-                float scaledHoverRadius = fingerJointHoverRadius * Mathf.Abs(SteamVR_Utils.GetLossyScale(this.transform));
+                float scaledHoverRadius = fingerJointHoverRadius * Mathf.Abs(SteamVRUtils.GetLossyScale(this.transform));
                 CheckHoveringForTransform(mainRenderModel.GetBonePosition((int)fingerJointHover), scaledHoverRadius / 2f, ref closestDistance, ref closestInteractable, Color.yellow);
             }
 
@@ -1163,7 +1165,7 @@ namespace Valve.VR.InteractionSystem
             inputFocusAction.enabled = true;
 
             // Stagger updates between hands
-            float hoverUpdateBegin = (handType == SteamVR_Input_Sources.LeftHand) ? (0.5f * hoverUpdateInterval) : (0.0f);
+            float hoverUpdateBegin = (handType == SteamVRInputSources.LeftHand) ? (0.5f * hoverUpdateInterval) : (0.0f);
             InvokeRepeating("UpdateHovering", hoverUpdateBegin, hoverUpdateInterval);
             if (spewDebugText)
             {
@@ -1192,7 +1194,7 @@ namespace Valve.VR.InteractionSystem
                 try
                 {
                     //MelonLogger.Msg("Hand Hover Update for " + hoveringInteractable?.name);
-                    hoveringInteractable?.HandHoverUpdate_Internal(this, Vector2.zero, false);
+                    hoveringInteractable?.HandHoverUpdateInternal(this, Vector2.zero, false);
                 }
                 catch
                 {
@@ -1218,7 +1220,7 @@ namespace Valve.VR.InteractionSystem
             {
                 if (currentAttachedObjectInfo.Value.interactable != null)
                 {
-                    SteamVR_Skeleton_PoseSnapshot pose = null;
+                    SteamVRSkeletonPoseSnapshot pose = null;
 
                     if (currentAttachedObjectInfo.Value.interactable.skeletonPoser != null && HasSkeleton())
                     {
@@ -1295,7 +1297,6 @@ namespace Valve.VR.InteractionSystem
                         }
                     }
 
-
                     if (attachedInfo.interactable.attachEaseIn)
                     {
                         float t = Util.RemapNumberClamped(Time.time, attachedInfo.attachTime, attachedInfo.attachTime + attachedInfo.interactable.snapAttachEaseInTime, 0.0f, 1.0f);
@@ -1331,7 +1332,7 @@ namespace Valve.VR.InteractionSystem
             bool success = GetUpdatedAttachedVelocities(attachedObjectInfo, out velocityTarget, out angularTarget);
             if (success)
             {
-                float scale = SteamVR_Utils.GetLossyScale(currentAttachedObjectInfo.Value.handAttachmentPointTransform);
+                float scale = SteamVRUtils.GetLossyScale(currentAttachedObjectInfo.Value.handAttachmentPointTransform);
                 float maxAngularVelocityChange = MaxAngularVelocityChange * scale;
                 float maxVelocityChange = MaxVelocityChange * scale;
 
@@ -1380,7 +1381,6 @@ namespace Valve.VR.InteractionSystem
         {
             bool realNumbers = false;
 
-
             float velocityMagic = VelocityMagic;
             float angularVelocityMagic = AngularVelocityMagic;
 
@@ -1404,7 +1404,6 @@ namespace Valve.VR.InteractionSystem
 
             Quaternion targetItemRotation = TargetItemRotation(attachedObjectInfo);
             Quaternion rotationDelta = targetItemRotation * Quaternion.Inverse(attachedObjectInfo.attachedObject.transform.rotation);
-
 
             float angle;
             Vector3 axis;
@@ -1458,21 +1457,21 @@ namespace Valve.VR.InteractionSystem
             if (useHoverSphere && hoverSphereTransform != null)
             {
                 Gizmos.color = Color.green;
-                float scaledHoverRadius = hoverSphereRadius * Mathf.Abs(SteamVR_Utils.GetLossyScale(hoverSphereTransform));
+                float scaledHoverRadius = hoverSphereRadius * Mathf.Abs(SteamVRUtils.GetLossyScale(hoverSphereTransform));
                 Gizmos.DrawWireSphere(hoverSphereTransform.position, scaledHoverRadius / 2);
             }
 
             if (useControllerHoverComponent && mainRenderModel != null && mainRenderModel.IsControllerVisibile())
             {
                 Gizmos.color = Color.blue;
-                float scaledHoverRadius = controllerHoverRadius * Mathf.Abs(SteamVR_Utils.GetLossyScale(this.transform));
+                float scaledHoverRadius = controllerHoverRadius * Mathf.Abs(SteamVRUtils.GetLossyScale(this.transform));
                 Gizmos.DrawWireSphere(mainRenderModel.GetControllerPosition(controllerHoverComponent), scaledHoverRadius / 2);
             }
 
             if (useFingerJointHover && mainRenderModel != null && mainRenderModel.IsHandVisibile())
             {
                 Gizmos.color = Color.yellow;
-                float scaledHoverRadius = fingerJointHoverRadius * Mathf.Abs(SteamVR_Utils.GetLossyScale(this.transform));
+                float scaledHoverRadius = fingerJointHoverRadius * Mathf.Abs(SteamVRUtils.GetLossyScale(this.transform));
                 Gizmos.DrawWireSphere(mainRenderModel.GetBonePosition((int)fingerJointHover), scaledHoverRadius / 2);
             }
         }
@@ -1845,5 +1844,5 @@ namespace Valve.VR.InteractionSystem
     }
 
     [Serializable]
-    public class HandEvent : SteamVR_Events.Event<Hand> { }
+    public class HandEvent : SteamVREvents.Event<Hand> { }
 }

@@ -10,11 +10,11 @@ using UnityEngine;
 namespace Valve.VR
 {
     [MelonLoader.RegisterTypeInIl2Cpp()]
-    public class SteamVR_Ears : MonoBehaviour
+    public class SteamVREars : MonoBehaviour
     {
-        public SteamVR_Ears(IntPtr value) : base(value) { }
+        public SteamVREars(IntPtr value) : base(value) { }
 
-        public SteamVR_Camera vrcam;
+        public SteamVRCamera vrcam;
 
         bool usingSpeakers;
         Quaternion offset;
@@ -34,18 +34,18 @@ namespace Valve.VR
             if (settings != null)
             {
                 var error = EVRSettingsError.None;
-                if (settings.GetBool(OpenVR.k_pch_SteamVR_Section, OpenVR.k_pch_SteamVR_UsingSpeakers_Bool, ref error))
+                if (settings.GetBool(OpenVR.kPchSteamVRSection, OpenVR.kPchSteamVRUsingSpeakersBool, ref error))
                 {
                     usingSpeakers = true;
 
-                    var yawOffset = settings.GetFloat(OpenVR.k_pch_SteamVR_Section, OpenVR.k_pch_SteamVR_SpeakersForwardYawOffsetDegrees_Float, ref error);
+                    var yawOffset = settings.GetFloat(OpenVR.kPchSteamVRSection, OpenVR.kPchSteamVRSpeakersForwardYawOffsetDegreesFloat, ref error);
                     offset = Quaternion.Euler(0.0f, yawOffset, 0.0f);
                 }
             }
 
             if (usingSpeakers)
             {
-                SteamVR_Events.NewPosesApplied.Listen(OnNewPosesApplied);
+                SteamVREvents.NewPosesApplied.Listen(OnNewPosesApplied);
             }
         }
 
@@ -53,7 +53,7 @@ namespace Valve.VR
         {
             if (usingSpeakers)
             {
-                SteamVR_Events.NewPosesApplied.Remove(OnNewPosesApplied);
+                SteamVREvents.NewPosesApplied.Remove(OnNewPosesApplied);
             }
         }
     }

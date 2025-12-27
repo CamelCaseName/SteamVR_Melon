@@ -24,7 +24,6 @@ namespace Valve.VR.InteractionSystem
             InvokeRepeating("CheckParticleSystem", 0.1f, 0.1f);
         }
 
-
         //-------------------------------------------------
         private void CheckParticleSystem()
         {

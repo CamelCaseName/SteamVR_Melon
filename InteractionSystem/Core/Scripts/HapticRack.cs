@@ -42,20 +42,17 @@ namespace Valve.VR.InteractionSystem
             }
         }
 
-
         //-------------------------------------------------
         private void OnHandHoverBegin(Hand hand)
         {
             this.hand = hand;
         }
 
-
         //-------------------------------------------------
         private void OnHandHoverEnd(Hand hand)
         {
             this.hand = null;
         }
-
 
         //-------------------------------------------------
         void Update()
@@ -67,7 +64,6 @@ namespace Valve.VR.InteractionSystem
                 previousToothIndex = currentToothIndex;
             }
         }
-
 
         //-------------------------------------------------
         private void Pulse()

@@ -19,7 +19,6 @@ namespace Valve.VR.InteractionSystem
 
         private float lastValue;
 
-
         //-------------------------------------------------
         void Awake()
         {
@@ -33,7 +32,6 @@ namespace Valve.VR.InteractionSystem
                 linearMapping = GetComponent<LinearMapping>();
             }
         }
-
 
         //-------------------------------------------------
         void Update()

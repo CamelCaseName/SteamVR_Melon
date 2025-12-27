@@ -17,7 +17,6 @@ namespace Valve.VR.InteractionSystem
         public EnumFlags() { }
     }
 
-
 #if UNITY_EDITOR
 	//-------------------------------------------------------------------------
 	[CustomPropertyDrawer( typeof( EnumFlags ) )]

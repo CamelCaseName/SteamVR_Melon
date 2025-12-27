@@ -4,7 +4,7 @@ using System.ComponentModel;
 
 namespace Valve.VR
 {
-    public enum SteamVR_Input_Sources
+    public enum SteamVRInputSources
     {
         [Description("/unrestricted")]
         Any,

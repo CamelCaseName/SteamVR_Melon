@@ -42,7 +42,7 @@ namespace SteamVR_Melon.Util
                     }
                 }
 
-                PlayerLoopSystem UnityHookSystem = new PlayerLoopSystem()
+                PlayerLoopSystem UnityHookSystem = new()
                 {
                     type = Il2CppType.Of<UnityHook>(),
                     updateDelegate = new Action(OnPreRender),
@@ -81,7 +81,6 @@ namespace SteamVR_Melon.Util
         }
 
         //private static Camera OnPreRenderCam = null;
-
 
         [RegisterTypeInIl2Cpp(true)]
         public class UnityHook : Il2CppSystem.Object

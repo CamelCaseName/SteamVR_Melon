@@ -152,7 +152,7 @@ namespace Valve.VR.InteractionSystem
                     theta -= 2.0f * Mathf.PI;
                 }
 
-                Vector3 angularVelocity = new Vector3(deltaRotation.x, deltaRotation.y, deltaRotation.z);
+                Vector3 angularVelocity = new(deltaRotation.x, deltaRotation.y, deltaRotation.z);
                 if (angularVelocity.sqrMagnitude > 0.0f)
                 {
                     angularVelocity = theta * velocityFactor * angularVelocity.normalized;

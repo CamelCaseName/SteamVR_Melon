@@ -28,7 +28,6 @@ namespace Valve.VR.InteractionSystem
             realTime = Time.realtimeSinceStartup;
         }
 
-
         //-------------------------------------------------
         void Update()
         {
@@ -90,7 +89,6 @@ namespace Valve.VR.InteractionSystem
                 transform.localEulerAngles = startEulerAngles + new Vector3(-offset.y * 360.0f / Screen.height, offset.x * 360.0f / Screen.width, 0.0f);
             }
         }
-
 
         //-------------------------------------------------
         void OnGUI()

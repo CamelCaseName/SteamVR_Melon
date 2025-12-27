@@ -18,14 +18,12 @@ namespace Valve.VR.InteractionSystem
         public bool destroyAfterPlayOnce = true;
         private AudioSource thisAudioSource;
 
-
         //-------------------------------------------------
         void Awake()
         {
             thisAudioSource = GetComponent<AudioSource>();
 
         }
-
 
         //-------------------------------------------------
         void Start()

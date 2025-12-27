@@ -30,13 +30,11 @@ namespace Valve.VR.InteractionSystem
             }
         }
 
-
         //-------------------------------------------------
         void Start()
         {
             player = Player.instance;
         }
-
 
 #if !HIDE_DEBUG_UI
         //-------------------------------------------------

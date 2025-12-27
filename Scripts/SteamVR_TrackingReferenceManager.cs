@@ -5,24 +5,24 @@ using UnityEngine;
 namespace Valve.VR
 {
     [MelonLoader.RegisterTypeInIl2Cpp()]
-    public class SteamVR_TrackingReferenceManager : MonoBehaviour
+    public class SteamVRTrackingReferenceManager : MonoBehaviour
     {
-        public SteamVR_TrackingReferenceManager(IntPtr value) : base(value) { }
+        public SteamVRTrackingReferenceManager(IntPtr value) : base(value) { }
 
-        private Dictionary<uint, TrackingReferenceObject> trackingReferences = new Dictionary<uint, TrackingReferenceObject>();
+        private readonly Dictionary<uint, TrackingReferenceObject> trackingReferences = new();
 
         private void OnEnable()
         {
-            SteamVR_Events.NewPoses.Listen(OnNewPoses);
+            SteamVREvents.NewPoses.Listen(OnNewPoses);
         }
 
         private void OnDisable()
         {
-            SteamVR_Events.NewPoses.Remove(OnNewPoses);
+            SteamVREvents.NewPoses.Remove(OnNewPoses);
         }
 
         [Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp]
-        private void OnNewPoses(TrackedDevicePose_t[] poses)
+        private void OnNewPoses(TrackedDevicePoseT[] poses)
         {
             if (poses == null)
             {
@@ -37,12 +37,14 @@ namespace Valve.VR
 
                     if (deviceClass == ETrackedDeviceClass.TrackingReference)
                     {
-                        TrackingReferenceObject trackingReference = new TrackingReferenceObject();
-                        trackingReference.trackedDeviceClass = deviceClass;
-                        trackingReference.gameObject = new GameObject("Tracking Reference " + deviceIndex.ToString());
+                        TrackingReferenceObject trackingReference = new()
+                        {
+                            trackedDeviceClass = deviceClass,
+                            gameObject = new GameObject("Tracking Reference " + deviceIndex.ToString())
+                        };
                         trackingReference.gameObject.transform.parent = transform;
-                        trackingReference.trackedObject = trackingReference.gameObject.AddComponent<SteamVR_TrackedObject>();
-                        trackingReference.renderModel = trackingReference.gameObject.AddComponent<SteamVR_RenderModel>();
+                        trackingReference.trackedObject = trackingReference.gameObject.AddComponent<SteamVRTrackedObject>();
+                        trackingReference.renderModel = trackingReference.gameObject.AddComponent<SteamVRRenderModel>();
                         trackingReference.renderModel.createComponents = false;
                         trackingReference.renderModel.updateDynamically = false;
 
@@ -62,8 +64,8 @@ namespace Valve.VR
         {
             public ETrackedDeviceClass trackedDeviceClass;
             public GameObject gameObject;
-            public SteamVR_RenderModel renderModel;
-            public SteamVR_TrackedObject trackedObject;
+            public SteamVRRenderModel renderModel;
+            public SteamVRTrackedObject trackedObject;
         }
     }
 }

@@ -40,7 +40,6 @@ namespace Valve.VR.InteractionSystem
         public bool requireReleaseActionToReturn = false;
         public bool showTriggerHint = false;
 
-
         public Hand.AttachmentFlags attachmentFlags = Hand.defaultAttachmentFlags;
 
         public bool takeBackItem = false; // if a hand enters this trigger and has the item this spawner dispenses at the top of the stack, remove it from the stack
@@ -54,7 +53,6 @@ namespace Valve.VR.InteractionSystem
         public UnityEvent dropEvent;
 
         public bool justPickedUpItem = false;
-
 
         //-------------------------------------------------
         private void CreatePreviewObject()
@@ -94,13 +92,11 @@ namespace Valve.VR.InteractionSystem
             }
         }
 
-
         //-------------------------------------------------
         void Start()
         {
             VerifyItemPackage();
         }
-
 
         //-------------------------------------------------
         private void VerifyItemPackage()
@@ -116,14 +112,12 @@ namespace Valve.VR.InteractionSystem
             }
         }
 
-
         //-------------------------------------------------
         private void ItemPackageNotValid()
         {
             MelonLoader.MelonLogger.Error("[HPVR Interaction] ItemPackage assigned to " + gameObject.name + " is not valid. Destroying this game object.", this);
             Destroy(gameObject);
         }
-
 
         //-------------------------------------------------
         private void ClearPreview()
@@ -141,7 +135,6 @@ namespace Valve.VR.InteractionSystem
             }
         }
 
-
         //-------------------------------------------------
         void Update()
         {
@@ -153,7 +146,6 @@ namespace Valve.VR.InteractionSystem
                 CreatePreviewObject();
             }
         }
-
 
         //-------------------------------------------------
         private void OnHandHoverBegin(Hand hand)
@@ -179,7 +171,6 @@ namespace Valve.VR.InteractionSystem
             }
         }
 
-
         //-------------------------------------------------
         private void TakeBackItem(Hand hand)
         {
@@ -190,7 +181,6 @@ namespace Valve.VR.InteractionSystem
                 RemoveMatchingItemsFromHandStack(itemPackage, hand.otherHand);
             }
         }
-
 
         //-------------------------------------------------
         private ItemPackage GetAttachedItemPackage(Hand hand)
@@ -212,7 +202,6 @@ namespace Valve.VR.InteractionSystem
 
             return attachedItemPackage;
         }
-
 
         //-------------------------------------------------
         private void HandHoverUpdate(Hand hand)
@@ -241,7 +230,6 @@ namespace Valve.VR.InteractionSystem
             }
         }
 
-
         //-------------------------------------------------
         private void OnHandHoverEnd(Hand hand)
         {
@@ -252,7 +240,6 @@ namespace Valve.VR.InteractionSystem
 
             justPickedUpItem = false;
         }
-
 
         //-------------------------------------------------
         private void RemoveMatchingItemsFromHandStack(ItemPackage package, Hand hand)
@@ -277,7 +264,6 @@ namespace Valve.VR.InteractionSystem
             }
         }
 
-
         //-------------------------------------------------
         private void RemoveMatchingItemTypesFromHand(ItemPackage.ItemPackageType packageType, Hand hand)
         {
@@ -294,7 +280,6 @@ namespace Valve.VR.InteractionSystem
                 }
             }
         }
-
 
         //-------------------------------------------------
         private void SpawnAndAttachObject(Hand hand, GrabTypes grabType)

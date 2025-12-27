@@ -21,7 +21,7 @@ namespace Valve.VR.InteractionSystem.Sample
 
         private float attachTime;
 
-        private Hand.AttachmentFlags attachmentFlags = Hand.defaultAttachmentFlags & (~Hand.AttachmentFlags.SnapOnAttach) & (~Hand.AttachmentFlags.DetachOthers) & (~Hand.AttachmentFlags.VelocityMovement);
+        private readonly Hand.AttachmentFlags attachmentFlags = Hand.defaultAttachmentFlags & (~Hand.AttachmentFlags.SnapOnAttach) & (~Hand.AttachmentFlags.DetachOthers) & (~Hand.AttachmentFlags.VelocityMovement);
 
         private Interactable interactable;
 
@@ -38,7 +38,6 @@ namespace Valve.VR.InteractionSystem.Sample
             interactable = this.GetComponent<Interactable>();
         }
 
-
         //-------------------------------------------------
         // Called when a Hand starts hovering over this object
         //-------------------------------------------------
@@ -47,7 +46,6 @@ namespace Valve.VR.InteractionSystem.Sample
             generalText.text = "Hovering hand: " + hand.name;
         }
 
-
         //-------------------------------------------------
         // Called when a Hand stops hovering over this object
         //-------------------------------------------------
@@ -55,7 +53,6 @@ namespace Valve.VR.InteractionSystem.Sample
         {
             generalText.text = "No Hand Hovering";
         }
-
 
         //-------------------------------------------------
         // Called every Update() while a Hand is hovering over this object
@@ -92,7 +89,6 @@ namespace Valve.VR.InteractionSystem.Sample
             }
         }
 
-
         //-------------------------------------------------
         // Called when this GameObject becomes attached to the hand
         //-------------------------------------------------
@@ -102,8 +98,6 @@ namespace Valve.VR.InteractionSystem.Sample
             attachTime = Time.time;
         }
 
-
-
         //-------------------------------------------------
         // Called when this GameObject is detached from the hand
         //-------------------------------------------------
@@ -111,7 +105,6 @@ namespace Valve.VR.InteractionSystem.Sample
         {
             generalText.text = string.Format("Detached: {0}", hand.name);
         }
-
 
         //-------------------------------------------------
         // Called every Update() while this GameObject is attached to the hand
@@ -131,14 +124,12 @@ namespace Valve.VR.InteractionSystem.Sample
             }
         }
 
-
         //-------------------------------------------------
         // Called when this attached GameObject becomes the primary attached object
         //-------------------------------------------------
         private void OnHandFocusAcquired(Hand hand)
         {
         }
-
 
         //-------------------------------------------------
         // Called when another attached GameObject becomes the primary attached object

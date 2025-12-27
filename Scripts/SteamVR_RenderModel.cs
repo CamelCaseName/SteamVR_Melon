@@ -13,11 +13,11 @@ using UnityEngine;
 namespace Valve.VR
 {
     [RegisterTypeInIl2Cpp()]
-    public class SteamVR_RenderModel : MonoBehaviour
+    public class SteamVRRenderModel : MonoBehaviour
     {
-        public SteamVR_RenderModel(System.IntPtr value) : base(value) { }
-        public SteamVR_TrackedObject.EIndex index = SteamVR_TrackedObject.EIndex.None;
-        protected SteamVR_Input_Sources inputSource;
+        public SteamVRRenderModel(System.IntPtr value) : base(value) { }
+        public SteamVRTrackedObject.EIndex index = SteamVRTrackedObject.EIndex.None;
+        protected SteamVRInputSources inputSource;
 
         public const string modelOverrideWarning = "Model override is really only meant to be used in " +
             "the scene view for lining things up; using it at runtime is discouraged.  Use tracked device " +
@@ -35,19 +35,19 @@ namespace Valve.VR
         public bool updateDynamically = true;
 
         // Additional controller settings for showing scrollwheel, etc.
-        public RenderModel_ControllerMode_State_t controllerModeState;
+        public RenderModelControllerModeStateT controllerModeState;
 
         // Name of the sub-object which represents the "local" coordinate space for each component.
-        public const string k_localTransformName = "attach";
+        public const string kLocalTransformName = "attach";
 
         // Cached name of this render model for updating component transforms at runtime.
         public string renderModelName { get; private set; }
 
         public bool initializedAttachPoints { get; set; }
 
-        private Dictionary<string, Transform> componentAttachPoints = new Dictionary<string, Transform>();
+        private readonly Dictionary<string, Transform> componentAttachPoints = new();
 
-        private List<MeshRenderer> meshRenderers = new List<MeshRenderer>();
+        private readonly List<MeshRenderer> meshRenderers = new();
 
         // If someone knows how to keep these from getting cleaned up every time
         // you exit play mode, let me know.  I've tried marking the RenderModel
@@ -69,8 +69,8 @@ namespace Valve.VR
             public Material material { get; private set; }
         }
 
-        public static Hashtable models = new Hashtable();
-        public static Hashtable materials = new Hashtable();
+        public static Hashtable models = new();
+        public static Hashtable materials = new();
 
         // Helper class to load render models interface on demand and clean up when done.
         public sealed class RenderModelInterfaceHolder : System.IDisposable
@@ -91,7 +91,7 @@ namespace Valve.VR
                         _instance = OpenVR.RenderModels;
                         if (_instance == null)
                         {
-                            MelonLogger.Error("[HPVR] Failed to load IVRRenderModels interface version " + OpenVR.IVRRenderModels_Version);
+                            MelonLogger.Error("[HPVR] Failed to load IVRRenderModels interface version " + OpenVR.IVRRenderModelsVersion);
                             failedLoadInterface = true;
                         }
                     }
@@ -108,7 +108,7 @@ namespace Valve.VR
         }
 
         [Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp]
-        private void OnModelSkinSettingsHaveChanged(VREvent_t vrEvent)
+        private void OnModelSkinSettingsHaveChanged(VREventT vrEvent)
         {
             if (!string.IsNullOrEmpty(renderModelName))
             {
@@ -151,13 +151,13 @@ namespace Valve.VR
         public void UpdateModel()
         {
             var system = OpenVR.System;
-            if (system == null || index == SteamVR_TrackedObject.EIndex.None)
+            if (system == null || index == SteamVRTrackedObject.EIndex.None)
             {
                 return;
             }
 
-            var error = ETrackedPropertyError.TrackedProp_Success;
-            var capacity = system.GetStringTrackedDeviceProperty((uint)index, ETrackedDeviceProperty.Prop_RenderModelName_String, null, 0, ref error);
+            var error = ETrackedPropertyError.TrackedPropSuccess;
+            var capacity = system.GetStringTrackedDeviceProperty((uint)index, ETrackedDeviceProperty.PropRenderModelNameString, null, 0, ref error);
             if (capacity <= 1)
             {
                 MelonLogger.Error("[HPVR] Failed to get render model name for tracked object " + index);
@@ -165,7 +165,7 @@ namespace Valve.VR
             }
 
             var buffer = new System.Text.StringBuilder((int)capacity);
-            system.GetStringTrackedDeviceProperty((uint)index, ETrackedDeviceProperty.Prop_RenderModelName_String, buffer, capacity, ref error);
+            system.GetStringTrackedDeviceProperty((uint)index, ETrackedDeviceProperty.PropRenderModelNameString, buffer, capacity, ref error);
 
             var s = buffer.ToString();
             if (renderModelName != s)
@@ -185,7 +185,7 @@ namespace Valve.VR
             }
 
             // Preload all render models before asking for the data to create meshes.
-            using (RenderModelInterfaceHolder holder = new RenderModelInterfaceHolder())
+            using (RenderModelInterfaceHolder holder = new())
             {
                 CVRRenderModels renderModels = holder.instance;
                 if (renderModels == null)
@@ -232,8 +232,7 @@ namespace Valve.VR
                         var s = nameStringBuilder.ToString();
 
                         // Only need to preload if not already cached.
-                        RenderModel model = models[s] as RenderModel;
-                        if (model == null || model.mesh == null)
+                        if (models[s] is not RenderModel model || model.mesh == null)
                         {
                             renderModelNames[componentIndex] = s;
                         }
@@ -242,8 +241,7 @@ namespace Valve.VR
                 else
                 {
                     // Only need to preload if not already cached.
-                    RenderModel model = models[newRenderModelName] as RenderModel;
-                    if (model == null || model.mesh == null)
+                    if (models[newRenderModelName] is not RenderModel model || model.mesh == null)
                     {
                         renderModelNames = new string[] { newRenderModelName };
                     }
@@ -266,7 +264,7 @@ namespace Valve.VR
 
                         var pRenderModel = System.IntPtr.Zero;
 
-                        var error = renderModels.LoadRenderModel_Async(renderModelNames[renderModelNameIndex], ref pRenderModel);
+                        var error = renderModels.LoadRenderModelAsync(renderModelNames[renderModelNameIndex], ref pRenderModel);
                         //MelonLoader.MelonLogger.Msg("[HPVR] renderModels.LoadRenderModel_Async(" + renderModelNames[renderModelNameIndex] + ": " + error.ToString());
 
                         if (error == EVRRenderModelError.Loading)
@@ -284,7 +282,7 @@ namespace Valve.VR
                             {
                                 var pDiffuseTexture = System.IntPtr.Zero;
 
-                                error = renderModels.LoadTexture_Async(renderModel.diffuseTextureId, ref pDiffuseTexture);
+                                error = renderModels.LoadTextureAsync(renderModel.diffuseTextureId, ref pDiffuseTexture);
                                 //MelonLoader.MelonLogger.Msg("[HPVR] renderModels.LoadRenderModel_Async(" + renderModelNames[renderModelNameIndex] + ": " + error.ToString());
 
                                 if (error == EVRRenderModelError.Loading)
@@ -308,7 +306,7 @@ namespace Valve.VR
 
             bool success = SetModel(newRenderModelName);
             renderModelName = newRenderModelName;
-            SteamVR_Events.RenderModelLoaded.Send(this, success);
+            SteamVREvents.RenderModelLoaded.Send(this, success);
         }
 
         private bool SetModel(string renderModelName)
@@ -374,7 +372,7 @@ namespace Valve.VR
             EVRRenderModelError error;
             while (true)
             {
-                error = renderModels.LoadRenderModel_Async(renderModelName, ref pRenderModel);
+                error = renderModels.LoadRenderModelAsync(renderModelName, ref pRenderModel);
                 if (error != EVRRenderModelError.Loading)
                 {
                     break;
@@ -395,11 +393,11 @@ namespace Valve.VR
             var normals = new Vector3[renderModel.unVertexCount];
             var uv = new Vector2[renderModel.unVertexCount];
 
-            var type = typeof(RenderModel_Vertex_t);
+            var type = typeof(RenderModelVertexT);
             for (int iVert = 0; iVert < renderModel.unVertexCount; iVert++)
             {
                 var ptr = new System.IntPtr(renderModel.rVertexData.ToInt64() + iVert * Marshal.SizeOf(type));
-                var vert = (RenderModel_Vertex_t)Marshal.PtrToStructure(ptr, type);
+                var vert = (RenderModelVertexT)Marshal.PtrToStructure(ptr, type);
 
                 vertices[iVert] = new Vector3(vert.vPosition.v0, vert.vPosition.v1, -vert.vPosition.v2);
                 normals[iVert] = new Vector3(vert.vNormal.v0, vert.vNormal.v1, -vert.vNormal.v2);
@@ -418,11 +416,13 @@ namespace Valve.VR
                 triangles[iTri * 3 + 2] = (int)indices[iTri * 3 + 0];
             }
 
-            var mesh = new Mesh();
-            mesh.vertices = vertices;
-            mesh.normals = normals;
-            mesh.uv = uv;
-            mesh.triangles = triangles;
+            var mesh = new Mesh
+            {
+                vertices = vertices,
+                normals = normals,
+                uv = uv,
+                triangles = triangles
+            };
 
 #if UNITY_5_4 || UNITY_5_3 || UNITY_5_2 || UNITY_5_1 || UNITY_5_0
             mesh.Optimize();
@@ -437,7 +437,7 @@ namespace Valve.VR
 
                 while (true)
                 {
-                    error = renderModels.LoadTexture_Async(renderModel.diffuseTextureId, ref pDiffuseTexture);
+                    error = renderModels.LoadTextureAsync(renderModel.diffuseTextureId, ref pDiffuseTexture);
                     if (error != EVRRenderModelError.Loading)
                     {
                         break;
@@ -456,7 +456,7 @@ namespace Valve.VR
                         System.IntPtr texturePointer = texture.GetNativeTexturePtr();
                         while (true)
                         {
-                            error = renderModels.LoadIntoTextureD3D11_Async(renderModel.diffuseTextureId, texturePointer);
+                            error = renderModels.LoadIntoTextureD3D11Async(renderModel.diffuseTextureId, texturePointer);
                             if (error != EVRRenderModelError.Loading)
                             {
                                 break;
@@ -619,7 +619,7 @@ namespace Valve.VR
                     continue;
                 }
 
-                System.Text.StringBuilder componentNameStringBuilder = new System.Text.StringBuilder((int)capacity);
+                System.Text.StringBuilder componentNameStringBuilder = new((int)capacity);
                 if (renderModels.GetComponentName(renderModelName, (uint)i, componentNameStringBuilder, capacity) == 0)
                 {
                     continue;
@@ -632,7 +632,7 @@ namespace Valve.VR
                 if (t != null)
                 {
                     t.gameObject.SetActive(true);
-                    componentAttachPoints[componentName] = FindTransformByName(k_localTransformName, t);
+                    componentAttachPoints[componentName] = FindTransformByName(kLocalTransformName, t);
                 }
                 else
                 {
@@ -641,7 +641,7 @@ namespace Valve.VR
                     t.gameObject.layer = gameObject.layer;
 
                     // Also create a child 'attach' object for attaching things.
-                    var attach = new GameObject(k_localTransformName).transform;
+                    var attach = new GameObject(kLocalTransformName).transform;
                     attach.parent = t;
                     attach.localPosition = Vector3.zero;
                     attach.localRotation = Quaternion.identity;
@@ -671,8 +671,7 @@ namespace Valve.VR
                 string componentRenderModelName = componentRenderModelNameStringBuilder.ToString();
 
                 // Check the cache or load into memory.
-                var model = models[componentRenderModelName] as RenderModel;
-                if (model == null || model.mesh == null)
+                if (models[componentRenderModelName] is not RenderModel model || model.mesh == null)
                 {
                     if (verbose)
                     {
@@ -697,15 +696,15 @@ namespace Valve.VR
             return true;
         }
 
-        SteamVR_Events.Action deviceConnectedAction;
-        SteamVR_Events.Action hideRenderModelsAction;
-        SteamVR_Events.Action modelSkinSettingsHaveChangedAction;
+        SteamVREvents.Action deviceConnectedAction;
+        SteamVREvents.Action hideRenderModelsAction;
+        SteamVREvents.Action modelSkinSettingsHaveChangedAction;
 
-        SteamVR_RenderModel()
+        SteamVRRenderModel()
         {
-            deviceConnectedAction = SteamVR_Events.DeviceConnectedAction(new System.Action<int, bool>(OnDeviceConnected));
-            hideRenderModelsAction = SteamVR_Events.HideRenderModelsAction(new System.Action<bool>(OnHideRenderModels));
-            modelSkinSettingsHaveChangedAction = SteamVR_Events.SystemAction(EVREventType.VREvent_ModelSkinSettingsHaveChanged, new System.Action<VREvent_t>(OnModelSkinSettingsHaveChanged));
+            deviceConnectedAction = SteamVREvents.DeviceConnectedAction(new System.Action<int, bool>(OnDeviceConnected));
+            hideRenderModelsAction = SteamVREvents.HideRenderModelsAction(new System.Action<bool>(OnHideRenderModels));
+            modelSkinSettingsHaveChangedAction = SteamVREvents.SystemAction(EVREventType.VREventModelSkinSettingsHaveChanged, new System.Action<VREventT>(OnModelSkinSettingsHaveChanged));
         }
 
         public void Initialize()
@@ -723,20 +722,20 @@ namespace Valve.VR
                 UpdateModel();
             }
 
-            var t = transform.GetComponent<SteamVR_Behaviour_Pose>();
+            var t = transform.GetComponent<SteamVRBehaviourPose>();
             if (t is not null)
             {
                 t.OnDeviceIndex += SetDeviceIndex;
             }
-            t = transform.GetComponent<SteamVR_Behaviour_Pose>();
+            t = transform.GetComponent<SteamVRBehaviourPose>();
             if (t is not null)
             {
                 t.OnInputSource += SetInputSource;
             }
 
-            deviceConnectedAction = SteamVR_Events.DeviceConnectedAction(new System.Action<int, bool>(OnDeviceConnected));
-            hideRenderModelsAction = SteamVR_Events.HideRenderModelsAction(new System.Action<bool>(OnHideRenderModels));
-            modelSkinSettingsHaveChangedAction = SteamVR_Events.SystemAction(EVREventType.VREvent_ModelSkinSettingsHaveChanged, new System.Action<VREvent_t>(OnModelSkinSettingsHaveChanged));
+            deviceConnectedAction = SteamVREvents.DeviceConnectedAction(new System.Action<int, bool>(OnDeviceConnected));
+            hideRenderModelsAction = SteamVREvents.HideRenderModelsAction(new System.Action<bool>(OnHideRenderModels));
+            modelSkinSettingsHaveChangedAction = SteamVREvents.SystemAction(EVREventType.VREventModelSkinSettingsHaveChanged, new System.Action<VREventT>(OnModelSkinSettingsHaveChanged));
 
             deviceConnectedAction.enabled = true;
             hideRenderModelsAction.enabled = true;
@@ -795,8 +794,8 @@ namespace Valve.VR
                     nameCache.Add(child.GetInstanceID(), componentName);
                 }
 
-                var componentState = new RenderModel_ComponentState_t();
-                if (!renderModels.GetComponentStateForDevicePath(renderModelName, componentName, SteamVR_Input_Source.GetHandle(inputSource), ref controllerModeState, ref componentState))
+                var componentState = new RenderModelComponentStateT();
+                if (!renderModels.GetComponentStateForDevicePath(renderModelName, componentName, SteamVRInputSource.GetHandle(inputSource), ref controllerModeState, ref componentState))
                 {
                     continue;
                 }
@@ -816,7 +815,7 @@ namespace Valve.VR
                         nameCache.Add(childInstanceID, componentName);
                     }
 
-                    if (childName == k_localTransformName)
+                    if (childName == kLocalTransformName)
                     {
                         attach = childChild;
                     }
@@ -840,7 +839,7 @@ namespace Valve.VR
 
         public void SetDeviceIndex(int newIndex)
         {
-            index = (SteamVR_TrackedObject.EIndex)newIndex;
+            index = (SteamVRTrackedObject.EIndex)newIndex;
 
             modelOverride = "";
 
@@ -851,7 +850,7 @@ namespace Valve.VR
         }
 
         [Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp]
-        public void SetInputSource(SteamVR_Input_Sources newInputSource)
+        public void SetInputSource(SteamVRInputSources newInputSource)
         {
             inputSource = newInputSource;
         }
@@ -870,19 +869,19 @@ namespace Valve.VR
         /// </summary>
         /// <param name="pRenderModel">native pointer to the RenderModel_t</param>
         /// <returns></returns>
-        private RenderModel_t MarshalRenderModel(System.IntPtr pRenderModel)
+        private RenderModelT MarshalRenderModel(System.IntPtr pRenderModel)
         {
             if ((System.Environment.OSVersion.Platform == System.PlatformID.MacOSX) ||
                 (System.Environment.OSVersion.Platform == System.PlatformID.Unix))
             {
-                var packedModel = (RenderModel_t_Packed)Marshal.PtrToStructure(pRenderModel, typeof(RenderModel_t_Packed));
-                RenderModel_t model = new RenderModel_t();
+                var packedModel = (RenderModelTPacked)Marshal.PtrToStructure(pRenderModel, typeof(RenderModelTPacked));
+                RenderModelT model = new();
                 packedModel.Unpack(ref model);
                 return model;
             }
             else
             {
-                return (RenderModel_t)Marshal.PtrToStructure(pRenderModel, typeof(RenderModel_t));
+                return (RenderModelT)Marshal.PtrToStructure(pRenderModel, typeof(RenderModelT));
             }
         }
 
@@ -892,19 +891,19 @@ namespace Valve.VR
         /// </summary>
         /// <param name="pRenderModel">native pointer to the RenderModel_TextureMap_t</param>
         /// <returns></returns>
-        private RenderModel_TextureMap_t MarshalRenderModel_TextureMap(System.IntPtr pRenderModel)
+        private RenderModelTextureMapT MarshalRenderModel_TextureMap(System.IntPtr pRenderModel)
         {
             if ((System.Environment.OSVersion.Platform == System.PlatformID.MacOSX) ||
                 (System.Environment.OSVersion.Platform == System.PlatformID.Unix))
             {
-                var packedModel = (RenderModel_TextureMap_t_Packed)Marshal.PtrToStructure(pRenderModel, typeof(RenderModel_TextureMap_t_Packed));
-                RenderModel_TextureMap_t model = new RenderModel_TextureMap_t();
+                var packedModel = (RenderModelTextureMapTPacked)Marshal.PtrToStructure(pRenderModel, typeof(RenderModelTextureMapTPacked));
+                RenderModelTextureMapT model = new();
                 packedModel.Unpack(ref model);
                 return model;
             }
             else
             {
-                return (RenderModel_TextureMap_t)Marshal.PtrToStructure(pRenderModel, typeof(RenderModel_TextureMap_t));
+                return (RenderModelTextureMapT)Marshal.PtrToStructure(pRenderModel, typeof(RenderModelTextureMapT));
             }
         }
     }

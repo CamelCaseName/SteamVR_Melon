@@ -21,7 +21,6 @@ namespace Valve.VR.InteractionSystem
         private Renderer sourceRenderer;
         private Renderer destRenderer;
 
-
         //-------------------------------------------------
         void Awake()
         {
@@ -104,14 +103,12 @@ namespace Valve.VR.InteractionSystem
             seeThru.gameObject.SetActive(false);
         }
 
-
         //-------------------------------------------------
         void OnEnable()
         {
             interactable.OnAttachedToHand += AttachedToHand;
             interactable.OnDetachedFromHand += DetachedFromHand;
         }
-
 
         //-------------------------------------------------
         void OnDisable()
@@ -120,20 +117,17 @@ namespace Valve.VR.InteractionSystem
             interactable.OnDetachedFromHand -= DetachedFromHand;
         }
 
-
         //-------------------------------------------------
         private void AttachedToHand(Hand hand)
         {
             seeThru.SetActive(true);
         }
 
-
         //-------------------------------------------------
         private void DetachedFromHand(Hand hand)
         {
             seeThru.SetActive(false);
         }
-
 
         //-------------------------------------------------
         void Update()

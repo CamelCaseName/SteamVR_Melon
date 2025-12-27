@@ -5,20 +5,21 @@
 //=============================================================================
 
 using MelonLoader;
+using SteamVR_Melon.Scripts;
 using System;
 using UnityEngine;
 
 namespace Valve.VR
 {
     [RegisterTypeInIl2Cpp()]
-    public class SteamVR_TrackedObject : MonoBehaviour
+    public class SteamVRTrackedObject : MonoBehaviour
     {
-        public SteamVR_TrackedObject(IntPtr value) : base(value) { }
+        public SteamVRTrackedObject(IntPtr value) : base(value) { }
 
         public enum EIndex
         {
             None = -1,
-            Hmd = (int)OpenVR.k_unTrackedDeviceIndex_Hmd,
+            Hmd = (int)OpenVR.kUnTrackedDeviceIndexHmd,
             Device1,
             Device2,
             Device3,
@@ -44,7 +45,7 @@ namespace Valve.VR
         public bool isValid { get; private set; }
 
         [Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp]
-        private void OnNewPoses(TrackedDevicePose_t[] poses)
+        private void OnNewPoses(TrackedDevicePoseT[] poses)
         {
             if (index == EIndex.None)
             {
@@ -71,7 +72,7 @@ namespace Valve.VR
 
             isValid = true;
 
-            var pose = new SteamVR_Utils.RigidTransform(poses[i].mDeviceToAbsoluteTracking);
+            var pose = new SteamVRUtils.RigidTransform(poses[i].mDeviceToAbsoluteTracking);
 
             if (origin != null)
             {
@@ -85,13 +86,13 @@ namespace Valve.VR
             }
         }
 
-        SteamVR_Events.Action newPosesAction;
+        readonly SteamVREvents.Action newPosesAction;
 
-        SteamVR_TrackedObject()
+        SteamVRTrackedObject()
         {
-            newPosesAction = SteamVR_Events.NewPosesAction(OnNewPoses);
+            newPosesAction = SteamVREvents.NewPosesAction(OnNewPoses);
             MelonLogger.Msg("[HPVR] newposes action is null: " + (newPosesAction == null));
-            var t = transform.GetComponent<SteamVR_Behaviour_Pose>();
+            var t = transform.GetComponent<SteamVRBehaviourPose>();
             if (t is not null)
             {
                 t.OnDeviceIndex += SetDeviceIndex;
@@ -105,7 +106,7 @@ namespace Valve.VR
 
         void OnEnable()
         {
-            var render = SteamVR_Render.instance;
+            var render = SteamVRRender.instance;
             if (render == null)
             {
                 enabled = false;

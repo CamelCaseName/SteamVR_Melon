@@ -21,7 +21,6 @@ namespace Valve.VR.InteractionSystem
         private float animLength;
         private float lastValue;
 
-
         //-------------------------------------------------
         void Awake()
         {
@@ -47,7 +46,6 @@ namespace Valve.VR.InteractionSystem
             animState.speed = 0;
             animLength = animState.length;
         }
-
 
         //-------------------------------------------------
         void Update()

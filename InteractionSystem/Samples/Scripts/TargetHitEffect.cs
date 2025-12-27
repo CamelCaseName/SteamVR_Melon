@@ -25,7 +25,7 @@ namespace Valve.VR.InteractionSystem.Sample
                 RaycastHit hit;
 
                 float backTrackLength = 1f;
-                Ray ray = new Ray(contact.point - (-contact.normal * backTrackLength), -contact.normal);
+                Ray ray = new(contact.point - (-contact.normal * backTrackLength), -contact.normal);
                 if (collision.collider.Raycast(ray, out hit, 2))
                 {
                     if (colorSpawnedObject)

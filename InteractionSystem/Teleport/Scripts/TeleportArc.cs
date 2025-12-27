@@ -28,7 +28,6 @@ namespace Valve.VR.InteractionSystem
 
         public Material material;
 
-
         public int traceLayerMask = 0;
 
         //Private data
@@ -44,13 +43,11 @@ namespace Valve.VR.InteractionSystem
         private bool arcInvalid = false;
         private float scale = 1;
 
-
         //-------------------------------------------------
         void Start()
         {
             arcTimeOffset = Time.time;
         }
-
 
         //-------------------------------------------------
         void Update()
@@ -65,8 +62,6 @@ namespace Valve.VR.InteractionSystem
             }
         }
 
-
-
         //-------------------------------------------------
         private void CreateLineRendererObjects()
         {
@@ -76,7 +71,7 @@ namespace Valve.VR.InteractionSystem
                 Destroy(arcObjectsTransfrom.gameObject);
             }
 
-            GameObject arcObjectsParent = new GameObject("ArcObjects");
+            GameObject arcObjectsParent = new("ArcObjects");
             arcObjectsTransfrom = arcObjectsParent.transform;
             arcObjectsTransfrom.SetParent(this.transform);
 
@@ -84,7 +79,7 @@ namespace Valve.VR.InteractionSystem
             lineRenderers = new LineRenderer[segmentCount];
             for (int i = 0; i < segmentCount; ++i)
             {
-                GameObject newObject = new GameObject("LineRenderer_" + i);
+                GameObject newObject = new("LineRenderer_" + i);
                 newObject.transform.SetParent(arcObjectsTransfrom);
 
                 lineRenderers[i] = newObject.AddComponent<LineRenderer>();
@@ -104,7 +99,6 @@ namespace Valve.VR.InteractionSystem
             }
         }
 
-
         //-------------------------------------------------
         public void SetArcData(Vector3 position, Vector3 velocity, bool gravity, bool pointerAtBadAngle)
         {
@@ -119,7 +113,6 @@ namespace Valve.VR.InteractionSystem
             arcInvalid = pointerAtBadAngle;
         }
 
-
         //-------------------------------------------------
         public void Show()
         {
@@ -129,7 +122,6 @@ namespace Valve.VR.InteractionSystem
                 CreateLineRendererObjects();
             }
         }
-
 
         //-------------------------------------------------
         public void Hide()
@@ -141,7 +133,6 @@ namespace Valve.VR.InteractionSystem
             }
             showArc = false;
         }
-
 
         //-------------------------------------------------
         // Draws each segment of the arc individually
@@ -231,7 +222,6 @@ namespace Valve.VR.InteractionSystem
             return arcHitTime != float.MaxValue;
         }
 
-
         //-------------------------------------------------
         private void DrawArcSegment(int index, float startTime, float endTime)
         {
@@ -239,7 +229,6 @@ namespace Valve.VR.InteractionSystem
             lineRenderers[index].SetPosition(0, GetArcPositionAtTime(startTime));
             lineRenderers[index].SetPosition(1, GetArcPositionAtTime(endTime));
         }
-
 
         //-------------------------------------------------
         public void SetColor(Color color)
@@ -254,7 +243,6 @@ namespace Valve.VR.InteractionSystem
 #endif
             }
         }
-
 
         //-------------------------------------------------
         private float FindProjectileCollision(out RaycastHit hitInfo)
@@ -288,7 +276,6 @@ namespace Valve.VR.InteractionSystem
             return float.MaxValue;
         }
 
-
         //-------------------------------------------------
         public Vector3 GetArcPositionAtTime(float time)
         {
@@ -297,7 +284,6 @@ namespace Valve.VR.InteractionSystem
             Vector3 arcPos = startPos + ((projectileVelocity * time) + (0.5f * time * time) * gravity) * scale;
             return arcPos;
         }
-
 
         //-------------------------------------------------
         private void HideLineSegments(int startSegment, int endSegment)

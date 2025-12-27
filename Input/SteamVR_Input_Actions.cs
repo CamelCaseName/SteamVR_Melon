@@ -17,219 +17,219 @@ namespace Valve.VR
     public partial class SteamVR_Actions
     {
         
-        private static SteamVR_Action_Vector2 p_default_Move;
+        private static SteamVRActionVector2 p_default_Move;
         
-        private static SteamVR_Action_Boolean p_default_Grab;
+        private static SteamVRActionBoolean p_default_Grab;
         
-        private static SteamVR_Action_Pose p_default_Pose;
+        private static SteamVRActionPose p_default_Pose;
         
-        private static SteamVR_Action_Skeleton p_default_SkeletonLeftHand;
+        private static SteamVRActionSkeleton p_default_SkeletonLeftHand;
         
-        private static SteamVR_Action_Skeleton p_default_SkeletonRightHand;
+        private static SteamVRActionSkeleton p_default_SkeletonRightHand;
         
-        private static SteamVR_Action_Boolean p_default_HeadsetOnHead;
+        private static SteamVRActionBoolean p_default_HeadsetOnHead;
         
-        private static SteamVR_Action_Boolean p_default_SnapTurnLeft;
+        private static SteamVRActionBoolean p_default_SnapTurnLeft;
         
-        private static SteamVR_Action_Boolean p_default_SnapTurnRight;
+        private static SteamVRActionBoolean p_default_SnapTurnRight;
         
-        private static SteamVR_Action_Boolean p_default_UI_Radial;
+        private static SteamVRActionBoolean p_default_UI_Radial;
         
-        private static SteamVR_Action_Boolean p_default_Self_Radial;
+        private static SteamVRActionBoolean p_default_Self_Radial;
         
-        private static SteamVR_Action_Boolean p_default_Pee;
+        private static SteamVRActionBoolean p_default_Pee;
         
-        private static SteamVR_Action_Boolean p_default_Masturbate;
+        private static SteamVRActionBoolean p_default_Masturbate;
         
-        private static SteamVR_Action_Boolean p_default_InteractUI;
+        private static SteamVRActionBoolean p_default_InteractUI;
         
-        private static SteamVR_Action_Boolean p_default_Inventory;
+        private static SteamVRActionBoolean p_default_Inventory;
         
-        private static SteamVR_Action_Boolean p_default_Memories;
+        private static SteamVRActionBoolean p_default_Memories;
         
-        private static SteamVR_Action_Boolean p_default_Opportunities;
+        private static SteamVRActionBoolean p_default_Opportunities;
         
-        private static SteamVR_Action_Boolean p_default_Flash;
+        private static SteamVRActionBoolean p_default_Flash;
         
-        private static SteamVR_Action_Boolean p_default_GameMenu;
+        private static SteamVRActionBoolean p_default_GameMenu;
         
-        private static SteamVR_Action_Boolean p_default_Combat;
+        private static SteamVRActionBoolean p_default_Combat;
         
-        private static SteamVR_Action_Boolean p_default_Crouch;
+        private static SteamVRActionBoolean p_default_Crouch;
         
-        private static SteamVR_Action_Vibration p_default_Haptic;
+        private static SteamVRActionVibration p_default_Haptic;
         
-        public static SteamVR_Action_Vector2 default_Move
+        public static SteamVRActionVector2 default_Move
         {
             get
             {
-                return SteamVR_Actions.p_default_Move.GetCopy<SteamVR_Action_Vector2>();
+                return SteamVR_Actions.p_default_Move.GetCopy<SteamVRActionVector2>();
             }
         }
         
-        public static SteamVR_Action_Boolean default_Grab
+        public static SteamVRActionBoolean default_Grab
         {
             get
             {
-                return SteamVR_Actions.p_default_Grab.GetCopy<SteamVR_Action_Boolean>();
+                return SteamVR_Actions.p_default_Grab.GetCopy<SteamVRActionBoolean>();
             }
         }
         
-        public static SteamVR_Action_Pose default_Pose
+        public static SteamVRActionPose default_Pose
         {
             get
             {
-                return SteamVR_Actions.p_default_Pose.GetCopy<SteamVR_Action_Pose>();
+                return SteamVR_Actions.p_default_Pose.GetCopy<SteamVRActionPose>();
             }
         }
         
-        public static SteamVR_Action_Skeleton default_SkeletonLeftHand
+        public static SteamVRActionSkeleton default_SkeletonLeftHand
         {
             get
             {
-                return SteamVR_Actions.p_default_SkeletonLeftHand.GetCopy<SteamVR_Action_Skeleton>();
+                return SteamVR_Actions.p_default_SkeletonLeftHand.GetCopy<SteamVRActionSkeleton>();
             }
         }
         
-        public static SteamVR_Action_Skeleton default_SkeletonRightHand
+        public static SteamVRActionSkeleton default_SkeletonRightHand
         {
             get
             {
-                return SteamVR_Actions.p_default_SkeletonRightHand.GetCopy<SteamVR_Action_Skeleton>();
+                return SteamVR_Actions.p_default_SkeletonRightHand.GetCopy<SteamVRActionSkeleton>();
             }
         }
         
-        public static SteamVR_Action_Boolean default_HeadsetOnHead
+        public static SteamVRActionBoolean default_HeadsetOnHead
         {
             get
             {
-                return SteamVR_Actions.p_default_HeadsetOnHead.GetCopy<SteamVR_Action_Boolean>();
+                return SteamVR_Actions.p_default_HeadsetOnHead.GetCopy<SteamVRActionBoolean>();
             }
         }
         
-        public static SteamVR_Action_Boolean default_SnapTurnLeft
+        public static SteamVRActionBoolean default_SnapTurnLeft
         {
             get
             {
-                return SteamVR_Actions.p_default_SnapTurnLeft.GetCopy<SteamVR_Action_Boolean>();
+                return SteamVR_Actions.p_default_SnapTurnLeft.GetCopy<SteamVRActionBoolean>();
             }
         }
         
-        public static SteamVR_Action_Boolean default_SnapTurnRight
+        public static SteamVRActionBoolean default_SnapTurnRight
         {
             get
             {
-                return SteamVR_Actions.p_default_SnapTurnRight.GetCopy<SteamVR_Action_Boolean>();
+                return SteamVR_Actions.p_default_SnapTurnRight.GetCopy<SteamVRActionBoolean>();
             }
         }
         
-        public static SteamVR_Action_Boolean default_UI_Radial
+        public static SteamVRActionBoolean default_UI_Radial
         {
             get
             {
-                return SteamVR_Actions.p_default_UI_Radial.GetCopy<SteamVR_Action_Boolean>();
+                return SteamVR_Actions.p_default_UI_Radial.GetCopy<SteamVRActionBoolean>();
             }
         }
         
-        public static SteamVR_Action_Boolean default_Self_Radial
+        public static SteamVRActionBoolean default_Self_Radial
         {
             get
             {
-                return SteamVR_Actions.p_default_Self_Radial.GetCopy<SteamVR_Action_Boolean>();
+                return SteamVR_Actions.p_default_Self_Radial.GetCopy<SteamVRActionBoolean>();
             }
         }
         
-        public static SteamVR_Action_Boolean default_Pee
+        public static SteamVRActionBoolean default_Pee
         {
             get
             {
-                return SteamVR_Actions.p_default_Pee.GetCopy<SteamVR_Action_Boolean>();
+                return SteamVR_Actions.p_default_Pee.GetCopy<SteamVRActionBoolean>();
             }
         }
         
-        public static SteamVR_Action_Boolean default_Masturbate
+        public static SteamVRActionBoolean default_Masturbate
         {
             get
             {
-                return SteamVR_Actions.p_default_Masturbate.GetCopy<SteamVR_Action_Boolean>();
+                return SteamVR_Actions.p_default_Masturbate.GetCopy<SteamVRActionBoolean>();
             }
         }
         
-        public static SteamVR_Action_Boolean default_InteractUI
+        public static SteamVRActionBoolean default_InteractUI
         {
             get
             {
-                return SteamVR_Actions.p_default_InteractUI.GetCopy<SteamVR_Action_Boolean>();
+                return SteamVR_Actions.p_default_InteractUI.GetCopy<SteamVRActionBoolean>();
             }
         }
         
-        public static SteamVR_Action_Boolean default_Inventory
+        public static SteamVRActionBoolean default_Inventory
         {
             get
             {
-                return SteamVR_Actions.p_default_Inventory.GetCopy<SteamVR_Action_Boolean>();
+                return SteamVR_Actions.p_default_Inventory.GetCopy<SteamVRActionBoolean>();
             }
         }
         
-        public static SteamVR_Action_Boolean default_Memories
+        public static SteamVRActionBoolean default_Memories
         {
             get
             {
-                return SteamVR_Actions.p_default_Memories.GetCopy<SteamVR_Action_Boolean>();
+                return SteamVR_Actions.p_default_Memories.GetCopy<SteamVRActionBoolean>();
             }
         }
         
-        public static SteamVR_Action_Boolean default_Opportunities
+        public static SteamVRActionBoolean default_Opportunities
         {
             get
             {
-                return SteamVR_Actions.p_default_Opportunities.GetCopy<SteamVR_Action_Boolean>();
+                return SteamVR_Actions.p_default_Opportunities.GetCopy<SteamVRActionBoolean>();
             }
         }
         
-        public static SteamVR_Action_Boolean default_Flash
+        public static SteamVRActionBoolean default_Flash
         {
             get
             {
-                return SteamVR_Actions.p_default_Flash.GetCopy<SteamVR_Action_Boolean>();
+                return SteamVR_Actions.p_default_Flash.GetCopy<SteamVRActionBoolean>();
             }
         }
         
-        public static SteamVR_Action_Boolean default_GameMenu
+        public static SteamVRActionBoolean default_GameMenu
         {
             get
             {
-                return SteamVR_Actions.p_default_GameMenu.GetCopy<SteamVR_Action_Boolean>();
+                return SteamVR_Actions.p_default_GameMenu.GetCopy<SteamVRActionBoolean>();
             }
         }
         
-        public static SteamVR_Action_Boolean default_Combat
+        public static SteamVRActionBoolean default_Combat
         {
             get
             {
-                return SteamVR_Actions.p_default_Combat.GetCopy<SteamVR_Action_Boolean>();
+                return SteamVR_Actions.p_default_Combat.GetCopy<SteamVRActionBoolean>();
             }
         }
         
-        public static SteamVR_Action_Boolean default_Crouch
+        public static SteamVRActionBoolean default_Crouch
         {
             get
             {
-                return SteamVR_Actions.p_default_Crouch.GetCopy<SteamVR_Action_Boolean>();
+                return SteamVR_Actions.p_default_Crouch.GetCopy<SteamVRActionBoolean>();
             }
         }
         
-        public static SteamVR_Action_Vibration default_Haptic
+        public static SteamVRActionVibration default_Haptic
         {
             get
             {
-                return SteamVR_Actions.p_default_Haptic.GetCopy<SteamVR_Action_Vibration>();
+                return SteamVR_Actions.p_default_Haptic.GetCopy<SteamVRActionVibration>();
             }
         }
         
         private static void InitializeActionArrays()
         {
-            Valve.VR.SteamVR_Input.actions = new Valve.VR.SteamVR_Action[] {
+            Valve.VR.SteamVRInput.actions = new Valve.VR.SteamVRAction[] {
                     SteamVR_Actions.default_Move,
                     SteamVR_Actions.default_Grab,
                     SteamVR_Actions.default_Pose,
@@ -251,7 +251,7 @@ namespace Valve.VR
                     SteamVR_Actions.default_Combat,
                     SteamVR_Actions.default_Crouch,
                     SteamVR_Actions.default_Haptic};
-            Valve.VR.SteamVR_Input.actionsIn = new Valve.VR.ISteamVR_Action_In[] {
+            Valve.VR.SteamVRInput.actionsIn = new Valve.VR.ISteamVRActionIn[] {
                     SteamVR_Actions.default_Move,
                     SteamVR_Actions.default_Grab,
                     SteamVR_Actions.default_Pose,
@@ -272,13 +272,13 @@ namespace Valve.VR
                     SteamVR_Actions.default_GameMenu,
                     SteamVR_Actions.default_Combat,
                     SteamVR_Actions.default_Crouch};
-            Valve.VR.SteamVR_Input.actionsOut = new Valve.VR.ISteamVR_Action_Out[] {
+            Valve.VR.SteamVRInput.actionsOut = new Valve.VR.ISteamVRActionOut[] {
                     SteamVR_Actions.default_Haptic};
-            Valve.VR.SteamVR_Input.actionsVibration = new Valve.VR.SteamVR_Action_Vibration[] {
+            Valve.VR.SteamVRInput.actionsVibration = new Valve.VR.SteamVRActionVibration[] {
                     SteamVR_Actions.default_Haptic};
-            Valve.VR.SteamVR_Input.actionsPose = new Valve.VR.SteamVR_Action_Pose[] {
+            Valve.VR.SteamVRInput.actionsPose = new Valve.VR.SteamVRActionPose[] {
                     SteamVR_Actions.default_Pose};
-            Valve.VR.SteamVR_Input.actionsBoolean = new Valve.VR.SteamVR_Action_Boolean[] {
+            Valve.VR.SteamVRInput.actionsBoolean = new Valve.VR.SteamVRActionBoolean[] {
                     SteamVR_Actions.default_Grab,
                     SteamVR_Actions.default_HeadsetOnHead,
                     SteamVR_Actions.default_SnapTurnLeft,
@@ -295,14 +295,14 @@ namespace Valve.VR
                     SteamVR_Actions.default_GameMenu,
                     SteamVR_Actions.default_Combat,
                     SteamVR_Actions.default_Crouch};
-            Valve.VR.SteamVR_Input.actionsSingle = new Valve.VR.SteamVR_Action_Single[0];
-            Valve.VR.SteamVR_Input.actionsVector2 = new Valve.VR.SteamVR_Action_Vector2[] {
+            Valve.VR.SteamVRInput.actionsSingle = new Valve.VR.SteamVRActionSingle[0];
+            Valve.VR.SteamVRInput.actionsVector2 = new Valve.VR.SteamVRActionVector2[] {
                     SteamVR_Actions.default_Move};
-            Valve.VR.SteamVR_Input.actionsVector3 = new Valve.VR.SteamVR_Action_Vector3[0];
-            Valve.VR.SteamVR_Input.actionsSkeleton = new Valve.VR.SteamVR_Action_Skeleton[] {
+            Valve.VR.SteamVRInput.actionsVector3 = new Valve.VR.SteamVRActionVector3[0];
+            Valve.VR.SteamVRInput.actionsSkeleton = new Valve.VR.SteamVRActionSkeleton[] {
                     SteamVR_Actions.default_SkeletonLeftHand,
                     SteamVR_Actions.default_SkeletonRightHand};
-            Valve.VR.SteamVR_Input.actionsNonPoseNonSkeletonIn = new Valve.VR.ISteamVR_Action_In[] {
+            Valve.VR.SteamVRInput.actionsNonPoseNonSkeletonIn = new Valve.VR.ISteamVRActionIn[] {
                     SteamVR_Actions.default_Move,
                     SteamVR_Actions.default_Grab,
                     SteamVR_Actions.default_HeadsetOnHead,
@@ -324,27 +324,27 @@ namespace Valve.VR
         
         private static void PreInitActions()
         {
-            SteamVR_Actions.p_default_Move = ((SteamVR_Action_Vector2)(SteamVR_Action.Create<SteamVR_Action_Vector2>("/actions/default/in/Move")));
-            SteamVR_Actions.p_default_Grab = ((SteamVR_Action_Boolean)(SteamVR_Action.Create<SteamVR_Action_Boolean>("/actions/default/in/Grab")));
-            SteamVR_Actions.p_default_Pose = ((SteamVR_Action_Pose)(SteamVR_Action.Create<SteamVR_Action_Pose>("/actions/default/in/Pose")));
-            SteamVR_Actions.p_default_SkeletonLeftHand = ((SteamVR_Action_Skeleton)(SteamVR_Action.Create<SteamVR_Action_Skeleton>("/actions/default/in/SkeletonLeftHand")));
-            SteamVR_Actions.p_default_SkeletonRightHand = ((SteamVR_Action_Skeleton)(SteamVR_Action.Create<SteamVR_Action_Skeleton>("/actions/default/in/SkeletonRightHand")));
-            SteamVR_Actions.p_default_HeadsetOnHead = ((SteamVR_Action_Boolean)(SteamVR_Action.Create<SteamVR_Action_Boolean>("/actions/default/in/HeadsetOnHead")));
-            SteamVR_Actions.p_default_SnapTurnLeft = ((SteamVR_Action_Boolean)(SteamVR_Action.Create<SteamVR_Action_Boolean>("/actions/default/in/SnapTurnLeft")));
-            SteamVR_Actions.p_default_SnapTurnRight = ((SteamVR_Action_Boolean)(SteamVR_Action.Create<SteamVR_Action_Boolean>("/actions/default/in/SnapTurnRight")));
-            SteamVR_Actions.p_default_UI_Radial = ((SteamVR_Action_Boolean)(SteamVR_Action.Create<SteamVR_Action_Boolean>("/actions/default/in/UI Radial")));
-            SteamVR_Actions.p_default_Self_Radial = ((SteamVR_Action_Boolean)(SteamVR_Action.Create<SteamVR_Action_Boolean>("/actions/default/in/Self_Radial")));
-            SteamVR_Actions.p_default_Pee = ((SteamVR_Action_Boolean)(SteamVR_Action.Create<SteamVR_Action_Boolean>("/actions/default/in/Pee")));
-            SteamVR_Actions.p_default_Masturbate = ((SteamVR_Action_Boolean)(SteamVR_Action.Create<SteamVR_Action_Boolean>("/actions/default/in/Masturbate")));
-            SteamVR_Actions.p_default_InteractUI = ((SteamVR_Action_Boolean)(SteamVR_Action.Create<SteamVR_Action_Boolean>("/actions/default/in/InteractUI")));
-            SteamVR_Actions.p_default_Inventory = ((SteamVR_Action_Boolean)(SteamVR_Action.Create<SteamVR_Action_Boolean>("/actions/default/in/Inventory")));
-            SteamVR_Actions.p_default_Memories = ((SteamVR_Action_Boolean)(SteamVR_Action.Create<SteamVR_Action_Boolean>("/actions/default/in/Memories")));
-            SteamVR_Actions.p_default_Opportunities = ((SteamVR_Action_Boolean)(SteamVR_Action.Create<SteamVR_Action_Boolean>("/actions/default/in/Opportunities")));
-            SteamVR_Actions.p_default_Flash = ((SteamVR_Action_Boolean)(SteamVR_Action.Create<SteamVR_Action_Boolean>("/actions/default/in/Flash")));
-            SteamVR_Actions.p_default_GameMenu = ((SteamVR_Action_Boolean)(SteamVR_Action.Create<SteamVR_Action_Boolean>("/actions/default/in/GameMenu")));
-            SteamVR_Actions.p_default_Combat = ((SteamVR_Action_Boolean)(SteamVR_Action.Create<SteamVR_Action_Boolean>("/actions/default/in/Combat")));
-            SteamVR_Actions.p_default_Crouch = ((SteamVR_Action_Boolean)(SteamVR_Action.Create<SteamVR_Action_Boolean>("/actions/default/in/Crouch")));
-            SteamVR_Actions.p_default_Haptic = ((SteamVR_Action_Vibration)(SteamVR_Action.Create<SteamVR_Action_Vibration>("/actions/default/out/Haptic")));
+            SteamVR_Actions.p_default_Move = ((SteamVRActionVector2)(SteamVRAction.Create<SteamVRActionVector2>("/actions/default/in/Move")));
+            SteamVR_Actions.p_default_Grab = ((SteamVRActionBoolean)(SteamVRAction.Create<SteamVRActionBoolean>("/actions/default/in/Grab")));
+            SteamVR_Actions.p_default_Pose = ((SteamVRActionPose)(SteamVRAction.Create<SteamVRActionPose>("/actions/default/in/Pose")));
+            SteamVR_Actions.p_default_SkeletonLeftHand = ((SteamVRActionSkeleton)(SteamVRAction.Create<SteamVRActionSkeleton>("/actions/default/in/SkeletonLeftHand")));
+            SteamVR_Actions.p_default_SkeletonRightHand = ((SteamVRActionSkeleton)(SteamVRAction.Create<SteamVRActionSkeleton>("/actions/default/in/SkeletonRightHand")));
+            SteamVR_Actions.p_default_HeadsetOnHead = ((SteamVRActionBoolean)(SteamVRAction.Create<SteamVRActionBoolean>("/actions/default/in/HeadsetOnHead")));
+            SteamVR_Actions.p_default_SnapTurnLeft = ((SteamVRActionBoolean)(SteamVRAction.Create<SteamVRActionBoolean>("/actions/default/in/SnapTurnLeft")));
+            SteamVR_Actions.p_default_SnapTurnRight = ((SteamVRActionBoolean)(SteamVRAction.Create<SteamVRActionBoolean>("/actions/default/in/SnapTurnRight")));
+            SteamVR_Actions.p_default_UI_Radial = ((SteamVRActionBoolean)(SteamVRAction.Create<SteamVRActionBoolean>("/actions/default/in/UI Radial")));
+            SteamVR_Actions.p_default_Self_Radial = ((SteamVRActionBoolean)(SteamVRAction.Create<SteamVRActionBoolean>("/actions/default/in/Self_Radial")));
+            SteamVR_Actions.p_default_Pee = ((SteamVRActionBoolean)(SteamVRAction.Create<SteamVRActionBoolean>("/actions/default/in/Pee")));
+            SteamVR_Actions.p_default_Masturbate = ((SteamVRActionBoolean)(SteamVRAction.Create<SteamVRActionBoolean>("/actions/default/in/Masturbate")));
+            SteamVR_Actions.p_default_InteractUI = ((SteamVRActionBoolean)(SteamVRAction.Create<SteamVRActionBoolean>("/actions/default/in/InteractUI")));
+            SteamVR_Actions.p_default_Inventory = ((SteamVRActionBoolean)(SteamVRAction.Create<SteamVRActionBoolean>("/actions/default/in/Inventory")));
+            SteamVR_Actions.p_default_Memories = ((SteamVRActionBoolean)(SteamVRAction.Create<SteamVRActionBoolean>("/actions/default/in/Memories")));
+            SteamVR_Actions.p_default_Opportunities = ((SteamVRActionBoolean)(SteamVRAction.Create<SteamVRActionBoolean>("/actions/default/in/Opportunities")));
+            SteamVR_Actions.p_default_Flash = ((SteamVRActionBoolean)(SteamVRAction.Create<SteamVRActionBoolean>("/actions/default/in/Flash")));
+            SteamVR_Actions.p_default_GameMenu = ((SteamVRActionBoolean)(SteamVRAction.Create<SteamVRActionBoolean>("/actions/default/in/GameMenu")));
+            SteamVR_Actions.p_default_Combat = ((SteamVRActionBoolean)(SteamVRAction.Create<SteamVRActionBoolean>("/actions/default/in/Combat")));
+            SteamVR_Actions.p_default_Crouch = ((SteamVRActionBoolean)(SteamVRAction.Create<SteamVRActionBoolean>("/actions/default/in/Crouch")));
+            SteamVR_Actions.p_default_Haptic = ((SteamVRActionVibration)(SteamVRAction.Create<SteamVRActionVibration>("/actions/default/out/Haptic")));
         }
     }
 }

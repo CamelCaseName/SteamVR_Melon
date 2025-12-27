@@ -25,7 +25,6 @@ namespace Valve.VR.InteractionSystem
 
         public bool playOnAwake;
 
-
         //-------------------------------------------------
         void Awake()
         {
@@ -36,7 +35,6 @@ namespace Valve.VR.InteractionSystem
                 Play();
             }
         }
-
 
         //-------------------------------------------------
         public void Play()
@@ -54,13 +52,11 @@ namespace Valve.VR.InteractionSystem
             }
         }
 
-
         //-------------------------------------------------
         public void Pause()
         {
             thisAudioSource?.Pause();
         }
-
 
         //-------------------------------------------------
         public void UnPause()

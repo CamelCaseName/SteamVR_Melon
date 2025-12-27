@@ -31,7 +31,6 @@ namespace Valve.VR.InteractionSystem.Sample
             MelonLoader.MelonCoroutines.Start(buttonHintCoroutine);
         }
 
-
         //-------------------------------------------------
         public void ShowTextHints(Hand hand)
         {
@@ -43,7 +42,6 @@ namespace Valve.VR.InteractionSystem.Sample
 
             MelonLoader.MelonCoroutines.Start(textHintCoroutine);
         }
-
 
         //-------------------------------------------------
         public void DisableHints()
@@ -67,7 +65,6 @@ namespace Valve.VR.InteractionSystem.Sample
             }
         }
 
-
         //-------------------------------------------------
         // Cycles through all the button hints on the controller
         //-------------------------------------------------
@@ -78,9 +75,9 @@ namespace Valve.VR.InteractionSystem.Sample
 
             while (true)
             {
-                for (int actionIndex = 0; actionIndex < SteamVR_Input.actionsIn.Length; actionIndex++)
+                for (int actionIndex = 0; actionIndex < SteamVRInput.actionsIn.Length; actionIndex++)
                 {
-                    ISteamVR_Action_In action = SteamVR_Input.actionsIn[actionIndex];
+                    ISteamVRActionIn action = SteamVRInput.actionsIn[actionIndex];
                     if (action.GetActive(hand.handType))
                     {
                         ControllerButtonHints.ShowButtonHint(hand, action);
@@ -96,7 +93,6 @@ namespace Valve.VR.InteractionSystem.Sample
             }
         }
 
-
         //-------------------------------------------------
         // Cycles through all the text hints on the controller
         //-------------------------------------------------
@@ -107,9 +103,9 @@ namespace Valve.VR.InteractionSystem.Sample
 
             while (true)
             {
-                for (int actionIndex = 0; actionIndex < SteamVR_Input.actionsIn.Length; actionIndex++)
+                for (int actionIndex = 0; actionIndex < SteamVRInput.actionsIn.Length; actionIndex++)
                 {
-                    ISteamVR_Action_In action = SteamVR_Input.actionsIn[actionIndex];
+                    ISteamVRActionIn action = SteamVRInput.actionsIn[actionIndex];
                     if (action.GetActive(hand.handType))
                     {
                         ControllerButtonHints.ShowTextHint(hand, action, action.GetShortName());

@@ -5,7 +5,7 @@ namespace Valve.VR
     /// <summary>
     /// The direction the the action. In actions get input, Out actions send input.
     /// </summary>
-    public enum SteamVR_ActionDirections
+    public enum SteamVRActionDirections
     {
         In,
         Out,

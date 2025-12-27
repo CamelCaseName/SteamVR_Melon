@@ -34,7 +34,6 @@ namespace Valve.VR.InteractionSystem
             CalculateBounds();
         }
 
-
         //-------------------------------------------------
         public void Start()
         {
@@ -43,20 +42,17 @@ namespace Valve.VR.InteractionSystem
             lockedTintColor = Teleport.instance.areaLockedMaterial.GetColor(tintColorId);
         }
 
-
         //-------------------------------------------------
         public override bool ShouldActivate(Vector3 playerPosition)
         {
             return true;
         }
 
-
         //-------------------------------------------------
         public override bool ShouldMovePlayer()
         {
             return true;
         }
-
 
         //-------------------------------------------------
         public override void Highlight(bool highlight)
@@ -76,7 +72,6 @@ namespace Valve.VR.InteractionSystem
             }
         }
 
-
         //-------------------------------------------------
         public override void SetAlpha(float tintAlpha, float alphaPercent)
         {
@@ -84,7 +79,6 @@ namespace Valve.VR.InteractionSystem
             tintedColor.a *= alphaPercent;
             areaMesh.material.SetColor(tintColorId, tintedColor);
         }
-
 
         //-------------------------------------------------
         public override void UpdateVisuals()
@@ -98,7 +92,6 @@ namespace Valve.VR.InteractionSystem
                 areaMesh.material = Teleport.instance.areaVisibleMaterial;
             }
         }
-
 
         //-------------------------------------------------
         public void UpdateVisualsInEditor()
@@ -120,7 +113,6 @@ namespace Valve.VR.InteractionSystem
             }
         }
 
-
         //-------------------------------------------------
         private bool CalculateBounds()
         {
@@ -139,7 +131,6 @@ namespace Valve.VR.InteractionSystem
             meshBounds = mesh.bounds;
             return true;
         }
-
 
         //-------------------------------------------------
         private Color GetTintColor()

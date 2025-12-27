@@ -26,7 +26,6 @@ namespace Valve.VR.InteractionSystem
             }
         }
 
-
         //-------------------------------------------------
         public void SetLocked(bool locked)
         {
@@ -35,12 +34,10 @@ namespace Valve.VR.InteractionSystem
             UpdateVisuals();
         }
 
-
         //-------------------------------------------------
         public virtual void TeleportPlayer(Vector3 pointedAtPosition)
         {
         }
-
 
         //-------------------------------------------------
         public abstract void UpdateVisuals();
