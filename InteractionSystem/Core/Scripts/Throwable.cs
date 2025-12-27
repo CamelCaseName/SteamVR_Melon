@@ -4,6 +4,7 @@
 //
 //=============================================================================
 
+using MelonLoader;
 using System;
 using System.Collections;
 using UnityEngine;
@@ -56,7 +57,6 @@ namespace Valve.VR.InteractionSystem
 
         protected Rigidbody rigidbody;
 
-
         public Interactable interactable;
 
         //-------------------------------------------------
@@ -66,6 +66,13 @@ namespace Valve.VR.InteractionSystem
             interactable = GetComponent<Interactable>();
 
             rigidbody = GetComponent<Rigidbody>();
+            if (rigidbody is null || velocityEstimator is null || interactable is null)
+            {
+                MelonLogger.Msg("sth was null on " + name);
+                enabled = false;
+                return;
+            }
+
             rigidbody.maxAngularVelocity = 50.0f;
 
             if (attachmentOffset != null)

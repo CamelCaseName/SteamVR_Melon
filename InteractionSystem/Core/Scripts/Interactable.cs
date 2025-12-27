@@ -57,6 +57,8 @@ namespace Valve.VR.InteractionSystem
 
         public bool attachEaseIn = false;
 
+        public bool WasSetByHand = false;
+
         public AnimationCurve snapAttachEaseInCurve = AnimationCurve.EaseInOut(0.0f, 0.0f, 1.0f, 1.0f);
         public float snapAttachEaseInTime = 0.15f;
 
@@ -290,6 +292,7 @@ namespace Valve.VR.InteractionSystem
         public virtual void OnHandHoverEnd_Internal(Hand hand)
         {
             wasHovering = isHovering;
+            WasSetByHand = false;
 
             hoveringHands.Remove(hand);
 

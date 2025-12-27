@@ -252,6 +252,8 @@ namespace Valve.VR.InteractionSystem
             }
         }
 
+        public bool IsHoveredByHand { get; private set; } = false;
+
         public AttachedObject? currentAttachedObjectInfo
         {
             get
@@ -972,9 +974,18 @@ namespace Valve.VR.InteractionSystem
             if (closestInteractable != null)
             {
                 //MelonLogger.Msg($"got {closestInteractable.name}");
+                IsHoveredByHand = true;
+                closestInteractable.WasSetByHand = true;
+            }
+            else
+            {
+                IsHoveredByHand = false;
             }
 
-            hoveringInteractable = closestInteractable;
+            if ((hoveringInteractable != null && hoveringInteractable.WasSetByHand) || closestInteractable != null)
+            {
+                hoveringInteractable = closestInteractable;
+            }
         }
 
         public static void UpdateScene()
@@ -1066,7 +1077,7 @@ namespace Valve.VR.InteractionSystem
                     bool isCloser = (distance < closestDistance);
                     if (isCloser && !lowerPriority)
                     {
-                        MelonLogger.Msg(contacting.name + " is now closer");
+                        //MelonLogger.Msg(contacting.name + " is now closer");
                         closestDistance = distance;
                         closestInteractable = contacting;
                         foundCloser = true;

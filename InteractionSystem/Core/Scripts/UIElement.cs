@@ -161,6 +161,7 @@ namespace Valve.VR.InteractionSystem
         private void OnHandHoverBegin(Hand hand, Vector2 position, bool poseIsValid)
         {
             currentHand = hand;
+            //todo only if we dont already have one selected
             InputModule.Instance.HoverBegin(gameObject, position, poseIsValid);
         }
 
