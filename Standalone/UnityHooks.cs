@@ -29,7 +29,7 @@ namespace SteamVR_Melon.Util
                 PlayerLoopSystem item = system.subSystemList[i];
                 //MelonLogger.Msg($"{item.type?.Name ?? "none"} {(item.loopConditionFunction == null ? IntPtr.Zero : item.loopConditionFunction):x} {item.updateDelegate?.method_info?.Name ?? "none"} {(item.updateFunction == null ? IntPtr.Zero : item.updateFunction):x}");
 
-                if (item.type != Il2CppType.Of<EarlyUpdate>())
+                if (item.type != Il2CppType.Of<PreUpdate>())
                 {
                     continue;
                 }
@@ -46,7 +46,7 @@ namespace SteamVR_Melon.Util
                 {
                     type = Il2CppType.Of<UnityHook>(),
                     updateDelegate = new Action(OnPreRender),
-                    subSystemList = new PlayerLoopSystem[0]
+                    subSystemList = Array.Empty<PlayerLoopSystem>()
                 };
 
                 //MelonLogger.Msg(item.subSystemList.Count + 1);
@@ -54,6 +54,7 @@ namespace SteamVR_Melon.Util
 
                 for (int k = 0; k < item.subSystemList.Count; k++)
                 {
+                    //MelonLogger.Msg(item.subSystemList[k].GetIl2CppType().ToString());
                     list[k] = item.subSystemList[k];
                 }
                 list[^1] = UnityHookSystem;
@@ -68,19 +69,10 @@ namespace SteamVR_Melon.Util
             MelonLogger.Msg("Initialized Unity Hooks");
         }
 
-        //private static void OnPreRender(ScriptableRenderContext ctx, Camera cam)
-        //{
-        //    if (OnPreRenderCam == null || !OnPreRenderCam.enabled)
-        //        OnPreRenderCam = cam;
-        //    if (OnPreRenderCam == cam)
-        //        InvokeOnBeforeRender();
-        //}
         private static void OnPreRender()
         {
             InvokeOnBeforeRender();
         }
-
-        //private static Camera OnPreRenderCam = null;
 
         [RegisterTypeInIl2Cpp(true)]
         public class UnityHook : Il2CppSystem.Object
