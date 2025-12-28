@@ -708,7 +708,7 @@ namespace Valve.VR
             int setEndIndex = fullPath.IndexOf('/', setStartIndex);
             int count = setEndIndex;
 
-            return fullPath.Substring(0, count);
+            return fullPath[..count];
         }
 
         private static readonly string inLowered = "IN".ToLower(System.Globalization.CultureInfo.CurrentCulture);

@@ -75,14 +75,14 @@ namespace Valve.VR
             {
                 if (lastSlash == fullName.Length - 1)
                 {
-                    fullName = fullName.Remove(lastSlash);
+                    fullName = fullName[..lastSlash];
                     lastSlash = fullName.LastIndexOf('/');
                     if (lastSlash == -1)
                     {
                         return GetCodeFriendlyName(fullName);
                     }
                 }
-                return GetCodeFriendlyName(fullName.Substring(lastSlash + 1));
+                return GetCodeFriendlyName(fullName[(lastSlash + 1)..]);
             }
 
             return GetCodeFriendlyName(fullName);
@@ -480,7 +480,7 @@ namespace Valve.VR
                 int lastIndex = name.LastIndexOf('/');
                 if (lastIndex != -1 && lastIndex + 1 < name.Length)
                 {
-                    return name.Substring(0, lastIndex + 1);
+                    return name[..(lastIndex + 1)];
                 }
 
                 return name;
@@ -529,7 +529,7 @@ namespace Valve.VR
                     return string.Empty;
                 }
 
-                return name.Substring(0, setEnd);
+                return name[..setEnd];
             }
         }
 

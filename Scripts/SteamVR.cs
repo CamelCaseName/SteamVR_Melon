@@ -175,7 +175,7 @@ namespace Valve.VR
 
                 PluginImporter.LoadPlugin(OpenVRMagic.openvrApi);
                 UnityHooks.Init();
-                VRShaders.TryLoadShaders();
+                //VRShaders.TryLoadShaders();
 
                 OpenVR.Init(ref error, EVRApplicationType.VRApplicationScene, "");
 
@@ -517,7 +517,7 @@ namespace Valve.VR
         {
             string currentPath = Application.dataPath;
             int lastIndex = currentPath.LastIndexOf('/');
-            currentPath = currentPath.Remove(lastIndex, currentPath.Length - lastIndex);
+            currentPath = currentPath[..lastIndex];
 
             string fullPath = Path.Combine(currentPath, "unityProject.vrmanifest");
 

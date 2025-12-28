@@ -98,7 +98,7 @@ namespace Valve.VR.InteractionSystem
         //-------------------------------------------------
         public static Vector3 Vector3FromString(string szString)
         {
-            string[] szParseString = szString.Substring(1, szString.Length - 1).Split(',');
+            string[] szParseString = szString[1..].Split(',');
 
             float x = float.Parse(szParseString[0]);
             float y = float.Parse(szParseString[1]);
@@ -112,7 +112,7 @@ namespace Valve.VR.InteractionSystem
         //-------------------------------------------------
         public static Vector2 Vector2FromString(string szString)
         {
-            string[] szParseString = szString.Substring(1, szString.Length - 1).Split(',');
+            string[] szParseString = szString[1..].Split(',');
 
             float x = float.Parse(szParseString[0]);
             float y = float.Parse(szParseString[1]);

@@ -21,13 +21,12 @@ namespace Valve.VR
         public bool drawWireframeWhenSelectedOnly = false;
         public bool drawInGame = true;
 
-
         public enum Size
         {
             Calibrated,
-            @400x300,
-            @300x225,
-            @200x150
+            p400x300,
+            p300x225,
+            p200x150
         }
 
         public Size size;
@@ -63,7 +62,7 @@ namespace Valve.VR
             {
                 try
                 {
-                    var str = size.ToString().Substring(1);
+                    var str = size.ToString()[1..];
                     var arr = str.Split(new char[] { 'x' }, 2);
 
                     // convert to half size in meters (from cm)

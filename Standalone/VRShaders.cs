@@ -65,6 +65,11 @@ namespace Assets.SteamVR_Melon.Standalone
             blitFlip = assetBundle.LoadAsset("assets/steamvr/resources/steamvr_blitFlip.shader").Cast<Shader>();
             overlay = assetBundle.LoadAsset("assets/steamvr/resources/steamvr_overlay.shader").Cast<Shader>();
             fade = assetBundle.LoadAsset("assets/steamvr/resources/steamvr_fade.shader").Cast<Shader>();
+            Object.DontDestroyOnLoad(occlusion);
+            Object.DontDestroyOnLoad(blit);
+            Object.DontDestroyOnLoad(blitFlip);
+            Object.DontDestroyOnLoad(overlay);
+            Object.DontDestroyOnLoad(fade);
             string[] allAssetNames = assetBundle.GetAllAssetNames();
             for (int i = 0; i < allAssetNames.Length; i++)
             {

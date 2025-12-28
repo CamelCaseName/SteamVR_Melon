@@ -276,7 +276,7 @@ namespace Valve.VR
         const string earsSuffix = " (ears)";
         const string headSuffix = " (head)";
         const string originSuffix = " (origin)";
-        public string baseName { get { return name.EndsWith(eyeSuffix) ? name.Substring(0, name.Length - eyeSuffix.Length) : name; } }
+        public string baseName { get { return name.EndsWith(eyeSuffix) ? name[..^eyeSuffix.Length] : name; } }
 
         // Object hierarchy creation to make it easy to parent other objects appropriately,
         // otherwise this gets called on demand at runtime. Remaining initialization is
@@ -388,7 +388,7 @@ namespace Valve.VR
 
             if (name.EndsWith(eyeSuffix))
             {
-                name = name.Substring(0, name.Length - eyeSuffix.Length);
+                name = name[..^eyeSuffix.Length];
             }
         }
 
