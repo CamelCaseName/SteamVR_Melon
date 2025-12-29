@@ -29,7 +29,7 @@ namespace SteamVR_Melon.Util
                 PlayerLoopSystem item = system.subSystemList[i];
                 //MelonLogger.Msg($"{item.type?.Name ?? "none"} {(item.loopConditionFunction == null ? IntPtr.Zero : item.loopConditionFunction):x} {item.updateDelegate?.method_info?.Name ?? "none"} {(item.updateFunction == null ? IntPtr.Zero : item.updateFunction):x}");
 
-                if (item.type != Il2CppType.Of<PreUpdate>())
+                if (item.type != Il2CppType.Of<UnityEngine.PlayerLoop.PreLateUpdate>())
                 {
                     continue;
                 }

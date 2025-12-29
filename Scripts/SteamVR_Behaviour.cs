@@ -180,6 +180,7 @@ namespace Valve.VR
             UnityHooks.OnBeforeRender -= OnBeforeRender;
             SteamVREvents.System(EVREventType.VREventQuit).Remove(OnQuit);
         }
+
         protected void OnBeforeRender()
         {
             PreCull();

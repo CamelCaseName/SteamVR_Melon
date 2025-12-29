@@ -58,7 +58,7 @@ namespace Assets.SteamVR_Melon.Standalone
                     return;
                 }
             }
-            MelonLogger.Msg("[HPVR] Loading shaders from asset bundle...");
+            MelonLogger.Msg("[HPVR] Loading steamvr shaders from asset bundle...");
 
             occlusion = assetBundle.LoadAsset("assets/steamvr/resources/steamvr_hiddenarea.shader").Cast<Shader>();
             blit = assetBundle.LoadAsset("assets/steamvr/resources/steamvr_blit.shader").Cast<Shader>();
