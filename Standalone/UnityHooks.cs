@@ -11,13 +11,7 @@ namespace SteamVR_Melon.Util
     /// </summary>
     public static class UnityHooks
     {
-        public static event Action OnBeforeRender;
-
-        public static void InvokeOnBeforeRender()
-        {
-            OnBeforeRender?.Invoke();
-            //MelonLogger.Msg("prerender");
-        }
+        public static Action OnBeforeRender;
 
         public static void Init()
         {
@@ -45,7 +39,7 @@ namespace SteamVR_Melon.Util
                 PlayerLoopSystem UnityHookSystem = new()
                 {
                     type = Il2CppType.Of<UnityHook>(),
-                    updateDelegate = new Action(OnPreRender),
+                    updateDelegate = new Action(() => OnBeforeRender.Invoke()),
                     subSystemList = Array.Empty<PlayerLoopSystem>()
                 };
 
@@ -67,11 +61,6 @@ namespace SteamVR_Melon.Util
             PlayerLoop.SetPlayerLoop(system);
 
             MelonLogger.Msg("Initialized Unity Hooks");
-        }
-
-        private static void OnPreRender()
-        {
-            InvokeOnBeforeRender();
         }
 
         [RegisterTypeInIl2Cpp(true)]

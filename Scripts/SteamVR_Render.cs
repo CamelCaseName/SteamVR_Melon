@@ -134,6 +134,9 @@ namespace Valve.VR
         public TrackedDevicePoseT[] gamePoses = new TrackedDevicePoseT[0];
 
         static private bool _pauseRendering;
+
+        public static event Action OnPreRender = () => { };
+
         static public bool pauseRendering
         {
             get { return _pauseRendering; }
@@ -168,6 +171,9 @@ namespace Valve.VR
                 {
                     continue;
                 }
+
+                //MelonLogger.Msg("invoking camera onprerender");
+                OnPreRender.Invoke();
 
                 var compositor = OpenVR.Compositor;
                 if (compositor != null)

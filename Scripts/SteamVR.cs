@@ -402,91 +402,6 @@ namespace Valve.VR
             }
         }
 
-#if UNITY_EDITOR
-        public static void ShowBindingsForEditor()
-        {
-            bool temporarySession = InitializeTemporarySession(false);
-
-
-            Valve.VR.EVRSettingsError bindingFlagError = Valve.VR.EVRSettingsError.None;
-            Valve.VR.OpenVR.Settings.SetBool(Valve.VR.OpenVR.k_pch_SteamVR_Section, Valve.VR.OpenVR.k_pch_SteamVR_DebugInputBinding, true, ref bindingFlagError);
-
-            if (bindingFlagError != Valve.VR.EVRSettingsError.None)
-                MelonLoader.MelonLogger.Error("[HPVR] Error turning on the debug input binding flag in steamvr: " + bindingFlagError.ToString());
-
-            if (Application.isPlaying == false)
-            {
-                IdentifyEditorApplication();
-
-                SteamVR_Input.IdentifyActionsFile();
-            }
-
-            OpenVR.Input.OpenBindingUI(SteamVR_Settings.instance.editorAppKey, 0, 0, true);
-
-            if (temporarySession)
-                ExitTemporarySession();
-        }
-
-        public static string GetSteamVRFolderParentPath(bool localToAssetsFolder = false)
-        {
-            SteamVR_Settings asset = ScriptableObject.CreateInstance<SteamVR_Settings>();
-            UnityEditor.MonoScript scriptAsset = UnityEditor.MonoScript.FromScriptableObject(asset);
-
-            string scriptPath = UnityEditor.AssetDatabase.GetAssetPath(scriptAsset);
-
-            System.IO.FileInfo settingsScriptFileInfo = new System.IO.FileInfo(scriptPath);
-
-            string fullPath = settingsScriptFileInfo.Directory.Parent.Parent.FullName;
-
-            if (localToAssetsFolder == false)
-                return fullPath;
-            else
-            {
-                System.IO.DirectoryInfo assetsDirectoryInfo = new DirectoryInfo(Application.dataPath);
-                string localPath = fullPath.Substring(assetsDirectoryInfo.Parent.FullName.Length + 1); //plus separator char
-                return localPath;
-            }
-        }
-
-        public static string GetSteamVRFolderPath(bool localToAssetsFolder = false)
-        {
-            SteamVR_Settings asset = ScriptableObject.CreateInstance<SteamVR_Settings>();
-            UnityEditor.MonoScript scriptAsset = UnityEditor.MonoScript.FromScriptableObject(asset);
-
-            string scriptPath = UnityEditor.AssetDatabase.GetAssetPath(scriptAsset);
-
-            System.IO.FileInfo settingsScriptFileInfo = new System.IO.FileInfo(scriptPath);
-            string fullPath = settingsScriptFileInfo.Directory.Parent.FullName;
-
-
-            if (localToAssetsFolder == false)
-                return fullPath;
-            else
-            {
-                System.IO.DirectoryInfo assetsDirectoryInfo = new DirectoryInfo(Application.dataPath);
-                string localPath = fullPath.Substring(assetsDirectoryInfo.Parent.FullName.Length + 1); //plus separator char
-                return localPath;
-            }
-        }
-
-        public static string GetSteamVRResourcesFolderPath(bool localToAssetsFolder = false)
-        {
-            string basePath = GetSteamVRFolderParentPath(localToAssetsFolder);
-
-            string folderPath = Path.Combine(basePath, "SteamVR_Resources");
-
-            if (Directory.Exists(folderPath) == false)
-                Directory.CreateDirectory(folderPath);
-
-            string resourcesFolderPath = Path.Combine(folderPath, "Resources");
-
-            if (Directory.Exists(resourcesFolderPath) == false)
-                Directory.CreateDirectory(resourcesFolderPath);
-
-            return resourcesFolderPath;
-        }
-#endif
-
         public const string defaultUnityAppKeyTemplate = "application.generated.unity.{0}.exe";
         public const string defaultAppKeyTemplate = "application.generated.{0}";
 
@@ -774,25 +689,7 @@ namespace Valve.VR
             new(hmd.GetEyeToHeadTransform(EVREye.EyeLeft)),
             new(hmd.GetEyeToHeadTransform(EVREye.EyeRight)) };
 
-            switch (SystemInfo.graphicsDeviceType)
-            {
-#if (UNITY_5_4)
-                case UnityEngine.Rendering.GraphicsDeviceType.OpenGL2:
-#endif
-                case UnityEngine.Rendering.GraphicsDeviceType.OpenGLCore:
-                case UnityEngine.Rendering.GraphicsDeviceType.OpenGLES2:
-                case UnityEngine.Rendering.GraphicsDeviceType.OpenGLES3:
-                    textureType = ETextureType.OpenGL;
-                    break;
-#if !(UNITY_5_4)
-                case UnityEngine.Rendering.GraphicsDeviceType.Vulkan:
-                    textureType = ETextureType.Vulkan;
-                    break;
-#endif
-                default:
-                    textureType = ETextureType.DirectX;
-                    break;
-            }
+            textureType = ETextureType.DirectX;
 
             SteamVREvents.Initializing.Listen(OnInitializing);
             SteamVREvents.Calibrating.Listen(OnCalibrating);
