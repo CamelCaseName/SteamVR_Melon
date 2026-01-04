@@ -20,7 +20,7 @@ namespace Valve.VR
     {
         // Use this to check if SteamVR is currently active without attempting
         // to activate it in the process.
-        public static bool active { get { return _instance != null; } }
+        public static bool Active { get { return _instance != null; } }
 
         private static bool ___enabled = true;
         // Set this to false to keep from auto-initializing when calling SteamVR.instance.
@@ -33,7 +33,7 @@ namespace Valve.VR
                 ___enabled = value;
             }
         }
-        public static bool enabled
+        public static bool Enabled
         {
             get
             {
@@ -67,11 +67,11 @@ namespace Valve.VR
                 ___instance = value;
             }
         }
-        public static SteamVR instance
+        public static SteamVR Instance
         {
             get
             {
-                if (!enabled)
+                if (!Enabled)
                 {
                     return null;
                 }
@@ -291,20 +291,20 @@ namespace Valve.VR
         public CVROverlay overlay { get; private set; }
 
         // tracking status
-        static public bool initializing { get; private set; }
-        static public bool calibrating { get; private set; }
-        static public bool outOfRange { get; private set; }
+        static public bool Initializing { get; private set; }
+        static public bool Calibrating { get; private set; }
+        static public bool OutOfRange { get; private set; }
 
         static public bool[] connected = new bool[OpenVR.kUnMaxTrackedDeviceCount];
 
         // render values
-        public float sceneWidth { get; private set; }
-        public float sceneHeight { get; private set; }
-        public float aspect { get; private set; }
-        public float fieldOfView { get; private set; }
-        public Vector2 tanHalfFov { get; private set; }
-        public VRTextureBoundsT[] textureBounds { get; private set; }
-        public SteamVRUtils.RigidTransform[] eyes { get; private set; }
+        public float SceneWidth { get; private set; }
+        public float SceneHeight { get; private set; }
+        public float Aspect { get; private set; }
+        public float FieldOfView { get; private set; }
+        public Vector2 TanHalfFov { get; private set; }
+        public VRTextureBoundsT[] TextureBounds { get; private set; }
+        public SteamVRUtils.RigidTransform[] Eyes { get; private set; }
         public ETextureType textureType;
 
         // hmd properties
@@ -519,8 +519,10 @@ namespace Valve.VR
                 }
                 */
 
-                manifestFile.applications = new System.Collections.Generic.List<SteamVRInputManifestFileApplication>();
-                manifestFile.applications.Add(manifestApplication);
+                manifestFile.applications = new System.Collections.Generic.List<SteamVRInputManifestFileApplication>
+                {
+                    manifestApplication
+                };
 
                 string json = Newtonsoft.Json.JsonConvert.SerializeObject(manifestFile, Newtonsoft.Json.Formatting.Indented,
                     new Newtonsoft.Json.JsonSerializerSettings { NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore });
@@ -576,17 +578,17 @@ namespace Valve.VR
 
         private void OnInitializing(bool initializing)
         {
-            SteamVR.initializing = initializing;
+            SteamVR.Initializing = initializing;
         }
 
         private void OnCalibrating(bool calibrating)
         {
-            SteamVR.calibrating = calibrating;
+            SteamVR.Calibrating = calibrating;
         }
 
         private void OnOutOfRange(bool outOfRange)
         {
-            SteamVR.outOfRange = outOfRange;
+            SteamVR.OutOfRange = outOfRange;
         }
 
         private void OnDeviceConnected(int i, bool connected)
@@ -598,8 +600,8 @@ namespace Valve.VR
         private void OnNewPoses(TrackedDevicePoseT[] poses)
         {
             // Update eye offsets to account for IPD changes.
-            eyes[0] = new SteamVRUtils.RigidTransform(hmd.GetEyeToHeadTransform(EVREye.EyeLeft));
-            eyes[1] = new SteamVRUtils.RigidTransform(hmd.GetEyeToHeadTransform(EVREye.EyeRight));
+            Eyes[0] = new SteamVRUtils.RigidTransform(hmd.GetEyeToHeadTransform(EVREye.EyeLeft));
+            Eyes[1] = new SteamVRUtils.RigidTransform(hmd.GetEyeToHeadTransform(EVREye.EyeRight));
 
             for (int i = 0; i < poses.Length; i++)
             {
@@ -615,7 +617,7 @@ namespace Valve.VR
                 var result = poses[(int)OpenVR.kUnTrackedDeviceIndexHmd].eTrackingResult;
 
                 var initializing = result == ETrackingResult.Uninitialized;
-                if (initializing != SteamVR.initializing)
+                if (initializing != SteamVR.Initializing)
                 {
                     SteamVREvents.Initializing.Send(initializing);
                 }
@@ -623,7 +625,7 @@ namespace Valve.VR
                 var calibrating =
                     result == ETrackingResult.CalibratingInProgress ||
                     result == ETrackingResult.CalibratingOutOfRange;
-                if (calibrating != SteamVR.calibrating)
+                if (calibrating != SteamVR.Calibrating)
                 {
                     SteamVREvents.Calibrating.Send(calibrating);
                 }
@@ -631,7 +633,7 @@ namespace Valve.VR
                 var outOfRange =
                     result == ETrackingResult.RunningOutOfRange ||
                     result == ETrackingResult.CalibratingOutOfRange;
-                if (outOfRange != SteamVR.outOfRange)
+                if (outOfRange != SteamVR.OutOfRange)
                 {
                     SteamVREvents.OutOfRange.Send(outOfRange);
                 }
@@ -651,9 +653,9 @@ namespace Valve.VR
             // Setup render values
             uint w = 0, h = 0;
             hmd.GetRecommendedRenderTargetSize(ref w, ref h);
-            sceneWidth = (float)w;
-            sceneHeight = (float)h;
-            MelonLogger.Msg($"hmd res: {sceneWidth}:{sceneHeight}");
+            SceneWidth = (float)w;
+            SceneHeight = (float)h;
+            MelonLogger.Msg($"hmd res: {SceneWidth}:{SceneHeight}");
 
             float l_left = 0.0f, l_right = 0.0f, l_top = 0.0f, l_bottom = 0.0f;
             hmd.GetProjectionRaw(EVREye.EyeLeft, ref l_left, ref l_right, ref l_top, ref l_bottom);
@@ -662,30 +664,30 @@ namespace Valve.VR
             hmd.GetProjectionRaw(EVREye.EyeRight, ref r_left, ref r_right, ref r_top, ref r_bottom);
             MelonLogger.Msg($"hmd projection: {r_left}{r_right}{r_top}{r_bottom}");
 
-            tanHalfFov = new Vector2(
+            TanHalfFov = new Vector2(
                 Mathf.Max(-l_left, l_right, -r_left, r_right),
                 Mathf.Max(-l_top, l_bottom, -r_top, r_bottom));
 
-            textureBounds = new VRTextureBoundsT[2];
+            TextureBounds = new VRTextureBoundsT[2];
 
-            textureBounds[0].uMin = 0.5f + 0.5f * l_left / tanHalfFov.x;
-            textureBounds[0].uMax = 0.5f + 0.5f * l_right / tanHalfFov.x;
-            textureBounds[0].vMin = 0.5f - 0.5f * l_bottom / tanHalfFov.y;
-            textureBounds[0].vMax = 0.5f - 0.5f * l_top / tanHalfFov.y;
+            TextureBounds[0].uMin = 0.5f + 0.5f * l_left / TanHalfFov.x;
+            TextureBounds[0].uMax = 0.5f + 0.5f * l_right / TanHalfFov.x;
+            TextureBounds[0].vMin = 0.5f - 0.5f * l_bottom / TanHalfFov.y;
+            TextureBounds[0].vMax = 0.5f - 0.5f * l_top / TanHalfFov.y;
 
-            textureBounds[1].uMin = 0.5f + 0.5f * r_left / tanHalfFov.x;
-            textureBounds[1].uMax = 0.5f + 0.5f * r_right / tanHalfFov.x;
-            textureBounds[1].vMin = 0.5f - 0.5f * r_bottom / tanHalfFov.y;
-            textureBounds[1].vMax = 0.5f - 0.5f * r_top / tanHalfFov.y;
+            TextureBounds[1].uMin = 0.5f + 0.5f * r_left / TanHalfFov.x;
+            TextureBounds[1].uMax = 0.5f + 0.5f * r_right / TanHalfFov.x;
+            TextureBounds[1].vMin = 0.5f - 0.5f * r_bottom / TanHalfFov.y;
+            TextureBounds[1].vMax = 0.5f - 0.5f * r_top / TanHalfFov.y;
 
             // Grow the recommended size to account for the overlapping fov
-            sceneWidth = sceneWidth / Mathf.Max(textureBounds[0].uMax - textureBounds[0].uMin, textureBounds[1].uMax - textureBounds[1].uMin);
-            sceneHeight = sceneHeight / Mathf.Max(textureBounds[0].vMax - textureBounds[0].vMin, textureBounds[1].vMax - textureBounds[1].vMin);
+            SceneWidth = SceneWidth / Mathf.Max(TextureBounds[0].uMax - TextureBounds[0].uMin, TextureBounds[1].uMax - TextureBounds[1].uMin);
+            SceneHeight = SceneHeight / Mathf.Max(TextureBounds[0].vMax - TextureBounds[0].vMin, TextureBounds[1].vMax - TextureBounds[1].vMin);
 
-            aspect = tanHalfFov.x / tanHalfFov.y;
-            fieldOfView = 2.0f * Mathf.Atan(tanHalfFov.y) * Mathf.Rad2Deg;
+            Aspect = TanHalfFov.x / TanHalfFov.y;
+            FieldOfView = 2.0f * Mathf.Atan(TanHalfFov.y) * Mathf.Rad2Deg;
 
-            eyes = new SteamVRUtils.RigidTransform[] {
+            Eyes = new SteamVRUtils.RigidTransform[] {
             new(hmd.GetEyeToHeadTransform(EVREye.EyeLeft)),
             new(hmd.GetEyeToHeadTransform(EVREye.EyeRight)) };
 

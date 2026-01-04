@@ -60,7 +60,7 @@ namespace Valve.VR
             return null;
         }
 
-        private SteamVRCamera[] cameras = new SteamVRCamera[0];
+        private SteamVRCamera[] cameras = Array.Empty<SteamVRCamera>();
 
         [Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp]
         void AddInternal(SteamVRCamera vrcam)
@@ -124,20 +124,20 @@ namespace Valve.VR
         {
             if (cameras.Length > 0)
             {
-                return cameras[cameras.Length - 1];
+                return cameras[^1];
             }
 
             return null;
         }
 
         public TrackedDevicePoseT[] poses = new TrackedDevicePoseT[OpenVR.kUnMaxTrackedDeviceCount];
-        public TrackedDevicePoseT[] gamePoses = new TrackedDevicePoseT[0];
+        public TrackedDevicePoseT[] gamePoses = Array.Empty<TrackedDevicePoseT>();
 
         static private bool _pauseRendering;
 
         public static event Action OnPreRender = () => { };
 
-        static public bool pauseRendering
+        static public bool PauseRendering
         {
             get { return _pauseRendering; }
             set
@@ -167,7 +167,7 @@ namespace Valve.VR
             {
                 yield return waitForEndOfFrame;
 
-                if (pauseRendering)
+                if (PauseRendering)
                 {
                     continue;
                 }
@@ -302,7 +302,7 @@ namespace Valve.VR
 
         private void OnInputFocus(bool hasFocus)
         {
-            if (SteamVR.active == false)
+            if (SteamVR.Active == false)
             {
                 return;
             }
@@ -395,7 +395,7 @@ namespace Valve.VR
                 SteamVRExternalCameraLegacyManager.SubscribeToNewPoses();
             }
 
-            UnityHooks.OnBeforeRender += OnBeforeRender;
+            UnityHooks.PreUpdate += OnBeforeRender;
 
             if (SteamVR.initializedState == SteamVR.InitializedStates.InitializeSuccess)
             {
@@ -422,7 +422,7 @@ namespace Valve.VR
             SteamVREvents.InputFocus.Remove(OnInputFocus);
             SteamVREvents.System(EVREventType.VREventRequestScreenshot).Remove(OnRequestScreenshot);
 
-            UnityHooks.OnBeforeRender -= OnBeforeRender;
+            UnityHooks.PreUpdate -= OnBeforeRender;
 
             if (SteamVR.initializedState != SteamVR.InitializedStates.InitializeSuccess)
             {
@@ -443,7 +443,7 @@ namespace Valve.VR
 
         void OnBeforeRender()
         {
-            if (SteamVR.active == false)
+            if (SteamVR.Active == false)
             {
                 MelonLogger.Msg("steamvr not active");
                 return;
@@ -463,7 +463,7 @@ namespace Valve.VR
 
         public void Update()
         {
-            if (SteamVR.active == false)
+            if (SteamVR.Active == false)
             {
                 return;
             }
@@ -521,7 +521,7 @@ namespace Valve.VR
 
             if (SteamVR.settings.lockPhysicsUpdateRateToRenderFrequency && Time.timeScale > 0.0f)
             {
-                var vr = SteamVR.instance;
+                var vr = SteamVR.Instance;
                 if (vr != null && Application.isPlaying)
                 {
                     //var timing = new Compositor_FrameTiming();

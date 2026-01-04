@@ -151,15 +151,15 @@ namespace Valve.VR
             }
             GUILayout.EndHorizontal();
 
-            if (SteamVR.active)
+            if (SteamVR.Active)
             {
-                var vr = SteamVR.instance;
+                var vr = SteamVR.Instance;
 
                 GUILayout.BeginHorizontal();
                 {
                     var t = SteamVRCamera.sceneResolutionScale;
-                    int w = (int)(vr.sceneWidth * t);
-                    int h = (int)(vr.sceneHeight * t);
+                    int w = (int)(vr.SceneWidth * t);
+                    int h = (int)(vr.SceneHeight * t);
                     int pct = (int)(100.0f * t);
                     GUILayout.Label(string.Format("Scene quality: {0}x{1} ({2}%)", w, h, pct));
                     var result = Mathf.RoundToInt(GUILayout.HorizontalSlider(pct, 50, 200));

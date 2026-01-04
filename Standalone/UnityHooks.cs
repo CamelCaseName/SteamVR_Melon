@@ -12,15 +12,17 @@ namespace SteamVR_Melon.Util
     /// </summary>
     public static class UnityHooks
     {
-        public static Action OnBeforeRender;
-        public static Action OnRenderImage;
+        public static Action PreUpdate;
+        public static Action EarlyUpdate;
+        public static Action OnPreCull;
 
         public static void Init()
         {
             //RenderPipelineManager.add_beginCameraRendering(new System.Action<ScriptableRenderContext, Camera>(OnPreRender));
             var system = PlayerLoop.GetCurrentPlayerLoop();
-            AddLoopSystem<UnityEngine.PlayerLoop.PreLateUpdate>(ref system, () => OnBeforeRender.Invoke());
-            AddLoopSystem<UnityEngine.PlayerLoop.PostLateUpdate>(ref system, () => OnRenderImage.Invoke());
+            AddLoopSystem<UnityEngine.PlayerLoop.PreUpdate>(ref system, () => PreUpdate?.Invoke());
+            AddLoopSystem<UnityEngine.PlayerLoop.EarlyUpdate>(ref system, () => EarlyUpdate?.Invoke());
+            AddLoopSystem<UnityEngine.PlayerLoop.PostLateUpdate>(ref system, () => OnPreCull?.Invoke());
 
             PlayerLoop.SetPlayerLoop(system);
 

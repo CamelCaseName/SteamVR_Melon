@@ -180,7 +180,7 @@ namespace Valve.VR
                         var texture = new TextureT
                         {
                             handle = renderTexture.GetNativeTexturePtr(),
-                            eType = SteamVR.instance.textureType,
+                            eType = SteamVR.Instance.textureType,
                             eColorSpace = EColorSpace.Auto
                         };
                         overlay.SetOverlayTexture(progressBarOverlayHandle, ref texture);
@@ -300,7 +300,7 @@ namespace Valve.VR
                     var texture = new TextureT
                     {
                         handle = loadingScreen.GetNativeTexturePtr(),
-                        eType = SteamVR.instance.textureType,
+                        eType = SteamVR.Instance.textureType,
                         eColorSpace = EColorSpace.Auto
                     };
                     overlay.SetOverlayTexture(loadingScreenOverlayHandle, ref texture);
@@ -346,7 +346,7 @@ namespace Valve.VR
             }
 
             // Now that we're fully faded out, we can stop submitting frames to the compositor.
-            SteamVRRender.pauseRendering = true;
+            SteamVRRender.PauseRendering = true;
 
             // Continue waiting for the overlays to fully fade in before continuing.
             while (alpha < 1.0f)
@@ -417,7 +417,7 @@ namespace Valve.VR
             // in order to give everything a change to settle down to avoid any hitching at the start of the new level.
             yield return new WaitForSeconds(postLoadSettleTime);
 
-            SteamVRRender.pauseRendering = false;
+            SteamVRRender.PauseRendering = false;
 
             // Fade out loading screen.
             if (loadingScreenFadeOutTime > 0.0f)
@@ -508,7 +508,7 @@ namespace Valve.VR
                 overlay.SetOverlayWidthInMeters(handle, widthInMeters);
 
                 // D3D textures are upside-down in Unity to match OpenGL.
-                if (SteamVR.instance.textureType == ETextureType.DirectX)
+                if (SteamVR.Instance.textureType == ETextureType.DirectX)
                 {
                     var textureBounds = new VRTextureBoundsT
                     {

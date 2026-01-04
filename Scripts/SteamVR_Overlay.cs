@@ -88,7 +88,7 @@ namespace Valve.VR
                 var tex = new TextureT
                 {
                     handle = texture.GetNativeTexturePtr(),
-                    eType = SteamVR.instance.textureType,
+                    eType = SteamVR.Instance.textureType,
                     eColorSpace = EColorSpace.Auto
                 };
                 overlay.SetOverlayTexture(handle, ref tex);

@@ -27,7 +27,7 @@ namespace Standalone
             }
             if (mirrorTexture == null)
             {
-                SteamVR instance = SteamVR.instance;
+                SteamVR instance = SteamVR.Instance;
                 if (instance != null && instance.textureType == ETextureType.DirectX)
                 {
                     Texture2D texture2D = new(2, 2);
@@ -46,12 +46,12 @@ namespace Standalone
 
         private void OnPostRender()
         {
-            SteamVR instance = SteamVR.instance;
+            SteamVR instance = SteamVR.Instance;
             if (!cam)
             {
                 cam = GetComponent<Camera>();
             }
-            float num = scale * cam.aspect / instance.aspect;
+            float num = scale * cam.aspect / instance.Aspect;
             float x = -scale;
             float x2 = scale;
             float y = num;

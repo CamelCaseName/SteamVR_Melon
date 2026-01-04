@@ -272,7 +272,7 @@ namespace Valve.VR.InteractionSystem
                 yield return null;
             }
 
-            if (SteamVR.instance != null)
+            if (SteamVR.Instance != null)
             {
                 ActivateRig(rigSteamVR);
             }
@@ -370,7 +370,7 @@ namespace Valve.VR.InteractionSystem
                 return;
             }
 
-            if (!SteamVR.active)
+            if (!SteamVR.Active)
             {
                 return;
             }

@@ -172,12 +172,12 @@ namespace Valve.VR
 
         protected void OnEnable()
         {
-            UnityHooks.OnBeforeRender += OnBeforeRender;
+            UnityHooks.PreUpdate += OnBeforeRender;
             SteamVREvents.System(EVREventType.VREventQuit).Listen(OnQuit);
         }
         protected void OnDisable()
         {
-            UnityHooks.OnBeforeRender -= OnBeforeRender;
+            UnityHooks.PreUpdate -= OnBeforeRender;
             SteamVREvents.System(EVREventType.VREventQuit).Remove(OnQuit);
         }
 

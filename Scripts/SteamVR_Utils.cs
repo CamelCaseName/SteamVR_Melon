@@ -485,7 +485,7 @@ namespace SteamVR_Melon.Scripts
 
         public static object CallSystemFn(SystemFn fn, params object[] args)
         {
-            var initOpenVR = !SteamVR.active && !SteamVR.usingNativeSupport;
+            var initOpenVR = !SteamVR.Active && !SteamVR.usingNativeSupport;
             if (initOpenVR)
             {
                 var error = EVRInitError.None;

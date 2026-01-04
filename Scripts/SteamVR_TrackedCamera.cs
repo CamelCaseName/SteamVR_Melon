@@ -83,7 +83,7 @@ namespace Valve.VR
                     return;
                 }
 
-                var vr = SteamVR.instance;
+                var vr = SteamVR.Instance;
                 if (vr == null)
                 {
                     return;

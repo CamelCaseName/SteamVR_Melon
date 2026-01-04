@@ -58,17 +58,17 @@ namespace Valve.VR
         public static Resolution GetSceneResolution()
         {
             Resolution r = new();
-            if (SteamVR.instance is not null)
+            if (SteamVR.Instance is not null)
             {
-                int w = (int)(SteamVR.instance.sceneWidth * sceneResolutionScale * sceneResolutionScaleMultiplier);
-                int h = (int)(SteamVR.instance.sceneHeight * sceneResolutionScale * sceneResolutionScaleMultiplier);
+                int w = (int)(SteamVR.Instance.SceneWidth * sceneResolutionScale * sceneResolutionScaleMultiplier);
+                int h = (int)(SteamVR.Instance.SceneHeight * sceneResolutionScale * sceneResolutionScaleMultiplier);
                 r.width = w;
                 r.height = h;
                 //MelonLogger.Msg($"[HPVR] {sceneResolutionScale}|{sceneResolutionScaleMultiplier}");
             }
             else
             {
-                MelonLogger.Msg(SteamVR.enabled);
+                MelonLogger.Msg(SteamVR.Enabled);
                 MelonLogger.Warning("[HPVR] steamvr instance was null when getting scene resolution!");
             }
             return r;
@@ -88,11 +88,11 @@ namespace Valve.VR
 
         public static Resolution GetUnscaledSceneResolution()
         {
-            var vr = SteamVR.instance;
+            var vr = SteamVR.Instance;
             Resolution r = new()
             {
-                width = (int)vr.sceneWidth,
-                height = (int)vr.sceneHeight
+                width = (int)vr.SceneWidth,
+                height = (int)vr.SceneHeight
             };
             r.width += r.width % 2;
             r.height += r.height % 2;
@@ -101,14 +101,14 @@ namespace Valve.VR
 
         static public RenderTexture GetSceneTexture(bool hdr)
         {
-            var vr = SteamVR.instance;
+            var vr = SteamVR.Instance;
             if (vr == null)
             {
                 return null;
             }
 
-            int w = (int)(vr.sceneWidth * sceneResolutionScale * sceneResolutionScaleMultiplier);
-            int h = (int)(vr.sceneHeight * sceneResolutionScale * sceneResolutionScaleMultiplier);
+            int w = (int)(vr.SceneWidth * sceneResolutionScale * sceneResolutionScaleMultiplier);
+            int h = (int)(vr.SceneHeight * sceneResolutionScale * sceneResolutionScaleMultiplier);
             w += w % 2;
             h += h % 2;
 
@@ -154,7 +154,7 @@ namespace Valve.VR
         void OnEnable()
         {
             // Bail if no hmd is connected
-            var vr = SteamVR.instance;
+            var vr = SteamVR.Instance;
             if (vr == null)
             {
                 if (head != null)
@@ -248,7 +248,7 @@ namespace Valve.VR
 
                 components = GetComponents<Component>();
 
-                if (this != components[components.Length - 1])
+                if (this != components[^1])
                 {
                     // Store off values to be restored on new instance
                     values = new Hashtable();

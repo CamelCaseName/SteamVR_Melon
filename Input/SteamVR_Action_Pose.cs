@@ -660,7 +660,7 @@ namespace Valve.VR
             }
             else
             {
-                err = OpenVR.Input.GetPoseActionDataRelativeToNow(handle, universeOrigin, framesAhead * (1 / SteamVR.instance.hmdDisplayFrequency), ref poseActionData, poseActionData_size, inputSourceHandle);
+                err = OpenVR.Input.GetPoseActionDataRelativeToNow(handle, universeOrigin, framesAhead * (1 / SteamVR.Instance.hmdDisplayFrequency), ref poseActionData, poseActionData_size, inputSourceHandle);
             }
 
             if (err != EVRInputError.None)

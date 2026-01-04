@@ -154,7 +154,7 @@ namespace Valve.VR
         /// <param name="inputSource">The device you would like to get data from. Any if the action is not device specific.</param>
         public string GetControllerType(SteamVRInputSources inputSource)
         {
-            return SteamVR.instance.GetStringProperty(ETrackedDeviceProperty.PropControllerTypeString, GetDeviceIndex(inputSource));
+            return SteamVR.Instance.GetStringProperty(ETrackedDeviceProperty.PropControllerTypeString, GetDeviceIndex(inputSource));
         }
     }
 
