@@ -12,9 +12,9 @@ namespace SteamVR_Melon.Util
     /// </summary>
     public static class UnityHooks
     {
-        public static Action PreUpdate;
-        public static Action EarlyUpdate;
-        public static Action OnPreCull;
+        public static event Action PreUpdate;
+        public static event Action EarlyUpdate;
+        public static event Action OnPreCull;
 
         public static void Init()
         {
@@ -22,11 +22,24 @@ namespace SteamVR_Melon.Util
             var system = PlayerLoop.GetCurrentPlayerLoop();
             AddLoopSystem<UnityEngine.PlayerLoop.PreUpdate>(ref system, () => PreUpdate?.Invoke());
             AddLoopSystem<UnityEngine.PlayerLoop.EarlyUpdate>(ref system, () => EarlyUpdate?.Invoke());
-            AddLoopSystem<UnityEngine.PlayerLoop.PostLateUpdate>(ref system, () => OnPreCull?.Invoke());
+            AddLoopSystem<UnityEngine.PlayerLoop.PreLateUpdate>(ref system, () => OnPreCull?.Invoke());
 
             PlayerLoop.SetPlayerLoop(system);
 
             MelonLogger.Msg("Initialized Unity Hooks");
+        }
+
+        public static void ResetOnPreCull()
+        {
+            OnPreCull = null;
+        }
+        public static void ResetPreUpdate()
+        {
+            PreUpdate = null;
+        }
+        public static void ResetEarlyUpdate()
+        {
+            EarlyUpdate = null;
         }
 
         private static void AddLoopSystem<T>(ref PlayerLoopSystem system, Action action) where T : struct
