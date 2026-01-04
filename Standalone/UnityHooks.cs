@@ -1,4 +1,5 @@
 ﻿using Il2CppInterop.Runtime;
+using Il2CppInterop.Runtime.InteropTypes;
 using MelonLoader;
 using System;
 using UnityEngine.LowLevel;
@@ -12,18 +13,28 @@ namespace SteamVR_Melon.Util
     public static class UnityHooks
     {
         public static Action OnBeforeRender;
+        public static Action OnRenderImage;
 
         public static void Init()
         {
             //RenderPipelineManager.add_beginCameraRendering(new System.Action<ScriptableRenderContext, Camera>(OnPreRender));
             var system = PlayerLoop.GetCurrentPlayerLoop();
+            AddLoopSystem<UnityEngine.PlayerLoop.PreLateUpdate>(ref system, () => OnBeforeRender.Invoke());
+            AddLoopSystem<UnityEngine.PlayerLoop.PostLateUpdate>(ref system, () => OnRenderImage.Invoke());
 
+            PlayerLoop.SetPlayerLoop(system);
+
+            MelonLogger.Msg("Initialized Unity Hooks");
+        }
+
+        private static void AddLoopSystem<T>(ref PlayerLoopSystem system, Action action) where T : struct
+        {
             for (int i = 0; i < system.subSystemList.Count; i++)
             {
                 PlayerLoopSystem item = system.subSystemList[i];
                 //MelonLogger.Msg($"{item.type?.Name ?? "none"} {(item.loopConditionFunction == null ? IntPtr.Zero : item.loopConditionFunction):x} {item.updateDelegate?.method_info?.Name ?? "none"} {(item.updateFunction == null ? IntPtr.Zero : item.updateFunction):x}");
 
-                if (item.type != Il2CppType.Of<UnityEngine.PlayerLoop.PreLateUpdate>())
+                if (item.type != Il2CppType.Of<T>())
                 {
                     continue;
                 }
@@ -39,7 +50,7 @@ namespace SteamVR_Melon.Util
                 PlayerLoopSystem UnityHookSystem = new()
                 {
                     type = Il2CppType.Of<UnityHook>(),
-                    updateDelegate = new Action(() => OnBeforeRender.Invoke()),
+                    updateDelegate = action,
                     subSystemList = Array.Empty<PlayerLoopSystem>()
                 };
 
@@ -58,9 +69,7 @@ namespace SteamVR_Melon.Util
                 break;
             }
 
-            PlayerLoop.SetPlayerLoop(system);
-
-            MelonLogger.Msg("Initialized Unity Hooks");
+            return;
         }
 
         [RegisterTypeInIl2Cpp(true)]
