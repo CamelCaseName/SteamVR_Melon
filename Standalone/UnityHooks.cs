@@ -29,19 +29,6 @@ namespace SteamVR_Melon.Util
             MelonLogger.Msg("Initialized Unity Hooks");
         }
 
-        public static void ResetOnPreCull()
-        {
-            OnPreCull = null;
-        }
-        public static void ResetPreUpdate()
-        {
-            PreUpdate = null;
-        }
-        public static void ResetEarlyUpdate()
-        {
-            EarlyUpdate = null;
-        }
-
         private static void AddLoopSystem<T>(ref PlayerLoopSystem system, Action action) where T : struct
         {
             for (int i = 0; i < system.subSystemList.Count; i++)

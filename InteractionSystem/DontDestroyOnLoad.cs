@@ -1,0 +1,23 @@
+﻿//======= Copyright (c) Valve Corporation, All rights reserved. ===============
+//
+// Purpose: This object won't be destroyed when a new scene is loaded
+//
+//=============================================================================
+
+using System;
+using UnityEngine;
+
+namespace SteamVR_Melon.InteractionSystem
+{
+    //-------------------------------------------------------------------------
+    [MelonLoader.RegisterTypeInIl2Cpp()]
+    public class DontDestroyOnLoad : MonoBehaviour
+    {
+        public DontDestroyOnLoad(IntPtr value) : base(value) { }
+        //-------------------------------------------------
+        void Awake()
+        {
+            DontDestroyOnLoad(this);
+        }
+    }
+}

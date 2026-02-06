@@ -287,10 +287,10 @@ namespace Valve.VR
         public static Event<float> LoadingFadeOut = new();
         public static Action LoadingFadeOutAction(System.Action<float> action) { return new Action<float>(LoadingFadeOut, action); }
 
-        public static Event<TrackedDevicePoseT[]> NewPoses = new();
-        public static Action NewPosesAction(System.Action<TrackedDevicePoseT[]> action)
+        public static Event NewPoses = new();
+        public static Action NewPosesAction(System.Action action)
         {
-            return new Action<TrackedDevicePoseT[]>(NewPoses, action);
+            return new ActionNoArgs(NewPoses, action);
         }
 
         public static Event NewPosesApplied = new();
@@ -301,25 +301,5 @@ namespace Valve.VR
 
         public static Event<bool> OutOfRange = new();
         public static Action OutOfRangeAction(System.Action<bool> action) { return new Action<bool>(OutOfRange, action); }
-
-        public static Event<SteamVRRenderModel, bool> RenderModelLoaded = new();
-        public static Action RenderModelLoadedAction(System.Action<SteamVRRenderModel, bool> action) { return new Action<SteamVRRenderModel, bool>(RenderModelLoaded, action); }
-
-        static readonly System.Collections.Generic.Dictionary<EVREventType, Event<VREventT>> systemEvents = new();
-        public static Event<VREventT> System(EVREventType eventType)
-        {
-            Event<VREventT> e;
-            if (!systemEvents.TryGetValue(eventType, out e))
-            {
-                e = new Event<VREventT>();
-                systemEvents.Add(eventType, e);
-            }
-            return e;
-        }
-
-        public static Action SystemAction(EVREventType eventType, System.Action<VREventT> action)
-        {
-            return new Action<VREventT>(System(eventType), action);
-        }
     }
 }

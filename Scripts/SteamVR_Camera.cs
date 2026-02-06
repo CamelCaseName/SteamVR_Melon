@@ -55,101 +55,9 @@ namespace Valve.VR
 
         static private RenderTexture _sceneTexture;
 
-        public static Resolution GetSceneResolution()
-        {
-            Resolution r = new();
-            if (SteamVR.Instance is not null)
-            {
-                int w = (int)(SteamVR.Instance.SceneWidth * sceneResolutionScale * sceneResolutionScaleMultiplier);
-                int h = (int)(SteamVR.Instance.SceneHeight * sceneResolutionScale * sceneResolutionScaleMultiplier);
-                r.width = w;
-                r.height = h;
-                //MelonLogger.Msg($"[HPVR] {sceneResolutionScale}|{sceneResolutionScaleMultiplier}");
-            }
-            else
-            {
-                MelonLogger.Msg(SteamVR.Enabled);
-                MelonLogger.Warning("[HPVR] steamvr instance was null when getting scene resolution!");
-            }
-            return r;
-        }
-
-        public static Resolution GetResolutionForAspect(int aspectW, int aspectH)
-        {
-            Resolution hmdResolution = GetSceneResolution();
-
-            // We calcuate an optimal 16:9 resolution to use with the HMD resolution because that's the best aspect for the UI rendering
-            Resolution closestToAspect = hmdResolution;
-            closestToAspect.height = closestToAspect.width / aspectW * aspectH;
-            closestToAspect.width += closestToAspect.width % 2;
-            closestToAspect.height += closestToAspect.height % 2;
-            return closestToAspect;
-        }
-
-        public static Resolution GetUnscaledSceneResolution()
-        {
-            var vr = SteamVR.Instance;
-            Resolution r = new()
-            {
-                width = (int)vr.SceneWidth,
-                height = (int)vr.SceneHeight
-            };
-            r.width += r.width % 2;
-            r.height += r.height % 2;
-            return r;
-        }
-
-        static public RenderTexture GetSceneTexture(bool hdr)
-        {
-            var vr = SteamVR.Instance;
-            if (vr == null)
-            {
-                return null;
-            }
-
-            int w = (int)(vr.SceneWidth * sceneResolutionScale * sceneResolutionScaleMultiplier);
-            int h = (int)(vr.SceneHeight * sceneResolutionScale * sceneResolutionScaleMultiplier);
-            w += w % 2;
-            h += h % 2;
-
-            int aa = QualitySettings.antiAliasing == 0 ? 1 : QualitySettings.antiAliasing;
-            var format = hdr ? RenderTextureFormat.ARGBHalf : RenderTextureFormat.ARGB32;
-            bool recreatedTex = false;
-            if (_sceneTexture != null)
-            {
-                if (_sceneTexture.width != w || _sceneTexture.height != h)
-                {
-                    MelonLogger.Msg($"Recreating scene texture.. Old: {_sceneTexture.width}x{_sceneTexture.height} MSAA={_sceneTexture.antiAliasing} [{aa}] New: {w}x{h} MSAA={aa} [{format}]");
-                    Destroy(_sceneTexture);
-                    _sceneTexture = null;
-                    recreatedTex = true;
-                }
-            }
-
-            if (_sceneTexture == null)
-            {
-                _sceneTexture = new RenderTexture(w, h, 0, format, 0)
-                {
-                    depth = 32,
-                    antiAliasing = aa
-                };
-
-                if (recreatedTex)
-                {
-                    OnResolutionChanged?.Invoke(w, h);
-                }
-            }
-
-            return _sceneTexture;
-        }
-
         #endregion
         #region Enable / Disable
 
-        void OnDisable()
-        {
-            SteamVRRender.Remove(this);
-        }
 
         void OnEnable()
         {
@@ -157,11 +65,6 @@ namespace Valve.VR
             var vr = SteamVR.Instance;
             if (vr == null)
             {
-                if (head != null)
-                {
-                    head.GetComponent<SteamVRTrackedObject>().enabled = false;
-                }
-
                 enabled = false;
                 return;
             }
@@ -203,8 +106,6 @@ namespace Valve.VR
             {
                 ears.GetComponent<SteamVREars>().vrcam = this;
             }
-
-            SteamVRRender.Add(this);
         }
 
         #endregion
@@ -295,7 +196,7 @@ namespace Valve.VR
 
             if (_head == null)
             {
-                _head = new GameObject(name + headSuffix, Il2CppType.Of<SteamVRTrackedObject>()).transform;
+                _head = new GameObject(name + headSuffix).transform;
                 head.parent = _origin;
                 head.position = transform.position;
                 head.rotation = transform.rotation;

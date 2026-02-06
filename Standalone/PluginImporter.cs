@@ -6,23 +6,6 @@ using UnityEngine;
 
 namespace SteamVR_Melon.Standalone
 {
-    public class OpenVRMagic
-    {
-
-        public const string openvrApi = "openvr_api";
-        public const string XRSDKOpenVR = "XRSDKOpenVR";
-
-        public const int kNRenderEventIDWaitGetPoses = 201510020;
-
-        public const int kNRenderEventIDSubmitL = 201510021;
-
-        public const int kNRenderEventIDSubmitR = 201510022;
-
-        public const int kNRenderEventIDFlush = 201510023;
-
-        public const int kNRenderEventIDPostPresentHandoff = 201510024;
-    }
-
     /// <summary>
     /// Most of this code by @Knah https://github.com/knah/VRCMods/blob/master/TrueShaderAntiCrash/TrueShaderAntiCrashMod.cs
     /// Thank him for supporting il2cpp modding ^^
@@ -43,7 +26,7 @@ namespace SteamVR_Melon.Standalone
         public static void UpdateOffsetForUnityVersion()
         {
             string version = Application.unityVersion;
-            MelonLogger.Msg(version);
+            MelonLogger.Msg("Initializing PluginImporter for " + version);
             switch (version)
             {
                 case "2019.4.1f1":
@@ -56,7 +39,7 @@ namespace SteamVR_Melon.Standalone
                 case "2022.3.16f1":
                     FindAndLoadUnityPluginOffset = 0x5b71b0;
                     break;
-                //house party 1.4.2
+                //house party > 1.4.2
                 case "2022.3.62f2":
                     FindAndLoadUnityPluginOffset = 0x5c4210;
                     break;
@@ -69,23 +52,23 @@ namespace SteamVR_Melon.Standalone
 
         public static void GetPluginLoadFunction()
         {
-            MelonLogger.Msg("[HPVR] Loading external plugin load function");
+            MelonLogger.Msg("Loading external plugin load function");
             var process = Process.GetCurrentProcess();
             foreach (ProcessModule module in process.Modules)
             {
-                MelonLogger.Msg("[HPVR] " + module.FileName);
+                MelonLogger.Msg(module.FileName);
                 if (!module.FileName.Contains("UnityPlayer"))
                 {
                     continue;
                 }
 
-                MelonLogger.Msg("[HPVR] Found the unityplayer module");
+                MelonLogger.Msg("Found the unityplayer module");
 
                 var loadLibraryAddress = module.BaseAddress + FindAndLoadUnityPluginOffset;
-                MelonLogger.Msg($"[HPVR] loadLibrary Address: {loadLibraryAddress:x} (offset {FindAndLoadUnityPluginOffset:x})");
+                MelonLogger.Msg($"loadLibrary Address: {loadLibraryAddress:x} (offset {FindAndLoadUnityPluginOffset:x})");
 
                 method = Marshal.GetDelegateForFunctionPointer<FindAndLoadUnityPlugin>(loadLibraryAddress);
-                MelonLogger.Msg("[HPVR] got the delegate");
+                MelonLogger.Msg("got the delegate");
 
                 break;
             }

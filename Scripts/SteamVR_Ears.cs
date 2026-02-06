@@ -30,18 +30,18 @@ namespace Valve.VR
         {
             usingSpeakers = false;
 
-            var settings = OpenVR.Settings;
-            if (settings != null)
-            {
-                var error = EVRSettingsError.None;
-                if (settings.GetBool(OpenVR.kPchSteamVRSection, OpenVR.kPchSteamVRUsingSpeakersBool, ref error))
-                {
+            //var settings = OpenVR.Settings;
+            //if (settings != null)
+            //{
+            //    var error = EVRSettingsError.None;
+            //    if (settings.GetBool(OpenVR.kPchSteamVRSection, OpenVR.kPchSteamVRUsingSpeakersBool, ref error))
+            //    {
                     usingSpeakers = true;
 
-                    var yawOffset = settings.GetFloat(OpenVR.kPchSteamVRSection, OpenVR.kPchSteamVRSpeakersForwardYawOffsetDegreesFloat, ref error);
-                    offset = Quaternion.Euler(0.0f, yawOffset, 0.0f);
-                }
-            }
+            //        var yawOffset = settings.GetFloat(OpenVR.kPchSteamVRSection, OpenVR.kPchSteamVRSpeakersForwardYawOffsetDegreesFloat, ref error);
+            //        offset = Quaternion.Euler(0.0f, yawOffset, 0.0f);
+            //    }
+            //}
 
             if (usingSpeakers)
             {
