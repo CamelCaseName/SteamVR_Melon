@@ -141,7 +141,6 @@ namespace Valve.VR
             return new SteamVR();
         }
 
-
         // tracking status
         static public bool Initializing { get; private set; }
         static public bool Calibrating { get; private set; }
