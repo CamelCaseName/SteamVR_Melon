@@ -134,6 +134,8 @@ namespace Valve.VR
                 return null;
             }
 
+            MelonLogger.Msg("Creating SteamVR Instance...");
+
             _enabled = true;
             initializedState = InitializedStates.InitializeSuccess;
             SteamVREvents.Initialized.Send(true);
