@@ -174,7 +174,6 @@ namespace Valve.VR
 
         private SteamVR()
         {
-            //MelonLoader.MelonLogger.Msg($"Initialized. Connected to {hmdTrackingSystemName} : {hmdModelNumber}");
             MelonLogger.Msg($"Initialized SteamVR");
 
             SteamVREvents.Initializing.Listen(OnInitializing);
