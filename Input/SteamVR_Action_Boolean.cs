@@ -19,50 +19,50 @@ namespace Valve.VR
         public delegate void ChangeHandler(SteamVRActionBoolean fromAction, SteamVRInputSources fromSource, bool newState);
         public delegate void UpdateHandler(SteamVRActionBoolean fromAction, SteamVRInputSources fromSource, bool newState);
 
-        /// <summary><strong>[Shortcut to: SteamVR_Input_Sources.Any]</strong> This event fires whenever a state changes from false to true or true to false</summary>
+        /// <summary><strong>[Shortcut to: SteamVRInput_Sources.Any]</strong> This event fires whenever a state changes from false to true or true to false</summary>
         public event ChangeHandler onChange
         { add { sourceMap[SteamVRInputSources.Any].onChange += value; } remove { sourceMap[SteamVRInputSources.Any].onChange -= value; } }
 
-        /// <summary><strong>[Shortcut to: SteamVR_Input_Sources.Any]</strong> This event fires whenever the action is updated</summary>
+        /// <summary><strong>[Shortcut to: SteamVRInput_Sources.Any]</strong> This event fires whenever the action is updated</summary>
         public event UpdateHandler onUpdate
         { add { sourceMap[SteamVRInputSources.Any].onUpdate += value; } remove { sourceMap[SteamVRInputSources.Any].onUpdate -= value; } }
 
-        /// <summary><strong>[Shortcut to: SteamVR_Input_Sources.Any]</strong> This event fires whenever the boolean action is true and gets updated</summary>
+        /// <summary><strong>[Shortcut to: SteamVRInput_Sources.Any]</strong> This event fires whenever the boolean action is true and gets updated</summary>
         public event StateHandler onState
         { add { sourceMap[SteamVRInputSources.Any].onState += value; } remove { sourceMap[SteamVRInputSources.Any].onState -= value; } }
 
-        /// <summary><strong>[Shortcut to: SteamVR_Input_Sources.Any]</strong> This event fires whenever the state of the boolean action has changed from false to true in the most recent update</summary>
+        /// <summary><strong>[Shortcut to: SteamVRInput_Sources.Any]</strong> This event fires whenever the state of the boolean action has changed from false to true in the most recent update</summary>
         public event StateDownHandler onStateDown
         { add { sourceMap[SteamVRInputSources.Any].onStateDown += value; } remove { sourceMap[SteamVRInputSources.Any].onStateDown -= value; } }
 
-        /// <summary><strong>[Shortcut to: SteamVR_Input_Sources.Any]</strong> This event fires whenever the state of the boolean action has changed from true to false in the most recent update</summary>
+        /// <summary><strong>[Shortcut to: SteamVRInput_Sources.Any]</strong> This event fires whenever the state of the boolean action has changed from true to false in the most recent update</summary>
         public event StateUpHandler onStateUp
         { add { sourceMap[SteamVRInputSources.Any].onStateUp += value; } remove { sourceMap[SteamVRInputSources.Any].onStateUp -= value; } }
 
-        /// <summary><strong>[Shortcut to: SteamVR_Input_Sources.Any]</strong> Event fires when the active state (ActionSet active and binding active) changes</summary>
+        /// <summary><strong>[Shortcut to: SteamVRInput_Sources.Any]</strong> Event fires when the active state (ActionSet active and binding active) changes</summary>
         public event ActiveChangeHandler onActiveChange
         { add { sourceMap[SteamVRInputSources.Any].onActiveChange += value; } remove { sourceMap[SteamVRInputSources.Any].onActiveChange -= value; } }
 
-        /// <summary><strong>[Shortcut to: SteamVR_Input_Sources.Any]</strong> Event fires when the bound state of the binding changes</summary>
+        /// <summary><strong>[Shortcut to: SteamVRInput_Sources.Any]</strong> Event fires when the bound state of the binding changes</summary>
         public event ActiveChangeHandler onActiveBindingChange
         { add { sourceMap[SteamVRInputSources.Any].onActiveBindingChange += value; } remove { sourceMap[SteamVRInputSources.Any].onActiveBindingChange -= value; } }
 
-        /// <summary><strong>[Shortcut to: SteamVR_Input_Sources.Any]</strong> True when the boolean action is true</summary>
+        /// <summary><strong>[Shortcut to: SteamVRInput_Sources.Any]</strong> True when the boolean action is true</summary>
         public bool state { get { return sourceMap[SteamVRInputSources.Any].state; } }
 
-        /// <summary><strong>[Shortcut to: SteamVR_Input_Sources.Any]</strong> True when the boolean action is true and the last state was false</summary>
+        /// <summary><strong>[Shortcut to: SteamVRInput_Sources.Any]</strong> True when the boolean action is true and the last state was false</summary>
         public bool stateDown { get { return sourceMap[SteamVRInputSources.Any].stateDown; } }
 
-        /// <summary><strong>[Shortcut to: SteamVR_Input_Sources.Any]</strong> True when the boolean action is false and the last state was true</summary>
+        /// <summary><strong>[Shortcut to: SteamVRInput_Sources.Any]</strong> True when the boolean action is false and the last state was true</summary>
         public bool stateUp { get { return sourceMap[SteamVRInputSources.Any].stateUp; } }
 
-        /// <summary><strong>[Shortcut to: SteamVR_Input_Sources.Any]</strong> (previous update) True when the boolean action is true</summary>
+        /// <summary><strong>[Shortcut to: SteamVRInput_Sources.Any]</strong> (previous update) True when the boolean action is true</summary>
         public bool lastState { get { return sourceMap[SteamVRInputSources.Any].lastState; } }
 
-        /// <summary><strong>[Shortcut to: SteamVR_Input_Sources.Any]</strong> (previous update) True when the boolean action is true and the last state was false</summary>
+        /// <summary><strong>[Shortcut to: SteamVRInput_Sources.Any]</strong> (previous update) True when the boolean action is true and the last state was false</summary>
         public bool lastStateDown { get { return sourceMap[SteamVRInputSources.Any].lastStateDown; } }
 
-        /// <summary><strong>[Shortcut to: SteamVR_Input_Sources.Any]</strong> (previous update) True when the boolean action is false and the last state was true</summary>
+        /// <summary><strong>[Shortcut to: SteamVRInput_Sources.Any]</strong> (previous update) True when the boolean action is false and the last state was true</summary>
         public bool lastStateUp { get { return sourceMap[SteamVRInputSources.Any].lastStateUp; } }
 
         public SteamVRActionBoolean() { }

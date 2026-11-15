@@ -491,19 +491,19 @@ namespace Valve.VR
                 manifestApplication.strings.Add("en_us", new SteamVRInputManifestFileApplicationString() { name = string.Format("{0} [Testing]", Application.productName) });
 
                 /*
-                var bindings = new System.Collections.Generic.List<SteamVR_Input_ManifestFile_Application_Binding>();
+                var bindings = new System.Collections.Generic.List<SteamVRInput_ManifestFile_Application_Binding>();
 
-                SteamVR_Input.InitializeFile();
-                if (SteamVR_Input.actionFile != null)
+                SteamVRInput.InitializeFile();
+                if (SteamVRInput.actionFile != null)
                 {
-                    string[] bindingFiles = SteamVR_Input.actionFile.GetFilesToCopy(true);
-                    if (bindingFiles.Length == SteamVR_Input.actionFile.default_bindings.Count)
+                    string[] bindingFiles = SteamVRInput.actionFile.GetFilesToCopy(true);
+                    if (bindingFiles.Length == SteamVRInput.actionFile.default_bindings.Count)
                     {
                         for (int bindingIndex = 0; bindingIndex < bindingFiles.Length; bindingIndex++)
                         {
-                            SteamVR_Input_ManifestFile_Application_Binding binding = new SteamVR_Input_ManifestFile_Application_Binding();
+                            SteamVRInput_ManifestFile_Application_Binding binding = new SteamVRInput_ManifestFile_Application_Binding();
                             binding.binding_url = bindingFiles[bindingIndex];
-                            binding.controller_type = SteamVR_Input.actionFile.default_bindings[bindingIndex].controller_type;
+                            binding.controller_type = SteamVRInput.actionFile.default_bindings[bindingIndex].controller_type;
                             bindings.Add(binding);
                         }
                         manifestApplication.bindings = bindings;

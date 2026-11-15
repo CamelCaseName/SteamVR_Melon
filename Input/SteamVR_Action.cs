@@ -5,7 +5,7 @@
 //          There may be many Action instances per Actual SteamVR Action, but these instances are just interfaces to the data and should have virtually no overhead.
 //     * Action Map: This is basically a wrapper for a list of Action_Source instances.
 //          The idea being there is one Map per Actual SteamVR Action.
-//          These maps can be retrieved from a static store in SteamVR_Input so we're not duplicating data.
+//          These maps can be retrieved from a static store in SteamVRInput so we're not duplicating data.
 //     * Action Source: This is a collection of cached data retrieved by calls to the underlying SteamVR Input system.
 //          Each Action Source has an inputSource that it is associated with.
 
@@ -16,7 +16,7 @@ namespace Valve.VR
 {
     [Serializable]
     /// <summary>
-    /// This is the base level action for SteamVR Input Actions. All SteamVR_Action_In and SteamVR_Action_Out inherit from this.
+    /// This is the base level action for SteamVR Input Actions. All SteamVRActionIn and SteamVRActionOut inherit from this.
     /// Initializes the ulong handle for the action, has some helper references that all actions will have.
     /// </summary>
     public abstract class SteamVRAction<SourceMap, SourceElement> : SteamVRAction, ISteamVRAction where SourceMap : SteamVRActionSourceMap<SourceElement>, new() where SourceElement : SteamVRActionSource, new()
@@ -69,16 +69,16 @@ namespace Valve.VR
             }
         }
 
-        /// <summary><strong>[Shortcut to: SteamVR_Input_Sources.Any]</strong> Returns true if the action is bound and the actionset is active</summary>
+        /// <summary><strong>[Shortcut to: SteamVRInput_Sources.Any]</strong> Returns true if the action is bound and the actionset is active</summary>
         public override bool active { get { return sourceMap[SteamVRInputSources.Any].active; } }
 
-        /// <summary><strong>[Shortcut to: SteamVR_Input_Sources.Any]</strong> Returns true if the action was bound and the ActionSet was active during the previous update</summary>
+        /// <summary><strong>[Shortcut to: SteamVRInput_Sources.Any]</strong> Returns true if the action was bound and the ActionSet was active during the previous update</summary>
         public override bool lastActive { get { return sourceMap[SteamVRInputSources.Any].lastActive; } }
 
-        /// <summary><strong>[Shortcut to: SteamVR_Input_Sources.Any]</strong> Returns true if the action is bound</summary>
+        /// <summary><strong>[Shortcut to: SteamVRInput_Sources.Any]</strong> Returns true if the action is bound</summary>
         public override bool activeBinding { get { return sourceMap[SteamVRInputSources.Any].activeBinding; } }
 
-        /// <summary><strong>[Shortcut to: SteamVR_Input_Sources.Any]</strong> Returns true if the action was bound at the previous update</summary>
+        /// <summary><strong>[Shortcut to: SteamVRInput_Sources.Any]</strong> Returns true if the action was bound at the previous update</summary>
         public override bool lastActiveBinding { get { return sourceMap[SteamVRInputSources.Any].lastActiveBinding; } }
 
         [NonSerialized]
@@ -372,16 +372,16 @@ namespace Valve.VR
         /// <summary>The action direction of this action (in for input - most actions, out for output - mainly haptics)</summary>
         public abstract SteamVRActionDirections direction { get; }
 
-        /// <summary><strong>[Shortcut to: SteamVR_Input_Sources.Any]</strong> Returns true if the action set that contains this action is active for Any input source.</summary>
+        /// <summary><strong>[Shortcut to: SteamVRInput_Sources.Any]</strong> Returns true if the action set that contains this action is active for Any input source.</summary>
         public bool setActive { get { return actionSet.IsActive(SteamVRInputSources.Any); } }
 
-        /// <summary><strong>[Shortcut to: SteamVR_Input_Sources.Any]</strong> Returns true if the action is bound and the actionset is active</summary>
+        /// <summary><strong>[Shortcut to: SteamVRInput_Sources.Any]</strong> Returns true if the action is bound and the actionset is active</summary>
         public abstract bool active { get; }
 
-        /// <summary><strong>[Shortcut to: SteamVR_Input_Sources.Any]</strong> Returns true if the action is bound</summary>
+        /// <summary><strong>[Shortcut to: SteamVRInput_Sources.Any]</strong> Returns true if the action is bound</summary>
         public abstract bool activeBinding { get; }
 
-        /// <summary><strong>[Shortcut to: SteamVR_Input_Sources.Any]</strong> Returns true if the action was bound and the actionset was active at the previous update</summary>
+        /// <summary><strong>[Shortcut to: SteamVRInput_Sources.Any]</strong> Returns true if the action was bound and the actionset was active at the previous update</summary>
         public abstract bool lastActive { get; }
 
         /// <summary>
@@ -469,7 +469,7 @@ namespace Valve.VR
         }
 
         /// <summary>
-        /// Compares two SteamVR_Actions by their action path instead of references
+        /// Compares two SteamVRActions by their action path instead of references
         /// </summary>
         public bool Equals(SteamVRAction other)
         {
@@ -478,15 +478,15 @@ namespace Valve.VR
                 return false;
             }
 
-            //SteamVR_Action_Source_Map thisMap = this.GetSourceMap();
-            //SteamVR_Action_Source_Map otherMap = other.GetSourceMap();
+            //SteamVRActionSource_Map thisMap = this.GetSourceMap();
+            //SteamVRActionSource_Map otherMap = other.GetSourceMap();
 
             //return this.actionPath == other.actionPath && thisMap.fullPath == otherMap.fullPath;
             return this.actionPath == other.actionPath;
         }
 
         /// <summary>
-        /// Compares two SteamVR_Actions by their action path instead of references
+        /// Compares two SteamVRActions by their action path instead of references
         /// </summary>
         public override bool Equals(object other)
         {
@@ -519,7 +519,7 @@ namespace Valve.VR
         }
 
         /// <summary>
-        /// Compares two SteamVR_Actions by their action path.
+        /// Compares two SteamVRActions by their action path.
         /// </summary>
         public static bool operator !=(SteamVRAction action1, SteamVRAction action2)
         {
@@ -527,7 +527,7 @@ namespace Valve.VR
         }
 
         /// <summary>
-        /// Compares two SteamVR_Actions by their action path.
+        /// Compares two SteamVRActions by their action path.
         /// </summary>
         public static bool operator ==(SteamVRAction action1, SteamVRAction action2)
         {
@@ -547,7 +547,7 @@ namespace Valve.VR
         }
 
         /// <summary>
-        /// Tries to find an existing action matching some subsection of an action path. More useful functions in SteamVR_Input.
+        /// Tries to find an existing action matching some subsection of an action path. More useful functions in SteamVRInput.
         /// </summary>
         public static SteamVRAction FindExistingActionForPartialPath(string path)
         {
@@ -662,7 +662,7 @@ namespace Valve.VR
         /// <summary>The action direction of this action (in for input - most actions, out for output - haptics)</summary>
         public SteamVRActionDirections direction { get; protected set; }
 
-        /// <summary>The base SteamVR_Action this map corresponds to</summary>
+        /// <summary>The base SteamVRAction this map corresponds to</summary>
         public SteamVRAction action;
 
         public virtual void PreInitialize(SteamVRAction wrappingAction, string actionPath, bool throwErrors = true)

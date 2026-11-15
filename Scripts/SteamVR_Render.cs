@@ -6,7 +6,6 @@ using System.Collections;
 using System.Runtime.InteropServices;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using Mathf = HPVR.Util.Mathf;
 
 namespace Valve.VR
 {

@@ -105,7 +105,7 @@ namespace Valve.VR
         {
 #if !UNITY_EDITOR
             //If you want a single frame of performance increase on application start and have already generated your actions uncomment the following two lines
-            //SteamVR_Actions.Preinitialize();
+            //SteamVRActions.Preinitialize();
             //return;
 #endif
             FindPreinitializeMethod();
@@ -118,7 +118,7 @@ namespace Valve.VR
 
         private static void FindPreinitializeMethod()
         {
-            SteamVR_Actions.PreInitialize();
+            SteamVRActions.PreInitialize();
         }
 
         /// <summary>
@@ -1358,7 +1358,7 @@ namespace Valve.VR
             string fullOldActionsPath = Path.Combine(projectRoot, SteamVR_Settings.instance.actionsFilePath);
             if (File.Exists(fullOldActionsPath))
             {
-                SteamVR_Input_ActionFile oldActionsFile = SteamVR_Input_ActionFile.Open(fullOldActionsPath);
+                SteamVRInput_ActionFile oldActionsFile = SteamVRInput_ActionFile.Open(fullOldActionsPath);
                 string[] actionAndBindingFiles = oldActionsFile.GetFilesToCopy(true);
 
                 string newActionsFilePath = GetActionsFilePath(true);
@@ -1683,7 +1683,7 @@ namespace Valve.VR
         public static bool IsOpeningSetup() { return openingSetup; }
         private static void CheckSetup()
         {
-            if (checkingSetup == false && openingSetup == false && (SteamVR_Input.actions == null || SteamVR_Input.actions.Length == 0))
+            if (checkingSetup == false && openingSetup == false && (SteamVRInput.actions == null || SteamVRInput.actions.Length == 0))
             {
                 checkingSetup = true;
                 Debug.Break();
@@ -1693,7 +1693,7 @@ namespace Valve.VR
                 {
                     openingSetup = true;
                     UnityEditor.EditorApplication.isPlaying = false;
-                    Type editorWindowType = SteamVR_Utils.FindType("Valve.VR.SteamVR_Input_EditorWindow");
+                    Type editorWindowType = SteamVR_Utils.FindType("Valve.VR.SteamVRInput_EditorWindow");
                     if (editorWindowType != null)
                     {
                         var window = UnityEditor.EditorWindow.GetWindow(editorWindowType, false, "SteamVR Input", true);

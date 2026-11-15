@@ -16,15 +16,15 @@ namespace Valve.VR
         public delegate void ActiveChangeHandler(SteamVRActionVibration fromAction, SteamVRInputSources fromSource, bool active);
         public delegate void ExecuteHandler(SteamVRActionVibration fromAction, SteamVRInputSources fromSource, float secondsFromNow, float durationSeconds, float frequency, float amplitude);
 
-        /// <summary><strong>[SteamVR_Input_Sources.Any]</strong> This event fires whenever a change happens in the action</summary>
+        /// <summary><strong>[SteamVRInput_Sources.Any]</strong> This event fires whenever a change happens in the action</summary>
         public event ActiveChangeHandler onActiveChange
         { add { sourceMap[SteamVRInputSources.Any].onActiveChange += value; } remove { sourceMap[SteamVRInputSources.Any].onActiveChange -= value; } }
 
-        /// <summary><strong>[SteamVR_Input_Sources.Any]</strong> This event fires whenever a change happens in the action</summary>
+        /// <summary><strong>[SteamVRInput_Sources.Any]</strong> This event fires whenever a change happens in the action</summary>
         public event ActiveChangeHandler onActiveBindingChange
         { add { sourceMap[SteamVRInputSources.Any].onActiveBindingChange += value; } remove { sourceMap[SteamVRInputSources.Any].onActiveBindingChange -= value; } }
 
-        /// <summary><strong>[SteamVR_Input_Sources.Any]</strong> This event fires whenever this action is executed</summary>
+        /// <summary><strong>[SteamVRInput_Sources.Any]</strong> This event fires whenever this action is executed</summary>
         public event ExecuteHandler onExecute
         { add { sourceMap[SteamVRInputSources.Any].onExecute += value; } remove { sourceMap[SteamVRInputSources.Any].onExecute -= value; } }
 

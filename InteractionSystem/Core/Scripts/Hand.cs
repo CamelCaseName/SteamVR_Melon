@@ -52,13 +52,11 @@ namespace Valve.VR.InteractionSystem
 
         public SteamVRBehaviourPose trackedObject;
 
-        public SteamVRActionBoolean grabPinchAction = SteamVR_Actions.default_Grab;
+        public SteamVRActionBoolean grabGripAction = SteamVRActions.hpvr_Grab;
 
-        public SteamVRActionBoolean grabGripAction = SteamVR_Actions.default_Grab;
+        public SteamVRActionVibration hapticAction;
 
-        public SteamVRActionVibration hapticAction = SteamVR_Actions.default_Haptic;
-
-        public SteamVRActionBoolean uiInteractAction = SteamVR_Actions.default_InteractUI;
+        public SteamVRActionBoolean uiInteractAction = SteamVRActions.hpvr_InteractUI;
 
         public bool useHoverSphere = true;
         public Transform hoverSphereTransform;
@@ -621,7 +619,7 @@ namespace Valve.VR.InteractionSystem
 
             if (spewDebugText)
             {
-                HandDebugLog("AttachObject " + objectToAttach);
+                HandDebugLog("AttachObject " + objectToAttach.name);
             }
 
             objectToAttach.GetComponent<Interactable>()?.OnAttachedToHandInternal(this);
@@ -657,7 +655,7 @@ namespace Valve.VR.InteractionSystem
             {
                 if (spewDebugText)
                 {
-                    HandDebugLog("DetachObject " + objectToDetach);
+                    HandDebugLog("DetachObject " + objectToDetach.name);
                 }
 
                 GameObject prevTopObject = currentAttachedObject;
@@ -1561,11 +1559,6 @@ namespace Valve.VR.InteractionSystem
                     }
                 }
 
-                if (explicitType == GrabTypes.Pinch && grabPinchAction.GetStateDown(handType))
-                {
-                    return GrabTypes.Pinch;
-                }
-
                 if (explicitType == GrabTypes.Grip && grabGripAction.GetStateDown(handType))
                 {
                     return GrabTypes.Grip;
@@ -1583,11 +1576,6 @@ namespace Valve.VR.InteractionSystem
                     {
                         return GrabTypes.None;
                     }
-                }
-
-                if (grabPinchAction != null && grabPinchAction.GetStateDown(handType))
-                {
-                    return GrabTypes.Pinch;
                 }
 
                 if (grabGripAction != null && grabGripAction.GetStateDown(handType))
@@ -1615,11 +1603,6 @@ namespace Valve.VR.InteractionSystem
                     }
                 }
 
-                if (explicitType == GrabTypes.Pinch && grabPinchAction.GetStateUp(handType))
-                {
-                    return GrabTypes.Pinch;
-                }
-
                 if (explicitType == GrabTypes.Grip && grabGripAction.GetStateUp(handType))
                 {
                     return GrabTypes.Grip;
@@ -1637,11 +1620,6 @@ namespace Valve.VR.InteractionSystem
                     {
                         return GrabTypes.None;
                     }
-                }
-
-                if (grabPinchAction.GetStateUp(handType))
-                {
-                    return GrabTypes.Pinch;
                 }
 
                 if (grabGripAction.GetStateUp(handType))
@@ -1682,9 +1660,6 @@ namespace Valve.VR.InteractionSystem
 
             switch (type)
             {
-                case GrabTypes.Pinch:
-                    return grabPinchAction.GetState(handType);
-
                 case GrabTypes.Grip:
                     return grabGripAction.GetState(handType);
 
@@ -1712,9 +1687,6 @@ namespace Valve.VR.InteractionSystem
                 case GrabTypes.Pinch:
                     return grabGripAction.GetState(handType);
 
-                case GrabTypes.Grip:
-                    return grabPinchAction.GetState(handType);
-
                 default:
                     return false;
             }
@@ -1741,11 +1713,7 @@ namespace Valve.VR.InteractionSystem
 
             if (preferred == GrabTypes.Pinch)
             {
-                if (grabPinchAction.GetState(handType))
-                {
-                    return GrabTypes.Pinch;
-                }
-                else if (forcePreference)
+                if (forcePreference)
                 {
                     return GrabTypes.None;
                 }
@@ -1760,11 +1728,6 @@ namespace Valve.VR.InteractionSystem
                 {
                     return GrabTypes.None;
                 }
-            }
-
-            if (grabPinchAction.GetState(handType))
-            {
-                return GrabTypes.Pinch;
             }
 
             if (grabGripAction.GetState(handType))

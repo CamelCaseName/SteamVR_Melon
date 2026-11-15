@@ -31,7 +31,7 @@ namespace Valve.VR.InteractionSystem
         public float distanceFromFace = 1.3f;
         public Vector3 additionalOffset = new(0, -0.3f, 0);
 
-        public static float teleportLastActiveTime;
+        private static float teleportLastActiveTime;
 
         private bool canRotate = true;
 
@@ -57,7 +57,7 @@ namespace Valve.VR.InteractionSystem
             if (canRotate && snapLeftAction != null && snapRightAction != null && snapLeftAction.activeBinding && snapRightAction.activeBinding)
             {
                 //only allow snap turning after a quarter second after the last teleport
-                if (Time.time < (teleportLastActiveTime + canTurnEverySeconds))
+                if (Time.time < (TeleportLastActiveTime + canTurnEverySeconds))
                 {
                     return;
                 }
@@ -92,6 +92,9 @@ namespace Valve.VR.InteractionSystem
         }
 
         private IEnumerator rotateCoroutine;
+
+        public static float TeleportLastActiveTime { get => teleportLastActiveTime; set => teleportLastActiveTime = value; }
+
         [HideFromIl2Cpp]
         public void RotatePlayer(float angle)
         {
@@ -127,6 +130,7 @@ namespace Valve.VR.InteractionSystem
 
             yield return new WaitForSeconds(fadeTime);
 
+            //todo use this for snap rotate :)
             Vector3 playerFeetOffset = player.trackingOriginTransform.position - player.feetPositionGuess;
             player.trackingOriginTransform.position -= playerFeetOffset;
             player.transform.Rotate(Vector3.up, angle);

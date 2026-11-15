@@ -39,7 +39,7 @@ namespace Valve.VR
 
         public string actionsFilePath = "actions.json";
 
-        public string steamVRInputPath = "SteamVR_Input";
+        public string steamVRInputPath = "SteamVRInput";
 
         public SteamVRUpdateModes inputUpdateMode = SteamVRUpdateModes.OnUpdate;
         public SteamVRUpdateModes poseUpdateMode = SteamVRUpdateModes.OnPreCull;

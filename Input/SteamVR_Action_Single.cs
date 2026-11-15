@@ -17,44 +17,44 @@ namespace Valve.VR
         public delegate void ChangeHandler(SteamVRActionSingle fromAction, SteamVRInputSources fromSource, float newAxis, float newDelta);
         public delegate void UpdateHandler(SteamVRActionSingle fromAction, SteamVRInputSources fromSource, float newAxis, float newDelta);
 
-        /// <summary><strong>[Shortcut to: SteamVR_Input_Sources.Any]</strong> This event fires whenever the axis changes by more than the specified changeTolerance</summary>
+        /// <summary><strong>[Shortcut to: SteamVRInput_Sources.Any]</strong> This event fires whenever the axis changes by more than the specified changeTolerance</summary>
         [Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp]
         public event ChangeHandler onChange
         { add { sourceMap[SteamVRInputSources.Any].onChange += value; } remove { sourceMap[SteamVRInputSources.Any].onChange -= value; } }
 
-        /// <summary><strong>[Shortcut to: SteamVR_Input_Sources.Any]</strong> This event fires whenever the action is updated</summary>
+        /// <summary><strong>[Shortcut to: SteamVRInput_Sources.Any]</strong> This event fires whenever the action is updated</summary>
         [Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp]
         public event UpdateHandler onUpdate
         { add { sourceMap[SteamVRInputSources.Any].onUpdate += value; } remove { sourceMap[SteamVRInputSources.Any].onUpdate -= value; } }
 
-        /// <summary><strong>[Shortcut to: SteamVR_Input_Sources.Any]</strong> This event will fire whenever the float value of the action is non-zero</summary>
+        /// <summary><strong>[Shortcut to: SteamVRInput_Sources.Any]</strong> This event will fire whenever the float value of the action is non-zero</summary>
         [Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp]
         public event AxisHandler onAxis
         { add { sourceMap[SteamVRInputSources.Any].onAxis += value; } remove { sourceMap[SteamVRInputSources.Any].onAxis -= value; } }
 
-        /// <summary><strong>[Shortcut to: SteamVR_Input_Sources.Any]</strong> This event fires when the active state (ActionSet active and binding active) changes</summary>
+        /// <summary><strong>[Shortcut to: SteamVRInput_Sources.Any]</strong> This event fires when the active state (ActionSet active and binding active) changes</summary>
         [Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp]
         public event ActiveChangeHandler onActiveChange
         { add { sourceMap[SteamVRInputSources.Any].onActiveChange += value; } remove { sourceMap[SteamVRInputSources.Any].onActiveChange -= value; } }
 
-        /// <summary><strong>[Shortcut to: SteamVR_Input_Sources.Any]</strong> This event fires when the active state of the binding changes</summary>
+        /// <summary><strong>[Shortcut to: SteamVRInput_Sources.Any]</strong> This event fires when the active state of the binding changes</summary>
         [Il2CppInterop.Runtime.Attributes.HideFromIl2Cpp]
         public event ActiveChangeHandler onActiveBindingChange
         { add { sourceMap[SteamVRInputSources.Any].onActiveBindingChange += value; } remove { sourceMap[SteamVRInputSources.Any].onActiveBindingChange -= value; } }
 
-        /// <summary><strong>[Shortcut to: SteamVR_Input_Sources.Any]</strong> The current float value of the action.
+        /// <summary><strong>[Shortcut to: SteamVRInput_Sources.Any]</strong> The current float value of the action.
         /// Note: Will only return non-zero if the action is also active.</summary>
         public float axis { get { return sourceMap[SteamVRInputSources.Any].axis; } }
 
-        /// <summary><strong>[Shortcut to: SteamVR_Input_Sources.Any]</strong> The float value of the action from the previous update.
+        /// <summary><strong>[Shortcut to: SteamVRInput_Sources.Any]</strong> The float value of the action from the previous update.
         /// Note: Will only return non-zero if the action is also active.</summary>
         public float lastAxis { get { return sourceMap[SteamVRInputSources.Any].lastAxis; } }
 
-        /// <summary><strong>[Shortcut to: SteamVR_Input_Sources.Any]</strong> The float value difference between this update and the previous update.
+        /// <summary><strong>[Shortcut to: SteamVRInput_Sources.Any]</strong> The float value difference between this update and the previous update.
         /// Note: Will only return non-zero if the action is also active.</summary>
         public float delta { get { return sourceMap[SteamVRInputSources.Any].delta; } }
 
-        /// <summary><strong>[Shortcut to: SteamVR_Input_Sources.Any]</strong> The float value difference between the previous update and update before that.
+        /// <summary><strong>[Shortcut to: SteamVRInput_Sources.Any]</strong> The float value difference between the previous update and update before that.
         /// Note: Will only return non-zero if the action is also active.</summary>
         public float lastDelta { get { return sourceMap[SteamVRInputSources.Any].lastDelta; } }
 

@@ -622,14 +622,14 @@ namespace Valve.VR
         public string binary_path_linux;
         public string binary_path_osx;
         public string action_manifest_path;
-        //public List<SteamVR_Input_ManifestFile_Application_Binding> bindings = new List<SteamVR_Input_ManifestFile_Application_Binding>();
+        //public List<SteamVRInput_ManifestFile_Application_Binding> bindings = new List<SteamVRInput_ManifestFile_Application_Binding>();
         public string image_path;
         public Dictionary<string, SteamVRInputManifestFileApplicationString> strings = new();
     }
 
     public class SteamVRInputUnityAssemblyFileDefinition
     {
-        public string name = "SteamVR_Actions";
+        public string name = "SteamVRActions";
         public string[] references = new string[] { "SteamVR" };
         public string[] optionalUnityReferences = new string[0];
         public string[] includePlatforms = new string[0];

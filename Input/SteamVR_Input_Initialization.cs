@@ -14,15 +14,15 @@ namespace Valve.VR
     using UnityEngine;
     
     
-    public partial class SteamVR_Actions
+    public partial class SteamVRActions
     {
         
         public static void PreInitialize()
         {
-            SteamVR_Actions.StartPreInitActionSets();
+            SteamVRActions.StartPreInitActionSets();
             SteamVRInput.PreinitializeActionSetDictionaries();
-            SteamVR_Actions.PreInitActions();
-            SteamVR_Actions.InitializeActionArrays();
+            SteamVRActions.PreInitActions();
+            SteamVRActions.InitializeActionArrays();
             SteamVRInput.PreinitializeActionDictionaries();
             SteamVRInput.PreinitializeFinishActionSets();
         }

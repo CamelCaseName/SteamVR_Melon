@@ -8,7 +8,6 @@ using MelonLoader;
 using System;
 using System.Collections;
 using UnityEngine;
-using Mathf = HPVR.Util.Mathf;
 
 namespace Valve.VR.InteractionSystem
 {

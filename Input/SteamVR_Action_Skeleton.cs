@@ -199,7 +199,7 @@ namespace Valve.VR
         public bool onlyUpdateSummaryData { get { return sourceMap[SteamVRInputSources.Any].onlyUpdateSummaryData; } set { sourceMap[SteamVRInputSources.Any].onlyUpdateSummaryData = value; } }
         #endregion
 
-        #region pose functions with SteamVR_Input_Sources.Any
+        #region pose functions with SteamVRInput_Sources.Any
 
         /// <summary>True if this action is bound and the ActionSet is active</summary>
         public bool GetActive()
@@ -616,42 +616,42 @@ namespace Valve.VR
         }
 
         /// <summary>Fires an event when a device is connected or disconnected.</summary>
-        /// <param name="functionToCall">The method you would like to be called when a device is connected. Should take a SteamVR_Action_Pose as a param</param>
+        /// <param name="functionToCall">The method you would like to be called when a device is connected. Should take a SteamVRActionPose as a param</param>
         public void AddOnDeviceConnectedChanged(DeviceConnectedChangeHandler functionToCall)
         {
             sourceMap[SteamVRInputSources.Any].onDeviceConnectedChanged += functionToCall;
         }
 
         /// <summary>Stops executing the function setup by the corresponding AddListener</summary>
-        /// <param name="functionToStopCalling">The method you would like to stop calling when a device is connected. Should take a SteamVR_Action_Pose as a param</param>
+        /// <param name="functionToStopCalling">The method you would like to stop calling when a device is connected. Should take a SteamVRActionPose as a param</param>
         public void RemoveOnDeviceConnectedChanged(DeviceConnectedChangeHandler functionToStopCalling)
         {
             sourceMap[SteamVRInputSources.Any].onDeviceConnectedChanged -= functionToStopCalling;
         }
 
         /// <summary>Fires an event when the tracking of the device has changed</summary>
-        /// <param name="functionToCall">The method you would like to be called when tracking has changed. Should take a SteamVR_Action_Pose as a param</param>
+        /// <param name="functionToCall">The method you would like to be called when tracking has changed. Should take a SteamVRActionPose as a param</param>
         public void AddOnTrackingChanged(TrackingChangeHandler functionToCall)
         {
             sourceMap[SteamVRInputSources.Any].onTrackingChanged += functionToCall;
         }
 
         /// <summary>Stops executing the function setup by the corresponding AddListener</summary>
-        /// <param name="functionToStopCalling">The method you would like to stop calling when tracking has changed. Should take a SteamVR_Action_Pose as a param</param>
+        /// <param name="functionToStopCalling">The method you would like to stop calling when tracking has changed. Should take a SteamVRActionPose as a param</param>
         public void RemoveOnTrackingChanged(TrackingChangeHandler functionToStopCalling)
         {
             sourceMap[SteamVRInputSources.Any].onTrackingChanged -= functionToStopCalling;
         }
 
         /// <summary>Fires an event when the device now has a valid pose or no longer has a valid pose</summary>
-        /// <param name="functionToCall">The method you would like to be called when the pose has become valid or invalid. Should take a SteamVR_Action_Pose as a param</param>
+        /// <param name="functionToCall">The method you would like to be called when the pose has become valid or invalid. Should take a SteamVRActionPose as a param</param>
         public void AddOnValidPoseChanged(ValidPoseChangeHandler functionToCall)
         {
             sourceMap[SteamVRInputSources.Any].onValidPoseChanged += functionToCall;
         }
 
         /// <summary>Stops executing the function setup by the corresponding AddListener</summary>
-        /// <param name="functionToStopCalling">The method you would like to stop calling when the pose has become valid or invalid. Should take a SteamVR_Action_Pose as a param</param>
+        /// <param name="functionToStopCalling">The method you would like to stop calling when the pose has become valid or invalid. Should take a SteamVRActionPose as a param</param>
         public void RemoveOnValidPoseChanged(ValidPoseChangeHandler functionToStopCalling)
         {
             sourceMap[SteamVRInputSources.Any].onValidPoseChanged -= functionToStopCalling;

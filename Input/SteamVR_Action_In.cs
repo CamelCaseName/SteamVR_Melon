@@ -15,34 +15,34 @@ namespace Valve.VR
         where SourceMap : SteamVRActionInSourceMap<SourceElement>, new()
         where SourceElement : SteamVRActionInSource, new()
     {
-        /// <summary><strong>[Shortcut to: SteamVR_Input_Sources.Any]</strong> Returns true if the action has been changed since the previous update</summary>
+        /// <summary><strong>[Shortcut to: SteamVRInput_Sources.Any]</strong> Returns true if the action has been changed since the previous update</summary>
         public bool changed { get { return sourceMap[SteamVRInputSources.Any].changed; } }
 
-        /// <summary><strong>[Shortcut to: SteamVR_Input_Sources.Any]</strong> Returns true if the action was changed for the previous update cycle</summary>
+        /// <summary><strong>[Shortcut to: SteamVRInput_Sources.Any]</strong> Returns true if the action was changed for the previous update cycle</summary>
         public bool lastChanged { get { return sourceMap[SteamVRInputSources.Any].changed; } }
 
-        /// <summary><strong>[Shortcut to: SteamVR_Input_Sources.Any]</strong> The time the action was changed (Time.realtimeSinceStartup)</summary>
+        /// <summary><strong>[Shortcut to: SteamVRInput_Sources.Any]</strong> The time the action was changed (Time.realtimeSinceStartup)</summary>
         public float changedTime { get { return sourceMap[SteamVRInputSources.Any].changedTime; } }
 
-        /// <summary><strong>[Shortcut to: SteamVR_Input_Sources.Any]</strong> The time the action was updated (Time.realtimeSinceStartup)</summary>
+        /// <summary><strong>[Shortcut to: SteamVRInput_Sources.Any]</strong> The time the action was updated (Time.realtimeSinceStartup)</summary>
         public float updateTime { get { return sourceMap[SteamVRInputSources.Any].updateTime; } }
 
-        /// <summary><strong>[Shortcut to: SteamVR_Input_Sources.Any]</strong> The handle to the component that triggered the action to be changed</summary>
+        /// <summary><strong>[Shortcut to: SteamVRInput_Sources.Any]</strong> The handle to the component that triggered the action to be changed</summary>
         public ulong activeOrigin { get { return sourceMap[SteamVRInputSources.Any].activeOrigin; } }
 
-        /// <summary><strong>[Shortcut to: SteamVR_Input_Sources.Any]</strong> The handle to the component that triggered the action to be changed in the previous update</summary>
+        /// <summary><strong>[Shortcut to: SteamVRInput_Sources.Any]</strong> The handle to the component that triggered the action to be changed in the previous update</summary>
         public ulong lastActiveOrigin { get { return sourceMap[SteamVRInputSources.Any].lastActiveOrigin; } }
 
-        /// <summary><strong>[Shortcut to: SteamVR_Input_Sources.Any]</strong> The input source that triggered the action to be changed</summary>
+        /// <summary><strong>[Shortcut to: SteamVRInput_Sources.Any]</strong> The input source that triggered the action to be changed</summary>
         public SteamVRInputSources activeDevice { get { return sourceMap[SteamVRInputSources.Any].activeDevice; } }
 
-        /// <summary><strong>[Shortcut to: SteamVR_Input_Sources.Any]</strong> The device index (used by Render Models) used by the device that triggered the action to be changed</summary>
+        /// <summary><strong>[Shortcut to: SteamVRInput_Sources.Any]</strong> The device index (used by Render Models) used by the device that triggered the action to be changed</summary>
         public uint trackedDeviceIndex { get { return sourceMap[SteamVRInputSources.Any].trackedDeviceIndex; } }
 
-        /// <summary><strong>[Shortcut to: SteamVR_Input_Sources.Any]</strong> The name of the component on the render model that caused the action to be changed (not localized)</summary>
+        /// <summary><strong>[Shortcut to: SteamVRInput_Sources.Any]</strong> The name of the component on the render model that caused the action to be changed (not localized)</summary>
         public string renderModelComponentName { get { return sourceMap[SteamVRInputSources.Any].renderModelComponentName; } }
 
-        /// <summary><strong>[Shortcut to: SteamVR_Input_Sources.Any]</strong> The full localized name for the component, controller, and hand that caused the action to be changed</summary>
+        /// <summary><strong>[Shortcut to: SteamVRInput_Sources.Any]</strong> The full localized name for the component, controller, and hand that caused the action to be changed</summary>
         public string localizedOriginName { get { return sourceMap[SteamVRInputSources.Any].localizedOriginName; } }
 
         /// <summary>
@@ -128,7 +128,7 @@ namespace Valve.VR
         /// <summary>
         /// <strong>[Should not be called by user code]</strong>
         /// Returns whether the system has determined this source should be updated (based on code calls)
-        /// Should only be used if you've set SteamVR_Action.startUpdatingSourceOnAccess to false.
+        /// Should only be used if you've set SteamVRAction.startUpdatingSourceOnAccess to false.
         /// </summary>
         /// <param name="inputSource">The device you would like to get data from. Any if the action is not device specific.</param>
         public override bool IsUpdating(SteamVRInputSources inputSource)
@@ -139,7 +139,7 @@ namespace Valve.VR
         /// <summary>
         /// <strong>[Should not be called by user code]</strong>
         /// Forces the system to start updating the data for this action and the specified input source.
-        /// Should only be used if you've set SteamVR_Action.startUpdatingSourceOnAccess to false.
+        /// Should only be used if you've set SteamVRAction.startUpdatingSourceOnAccess to false.
         /// </summary>
         /// <param name="inputSource">The device you would like to get data from. Any if the action is not device specific.</param>
         public void ForceAddSourceToUpdateList(SteamVRInputSources inputSource)
@@ -166,7 +166,7 @@ namespace Valve.VR
         /// <summary>
         /// <strong>[Should not be called by user code]</strong>
         /// Returns whether the system has determined this source should be updated (based on code calls)
-        /// Should only be used if you've set SteamVR_Action.startUpdatingSourceOnAccess to false.
+        /// Should only be used if you've set SteamVRAction.startUpdatingSourceOnAccess to false.
         /// </summary>
         /// <param name="inputSource">The device you would like to get data from. Any if the action is not device specific.</param>
         public bool IsUpdating(SteamVRInputSources inputSource)
@@ -195,7 +195,7 @@ namespace Valve.VR
         /// <summary>
         /// <strong>[Should not be called by user code]</strong>
         /// Forces the system to start updating the data for this action and the specified input source.
-        /// Should only be used if you've set SteamVR_Action.startUpdatingSourceOnAccess to false.
+        /// Should only be used if you've set SteamVRAction.startUpdatingSourceOnAccess to false.
         /// </summary>
         /// <param name="inputSource">The device you would like to get data from. Any if the action is not device specific.</param>
         public void ForceAddSourceToUpdateList(SteamVRInputSources inputSource)
@@ -243,7 +243,7 @@ namespace Valve.VR
         /// <summary>
         /// <strong>[Should not be called by user code]</strong>
         /// Forces the system to start updating the data for this action and the specified input source.
-        /// Should only be used if you've set SteamVR_Action.startUpdatingSourceOnAccess to false.
+        /// Should only be used if you've set SteamVRAction.startUpdatingSourceOnAccess to false.
         /// </summary>
         public bool isUpdating { get; set; }
 

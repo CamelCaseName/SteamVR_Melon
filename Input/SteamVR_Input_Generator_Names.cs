@@ -4,8 +4,8 @@ namespace Valve.VR
 {
     public class SteamVRInputGeneratorNames
     {
-        public const string fullActionsClassName = "Valve.VR.SteamVR_Actions";
-        public const string actionsClassName = "SteamVR_Actions";
+        public const string fullActionsClassName = "Valve.VR.SteamVRActions";
+        public const string actionsClassName = "SteamVRActions";
 
         public const string preinitializeMethodName = "PreInitialize";
 

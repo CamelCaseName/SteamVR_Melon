@@ -108,7 +108,7 @@ namespace Valve.VR
         {
             get
             {
-                if (skeletonAvailable)
+                if (skeletonAvailable && skeletonAction is not null)
                 {
                     return skeletonAction.GetFingerCurls();
                 }
@@ -1009,7 +1009,7 @@ namespace Valve.VR
                 Initialize();
 
 #if UNITY_EDITOR
-                //gotta wait a bit for steamvr input to startup //todo: implement steamvr_input.isready
+                //gotta wait a bit for steamvr input to startup //todo: implement SteamVRInput.isready
                 string title = "SteamVR";
                 string text = "Getting reference pose...";
                 float msToWait = 3000;

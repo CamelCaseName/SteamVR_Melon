@@ -16,7 +16,7 @@ MonoBehaviour:
   lockPhysicsUpdateRateToRenderFrequency: 1
   trackingSpaceOrigin: 1
   actionsFilePath: actions.json
-  steamVRInputPath: SteamVR_Input
+  steamVRInputPath: SteamVRInput
   inputUpdateMode: 2
   poseUpdateMode: 8
   activateFirstActionSetOnStart: 1

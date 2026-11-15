@@ -877,13 +877,13 @@ namespace Valve.VR.InteractionSystem
 #else
 using UnityEngine;
 namespace Valve.VR.InteractionSystem { public class ControllerButtonHints : MonoBehaviour {
-        public static void ShowButtonHint(Hand hand, params ISteamVR_Action_In_Source[] actions) { }
-        public static void HideButtonHint(Hand hand, params ISteamVR_Action_In_Source[] actions) { }
+        public static void ShowButtonHint(Hand hand, params ISteamVRActionIn_Source[] actions) { }
+        public static void HideButtonHint(Hand hand, params ISteamVRActionIn_Source[] actions) { }
         public static void HideAllButtonHints(Hand hand) { }
-        public static bool IsButtonHintActive(Hand hand, ISteamVR_Action_In_Source action) { return false; }
-        public static void ShowTextHint(Hand hand, ISteamVR_Action_In_Source action, string text, bool highlightButton = true) { }
-        public static void HideTextHint(Hand hand, ISteamVR_Action_In_Source action) { }
+        public static bool IsButtonHintActive(Hand hand, ISteamVRActionIn_Source action) { return false; }
+        public static void ShowTextHint(Hand hand, ISteamVRActionIn_Source action, string text, bool highlightButton = true) { }
+        public static void HideTextHint(Hand hand, ISteamVRActionIn_Source action) { }
         public static void HideAllTextHints(Hand hand) { }
-        public static string GetActiveHintText(Hand hand, ISteamVR_Action_In_Source action) { return null; }
+        public static string GetActiveHintText(Hand hand, ISteamVRActionIn_Source action) { return null; }
     } }
 #endif
