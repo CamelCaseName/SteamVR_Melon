@@ -1804,6 +1804,7 @@ namespace Valve.VR.InteractionSystem
         {
             return trackedObject.GetDeviceIndex();
         }
+
     }
 
     [Serializable]
