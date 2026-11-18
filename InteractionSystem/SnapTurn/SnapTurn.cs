@@ -130,7 +130,6 @@ namespace Valve.VR.InteractionSystem
 
             yield return new WaitForSeconds(fadeTime);
 
-            //todo use this for snap rotate :)
             Vector3 playerFeetOffset = player.trackingOriginTransform.position - player.feetPositionGuess;
             player.trackingOriginTransform.position -= playerFeetOffset;
             player.transform.Rotate(Vector3.up, angle);

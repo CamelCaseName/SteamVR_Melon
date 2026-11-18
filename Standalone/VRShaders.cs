@@ -50,7 +50,7 @@ namespace Assets.SteamVR_Melon.Standalone
         {
             if (assetBundle == null)
             {
-                MelonLogger.Msg($"[HPVR] loading assetbundle from {Application.streamingAssetsPath}/vrshaders");
+                //MelonLogger.Msg($"[HPVR] loading assetbundle from {Application.streamingAssetsPath}/vrshaders");
                 assetBundle = AssetBundle.LoadFromFile(Application.streamingAssetsPath + "/vrshaders");
                 if (assetBundle == null)
                 {
@@ -70,11 +70,11 @@ namespace Assets.SteamVR_Melon.Standalone
             Object.DontDestroyOnLoad(blitFlip);
             Object.DontDestroyOnLoad(overlay);
             Object.DontDestroyOnLoad(fade);
-            string[] allAssetNames = assetBundle.GetAllAssetNames();
-            for (int i = 0; i < allAssetNames.Length; i++)
-            {
-                MelonLogger.Msg("[HPVR] " + allAssetNames[i]);
-            }
+            //string[] allAssetNames = assetBundle.GetAllAssetNames();
+            //for (int i = 0; i < allAssetNames.Length; i++)
+            //{
+            //    MelonLogger.Msg("[HPVR] " + allAssetNames[i]);
+            //}
         }
     }
 }
